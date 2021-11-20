@@ -7,6 +7,7 @@ const GeneralNavbar = styled.div`
     display: flex;
     flex-direction: row;
     font-size: 2em;
+    column-gap: 10px;
 `;
 
 export default GeneralNavbar;
