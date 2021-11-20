@@ -1,4 +1,4 @@
-import { Theme } from "./theme"
+import { Theme } from "./theme";
 
 const createDefaultTheme = (): Theme => {
     return {
@@ -16,9 +16,14 @@ const createDebugTheme = (): Theme => {
     }
 }
 
+const defaultTheme = createDefaultTheme();
+
 const themes: Theme[] = [
-    createDefaultTheme(),
+    defaultTheme,
     createDebugTheme(),
 ]
 
-export default themes
+export default themes;
+export {
+    defaultTheme
+};
