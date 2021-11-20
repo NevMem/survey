@@ -3,6 +3,7 @@ import DemoPage from './pages/demo/DemoPage';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { defaultTheme } from './theme/themes';
 import { ThemeProvider } from 'styled-components';
+import HomePage from './pages/home/HomePage';
 
 function Root() {
   return (
@@ -11,6 +12,7 @@ function Root() {
         <HashRouter>
           <Routes>
             <Route path="/demo" element={<DemoPage />} />
+            <Route path="/" element={<HomePage/>} />
           </Routes>
         </HashRouter>
       </ThemeProvider>
