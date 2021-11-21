@@ -4,11 +4,20 @@ import { Link } from 'react-router-dom';
 
 const AppSidebarItem = styled.p`
     font-size: 1.2em;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 8px;
+    margin: 0px;
     color: ${props => props.theme.primary};
     cursor: pointer;
     text-decoration: none;
+    transition: all ease-in 0.1s;
+    border-radius: 8px;
+
+    &:hover {
+        background-color: ${props => props.theme.primary};
+        color: ${props => props.theme.background};
+    }
 `;
 
 const AppSidebar = () => {
