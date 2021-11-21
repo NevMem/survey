@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import HomePage from './pages/home/HomePage';
 import AppNavbar from './app/navbar/AppNavbar';
 import AppSidebar from './app/sidebar/AppSidebar';
+import CreateSurveyPage from './pages/create_survey/CreateSurveyPage';
 
 const WithSideBar = (props: { children: any }) => {
   return (
@@ -29,6 +30,7 @@ function Root() {
           <AppNavbar />
           <WithSideBar>
               <Routes>
+                <Route path="create_survey" element={<CreateSurveyPage/>} />
                 <Route path="/demo" element={<DemoPage />} />
                 <Route path="/" element={<HomePage/>} />
               </Routes>

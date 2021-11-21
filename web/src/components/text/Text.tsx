@@ -21,8 +21,14 @@ enum TextStyle {
     Large,
 };
 
-const Text = (props: {children: any | undefined, style?: TextStyle | undefined}) => {
-    const style: TextStyle = props.style ?? TextStyle.Medium
+const Text = (props: {children: any | undefined, style?: TextStyle | undefined, large?: boolean, small?: boolean}) => {
+    var style: TextStyle = props.style ?? TextStyle.Medium
+    if (props.large) {
+        style = TextStyle.Large
+    }
+    if (props.small) {
+        style = TextStyle.Small
+    }
     switch (style) {
         case TextStyle.Large:
             return <LargeText>{props.children}</LargeText>;
