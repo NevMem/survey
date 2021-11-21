@@ -25,15 +25,15 @@ function Root() {
   return (
     <div>
       <ThemeProvider theme={defaultTheme}>
-        <AppNavbar />
-        <WithSideBar>
-          <HashRouter>
-            <Routes>
-              <Route path="/demo" element={<DemoPage />} />
-              <Route path="/" element={<HomePage/>} />
-            </Routes>
-          </HashRouter>
-        </WithSideBar>
+        <HashRouter>
+          <AppNavbar />
+          <WithSideBar>
+              <Routes>
+                <Route path="/demo" element={<DemoPage />} />
+                <Route path="/" element={<HomePage/>} />
+              </Routes>
+          </WithSideBar>
+        </HashRouter>
       </ThemeProvider>
     </div>
   );
