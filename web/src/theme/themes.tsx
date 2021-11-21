@@ -5,6 +5,8 @@ const createDefaultTheme = (): Theme => {
         primary: 'tomato',
         secondary: '#a03020',
         foreground: 'white',
+        background: 'white',
+        secondaryBackgrond: '#f5f5f5',
     }
 }
 
@@ -13,6 +15,8 @@ const createDebugTheme = (): Theme => {
         primary: 'green',
         secondary: 'red',
         foreground: 'blue',
+        background: 'white',
+        secondaryBackgrond: '#e0e0e0',
     }
 }
 
