@@ -15,10 +15,16 @@ class CreateSurveyService {
                 setName: action,
             }
         )
+
+        const maybeName = localStorage.getItem('create-survey-service.name')
+        if (maybeName) {
+            this.setName(maybeName)
+        }
     }
 
     setName(name: string) {
         this.name = name
+        localStorage.setItem('create-survey-service.name', name)
     }
     
     addQuestion(question: Question) {

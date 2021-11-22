@@ -15,7 +15,7 @@ const WithSideBar = (props: { children: any }) => {
         <AppSidebar />
       </div>
 
-      <div style={{width: '70vh'}}>
+      <div style={{width: '70vw'}}>
         {props.children}
       </div>
     </div>

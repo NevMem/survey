@@ -29,7 +29,7 @@ const Input = styled.input`
 
 const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyService }) => {
     const nameChanged = (event: any) => {
-        createSurveyService.setName(event.target.value)
+        props.createSurveyService.setName(event.target.value)
     }
 
     return (
@@ -37,7 +37,7 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
             <WrappedRow>
                 <Text>Название опроса:</Text>
                 <br/>
-                <Input value={createSurveyService.name} onChange={nameChanged}></Input>
+                <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
             </WrappedRow>
         </Fragment>
     );
@@ -47,13 +47,6 @@ const CreateSurveyPage = () => {
     return (
         <PageWrapper>
             <Text large>Создаем опрос</Text>
-
-            <WrappedRow>
-                <Text>Название опроса:</Text>
-                <br/>
-                <Input></Input>
-            </WrappedRow>
-
             <NewSurveyBlock createSurveyService={createSurveyService} />
         </PageWrapper>
     );
