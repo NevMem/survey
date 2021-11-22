@@ -1,9 +1,11 @@
 import { makeObservable, observable, action } from "mobx";
 import Question from "../../data/Question";
+import { createLocalStorageAdapter } from '../../adapter/LocalStorageAdapter';
 
 class CreateSurveyService {
     name: string = ""
     questions: Question[] = [];
+    localStorageAdapter = createLocalStorageAdapter('create-survey-service')
 
     constructor() {
         makeObservable(
@@ -16,7 +18,7 @@ class CreateSurveyService {
             }
         )
 
-        const maybeName = localStorage.getItem('create-survey-service.name')
+        const maybeName = this.localStorageAdapter.get('name')
         if (maybeName) {
             this.setName(maybeName)
         }
@@ -24,7 +26,7 @@ class CreateSurveyService {
 
     setName(name: string) {
         this.name = name
-        localStorage.setItem('create-survey-service.name', name)
+        this.localStorageAdapter.set('name', name)
     }
     
     addQuestion(question: Question) {
