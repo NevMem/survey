@@ -34,6 +34,7 @@ class CreateSurveyService {
     }
 
     reset() {
+        this.setName('')
         this.questions = [];
     }
 };
