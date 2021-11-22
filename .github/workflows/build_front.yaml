@@ -1,0 +1,21 @@
+name: build_front
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: "Build frontend and push to S3"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: "Building front"
+        run: cd web && npm install && npm run-script build
+      - name: "Pushing to s3"
+        run: aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive web/build/ s3://ethnosurvey.com
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+          AWS_DEFAULT_REGION: ru-central1
