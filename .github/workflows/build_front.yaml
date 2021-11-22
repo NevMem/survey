@@ -16,6 +16,6 @@ jobs:
       - name: "Pushing to s3"
         run: aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive web/build/ s3://ethnosurvey.com
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
           AWS_DEFAULT_REGION: ru-central1
