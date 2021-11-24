@@ -5,7 +5,7 @@ import Text from '../../components/text/Text';
 import createSurveyService, { CreateSurveyService } from '../../service/create_survey/CreateSurveyService';
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
-import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, RatingQuestion } from '../../data/Question';
+import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/Question';
 
 const PageWrapper = styled.div`
     margin: 20px;
@@ -108,14 +108,63 @@ const RatingQuestionBlock = (props: {setQuestion: (question: Question | undefine
     );
 }
 
-const QuestionCreationBlock = (props: {type: string, setQuestion: (question: Question | undefined) => void}) => {
-    if (props.type === '-') {
-        return null;
+const TextQuestionBlock = (props: {setQuestion: (question: Question | undefined) => void}) => {
+    const [name, setName] = useState('');
+    const [maxLength, setMaxLength] = useState(20);
+
+    const changeName = (event: any) => {
+        setName(event.target.value);
+        props.setQuestion({ title: event.target.value, maxLength: maxLength } as TextQuestion);
     }
-    if (props.type === 'rating') {
-        return (
-            <RatingQuestionBlock setQuestion={props.setQuestion} />
-        );
+
+    const changeMaxLength = (event: any) => {
+        setMaxLength(event.target.value | 0);
+        props.setQuestion({ title: name, maxLength: event.target.value | 0 } as TextQuestion);
+    }
+
+    return (
+        <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
+            <Text>Вопрос:</Text>
+            <Input value={name} onChange={changeName} />
+            <Text>Максимальная длина ответа:</Text>
+            <Input value={maxLength} onChange={changeMaxLength} />
+        </div>
+    );
+}
+
+
+const StarsQuestionBuilderBlock = (props: {setQuestion: (question: Question | undefined) => void}) => {
+    const [name, setName] = useState('');
+    const [starsCount, setStarsCount] = useState(5);
+
+    const changeName = (event: any) => {
+        setName(event.target.value);
+        props.setQuestion({ title: event.target.value, stars: starsCount } as StarsQuestion);
+    }
+
+    const changeStarsCount = (event: any) => {
+        setStarsCount(event.target.value | 0);
+        props.setQuestion({ title: name, stars: event.target.value | 0 } as StarsQuestion);
+    }
+
+    return (
+        <div style={{paddingTop: '10px', paddingBottom: '10px'}}>
+            <Text>Вопрос:</Text>
+            <Input value={name} onChange={changeName} />
+            <Text>Количество звезд:</Text>
+            <Input value={starsCount} onChange={changeStarsCount} />
+        </div>
+    );
+}
+
+const QuestionCreationBlock = (props: {type: string, setQuestion: (question: Question | undefined) => void}) => {
+    switch (props.type) {
+        case 'rating':
+            return <RatingQuestionBlock setQuestion={props.setQuestion} />;
+        case 'text':
+            return <TextQuestionBlock setQuestion={props.setQuestion} />;
+        case 'stars':
+            return <StarsQuestionBuilderBlock setQuestion={props.setQuestion} />;
     }
     return null;
 }
@@ -191,8 +240,10 @@ const QuestionBlock = (props: {question: Question}) => {
             <WrappedRow>
                 <Text large>Вопрос с рейтингом:</Text>
                 <Text>{props.question.title}</Text>
-                <Text large>Минимальное значени</Text>
+                <br/>
+                <Text large>Минимальное значение</Text>
                 <Text>{props.question.min}</Text>
+                <br/>
                 <Text large>Максимальное значение</Text>
                 <Text>{props.question.max}</Text>
             </WrappedRow>
@@ -203,6 +254,7 @@ const QuestionBlock = (props: {question: Question}) => {
             <WrappedRow>
                 <Text large>Вопрос с рейтингом в виде звездочек:</Text>
                 <Text>{props.question.title}</Text>
+                <br/>
                 <Text large>Количество звездочек</Text>
                 <Text>{props.question.stars}</Text>
             </WrappedRow>
@@ -213,6 +265,7 @@ const QuestionBlock = (props: {question: Question}) => {
             <WrappedRow>
                 <Text large>Текстовый вопрос:</Text>
                 <Text>{props.question.title}</Text>
+                <br/>
                 <Text large>Максимальная длина ответа</Text>
                 <Text>{props.question.maxLength}</Text>
             </WrappedRow>
