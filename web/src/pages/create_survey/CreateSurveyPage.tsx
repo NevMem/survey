@@ -5,7 +5,7 @@ import Text from '../../components/text/Text';
 import createSurveyService, { CreateSurveyService } from '../../service/create_survey/CreateSurveyService';
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
-import { instanceOfRatingQuestion, Question, RatingQuestion } from '../../data/Question';
+import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, RatingQuestion } from '../../data/Question';
 
 const PageWrapper = styled.div`
     margin: 20px;
@@ -189,9 +189,32 @@ const QuestionBlock = (props: {question: Question}) => {
     if (instanceOfRatingQuestion(props.question)) {
         return (
             <WrappedRow>
+                <Text large>Вопрос с рейтингом:</Text>
                 <Text>{props.question.title}</Text>
+                <Text large>Минимальное значени</Text>
                 <Text>{props.question.min}</Text>
+                <Text large>Максимальное значение</Text>
                 <Text>{props.question.max}</Text>
+            </WrappedRow>
+        );
+    }
+    if (instanceOfStarsQuestion(props.question)) {
+        return (
+            <WrappedRow>
+                <Text large>Вопрос с рейтингом в виде звездочек:</Text>
+                <Text>{props.question.title}</Text>
+                <Text large>Количество звездочек</Text>
+                <Text>{props.question.stars}</Text>
+            </WrappedRow>
+        );
+    }
+    if (instanceOfTextQuestion(props.question)) {
+        return (
+            <WrappedRow>
+                <Text large>Текстовый вопрос:</Text>
+                <Text>{props.question.title}</Text>
+                <Text large>Максимальная длина ответа</Text>
+                <Text>{props.question.maxLength}</Text>
             </WrappedRow>
         );
     }
