@@ -1,5 +1,5 @@
 import { makeObservable, observable, action } from "mobx";
-import Question from "../../data/Question";
+import { Question } from "../../data/Question";
 import { createLocalStorageAdapter } from '../../adapter/LocalStorageAdapter';
 
 class CreateSurveyService {

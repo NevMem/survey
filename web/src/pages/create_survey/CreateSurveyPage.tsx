@@ -5,7 +5,7 @@ import Text from '../../components/text/Text';
 import createSurveyService, { CreateSurveyService } from '../../service/create_survey/CreateSurveyService';
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
-import Question, { RatingQuestion } from '../../data/Question';
+import { instanceOfRatingQuestion, Question, RatingQuestion } from '../../data/Question';
 
 const PageWrapper = styled.div`
     margin: 20px;
@@ -120,7 +120,7 @@ const QuestionCreationBlock = (props: {type: string, setQuestion: (question: Que
     return null;
 }
 
-const AddQuestionSection = () => {
+const AddQuestionSection = (props: { createSurveyService: CreateSurveyService }) => {
     const [opened, setOpened] = useState(false);
     const openNewQuestionModal = () => {
         setOpened(true);
@@ -140,6 +140,12 @@ const AddQuestionSection = () => {
     }
 
     const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>(undefined);
+
+    const saveQuestionIfPossible = () => {
+        if (currentQuestion) {
+            props.createSurveyService.addQuestion(currentQuestion);
+        }
+    }
 
     return (
         <Fragment>
@@ -167,7 +173,7 @@ const AddQuestionSection = () => {
                         <QuestionCreationBlock type={selectedOption} setQuestion={setCurrentQuestion} />
                     </ModalBody>
                     <ModalActions>
-                        <GeneralButton>Добавить</GeneralButton>
+                        <GeneralButton onClick={saveQuestionIfPossible}>Добавить</GeneralButton>
                         <GeneralButton secondary onClick={closeNewQuestionModal}>Отмена</GeneralButton>
                     </ModalActions>
                 </Modal>
@@ -177,7 +183,21 @@ const AddQuestionSection = () => {
             </div>
         </Fragment>
     );
-}
+};
+
+const QuestionBlock = (props: {question: Question}) => {
+    if (instanceOfRatingQuestion(props.question)) {
+        return (
+            <div>
+                <div>{props.question.title}</div>
+                <div>{props.question.min}</div>
+                <div>{props.question.max}</div>
+            </div>
+        );
+    }
+    
+    return null;
+};
 
 const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyService }) => {
     const nameChanged = (event: any) => {
@@ -195,7 +215,12 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
                 <br/>
                 <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
             </WrappedRow>
-            <AddQuestionSection />
+            {props.createSurveyService.questions.map((question) => {
+                return (
+                    <QuestionBlock question={question} />
+                );
+            })}
+            <AddQuestionSection createSurveyService={props.createSurveyService} />
             <WrappedRow style={{display: 'flex', flexDirection: 'row-reverse', columnGap: '10px'}}>
                 <GeneralButton>Создать опрос</GeneralButton> 
                 <GeneralButton onClick={resetAll} secondary>Сбросить все</GeneralButton>
