@@ -188,11 +188,11 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
 const QuestionBlock = (props: {question: Question}) => {
     if (instanceOfRatingQuestion(props.question)) {
         return (
-            <div>
-                <div>{props.question.title}</div>
-                <div>{props.question.min}</div>
-                <div>{props.question.max}</div>
-            </div>
+            <WrappedRow>
+                <Text>{props.question.title}</Text>
+                <Text>{props.question.min}</Text>
+                <Text>{props.question.max}</Text>
+            </WrappedRow>
         );
     }
     
