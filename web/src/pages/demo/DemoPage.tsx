@@ -4,13 +4,14 @@ import Loader from '../../components/loader/Loader';
 import themes from '../../theme/themes';
 import Text from '../../components/text/Text';
 import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
+import Badge from '../../components/badge/Badge';
 
 export default function DemoPage() {
     return (
         <div>
-            {themes.map((theme) => {
+            {themes.map((theme, index) => {
                 return (
-                    <section>
+                    <section key={index}>
                         <ThemeProvider theme={theme}>
                             <GeneralButton>Primary</GeneralButton>
                             <GeneralButton secondary>Secondary</GeneralButton>
@@ -28,6 +29,13 @@ export default function DemoPage() {
                                 <Loader large />
                                 <Text large>Large</Text>
                                 <GeneralButton secondary>Button</GeneralButton>
+                            </SpaceBetweenRow>
+
+                            <SpaceBetweenRow>
+                                <Badge error>Error</Badge>
+                                <Badge warning>Warning</Badge>
+                                <Badge>Default</Badge>
+                                <Badge success>Success</Badge>
                             </SpaceBetweenRow>
                         </ThemeProvider>
                     </section>

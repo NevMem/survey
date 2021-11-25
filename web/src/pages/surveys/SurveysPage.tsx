@@ -5,6 +5,7 @@ import { Survey } from "../../data/Survey";
 import { observer } from "mobx-react-lite";
 import surveysService, { SurveysService } from "../../service/survey/SurveysService";
 import Loader from "../../components/loader/Loader";
+import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 
 const TableRow = styled.div`
     display: flex;
@@ -14,7 +15,7 @@ const TableRow = styled.div`
     justify-content: space-between;
 
     &:not(:last-child) {
-        border-bottom: 2px solid ${props => props.theme.secondaryBackgrond};
+        border-bottom: 2px solid ${props => props.theme.secondaryBackground};
     }
 `;
 
@@ -23,7 +24,7 @@ const Table = styled.div`
     flex-direction: column;
     margin-top: 16px;
     margin-bottom: 16px;
-    border: 2px solid ${props => props.theme.secondaryBackgrond};
+    border: 2px solid ${props => props.theme.secondaryBackground};
     border-radius: 4px;
 `;
 
@@ -36,7 +37,9 @@ const LoaderRow = styled.div`
 const SurveyRow = (props: {survey: Survey}) => {
     return (
         <TableRow>
-            <Text large>{props.survey.name}</Text>
+            <SpaceBetweenRow>
+                <Text large>{props.survey.name}</Text>
+            </SpaceBetweenRow>
         </TableRow>
     );
 };

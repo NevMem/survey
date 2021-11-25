@@ -10,7 +10,7 @@ import PageWrapper from '../../app/page/PageWrapper';
 
 const WrappedRow = styled.div`
     padding: 20px;
-    background-color: ${props => props.theme.secondaryBackgrond};
+    background-color: ${props => props.theme.secondaryBackground};
     border-radius: 8px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -22,14 +22,14 @@ const WrappedRow = styled.div`
 //     border-radius: 8px;
 //     margin-top: 10px;
 //     margin-bottom: 10px;
-//     border: 2px solid ${props => props.theme.secondaryBackgrond};
+//     border: 2px solid ${props => props.theme.secondaryBackground};
 // `;
 
 const Input = styled.input`
     outline: none;
     padding: 4px;
     padding-left: 10px;
-    border: 2px solid ${props => props.theme.secondaryBackgrond};
+    border: 2px solid ${props => props.theme.secondaryBackground};
     border-radius: 4px;
     background-color: ${props => props.theme.background};
     font-size: 1.5em;
