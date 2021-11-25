@@ -2,19 +2,35 @@ import PageWrapper from "../../app/page/PageWrapper";
 import Text from "../../components/text/Text";
 import styled from "styled-components";
 import { Survey } from "../../data/Survey";
-import { Fragment } from "react";
 import { observer } from "mobx-react-lite";
 import surveysService, { SurveysService } from "../../service/survey/SurveysService";
+import Loader from "../../components/loader/Loader";
 
 const TableRow = styled.div`
     display: flex;
     flex-direction: row;
     column-gap: 16px;
-    padding: 8px;
+    padding: 16px;
+    justify-content: space-between;
+
+    &:not(:last-child) {
+        border-bottom: 2px solid ${props => props.theme.secondaryBackgrond};
+    }
+`;
+
+const Table = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    margin-bottom: 16px;
     border: 2px solid ${props => props.theme.secondaryBackgrond};
     border-radius: 4px;
-    margin-top: 4px;
-    margin-bottom: 4px;
+`;
+
+const LoaderRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 `;
 
 const SurveyRow = (props: {survey: Survey}) => {
@@ -25,26 +41,34 @@ const SurveyRow = (props: {survey: Survey}) => {
     );
 };
 
-const SurveysTable = (props: {surveys: Survey[]}) => {
+const SurveysTable = (props: {surveys: Survey[], isLoading: boolean}) => {
+    if (props.isLoading) {
+        return (
+            <LoaderRow>
+                <Loader large />
+            </LoaderRow>
+        );
+    }
+
     return (
-        <Fragment>
+        <Table>
             {
                 props.surveys.map(survey => {
                     return <SurveyRow survey={survey} key={survey.id} />;
                 })
             }
-        </Fragment>
+        </Table>
     );
 }
 
 const SurveysWrapper = observer((props: {surveysService: SurveysService}) => {
-    return <SurveysTable surveys={props.surveysService.surveys} />
+    return <SurveysTable surveys={props.surveysService.surveys} isLoading={props.surveysService.fetchingSurveys} />
 });
 
 const SurveysPage = () => {
     return (
         <PageWrapper>
-            <Text large>Опросы</Text>
+            <Text header>Опросы</Text>
             <SurveysWrapper surveysService={surveysService} />
         </PageWrapper>
     );

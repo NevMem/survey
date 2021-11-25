@@ -1,46 +1,36 @@
 import styled from "styled-components";
 
 const SmallText = styled.p`
-    font-size: 0.7em;
+    font-size: ${props => props.theme.smallTextSize};
     margin: 0;
 `;
 
 const MediumText = styled.p`
-    font-size: 1em;
+    font-size: ${props => props.theme.mediumTextSize};
     margin: 0;
 `;
 
 const LargeText = styled.p`
-    font-size: 1.3em;
+    font-size: ${props => props.theme.largeTextSize};
     margin: 0;
 `;
 
-enum TextStyle {
-    Small,
-    Medium,
-    Large,
-};
+const HeaderText = styled.p`
+    font-size: ${props => props.theme.headerTextSize};
+    margin: 0;
+`;
 
-const Text = (props: {children: any | undefined, style?: TextStyle | undefined, large?: boolean, small?: boolean}) => {
-    var style: TextStyle = props.style ?? TextStyle.Medium
+const Text = (props: {children: any | undefined, large?: boolean, small?: boolean, header?: boolean}) => {
+    if (props.header) {
+        return <HeaderText>{props.children}</HeaderText>
+    }
     if (props.large) {
-        style = TextStyle.Large
+        return <LargeText>{props.children}</LargeText>;
     }
     if (props.small) {
-        style = TextStyle.Small
+        return <SmallText>{props.children}</SmallText>;
     }
-    switch (style) {
-        case TextStyle.Large:
-            return <LargeText>{props.children}</LargeText>;
-        case TextStyle.Medium:
-            return <MediumText>{props.children}</MediumText>;
-        case TextStyle.Small:
-            return <SmallText>{props.children}</SmallText>;
-    }
+    return <MediumText>{props.children}</MediumText>;
 }
 
 export default Text;
-
-export {
-    TextStyle
-};

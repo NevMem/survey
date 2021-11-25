@@ -51,7 +51,6 @@ class SurveysService {
     }
     
     _setSurveys(surveys: Survey[]) {
-        console.log(surveys.length);
         this.surveys = surveys;
     }
 

@@ -1,8 +1,8 @@
 import { ThemeProvider } from 'styled-components';
 import GeneralButton from '../../components/button/GeneralButton';
 import Loader from '../../components/loader/Loader';
-import Text, { TextStyle } from '../../components/text/Text';
 import themes from '../../theme/themes';
+import Text from '../../components/text/Text';
 
 export default function DemoPage() {
     return (
@@ -14,13 +14,10 @@ export default function DemoPage() {
                             <GeneralButton secondary={false}>Button</GeneralButton>
                             <GeneralButton secondary={true}>Button</GeneralButton>
 
-                            <Text style={TextStyle.Large}>Large</Text>
-                            <Text style={TextStyle.Medium}>Medium</Text>
-                            <Text style={TextStyle.Small}>Small</Text>
-
-                            <Text large>Another large</Text>
-                            <Text>Another medium</Text>
-                            <Text small>Another small</Text>
+                            <Text header>Header</Text>
+                            <Text large>Large</Text>
+                            <Text>Medium</Text>
+                            <Text small>Small</Text>
 
                             <Loader small />
                             <Loader />

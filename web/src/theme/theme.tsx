@@ -4,4 +4,8 @@ export interface Theme {
     foreground: string
     background: string
     secondaryBackgrond: string
+    smallTextSize: string
+    mediumTextSize: string
+    largeTextSize: string
+    headerTextSize: string
 }
