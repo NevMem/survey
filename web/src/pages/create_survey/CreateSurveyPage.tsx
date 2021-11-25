@@ -6,10 +6,7 @@ import createSurveyService, { CreateSurveyService } from '../../service/create_s
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
 import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/Question';
-
-const PageWrapper = styled.div`
-    margin: 20px;
-`;
+import PageWrapper from '../../app/page/PageWrapper';
 
 const WrappedRow = styled.div`
     padding: 20px;
@@ -291,9 +288,9 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
                 <br/>
                 <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
             </WrappedRow>
-            {props.createSurveyService.questions.map((question) => {
+            {props.createSurveyService.questions.map((question, index) => {
                 return (
-                    <QuestionBlock question={question} />
+                    <QuestionBlock question={question} key={index} />
                 );
             })}
             <AddQuestionSection createSurveyService={props.createSurveyService} />

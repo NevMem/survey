@@ -3,29 +3,30 @@ import { Survey, UnsavedSurvey } from '../../data/Survey';
 import apiService from '../../api/backendApiServiceSingleton';
 
 class SurveysService {
-    surveys: Survey[]
-    addingSurvey: boolean
+    surveys: Survey[];
+    addingSurvey: boolean;
+    fetchingSurveys: boolean;
 
     constructor() {
         this.surveys = [];
         this.addingSurvey = false;
+        this.fetchingSurveys = false;
+
         makeObservable(
             this,
             {
-                getSurveys: observable,
+                addingSurvey: observable,
+                fetchingSurveys: observable,
+                surveys: observable,
                 addSurvey: action,
                 _addSurveyImpl: action,
-                isAddingSurvey: observable,
+                _fetchSurveys: action,
+                _setFetchingSurveys: action,
+                _setSurveys: action,
             }
         );
-    }
 
-    isAddingSurvey(): boolean {
-        return this.addingSurvey;
-    }
-
-    getSurveys(): Survey[] {
-        return this.surveys;
+        this._fetchSurveys();
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey) {
@@ -39,8 +40,30 @@ class SurveysService {
     _addSurveyImpl(survey: Survey) {
         this.surveys.push(survey);
     }
+
+    _fetchSurveys() {
+        this.fetchingSurveys = true;
+        apiService.fetchSurveys()
+            .then(surveys => {
+                this._setSurveys(surveys);
+                this._setFetchingSurveys(false);
+            });
+    }
+    
+    _setSurveys(surveys: Survey[]) {
+        console.log(surveys.length);
+        this.surveys = surveys;
+    }
+
+    _setFetchingSurveys(isFetching: boolean) {
+        this.fetchingSurveys = isFetching;
+    }
 };
 
 const surveysService = new SurveysService();
 
 export default surveysService;
+
+export type {
+    SurveysService
+};

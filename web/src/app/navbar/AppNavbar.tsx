@@ -1,5 +1,5 @@
 import GeneralNavbar from "../../components/navbar/GeneralNavbar";
-import Text, { TextStyle } from "../../components/text/Text";
+import Text from "../../components/text/Text";
 import Logo from "../logo/Logo";
 
 const AppNavbar = () => {
