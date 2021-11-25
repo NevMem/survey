@@ -6,7 +6,7 @@ const AppNavbar = () => {
     return (
         <GeneralNavbar>
             <Logo />
-            <Text style={TextStyle.Medium}>Survey</Text>
+            <Text>Survey<span style={{fontSize: '16px'}}>&beta;</span></Text>
         </GeneralNavbar>
     )
 }
