@@ -1,9 +1,15 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import App from './Root';
+import Root from './Root';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders header', () => {
+  render(<Root />);
+  const headerText = screen.getByText(/Survey/i);
+  expect(headerText).toBeInTheDocument();
 });
+
+test('renders navbar', () => {
+  render(<Root />);
+  const navText = screen.getByText(/Опросы/i);
+  expect(navText).toBeInTheDocument();
+})
