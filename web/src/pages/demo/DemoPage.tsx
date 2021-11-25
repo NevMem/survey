@@ -1,5 +1,6 @@
 import { ThemeProvider } from 'styled-components';
 import GeneralButton from '../../components/button/GeneralButton';
+import Loader from '../../components/loader/Loader';
 import Text, { TextStyle } from '../../components/text/Text';
 import themes from '../../theme/themes';
 
@@ -20,6 +21,10 @@ export default function DemoPage() {
                             <Text large>Another large</Text>
                             <Text>Another medium</Text>
                             <Text small>Another small</Text>
+
+                            <Loader small />
+                            <Loader />
+                            <Loader large />
                         </ThemeProvider>
                     </section>
                 )

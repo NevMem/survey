@@ -4,16 +4,24 @@ import apiService from '../../api/backendApiServiceSingleton';
 
 class SurveysService {
     surveys: Survey[]
+    addingSurvey: boolean
 
     constructor() {
         this.surveys = [];
+        this.addingSurvey = false;
         makeObservable(
             this,
             {
                 getSurveys: observable,
+                addSurvey: action,
                 _addSurveyImpl: action,
+                isAddingSurvey: observable,
             }
         );
+    }
+
+    isAddingSurvey(): boolean {
+        return this.addingSurvey;
     }
 
     getSurveys(): Survey[] {
@@ -21,14 +29,15 @@ class SurveysService {
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey) {
+        this.addingSurvey = true;
         apiService.addSurvey(unsavedSurvey)
             .then(survey => {
                 this._addSurveyImpl(survey)
-            })
+            });
     }
 
     _addSurveyImpl(survey: Survey) {
-        this.surveys.push(survey)
+        this.surveys.push(survey);
     }
 };
 
