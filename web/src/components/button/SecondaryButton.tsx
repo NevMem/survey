@@ -17,4 +17,18 @@ const SecondaryButton = styled.button`
     }
 `;
 
-export default SecondaryButton;
+const SecondaryDisabledButton = styled.button`
+    color: ${props => props.theme.secondary};
+    font-size: 1em;
+    padding: 8px 18px;
+    background-color: ${props => props.theme.withAlpha(40).foreground};
+    border: 2px solid ${props => props.theme.withAlpha(40).secondary};
+    border-radius: 4px;
+    transition: all ease-in 0.2s;
+    cursor: pointer;
+`;
+
+export { 
+    SecondaryButton,
+    SecondaryDisabledButton,
+};

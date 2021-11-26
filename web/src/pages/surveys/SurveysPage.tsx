@@ -7,6 +7,7 @@ import surveysService, { SurveysService } from "../../service/survey/SurveysServ
 import Loader from "../../components/loader/Loader";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import Badge from "../../components/badge/Badge";
+import GeneralButton from "../../components/button/GeneralButton";
 
 const TableRow = styled.div`
     padding: 16px;
@@ -37,6 +38,7 @@ const SurveyRow = (props: {survey: Survey}) => {
             <SpaceBetweenRow>
                 <Text large>{props.survey.name}</Text>
                 <Badge success={props.survey.active}>{props.survey.active ? 'Активный' : 'Отключен'}</Badge>
+                <GeneralButton disabled={!props.survey.active}>Активировать</GeneralButton>
             </SpaceBetweenRow>
         </TableRow>
     );
