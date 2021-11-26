@@ -8,6 +8,8 @@ import Loader from "../../components/loader/Loader";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import Badge from "../../components/badge/Badge";
 import GeneralButton from "../../components/button/GeneralButton";
+import { useState } from "react";
+import { Navigate } from 'react-router-dom';
 
 const TableRow = styled.div`
     padding: 16px;
@@ -69,9 +71,17 @@ const SurveysWrapper = observer((props: {surveysService: SurveysService}) => {
 });
 
 const SurveysPage = () => {
+    const [redirect, setRedirect]  = useState(false);
+    const initRedirect = () => {
+        setRedirect(true);
+    };
     return (
         <PageWrapper>
-            <Text header>Опросы</Text>
+            { redirect && <Navigate to="/create_survey" /> }
+            <SpaceBetweenRow>
+                <Text header>Опросы</Text>
+                <GeneralButton onClick={initRedirect}>Создать опрос</GeneralButton>
+            </SpaceBetweenRow>
             <SurveysWrapper surveysService={surveysService} />
         </PageWrapper>
     );
