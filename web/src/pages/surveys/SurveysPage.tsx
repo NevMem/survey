@@ -51,7 +51,6 @@ const SurveyRow = (props: {survey: Survey}) => {
 };
 
 const SurveysTable = (props: {surveys: Survey[], isLoading: boolean, isActivating: boolean}) => {
-    console.log(props.isActivating, props.isLoading);
     if (props.isLoading || props.isActivating) {
         return (
             <LoaderRow>
