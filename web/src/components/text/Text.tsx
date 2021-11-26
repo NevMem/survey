@@ -20,17 +20,17 @@ const HeaderText = styled.p`
     margin: 0;
 `;
 
-const Text = (props: {children: any | undefined, large?: boolean, small?: boolean, header?: boolean}) => {
+const Text = (props: {children: any | undefined, large?: boolean, small?: boolean, header?: boolean, style?: any}) => {
     if (props.header) {
-        return <HeaderText>{props.children}</HeaderText>
+        return <HeaderText style={props.style}>{props.children}</HeaderText>
     }
     if (props.large) {
-        return <LargeText>{props.children}</LargeText>;
+        return <LargeText style={props.style}>{props.children}</LargeText>;
     }
     if (props.small) {
-        return <SmallText>{props.children}</SmallText>;
+        return <SmallText style={props.style}>{props.children}</SmallText>;
     }
-    return <MediumText>{props.children}</MediumText>;
+    return <MediumText style={props.style}>{props.children}</MediumText>;
 }
 
 export default Text;

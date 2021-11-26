@@ -7,6 +7,10 @@ import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
 import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/Question';
 import PageWrapper from '../../app/page/PageWrapper';
+import { UnsavedSurvey } from '../../data/Survey';
+import surveysService, { SurveysService } from '../../service/survey/SurveysService';
+import Loader from '../../components/loader/Loader';
+import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
 
 const WrappedRow = styled.div`
     padding: 20px;
@@ -272,13 +276,32 @@ const QuestionBlock = (props: {question: Question}) => {
     return null;
 };
 
-const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyService }) => {
+const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyService, surveysService: SurveysService }) => {
     const nameChanged = (event: any) => {
         props.createSurveyService.setName(event.target.value)
-    }
+    };
 
     const resetAll = () => {
         props.createSurveyService.reset()
+    };
+
+    const createSurvey = () => {
+        const unsavedSurvey: UnsavedSurvey = {
+            name: props.createSurveyService.name,
+            questions: props.createSurveyService.questions,
+        };
+        props.surveysService.addSurvey(unsavedSurvey);
+    };
+
+    if (props.surveysService.addingSurvey) {
+        return (
+            <Fragment>
+                <Text large>Опрос добавляется</Text>
+                <SpaceAroundRow>
+                    <Loader large />
+                </SpaceAroundRow>
+            </Fragment>
+        );
     }
 
     return (
@@ -295,7 +318,7 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
             })}
             <AddQuestionSection createSurveyService={props.createSurveyService} />
             <WrappedRow style={{display: 'flex', flexDirection: 'row-reverse', columnGap: '10px'}}>
-                <GeneralButton>Создать опрос</GeneralButton> 
+                <GeneralButton onClick={createSurvey}>Создать опрос</GeneralButton> 
                 <GeneralButton onClick={resetAll} secondary>Сбросить все</GeneralButton>
             </WrappedRow>
         </Fragment>
@@ -306,7 +329,7 @@ const CreateSurveyPage = () => {
     return (
         <PageWrapper>
             <Text large>Создаем опрос</Text>
-            <NewSurveyBlock createSurveyService={createSurveyService} />
+            <NewSurveyBlock createSurveyService={createSurveyService} surveysService={surveysService} />
         </PageWrapper>
     );
 };

@@ -23,6 +23,7 @@ class SurveysService {
                 _fetchSurveys: action,
                 _setFetchingSurveys: action,
                 _setSurveys: action,
+                _setAddingSurvey: action,
             }
         );
 
@@ -33,8 +34,13 @@ class SurveysService {
         this.addingSurvey = true;
         apiService.addSurvey(unsavedSurvey)
             .then(survey => {
-                this._addSurveyImpl(survey)
+                this._addSurveyImpl(survey);
+                this._setAddingSurvey(false);
             });
+    }
+
+    _setAddingSurvey(isAdding: boolean) {
+        this.addingSurvey = isAdding;
     }
 
     _addSurveyImpl(survey: Survey) {
