@@ -92,7 +92,7 @@ const createDefaultTheme = (): Theme => {
         success: '#61E294',
         warning: '#FFD25A',
         error: '#FF785A',
-        grey: '#e0e0e0',
+        grey: '#d0d0d0',
     }, {
         smallTextSize: '0.7em',
         mediumTextSize: '1em',
