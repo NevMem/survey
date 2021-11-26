@@ -35,19 +35,24 @@ const LoaderRow = styled.div`
 `;
 
 const SurveyRow = (props: {survey: Survey}) => {
+    const activateSurvey = () => {
+        surveysService.activateSurvey(props.survey.id);
+    };
+
     return (
         <TableRow>
             <SpaceBetweenRow>
                 <Text large style={{width: '300px'}}>{props.survey.name}</Text>
                 <Badge success={props.survey.active}>{props.survey.active ? 'Активный' : 'Отключен'}</Badge>
-                <GeneralButton disabled={props.survey.active}>Активировать</GeneralButton>
+                <GeneralButton onClick={activateSurvey} disabled={props.survey.active}>Активировать</GeneralButton>
             </SpaceBetweenRow>
         </TableRow>
     );
 };
 
-const SurveysTable = (props: {surveys: Survey[], isLoading: boolean}) => {
-    if (props.isLoading) {
+const SurveysTable = (props: {surveys: Survey[], isLoading: boolean, isActivating: boolean}) => {
+    console.log(props.isActivating, props.isLoading);
+    if (props.isLoading || props.isActivating) {
         return (
             <LoaderRow>
                 <Loader large />
@@ -67,7 +72,11 @@ const SurveysTable = (props: {surveys: Survey[], isLoading: boolean}) => {
 }
 
 const SurveysWrapper = observer((props: {surveysService: SurveysService}) => {
-    return <SurveysTable surveys={props.surveysService.surveys} isLoading={props.surveysService.fetchingSurveys} />
+    return <SurveysTable
+        surveys={props.surveysService.surveys}
+        isLoading={props.surveysService.fetchingSurveys}
+        isActivating={props.surveysService.activatingSurvey}
+        />
 });
 
 const SurveysPage = () => {

@@ -68,7 +68,16 @@ class MockBackendApiService implements BackendApiService {
                 };
                 this.surveys.push(survey);
                 return survey;
-            })
+            });
+    }
+
+    activateSurvey(id: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, 1000))
+            .then(() => {
+                this.surveys.forEach(survey => {
+                    survey.active = survey.id === id;
+                });
+            });
     }
 };
 

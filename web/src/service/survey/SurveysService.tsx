@@ -6,11 +6,13 @@ class SurveysService {
     surveys: Survey[];
     addingSurvey: boolean;
     fetchingSurveys: boolean;
+    activatingSurvey: boolean;
 
     constructor() {
         this.surveys = [];
         this.addingSurvey = false;
         this.fetchingSurveys = false;
+        this.activatingSurvey = false;
 
         makeObservable(
             this,
@@ -18,12 +20,15 @@ class SurveysService {
                 addingSurvey: observable,
                 fetchingSurveys: observable,
                 surveys: observable,
+                activatingSurvey: observable,
+                activateSurvey: action,
                 addSurvey: action,
                 _addSurveyImpl: action,
                 _fetchSurveys: action,
-                _setFetchingSurveys: action,
                 _setSurveys: action,
                 _setAddingSurvey: action,
+                _setActivatingSurvey: action,
+                _setFetchingSurveys: action,
             }
         );
 
@@ -36,6 +41,15 @@ class SurveysService {
             .then(survey => {
                 this._addSurveyImpl(survey);
                 this._setAddingSurvey(false);
+            });
+    }
+
+    activateSurvey(id: number) {
+        this.activatingSurvey = true;
+        apiService.activateSurvey(id)
+            .then(() => {
+                this._setActivatingSurvey(false);
+                this._fetchSurveys();
             });
     }
 
@@ -58,6 +72,10 @@ class SurveysService {
     
     _setSurveys(surveys: Survey[]) {
         this.surveys = surveys;
+    }
+
+    _setActivatingSurvey(isActivating: boolean) {
+        this.activatingSurvey = isActivating;
     }
 
     _setFetchingSurveys(isFetching: boolean) {
