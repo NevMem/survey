@@ -34,9 +34,31 @@ const LoaderRow = styled.div`
     justify-content: space-around;
 `;
 
+const MetadataContainer = styled.div`
+    background-color: ${props => props.theme.secondaryBackground};
+    padding: 16px;
+    border-radius: 16px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+`;
+
+const SurveyMetadataRenderer = (props: {survey: Survey}) => {
+    return (
+        <MetadataContainer>
+        </MetadataContainer>
+    );
+};
+
 const SurveyRow = (props: {survey: Survey}) => {
     const activateSurvey = () => {
         surveysService.activateSurvey(props.survey.id);
+    };
+
+    const [expanded, setExpanded] = useState(false);
+    const toggleMetadata = () => {
+        setExpanded(!expanded);
     };
 
     return (
@@ -45,7 +67,9 @@ const SurveyRow = (props: {survey: Survey}) => {
                 <Text large style={{width: '300px'}}>{props.survey.name}</Text>
                 <Badge success={props.survey.active}>{props.survey.active ? 'Активный' : 'Отключен'}</Badge>
                 <GeneralButton onClick={activateSurvey} disabled={props.survey.active}>Активировать</GeneralButton>
+                <GeneralButton onClick={toggleMetadata} secondary>{expanded ? 'свернуть' : 'раскрыть'}</GeneralButton>
             </SpaceBetweenRow>
+            { expanded && <SurveyMetadataRenderer survey={props.survey} /> }
         </TableRow>
     );
 };
