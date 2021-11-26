@@ -19,7 +19,6 @@ interface BadgeProps {
 
 const Badge = (props: BadgeProps) => {
     const theme = useContext(ThemeContext);
-    console.log(theme);
     if (props.error) {
         return <StyledBadge badgeBackgroundColor={theme.withAlpha(60).error} badgeTextColor={theme.error}>{props.children}</StyledBadge>;
     }

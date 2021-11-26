@@ -6,13 +6,10 @@ import { observer } from "mobx-react-lite";
 import surveysService, { SurveysService } from "../../service/survey/SurveysService";
 import Loader from "../../components/loader/Loader";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
+import Badge from "../../components/badge/Badge";
 
 const TableRow = styled.div`
-    display: flex;
-    flex-direction: row;
-    column-gap: 16px;
     padding: 16px;
-    justify-content: space-between;
 
     &:not(:last-child) {
         border-bottom: 2px solid ${props => props.theme.secondaryBackground};
@@ -39,6 +36,7 @@ const SurveyRow = (props: {survey: Survey}) => {
         <TableRow>
             <SpaceBetweenRow>
                 <Text large>{props.survey.name}</Text>
+                <Badge success={props.survey.active}>{props.survey.active ? 'Активный' : 'Отключен'}</Badge>
             </SpaceBetweenRow>
         </TableRow>
     );
