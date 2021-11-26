@@ -38,7 +38,7 @@ const SurveyRow = (props: {survey: Survey}) => {
             <SpaceBetweenRow>
                 <Text large>{props.survey.name}</Text>
                 <Badge success={props.survey.active}>{props.survey.active ? 'Активный' : 'Отключен'}</Badge>
-                <GeneralButton disabled={!props.survey.active}>Активировать</GeneralButton>
+                <GeneralButton disabled={props.survey.active}>Активировать</GeneralButton>
             </SpaceBetweenRow>
         </TableRow>
     );
