@@ -8,6 +8,7 @@ import AppNavbar from './app/navbar/AppNavbar';
 import AppSidebar from './app/sidebar/AppSidebar';
 import CreateSurveyPage from './pages/create_survey/CreateSurveyPage';
 import SurveysPage from './pages/surveys/SurveysPage';
+import DownloadPage from './pages/download/DownloadPage';
 
 const WithSideBar = (props: { children: any }) => {
   return (
@@ -33,6 +34,7 @@ function Root() {
               <Routes>
                 <Route path="/create_survey" element={<CreateSurveyPage/>} />
                 <Route path="/surveys" element={<SurveysPage />} />
+                <Route path="/download" element={<DownloadPage />} />
                 <Route path="/demo" element={<DemoPage />} />
                 <Route path="/" element={<HomePage/>} />
               </Routes>
