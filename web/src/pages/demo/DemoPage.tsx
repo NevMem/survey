@@ -5,6 +5,7 @@ import themes from '../../theme/themes';
 import Text from '../../components/text/Text';
 import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
 import Badge from '../../components/badge/Badge';
+import Notification from '../../components/notification/Notification';
 
 export default function DemoPage() {
     return (
@@ -37,6 +38,11 @@ export default function DemoPage() {
                                 <Badge>Default</Badge>
                                 <Badge success>Success</Badge>
                             </SpaceBetweenRow>
+
+                            <Notification title='Нотификация' text='Просто какое-то уведомление' />
+                            <Notification title='Нотификация' text='Просто какое-то уведомление' type='success' />
+                            <Notification title='Нотификация' text='Просто какое-то уведомление' type='error' />
+                            <Notification title='Нотификация' text='Просто какое-то уведомление' type='warning' />
                         </ThemeProvider>
                     </section>
                 )

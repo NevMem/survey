@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
 import PageWrapper from '../../app/page/PageWrapper';
 import surveysService, { SurveysService } from '../../service/survey/SurveysService';
