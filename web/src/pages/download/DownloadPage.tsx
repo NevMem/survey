@@ -6,6 +6,8 @@ import Loader from '../../components/loader/Loader';
 import { observer } from 'mobx-react-lite';
 import Card from '../../app/card/Card';
 import { Option, Select } from '../../components/select/Selector';
+import Text from '../../components/text/Text';
+import SpacedColumn from '../../app/layout/SpacedColumn';
 
 const SurveySelector = observer((props: {surveysService: SurveysService}) => {
     if (props.surveysService.fetchingSurveys) {
@@ -20,13 +22,16 @@ const SurveySelector = observer((props: {surveysService: SurveysService}) => {
 
     return (
         <Card>
-            <Select>
-                {props.surveysService.surveys.map(survey => {
-                    return (
-                        <Option key={survey.id}>{survey.name}</Option>
-                    );
-                })}
-            </Select>
+            <SpacedColumn rowGap={16}>
+                <Text large>Выберите опрос:</Text>
+                <Select>
+                    {props.surveysService.surveys.map(survey => {
+                        return (
+                            <Option key={survey.id}>{survey.name}</Option>
+                        );
+                    })}
+                </Select>
+            </SpacedColumn>
         </Card>
     );
 });
@@ -34,6 +39,7 @@ const SurveySelector = observer((props: {surveysService: SurveysService}) => {
 const DownloadPage = () => {
     return (
         <PageWrapper>
+            <Text header>Выгрузка данных опроса</Text>
             <SurveySelector surveysService={surveysService} />
         </PageWrapper>
     );
