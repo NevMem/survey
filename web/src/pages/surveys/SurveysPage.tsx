@@ -12,6 +12,7 @@ import { Fragment, useState } from "react";
 import { Navigate } from 'react-router-dom';
 import surveyMetadataService, { SurveyMetadataProvider } from "../../service/survey_metadata/SurveyMetadataService";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
+import SpaceBetweenReversedRow from "../../app/layout/SpaceBetweenReversedRow";
 
 const TableRow = styled.div`
     padding: 16px;
@@ -51,6 +52,9 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
         return <SpaceAroundRow><Loader large/></SpaceAroundRow>
     }
 
+    const gotoUploadAnswers = () => {  
+    };
+
     return (
         <Fragment>
             <SpaceBetweenRow>
@@ -61,6 +65,9 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
                 <Text>Файлов: </Text>
                 <Text>{props.provider.metadata?.files}</Text>
             </SpaceBetweenRow>
+            <SpaceBetweenReversedRow>
+                <GeneralButton onClick={gotoUploadAnswers}>Выгрузить ответы</GeneralButton>
+            </SpaceBetweenReversedRow>
         </Fragment>
     );
 });
