@@ -7,6 +7,11 @@ interface Survey {
     active: boolean
 };
 
+interface SurveyMetadata {
+    answers: number;
+    files: number;
+};
+
 interface UnsavedSurvey {
     name: string
     questions: Question[]
@@ -14,5 +19,6 @@ interface UnsavedSurvey {
 
 export type {
     Survey,
+    SurveyMetadata,
     UnsavedSurvey,
 };

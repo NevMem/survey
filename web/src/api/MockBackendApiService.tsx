@@ -1,5 +1,5 @@
 import { RatingQuestion, StarsQuestion, TextQuestion } from '../data/Question';
-import { Survey, UnsavedSurvey } from '../data/Survey';
+import { Survey, SurveyMetadata, UnsavedSurvey } from '../data/Survey';
 import { BackendApiService } from './BackendApiService';
 
 class MockBackendApiService implements BackendApiService {
@@ -77,6 +77,17 @@ class MockBackendApiService implements BackendApiService {
                 this.surveys.forEach(survey => {
                     survey.active = survey.id === id;
                 });
+            });
+    }
+
+
+    fetchMetadata(surveyId: number): Promise<SurveyMetadata> {
+        return new Promise(resolve => setTimeout(resolve, 1000))
+            .then(() => {
+                return {
+                    files: 56,
+                    answers: 48,
+                };
             });
     }
 };

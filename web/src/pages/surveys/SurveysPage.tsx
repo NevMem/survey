@@ -8,8 +8,10 @@ import Loader from "../../components/loader/Loader";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import Badge from "../../components/badge/Badge";
 import GeneralButton from "../../components/button/GeneralButton";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Navigate } from 'react-router-dom';
+import surveyMetadataService, { SurveyMetadataProvider } from "../../service/survey_metadata/SurveyMetadataService";
+import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 
 const TableRow = styled.div`
     padding: 16px;
@@ -44,9 +46,29 @@ const MetadataContainer = styled.div`
     row-gap: 12px;
 `;
 
+const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => {
+    if (props.provider.loading) {
+        return <SpaceAroundRow><Loader large/></SpaceAroundRow>
+    }
+
+    return (
+        <Fragment>
+            <SpaceBetweenRow>
+                <Text>Ответов: </Text>
+                <Text>{props.provider.metadata?.answers}</Text>
+            </SpaceBetweenRow>
+            <SpaceBetweenRow>
+                <Text>Файлов: </Text>
+                <Text>{props.provider.metadata?.files}</Text>
+            </SpaceBetweenRow>
+        </Fragment>
+    );
+});
+
 const SurveyMetadataRenderer = (props: {survey: Survey}) => {
     return (
         <MetadataContainer>
+            <MetadataWrapper provider={surveyMetadataService.createProvider(props.survey.id)} />
         </MetadataContainer>
     );
 };
