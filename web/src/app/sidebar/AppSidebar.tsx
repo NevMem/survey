@@ -27,6 +27,7 @@ const AppSidebar = () => {
             <Link to='/surveys'><AppSidebarItem>Опросы</AppSidebarItem></Link>
             <Link to='/create_survey'><AppSidebarItem>Создать опрос</AppSidebarItem></Link>
             <Link to='/push'><AppSidebarItem>Пуши</AppSidebarItem></Link>
+            <Link to='/download'><AppSidebarItem>Выгрузка данных</AppSidebarItem></Link>
             <Link to='/demo'><AppSidebarItem>[demo] компоненты</AppSidebarItem></Link>
         </Sidebar>
     );

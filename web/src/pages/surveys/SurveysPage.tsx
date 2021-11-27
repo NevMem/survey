@@ -52,7 +52,7 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
         return <SpaceAroundRow><Loader large/></SpaceAroundRow>
     }
 
-    const gotoUploadAnswers = () => {  
+    const gotoDownloadAnswers = () => {  
     };
 
     return (
@@ -66,7 +66,7 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
                 <Text>{props.provider.metadata?.files}</Text>
             </SpaceBetweenRow>
             <SpaceBetweenReversedRow>
-                <GeneralButton onClick={gotoUploadAnswers}>Выгрузить ответы</GeneralButton>
+                <GeneralButton onClick={gotoDownloadAnswers}>Выгрузить ответы</GeneralButton>
             </SpaceBetweenReversedRow>
         </Fragment>
     );
