@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: "Building front"
-        run: cd web && npm install && npm run-script build
+        run: cd web && npm install && CI=false npm run-script build
       - name: "Pushing to s3"
         run: aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive web/build/ s3://web.ethnosurvey.com
         env:
