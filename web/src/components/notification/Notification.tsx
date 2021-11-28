@@ -1,7 +1,12 @@
 import { useContext } from "react";
-import styled, { ThemeContext } from "styled-components";
+import styled, { keyframes, ThemeContext } from "styled-components";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import Text from '../text/Text';
+
+const appearAnimation = keyframes`
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
+`;
 
 const NotificationWrapper = styled.div<{color: string}>`
     width: 200px;
@@ -12,6 +17,7 @@ const NotificationWrapper = styled.div<{color: string}>`
     row-gap: 16px;
     background-color: ${props => props.color};
     margin: 8px;
+    animation: 1s ease-out 0s 1 ${appearAnimation};
 `;
 
 const Notification = (props: {title: string, text: string, type?: string}) => {
