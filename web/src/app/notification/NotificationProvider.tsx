@@ -71,7 +71,7 @@ const NotificationProvider = (props: { children: any }) => {
             <NotificationsTray>
                 {state.map(data => {
                     return (
-                        <TimedNotificationWrapper dispatcher={dispatcher} data={data} />
+                        <TimedNotificationWrapper key={data.id} dispatcher={dispatcher} data={data} />
                     );
                 })}
             </NotificationsTray>
