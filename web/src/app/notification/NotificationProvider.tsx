@@ -48,7 +48,7 @@ const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationActio
 
     useEffect(() => {
         startTimer();
-    });
+    }, []);
 
     return (
         <Notification title={props.data.title} text={props.data.text} type={props.data.type} />
