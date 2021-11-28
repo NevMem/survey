@@ -1,4 +1,4 @@
-import { createContext, Dispatch, useContext, useReducer } from "react";
+import { createContext, Dispatch, useContext, useEffect, useReducer, useState } from "react";
 import styled from "styled-components";
 import Notification from "../../components/notification/Notification";
 import { v4 } from 'uuid';
@@ -23,10 +23,37 @@ const NotificationsTray = styled.div`
     right: 0px;
     bottom: 0px;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
 `;
 
 const NotificationContext = createContext<Dispatch<NotificationAction>>(() => {});
+
+const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationAction>, data: NotificationData}) => {
+    const [intervalId, setIntervalId] = useState<any>(0);
+    
+    const stopTimer = () => {
+        clearTimeout(intervalId);
+        props.dispatcher({
+            type: REMOVE_NOTIFICATION_ACTION,
+            data: props.data,
+        });
+    }
+
+    const startTimer = () => {
+        const id = setTimeout(() => {
+            stopTimer();
+        }, 5000);
+        setIntervalId(id);
+    };
+
+    useEffect(() => {
+        startTimer();
+    });
+
+    return (
+        <Notification title={props.data.title} text={props.data.text} type={props.data.type} />
+    );
+};
 
 const NotificationProvider = (props: { children: any }) => {
     const [state, dispatcher] = useReducer((state: NotificationData[], action: NotificationAction) => {
@@ -44,7 +71,7 @@ const NotificationProvider = (props: { children: any }) => {
             <NotificationsTray>
                 {state.map(data => {
                     return (
-                        <Notification title={data.title} text={data.text} type={data.type} />
+                        <TimedNotificationWrapper dispatcher={dispatcher} data={data} />
                     );
                 })}
             </NotificationsTray>
