@@ -6,6 +6,24 @@ import Text from '../../components/text/Text';
 import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
 import Badge from '../../components/badge/Badge';
 import Notification from '../../components/notification/Notification';
+import { useNotification } from '../../app/notification/NotificationProvider';
+
+const NotificationsBlock = () => {
+    const notificationUser = useNotification();
+    const notification = (type: string) => {
+        notificationUser('Notification', 'Notification body', type);
+    };
+
+    return (
+        <SpaceBetweenRow>
+            <Text large>Нотификации:</Text>
+            <GeneralButton onClick={() => notification('success')}>Success</GeneralButton>
+            <GeneralButton onClick={() => notification('error')}>Error</GeneralButton>
+            <GeneralButton onClick={() => notification('warning')}>Warning</GeneralButton>
+            <GeneralButton onClick={() => notification('default')}>Default</GeneralButton>
+        </SpaceBetweenRow>
+    );
+};
 
 export default function DemoPage() {
     return (
@@ -47,6 +65,8 @@ export default function DemoPage() {
                     </section>
                 )
             })}
+
+            <NotificationsBlock />
         </div>
     )
-}
+};
