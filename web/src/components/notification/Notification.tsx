@@ -19,7 +19,7 @@ const NotificationWrapper = styled.div<{color: string}>`
     row-gap: 16px;
     background-color: ${props => props.color};
     margin: 8px;
-    animation: 1s ease-out 0s 1 ${appearAnimation};
+    animation: 0.25s ease-out 0s 1 ${appearAnimation};
 `;
 
 const ActionsBlock = (props: {actions?: string[], onAction?: (action: string) => void}) => {
