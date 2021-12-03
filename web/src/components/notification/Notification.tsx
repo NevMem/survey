@@ -22,7 +22,16 @@ const NotificationWrapper = styled.div<{color: string}>`
     animation: 0.25s ease-out 0s 1 ${appearAnimation};
 `;
 
-const ActionsBlock = (props: {actions?: string[], onAction?: (action: string) => void}) => {
+const NotificationButton = styled.div<{color: string}>`
+    padding: 8px;
+    border-radius: 8px;
+    background-color: ${props => props.color};
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+`;
+
+const ActionsBlock = (props: {buttonsColor: string, actions?: string[], onAction?: (action: string) => void}) => {
     if (!props.actions) {
         return null;
     }
@@ -30,25 +39,30 @@ const ActionsBlock = (props: {actions?: string[], onAction?: (action: string) =>
     return (
         <SpaceBetweenReversedRow>
             {props.actions.map(action => {
-                return <GeneralButton secondary onClick={() => props.onAction?.(action)}>{action}</GeneralButton>;
+                return <NotificationButton color={props.buttonsColor} onClick={() => props.onAction?.(action)}>{action}</NotificationButton>;
             })}
         </SpaceBetweenReversedRow>
     )
 };
 
 const Notification = (props: {title: string, text: string, type?: string, actions?: string[], onAction?: (action: string) => void}) => {
-    const theme = useContext(ThemeContext).withAlpha(150);
-    var color = theme.secondaryBackground;
+    const backgroundTheme = useContext(ThemeContext).withAlpha(150);
+    const buttonsTheme = useContext(ThemeContext).withAlpha(200);
+    var color = backgroundTheme.secondaryBackground;
+    var buttonsColor = buttonsTheme.secondaryBackground;
     if (props.type) {
         switch (props.type) {
             case 'success':
-                color = theme.success;
+                color = backgroundTheme.success;
+                buttonsColor = buttonsTheme.success;
                 break;
             case 'error':
-                color = theme.error;
+                color = backgroundTheme.error;
+                buttonsColor = buttonsTheme.error;
                 break;
             case 'warning':
-                color = theme.warning;
+                color = backgroundTheme.warning;
+                buttonsColor = buttonsTheme.warning;
         }
     }
 
@@ -59,7 +73,7 @@ const Notification = (props: {title: string, text: string, type?: string, action
                 <Text large>&times;</Text>
             </SpaceBetweenRow>
             <Text>{props.text}</Text>
-            <ActionsBlock actions={props.actions} onAction={props.onAction} />
+            <ActionsBlock actions={props.actions} onAction={props.onAction} buttonsColor={buttonsColor} />
         </NotificationWrapper>
     );
 };
