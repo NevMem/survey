@@ -1,6 +1,7 @@
 import { createContext, Dispatch, useContext, useEffect, useReducer, useState } from "react";
 import styled from "styled-components";
 import Notification from "../../components/notification/Notification";
+import { NotificationAction } from "./data";
 import { v4 } from 'uuid';
 
 const ADD_NOTIFICATION_ACTION = 'ADD_NOTIFICATION';
@@ -11,6 +12,7 @@ interface NotificationData {
     title: string;
     text: string;
     type?: string;
+    actions?: NotificationAction[];
 };
 
 interface NotificationsStateAction {
@@ -85,15 +87,18 @@ export default NotificationProvider;
 export const useNotification = () => {
     const dispatcher = useContext(NotificationContext);
     
-    return (title: string, text: string, type?: string) => {
+    return (title: string, text: string, type?: string, actions?: NotificationAction[]) => {
+        const id = v4();
         dispatcher({
             type: ADD_NOTIFICATION_ACTION,
             data: {
-                id: v4(),
+                id: id,
                 title: title,
                 text: text,
                 type: type,
+                actions: actions,
             }
         });
+        return id;
     };
 };
