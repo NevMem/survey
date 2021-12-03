@@ -2,7 +2,6 @@ import { useContext } from "react";
 import styled, { keyframes, ThemeContext } from "styled-components";
 import SpaceBetweenReversedRow from "../../app/layout/SpaceBetweenReversedRow";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
-import GeneralButton from "../button/GeneralButton";
 import Text from '../text/Text';
 
 const appearAnimation = keyframes`
@@ -11,7 +10,7 @@ const appearAnimation = keyframes`
 `;
 
 const NotificationWrapper = styled.div<{color: string}>`
-    width: 200px;
+    width: 250px;
     padding: 12px;
     border-radius: 8px;
     display: flex;
