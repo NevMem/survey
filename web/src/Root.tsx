@@ -10,6 +10,7 @@ import CreateSurveyPage from './pages/create_survey/CreateSurveyPage';
 import SurveysPage from './pages/surveys/SurveysPage';
 import DownloadPage from './pages/download/DownloadPage';
 import NotificationProvider from './app/notification/NotificationProvider';
+import DebugPanel from './app/debug/DebugPanel';
 
 const WithSideBar = (props: { children: any }) => {
   return (
@@ -42,6 +43,7 @@ function Root() {
                 </Routes>
             </WithSideBar>
           </HashRouter>
+          <DebugPanel />
         </NotificationProvider>
       </ThemeProvider>
     </div>
