@@ -13,7 +13,7 @@ interface NotificationData {
     type?: string;
 };
 
-interface NotificationAction {
+interface NotificationsStateAction {
     type: string;
     data: NotificationData;
 };
@@ -26,9 +26,9 @@ const NotificationsTray = styled.div`
     flex-direction: column;
 `;
 
-const NotificationContext = createContext<Dispatch<NotificationAction>>(() => {});
+const NotificationContext = createContext<Dispatch<NotificationsStateAction>>(() => {});
 
-const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationAction>, data: NotificationData}) => {
+const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationsStateAction>, data: NotificationData}) => {
     const [intervalId, setIntervalId] = useState<any>(0);
     
     const stopTimer = () => {
@@ -56,7 +56,7 @@ const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationActio
 };
 
 const NotificationProvider = (props: { children: any }) => {
-    const [state, dispatcher] = useReducer((state: NotificationData[], action: NotificationAction) => {
+    const [state, dispatcher] = useReducer((state: NotificationData[], action: NotificationsStateAction) => {
         if (action.type === ADD_NOTIFICATION_ACTION) {
             return [...state, action.data];
         }
