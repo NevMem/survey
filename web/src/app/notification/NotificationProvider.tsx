@@ -51,9 +51,19 @@ const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationsStat
     useEffect(() => {
         startTimer();
     }, []);
+    
+    const onAction = (action: string) => {
+        props.data.actions?.find(propsAction => propsAction.message === action)?.action(props.data.id)
+    }
 
     return (
-        <Notification title={props.data.title} text={props.data.text} type={props.data.type} />
+        <Notification
+            title={props.data.title}
+            text={props.data.text}
+            type={props.data.type}
+            actions={props.data.actions?.map(action => action.message)}
+            onAction={onAction}
+            />
     );
 };
 

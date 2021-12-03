@@ -14,6 +14,22 @@ const NotificationsBlock = () => {
         notificationUser('Notification', 'Notification body', type);
     };
 
+    const notificationWithAction = (type: string) => {
+        notificationUser(
+            'Notification with action',
+            'Notification body',
+            type,
+            [
+                {
+                    message: 'Ok',
+                    action: (notificationId: string) => {
+                        notificationUser('Got action for notification with id', notificationId);
+                    }
+                }
+            ]
+        );
+    }
+
     return (
         <SpaceBetweenRow>
             <Text large>Нотификации:</Text>
@@ -21,6 +37,10 @@ const NotificationsBlock = () => {
             <GeneralButton onClick={() => notification('error')}>Error</GeneralButton>
             <GeneralButton onClick={() => notification('warning')}>Warning</GeneralButton>
             <GeneralButton onClick={() => notification('default')}>Default</GeneralButton>
+            <GeneralButton onClick={() => notificationWithAction('success')}>Success w action</GeneralButton>
+            <GeneralButton onClick={() => notificationWithAction('error')}>Error w action</GeneralButton>
+            <GeneralButton onClick={() => notificationWithAction('warning')}>Warning w action</GeneralButton>
+            <GeneralButton onClick={() => notificationWithAction('default')}>Default w action</GeneralButton>
         </SpaceBetweenRow>
     );
 };
