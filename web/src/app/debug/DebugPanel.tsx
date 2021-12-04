@@ -3,6 +3,7 @@ import styled from "styled-components";
 import GeneralButton from "../../components/button/GeneralButton";
 import { Feature } from "../../service/experiments/data";
 import { features } from "../../service/experiments/experiments";
+import experimentsService from "../../service/experiments/ExperimentsService";
 import SpaceBetweenRow from "../layout/SpaceBetweenRow";
 
 
@@ -23,10 +24,18 @@ const DebugPanelCard = styled.div`
 `;
 
 const FeatureBlock = (props: {feature: Feature}) => {
+    const [enabled, setEnabled] = useState(experimentsService.isFeatureEnabled(props.feature));
+
+    const onChange = (event: any) => {
+        const newValue = event.target.checked;
+        experimentsService.setFeatureEnabled(props.feature, newValue);
+        setEnabled(!enabled);
+    };
+
     return (
         <SpaceBetweenRow>
             <label htmlFor={'feature-' + props.feature.name}>{props.feature.name}</label>
-            <input type='checkbox' id={'feature-' + props.feature.name} />
+            <input type='checkbox' id={'feature-' + props.feature.name} checked={enabled} onChange={onChange} />
         </SpaceBetweenRow>
     );
 };
@@ -35,7 +44,7 @@ const FeaturesBlock = () => {
     return (
         <Fragment>
             {features.map(feature => {
-                return <FeatureBlock feature={feature} />;
+                return <FeatureBlock key={feature.name} feature={feature} />;
             })}
         </Fragment>
     );

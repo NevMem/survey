@@ -9,7 +9,7 @@ class ExperimentsService {
     }
 
     isFeatureEnabled(feature: Feature): boolean {
-        return this.data.get(`feature-${feature.name}`) == "enabled";
+        return this.data.get(`feature-${feature.name}`) === "enabled";
     }
 
     setFeatureEnabled(feature: Feature, isEnabled: boolean) {
