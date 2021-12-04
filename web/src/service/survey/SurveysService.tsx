@@ -62,6 +62,10 @@ class SurveysService {
             .then(survey => {
                 this._setAddingSurvey(false);
                 this._fetchSurveys();
+            })
+            .catch(error => {
+                console.log(error);
+                this.notificationUser?.('Ошибка добавлениия опроса', error, 'error');
             });
     }
 
@@ -71,6 +75,10 @@ class SurveysService {
             .then(() => {
                 this._setActivatingSurvey(false);
                 this._fetchSurveys();
+            })
+            .catch(error => {
+                console.log(error);
+                this.notificationUser?.('Ошибка активации опроса', error, 'error');
             });
     }
 
@@ -86,7 +94,7 @@ class SurveysService {
             })
             .catch(error => {
                 console.log(error);
-                this.notificationUser?.('Ошибка загрузки опросов', error);
+                this.notificationUser?.('Ошибка загрузки опросов', error, 'error', [{message: 'Еще раз', action: () => { this._fetchSurveys() } }]);
 
                 this._setSurveysState(new SurveysError(error));
             });

@@ -38,7 +38,7 @@ const ActionsBlock = (props: {buttonsColor: string, actions?: string[], onAction
     return (
         <SpaceBetweenReversedRow>
             {props.actions.map(action => {
-                return <NotificationButton color={props.buttonsColor} onClick={() => props.onAction?.(action)}>{action}</NotificationButton>;
+                return <NotificationButton key={action} color={props.buttonsColor} onClick={() => props.onAction?.(action)}>{action}</NotificationButton>;
             })}
         </SpaceBetweenReversedRow>
     )
