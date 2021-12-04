@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 const SmallText = styled.p`
@@ -20,17 +21,24 @@ const HeaderText = styled.p`
     margin: 0;
 `;
 
-const Text = (props: {children: any | undefined, large?: boolean, small?: boolean, header?: boolean, style?: any}) => {
+const Text = (props: {
+    children: any | undefined,
+    large?: boolean,
+    small?: boolean,
+    header?: boolean,
+    style?: any,
+    onClick?: React.MouseEventHandler<HTMLParagraphElement>
+}) => {
     if (props.header) {
-        return <HeaderText style={props.style}>{props.children}</HeaderText>
+        return <HeaderText onClick={props.onClick} style={props.style}>{props.children}</HeaderText>
     }
     if (props.large) {
-        return <LargeText style={props.style}>{props.children}</LargeText>;
+        return <LargeText onClick={props.onClick} style={props.style}>{props.children}</LargeText>;
     }
     if (props.small) {
-        return <SmallText style={props.style}>{props.children}</SmallText>;
+        return <SmallText onClick={props.onClick} style={props.style}>{props.children}</SmallText>;
     }
-    return <MediumText style={props.style}>{props.children}</MediumText>;
+    return <MediumText onClick={props.onClick} style={props.style}>{props.children}</MediumText>;
 }
 
 export default Text;

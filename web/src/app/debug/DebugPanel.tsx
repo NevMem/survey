@@ -5,6 +5,7 @@ import { Feature } from "../../service/experiments/data";
 import { features } from "../../service/experiments/experiments";
 import experimentsService from "../../service/experiments/ExperimentsService";
 import SpaceBetweenRow from "../layout/SpaceBetweenRow";
+import Text from "../../components/text/Text";
 
 
 const DebugPanelContainer = styled.div`
@@ -61,6 +62,12 @@ const DebugPanel = () => {
         return (
             <DebugPanelContainer>
                 <DebugPanelCard>
+
+                    <SpaceBetweenRow>
+                        <Text large>Debug panel</Text>
+                        <Text large onClick={togglePanel}>&times;</Text>
+                    </SpaceBetweenRow>                    
+
                     <FeaturesBlock />
                 </DebugPanelCard>
             </DebugPanelContainer>
