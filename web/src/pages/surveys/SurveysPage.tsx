@@ -3,7 +3,7 @@ import Text from "../../components/text/Text";
 import styled from "styled-components";
 import { Survey } from "../../data/Survey";
 import { observer } from "mobx-react-lite";
-import surveysService, { SurveysService } from "../../service/survey/SurveysService";
+import surveysService, { SurveysError, SurveysLoaded, SurveysLoading, SurveysService, SurveysState } from "../../service/survey/SurveysService";
 import Loader from "../../components/loader/Loader";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import Badge from "../../components/badge/Badge";
@@ -13,6 +13,8 @@ import { Navigate } from 'react-router-dom';
 import surveyMetadataService, { SurveyMetadataProvider } from "../../service/survey_metadata/SurveyMetadataService";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import SpaceBetweenReversedRow from "../../app/layout/SpaceBetweenReversedRow";
+import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
+import CardError from "../../app/card/CardError";
 
 const TableRow = styled.div`
     padding: 16px;
@@ -29,12 +31,6 @@ const Table = styled.div`
     margin-bottom: 16px;
     border: 2px solid ${props => props.theme.secondaryBackground};
     border-radius: 4px;
-`;
-
-const LoaderRow = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
 `;
 
 const MetadataContainer = styled.div`
@@ -103,19 +99,33 @@ const SurveyRow = (props: {survey: Survey}) => {
     );
 };
 
-const SurveysTable = (props: {surveys: Survey[], isLoading: boolean, isActivating: boolean}) => {
-    if (props.isLoading || props.isActivating) {
+const SurveysTable = (props: {surveysState: SurveysState, isActivating: boolean}) => {
+    if (props.surveysState instanceof SurveysLoading || props.isActivating) {
         return (
-            <LoaderRow>
+            <SpaceAroundRow>
                 <Loader large />
-            </LoaderRow>
+            </SpaceAroundRow>
         );
+    }
+
+    if (props.surveysState instanceof SurveysError) {
+        return (
+            <CardError style={{marginTop: '16px'}}>
+                <SpaceAroundRow>
+                    <SpacedCenteredColumn rowGap={16}>
+                        <Text large>Ошибка загрузки опросов, ошибка:</Text>
+                        <Text>{props.surveysState.error}</Text>
+                        <GeneralButton onClick={() => {surveysService._fetchSurveys()}}>Попробовать еще раз</GeneralButton>
+                    </SpacedCenteredColumn>
+                </SpaceAroundRow>
+            </CardError>
+        )
     }
 
     return (
         <Table>
             {
-                props.surveys.map(survey => {
+                (props.surveysState as SurveysLoaded).surveys.map(survey => {
                     return <SurveyRow survey={survey} key={survey.id} />;
                 })
             }
@@ -125,8 +135,7 @@ const SurveysTable = (props: {surveys: Survey[], isLoading: boolean, isActivatin
 
 const SurveysWrapper = observer((props: {surveysService: SurveysService}) => {
     return <SurveysTable
-        surveys={props.surveysService.surveys}
-        isLoading={props.surveysService.fetchingSurveys}
+        surveysState={props.surveysService.surveysState}
         isActivating={props.surveysService.activatingSurvey}
         />
 });

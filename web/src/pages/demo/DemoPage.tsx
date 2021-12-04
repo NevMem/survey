@@ -55,6 +55,9 @@ export default function DemoPage() {
                             <GeneralButton>Primary</GeneralButton>
                             <GeneralButton secondary>Secondary</GeneralButton>
 
+                            <GeneralButton disabled>Primary disabled</GeneralButton>
+                            <GeneralButton secondary disabled>Secondary disabled</GeneralButton>
+
                             <Text header>Header</Text>
                             <Text large>Large</Text>
                             <Text>Medium</Text>

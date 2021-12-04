@@ -97,7 +97,7 @@ export default NotificationProvider;
 export const useNotification = () => {
     const dispatcher = useContext(NotificationContext);
     
-    return (title: string, text: string, type?: string, actions?: NotificationAction[]) => {
+    return (title: string, text: string, type?: string, actions?: NotificationAction[]): string => {
         const id = v4();
         dispatcher({
             type: ADD_NOTIFICATION_ACTION,
