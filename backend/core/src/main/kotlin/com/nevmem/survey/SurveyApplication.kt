@@ -1,4 +1,4 @@
-package com.example
+package com.nevmem.survey
 
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*

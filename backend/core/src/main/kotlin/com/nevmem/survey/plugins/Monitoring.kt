@@ -1,4 +1,4 @@
-package com.example.plugins
+package com.nevmem.survey.plugins
 
 import io.ktor.features.*
 import io.micrometer.prometheus.*
