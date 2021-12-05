@@ -1,0 +1,42 @@
+buildscript {
+    apply from: 'shared/versions.gradle'
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.3"
+
+        classpath "com.android.tools.build:gradle:$gradlePluginVersion"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+
+configurations {
+    ktlint
+}
+
+dependencies {
+    ktlint "com.pinterest:ktlint:0.41.0"
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "backend/**/src/**/*.kt", "android/**/src/**/*kt", "shared/**/src/**/*kt"
+}
+check.dependsOn ktlint
+
+apply plugin: 'org.jetbrains.kotlin.jvm'

@@ -1,0 +1,2 @@
+ext.kotlinVersion = '1.5.30'
+ext.gradlePluginVersion = '4.2.0'
