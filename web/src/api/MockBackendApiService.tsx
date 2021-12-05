@@ -27,6 +27,7 @@ class MockBackendApiService implements BackendApiService {
                     } as TextQuestion
                 ],
                 name: 'Первый замоканный опрос',
+                commonQuestions: [],
                 active: false,
             },
             {
@@ -47,6 +48,7 @@ class MockBackendApiService implements BackendApiService {
                     } as TextQuestion
                 ],
                 name: 'Второй замоканный опрос',
+                commonQuestions: [],
                 active: true,
             }
         ]
@@ -74,6 +76,7 @@ class MockBackendApiService implements BackendApiService {
                     id: 2 + this.surveys.length,
                     name: unsavedSurvey.name,
                     questions: unsavedSurvey.questions,
+                    commonQuestions: unsavedSurvey.commonQuestions,
                     active: false
                 };
                 this.surveys.push(survey);

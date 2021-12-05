@@ -1,10 +1,12 @@
+import { CommonQuestion } from "./CommonQuestion";
 import { Question } from "./Question";
 
 interface Survey {
-    id: number
-    name: string
-    questions: Question[]
-    active: boolean
+    id: number;
+    name: string;
+    questions: Question[];
+    commonQuestions: CommonQuestion[];
+    active: boolean;
 };
 
 interface SurveyMetadata {
@@ -13,8 +15,9 @@ interface SurveyMetadata {
 };
 
 interface UnsavedSurvey {
-    name: string
-    questions: Question[]
+    name: string;
+    questions: Question[];
+    commonQuestions: CommonQuestion[];
 };
 
 export type {

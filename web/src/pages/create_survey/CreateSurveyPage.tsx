@@ -11,6 +11,7 @@ import { UnsavedSurvey } from '../../data/Survey';
 import surveysService, { SurveysService } from '../../service/survey/SurveysService';
 import Loader from '../../components/loader/Loader';
 import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
+import { commonQuestions } from '../../data/commonQuestions';
 
 const WrappedRow = styled.div`
     padding: 20px;
@@ -285,10 +286,13 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
         props.createSurveyService.reset()
     };
 
+    const [selectedCommonQuestions, setSelectedCommonQuestions] = useState(commonQuestions);
+
     const createSurvey = () => {
         const unsavedSurvey: UnsavedSurvey = {
             name: props.createSurveyService.name,
             questions: props.createSurveyService.questions,
+            commonQuestions: selectedCommonQuestions,
         };
         props.surveysService.addSurvey(unsavedSurvey);
     };
