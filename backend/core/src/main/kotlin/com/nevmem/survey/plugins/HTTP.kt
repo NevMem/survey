@@ -14,7 +14,6 @@ fun Application.configureHTTP() {
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
         header("MyCustomHeader")
-        allowCredentials = true
         anyHost()
     }
 

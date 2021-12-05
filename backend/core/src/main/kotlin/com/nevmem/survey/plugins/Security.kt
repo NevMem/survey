@@ -1,25 +1,25 @@
 package com.nevmem.survey.plugins
 
-import io.ktor.auth.*
-import io.ktor.util.*
-import io.ktor.auth.jwt.*
 import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
+import com.nevmem.survey.env.EnvVars
+import io.ktor.application.Application
+import io.ktor.auth.authentication
+import io.ktor.auth.jwt.JWTPrincipal
+import io.ktor.auth.jwt.jwt
 
 fun Application.configureSecurity() {
     authentication {
         jwt {
-            val jwtAudience = environment.config.property("jwt.audience").getString()
-            realm = environment.config.property("jwt.realm").getString()
+            val jwtAudience = EnvVars.JWT.audience
+            realm = EnvVars.JWT.realm
             verifier(
                 JWT
-                    .require(Algorithm.HMAC256("secret"))
+                    .require(Algorithm.HMAC256(EnvVars.JWT.secret))
                     .withAudience(jwtAudience)
-                    .withIssuer(environment.config.property("jwt.domain").getString())
+                    .withIssuer(EnvVars.JWT.domain)
+                    .withClaimPresence("user_id")
+                    .withClaimPresence("user_name")
                     .build()
             )
             validate { credential ->
