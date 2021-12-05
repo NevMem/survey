@@ -11,7 +11,8 @@ import { UnsavedSurvey } from '../../data/Survey';
 import surveysService, { SurveysService } from '../../service/survey/SurveysService';
 import Loader from '../../components/loader/Loader';
 import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
-import { commonQuestions } from '../../data/commonQuestions';
+import { commonQuestions, commonQuestionTitle } from '../../data/commonQuestions';
+import { CommonQuestion } from '../../data/CommonQuestion';
 
 const WrappedRow = styled.div`
     padding: 20px;
@@ -308,6 +309,16 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
         );
     }
 
+    const toggleSelectedCommonQuestion = (commonQuestion: CommonQuestion) => {
+        if (selectedCommonQuestions.find(question => question === commonQuestion)) {
+            setSelectedCommonQuestions(
+                selectedCommonQuestions.filter(question => question !== commonQuestion)
+            );
+            return;
+        }
+        setSelectedCommonQuestions([...selectedCommonQuestions, commonQuestion]);
+    }
+
     return (
         <Fragment>
             <WrappedRow>
@@ -315,6 +326,23 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
                 <br/>
                 <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
             </WrappedRow>
+            <WrappedRow>
+                <Text large>Общие вопросы:</Text>
+                {commonQuestions.map(question => {
+                    return (
+                        <div key={question.id}>
+                            <label htmlFor={'question-' + question.id}>{commonQuestionTitle(question)}</label>
+                            <input
+                                type='checkbox'
+                                id={'question-' + question.id}
+                                checked={selectedCommonQuestions.find(q => q === question) !== undefined}
+                                onChange={() => {toggleSelectedCommonQuestion(question)}}
+                                />
+                        </div>
+                    );
+                })}
+            </WrappedRow>
+
             {props.createSurveyService.questions.map((question, index) => {
                 return (
                     <QuestionBlock question={question} key={index} />
