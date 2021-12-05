@@ -13,6 +13,7 @@ import Loader from '../../components/loader/Loader';
 import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
 import { commonQuestions, commonQuestionTitle } from '../../data/commonQuestions';
 import { CommonQuestion } from '../../data/CommonQuestion';
+import Input from '../../components/input/Input';
 
 const WrappedRow = styled.div`
     padding: 20px;
@@ -30,16 +31,6 @@ const WrappedRow = styled.div`
 //     margin-bottom: 10px;
 //     border: 2px solid ${props => props.theme.secondaryBackground};
 // `;
-
-const Input = styled.input`
-    outline: none;
-    padding: 4px;
-    padding-left: 10px;
-    border: 2px solid ${props => props.theme.secondaryBackground};
-    border-radius: 4px;
-    background-color: ${props => props.theme.background};
-    font-size: 1.5em;
-`;
 
 const Modal = styled.div`
     margin: 15% auto;
