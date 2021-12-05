@@ -1,6 +1,6 @@
 package com.nevmem.survey
 
-import com.nevmem.survey.plugins.configureRouting
+import com.nevmem.survey.routing.configureRouting
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import org.junit.Test
@@ -8,11 +8,11 @@ import kotlin.test.assertEquals
 
 class ApplicationTest {
     @Test
-    fun testRoot() {
+    fun testPing() {
         withTestApplication({ configureRouting() }) {
-            handleRequest(HttpMethod.Get, "/").apply {
+            handleRequest(HttpMethod.Get, "/ping").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("Hello World!", response.content)
+                assertEquals("pong", response.content)
             }
         }
     }

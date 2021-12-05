@@ -16,5 +16,4 @@ fun Application.configureHTTP() {
         header("MyCustomHeader")
         anyHost()
     }
-
 }
