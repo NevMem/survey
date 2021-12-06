@@ -22,7 +22,7 @@ jobs:
           java-version: 1.8
       - name: build core executable
         run: ./gradlew clean && ./gradlew :backend:core:build
-      - name: copy zip to root
+      - name: Copy zip to root
         run: cp -r backend/core/build/distributions/core*.zip core.zip
       - uses: actions/upload-artifact@master
         with:

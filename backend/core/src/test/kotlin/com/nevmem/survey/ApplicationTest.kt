@@ -3,8 +3,8 @@ package com.nevmem.survey
 import com.nevmem.survey.routing.configureRouting
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.Test
 
 class ApplicationTest {
     @Test
