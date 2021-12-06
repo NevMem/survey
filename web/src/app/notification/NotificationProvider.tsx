@@ -1,6 +1,7 @@
 import { createContext, Dispatch, useContext, useEffect, useReducer, useState } from "react";
 import styled from "styled-components";
 import Notification from "../../components/notification/Notification";
+import { NotificationAction } from "./data";
 import { v4 } from 'uuid';
 
 const ADD_NOTIFICATION_ACTION = 'ADD_NOTIFICATION';
@@ -11,9 +12,10 @@ interface NotificationData {
     title: string;
     text: string;
     type?: string;
+    actions?: NotificationAction[];
 };
 
-interface NotificationAction {
+interface NotificationsStateAction {
     type: string;
     data: NotificationData;
 };
@@ -26,9 +28,9 @@ const NotificationsTray = styled.div`
     flex-direction: column;
 `;
 
-const NotificationContext = createContext<Dispatch<NotificationAction>>(() => {});
+const NotificationContext = createContext<Dispatch<NotificationsStateAction>>(() => {});
 
-const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationAction>, data: NotificationData}) => {
+const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationsStateAction>, data: NotificationData}) => {
     const [intervalId, setIntervalId] = useState<any>(0);
     
     const stopTimer = () => {
@@ -49,14 +51,24 @@ const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationActio
     useEffect(() => {
         startTimer();
     }, []);
+    
+    const onAction = (action: string) => {
+        props.data.actions?.find(propsAction => propsAction.message === action)?.action(props.data.id)
+    }
 
     return (
-        <Notification title={props.data.title} text={props.data.text} type={props.data.type} />
+        <Notification
+            title={props.data.title}
+            text={props.data.text}
+            type={props.data.type}
+            actions={props.data.actions?.map(action => action.message)}
+            onAction={onAction}
+            />
     );
 };
 
 const NotificationProvider = (props: { children: any }) => {
-    const [state, dispatcher] = useReducer((state: NotificationData[], action: NotificationAction) => {
+    const [state, dispatcher] = useReducer((state: NotificationData[], action: NotificationsStateAction) => {
         if (action.type === ADD_NOTIFICATION_ACTION) {
             return [...state, action.data];
         }
@@ -85,15 +97,18 @@ export default NotificationProvider;
 export const useNotification = () => {
     const dispatcher = useContext(NotificationContext);
     
-    return (title: string, text: string, type?: string) => {
+    return (title: string, text: string, type?: string, actions?: NotificationAction[]): string => {
+        const id = v4();
         dispatcher({
             type: ADD_NOTIFICATION_ACTION,
             data: {
-                id: v4(),
+                id: id,
                 title: title,
                 text: text,
                 type: type,
+                actions: actions,
             }
         });
+        return id;
     };
 };

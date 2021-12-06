@@ -11,7 +11,7 @@ const PrimaryButton = styled.button`
     transition: all ease-in 0.2s;
 
     &:hover {
-        background-color: ${props => props.theme.background};
+        background-color: rgba(0, 0, 0, 0);
         color: ${props => props.theme.primary};
     }
 `;

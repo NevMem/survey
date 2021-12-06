@@ -1,18 +1,18 @@
 interface Question {
-    title: string
+    title: string;
 }
 
 interface RatingQuestion extends Question {
-    min: number
-    max: number
+    min: number;
+    max: number;
 }
 
 interface StarsQuestion extends Question {
-    stars: number
+    stars: number;
 }
 
 interface TextQuestion extends Question {
-    maxLength: number
+    maxLength: number;
 }
 
 function instanceOfRatingQuestion(object: any): object is RatingQuestion {

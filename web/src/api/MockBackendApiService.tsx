@@ -1,5 +1,7 @@
 import { RatingQuestion, StarsQuestion, TextQuestion } from '../data/Question';
 import { Survey, SurveyMetadata, UnsavedSurvey } from '../data/Survey';
+import { networkFailuresFeature } from '../service/experiments/experiments';
+import { isFeatureEnabled } from '../service/experiments/utils';
 import { BackendApiService } from './BackendApiService';
 
 class MockBackendApiService implements BackendApiService {
@@ -25,6 +27,7 @@ class MockBackendApiService implements BackendApiService {
                     } as TextQuestion
                 ],
                 name: 'Первый замоканный опрос',
+                commonQuestions: [],
                 active: false,
             },
             {
@@ -45,12 +48,17 @@ class MockBackendApiService implements BackendApiService {
                     } as TextQuestion
                 ],
                 name: 'Второй замоканный опрос',
+                commonQuestions: [],
                 active: true,
             }
         ]
     }
 
     fetchSurveys(): Promise<Survey[]> {
+        if (isFeatureEnabled(networkFailuresFeature)) {
+            return new Promise((_, rej) => setTimeout(rej.bind(rej, 'Network failed'), 1000));
+        }
+
         return new Promise(resolve => setTimeout(resolve, 1000))
             .then(() => {
                 return this.surveys;
@@ -58,12 +66,17 @@ class MockBackendApiService implements BackendApiService {
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey> {
+        if (isFeatureEnabled(networkFailuresFeature)) {
+            return new Promise((_, rej) => setTimeout(rej.bind(rej, 'Network failed'), 1000));
+        }
+
         return new Promise(resolve => setTimeout(resolve, 1000))
             .then(() => {
                 const survey: Survey = {
                     id: 2 + this.surveys.length,
                     name: unsavedSurvey.name,
                     questions: unsavedSurvey.questions,
+                    commonQuestions: unsavedSurvey.commonQuestions,
                     active: false
                 };
                 this.surveys.push(survey);
@@ -72,6 +85,10 @@ class MockBackendApiService implements BackendApiService {
     }
 
     activateSurvey(id: number): Promise<void> {
+        if (isFeatureEnabled(networkFailuresFeature)) {
+            return new Promise((_, rej) => setTimeout(rej.bind(rej, 'Network failed'), 1000));
+        }
+
         return new Promise(resolve => setTimeout(resolve, 1000))
             .then(() => {
                 this.surveys.forEach(survey => {
@@ -82,6 +99,10 @@ class MockBackendApiService implements BackendApiService {
 
 
     fetchMetadata(surveyId: number): Promise<SurveyMetadata> {
+        if (isFeatureEnabled(networkFailuresFeature)) {
+            return new Promise((_, rej) => setTimeout(rej.bind(rej, 'Network failed'), 1000));
+        }
+
         return new Promise(resolve => setTimeout(resolve, 1000))
             .then(() => {
                 return {
