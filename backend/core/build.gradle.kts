@@ -15,6 +15,8 @@ application {
     mainClass.set("com.nevmem.survey.SurveyApplicationKt")
 }
 
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
 repositories {
     mavenCentral()
 }
