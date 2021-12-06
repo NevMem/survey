@@ -13,7 +13,9 @@ jobs:
       - uses: actions/checkout@master
       - name: "Building front"
         run: cd web && npm install && CI=false npm run-script build
-      - name: "Pushing to s3"
+      - name: Deleting files on S3
+        run: aws --endpoint-url=https://storage.yandexcloud.net s3 rm --recursive s3://web.ethnosurvey.com
+      - name: Pushing to s3
         run: aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive web/build/ s3://web.ethnosurvey.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_KEY_ID }}
