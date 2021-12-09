@@ -9,9 +9,5 @@ fun Application.configureRouting() {
         get("/ping") {
             call.respondText("pong")
         }
-        
-        get("/.well-known/acme-challenge/O8aCFl7hY0YNvS0lAskzzF_s6mMz0qN9CeMd6Uesv4Q") {
-            call.respondText("O8aCFl7hY0YNvS0lAskzzF_s6mMz0qN9CeMd6Uesv4Q.5N97G4tmA5CuiRNjIVVaA1ntNMIXvoBWwW72RFKLVBg")
-        }
     }
 }
