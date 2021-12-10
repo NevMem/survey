@@ -60,8 +60,8 @@ internal fun mainRoleModel(): RoleModel {
         }
 
         override fun roleById(roleId: String): RoleEntity {
-            return allRoles.find { it.roleId == roleId } ?:
-                throw IllegalStateException("No role for given id: $roleId")
+            return allRoles.find { it.roleId == roleId }
+                ?: throw IllegalStateException("No role for given id: $roleId")
         }
     }
 }

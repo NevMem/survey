@@ -6,8 +6,8 @@ import com.nevmem.survey.role.internal.RoleConverterImpl
 import com.nevmem.survey.role.internal.mainRoleModel
 import com.nevmem.survey.service.users.UsersService
 import com.nevmem.survey.service.users.internal.UsersServiceImpl
-import io.ktor.application.*
 import io.ktor.application.Application
+import io.ktor.application.install
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
 

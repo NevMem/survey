@@ -15,7 +15,5 @@ fun Route.users() {
             call.respond(HttpStatusCode.BadRequest)
             return@post
         }
-
-
     }
 }
