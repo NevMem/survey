@@ -2,6 +2,7 @@ package com.nevmem.survey.role.internal
 
 import com.nevmem.survey.role.RoleEntity
 import com.nevmem.survey.role.RoleModel
+import org.slf4j.LoggerFactory
 
 typealias RoleEntityVisitor = (RoleEntity) -> Unit
 
@@ -45,6 +46,12 @@ internal fun mainRoleModel(): RoleModel {
         role("role.manager")
 
         role("invite.manager")
+    }
+
+    LoggerFactory.getLogger(RoleModel::class.simpleName).apply {
+        allRoles.forEach {
+            info("role parent: ${it.parentRole?.roleId}, child: ${it.roleId}")
+        }
     }
 
     return object : RoleModel {
