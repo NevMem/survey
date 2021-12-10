@@ -18,4 +18,8 @@ interface UsersService {
         credentials: Credentials,
         personal: Personal,
     ): UserEntity
+
+    suspend fun hasUserWithCredentials(credentials: Credentials): Boolean
+
+    suspend fun getUserWithCredentials(credentials: Credentials): UserEntity?
 }

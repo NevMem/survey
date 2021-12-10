@@ -15,6 +15,10 @@ object EnvVars {
         val secret by lazy { env("JWT_SECRET") }
         val domain by lazy { env("JWT_DOMAIN") }
     }
+
+    object Security {
+        val salt by lazy { env("SECURITY_SALT") }
+    }
 }
 
 private fun env(key: String): String {
