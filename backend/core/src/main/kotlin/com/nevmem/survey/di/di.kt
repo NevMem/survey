@@ -6,6 +6,8 @@ import com.nevmem.survey.role.internal.RoleConverterImpl
 import com.nevmem.survey.role.internal.mainRoleModel
 import com.nevmem.survey.service.auth.TokenService
 import com.nevmem.survey.service.auth.internal.TokenServiceImpl
+import com.nevmem.survey.service.invites.InvitesService
+import com.nevmem.survey.service.invites.internal.InvitesServiceImpl
 import com.nevmem.survey.service.security.auth.PasswordEncoder
 import com.nevmem.survey.service.security.auth.internal.PasswordEncoderImpl
 import com.nevmem.survey.service.users.UsersService
@@ -20,6 +22,7 @@ private val coreModule = module {
     single<RoleConverter> { RoleConverterImpl(get()) }
     single<TokenService> { TokenServiceImpl() }
     single<PasswordEncoder> { PasswordEncoderImpl() }
+    single<InvitesService> { InvitesServiceImpl() }
 }
 
 private val servicesModule = module {

@@ -22,4 +22,6 @@ interface UsersService {
     suspend fun hasUserWithCredentials(credentials: Credentials): Boolean
 
     suspend fun getUserWithCredentials(credentials: Credentials): UserEntity?
+
+    suspend fun getUserById(id: Long): UserEntity?
 }

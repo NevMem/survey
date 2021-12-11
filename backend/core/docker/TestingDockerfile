@@ -33,7 +33,7 @@ ENV SECURITY_SALT=salt
 
 ENV DB_USERNAME=postgres_for_testing
 ENV DB_PASSWORD=postgres_for_testing
-ENV DB_DBNAME=survey
+ENV DB_DBNAME=test_db
 ENV DB_SERVER=database
 ENV DB_PORT=5432
 

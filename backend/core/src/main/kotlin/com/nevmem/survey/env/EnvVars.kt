@@ -19,8 +19,14 @@ object EnvVars {
     object Security {
         val salt by lazy { env("SECURITY_SALT") }
     }
+
+    object Admin {
+        val password by lazy { maybeEnv("ADMIN_PASSWORD") }
+    }
 }
 
+private fun maybeEnv(key: String): String? = System.getenv(key)
+
 private fun env(key: String): String {
-    return System.getenv(key) ?: throw IllegalStateException("Environment variable with key $key not found")
+    return maybeEnv(key) ?: throw IllegalStateException("Environment variable with key $key not found")
 }

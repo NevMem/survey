@@ -5,6 +5,7 @@ import com.nevmem.survey.service.security.auth.PasswordEncoder
 import com.nevmem.survey.service.users.UsersService
 import com.nevmem.survey.service.users.data.UserEntity
 import com.nevmem.survey.service.users.internal.UsersTable.login
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -48,6 +49,15 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
 
     override suspend fun hasUserWithCredentials(credentials: UsersService.Credentials): Boolean {
         return getUserWithCredentials(credentials) == null
+    }
+
+
+    override suspend fun getUserById(id: Long): UserEntity? {
+        return transaction {
+            UserEntityDTO.find {
+                UsersTable.id eq id
+            }
+        }.firstOrNull()?.toEntity()
     }
 
     private fun UserEntityDTO.toEntity(): UserEntity {

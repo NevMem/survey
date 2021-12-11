@@ -7,6 +7,9 @@ class Client:
     def ping(self):
         return self._get('/ping')
 
+    def roles(self):
+        return self._get('/roles')
+
     def _post(self, addr: str, body, headers={}):
         return requests.post(self.base_url + addr, json=body, headers=headers)
 

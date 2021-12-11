@@ -70,5 +70,8 @@ internal fun mainRoleModel(): RoleModel {
             return allRoles.find { it.roleId == roleId }
                 ?: throw IllegalStateException("No role for given id: $roleId")
         }
+
+        override val roles: List<RoleEntity>
+            get() = allRoles
     }
 }
