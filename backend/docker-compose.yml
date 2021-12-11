@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  database:
+    image: 'postgres'
+    environment:
+      - POSTGRES_USER=postgres_for_testing
+      - POSTGRES_PASSWORD=postgres_for_testing
+      - POSTGRES_DB=test_db
+  core:
+    build:
+      context: ../
+      dockerfile: backend/core/docker/TestingDockerfile

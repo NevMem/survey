@@ -1,0 +1,31 @@
+# FROM openjdk:8-jdk-alpine AS BUILD_PHASE
+# COPY . .
+# RUN ls -la
+# RUN ./gradlew :backend:core:build
+
+FROM openjdk:8-jdk-alpine AS BUILD_PHASE
+COPY . .
+RUN ls -la
+
+
+FROM ubuntu:20.04
+
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+    vim \
+    telnet \
+    lsof \
+    syslog-ng \
+    curl \
+    openjdk-8-jdk \
+    nginx \
+    unzip
+
+COPY --from=BUILD_PHASE backend/core/build/distributions/core-0.0.1.zip /
+RUN unzip core-0.0.1.zip
+
+CMD ["ls -la"]
+CMD ["core-0.0.1/bin/core"]
+
+EXPOSE 80 443 8080
