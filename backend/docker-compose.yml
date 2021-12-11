@@ -11,3 +11,14 @@ services:
     build:
       context: ../
       dockerfile: backend/core/docker/TestingDockerfile
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  test:
+    build:
+      context: test/
+    depends_on:
+      - core
+
