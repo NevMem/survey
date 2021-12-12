@@ -1,17 +1,15 @@
 package com.nevmem.survey.service.users.internal
 
-import com.nevmem.survey.role.RoleConverter
+import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.service.security.auth.PasswordEncoder
 import com.nevmem.survey.service.users.UsersService
 import com.nevmem.survey.service.users.data.UserEntity
-import com.nevmem.survey.service.users.internal.UsersTable.login
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 internal class UsersServiceImpl : UsersService, KoinComponent {
-    private val roleConverter: RoleConverter by inject()
+    private val roleConverter: RoleSerializer by inject()
     private val passwordEncoder: PasswordEncoder by inject()
 
     override suspend fun createUser(

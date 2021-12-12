@@ -43,6 +43,14 @@ internal class InvitesServiceImpl : InvitesService, KoinComponent {
         }
     }
 
+    override suspend fun userInvites(ownerId: Long): List<InviteEntity> {
+        return transaction {
+            InviteEntityDTO.find {
+                InvitesTable.ownerId eq ownerId
+            }
+        }.map { it.toEntity() }
+    }
+
     private fun InviteEntityDTO.toEntity(): InviteEntity {
         return InviteEntity(
             inviteId,
