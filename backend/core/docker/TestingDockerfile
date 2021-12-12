@@ -36,6 +36,7 @@ ENV DB_PASSWORD=postgres_for_testing
 ENV DB_DBNAME=test_db
 ENV DB_SERVER=database
 ENV DB_PORT=5432
+ENV ADMIN_PASSWORD=password
 
 CMD ["ls -la"]
 CMD ["core-0.0.1/bin/core"]
