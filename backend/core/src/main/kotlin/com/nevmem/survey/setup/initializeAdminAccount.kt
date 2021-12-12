@@ -25,7 +25,6 @@ fun Application.initializeAdminAccount() {
                     "email@admin.com",
                 )
             )
-
         }
     }
 }

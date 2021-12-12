@@ -26,6 +26,7 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
                 name = personal.name
                 surname = personal.surname
                 email = personal.email
+                roles = "admin"
             }
         }
         return UserEntity(
