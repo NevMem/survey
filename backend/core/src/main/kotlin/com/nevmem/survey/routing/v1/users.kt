@@ -1,5 +1,6 @@
 package com.nevmem.survey.routing.v1
 
+import com.nevmem.survey.converter.UsersConverter
 import com.nevmem.survey.data.request.auth.LoginRequest
 import com.nevmem.survey.data.request.auth.RegisterRequest
 import com.nevmem.survey.data.response.auth.LoginResponse
@@ -8,10 +9,14 @@ import com.nevmem.survey.service.auth.TokenService
 import com.nevmem.survey.service.invites.InvitesService
 import com.nevmem.survey.service.users.UsersService
 import io.ktor.application.call
+import io.ktor.auth.authenticate
+import io.ktor.auth.jwt.JWTPrincipal
+import io.ktor.auth.principal
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveOrNull
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.routing.get
 import io.ktor.routing.post
 import org.koin.ktor.ext.inject
 
@@ -19,6 +24,7 @@ fun Route.users() {
     val usersService by inject<UsersService>()
     val tokenService by inject<TokenService>()
     val invitesService by inject<InvitesService>()
+    val usersConverter by inject<UsersConverter>()
 
     post("/login") {
         val request = call.receiveOrNull<LoginRequest>()
@@ -100,5 +106,17 @@ fun Route.users() {
         invitesService.acceptedBy(invite, user)
 
         call.respond(RegisterResponse.RegisterSuccessful(tokenService.createTokenForUser(user)))
+    }
+
+    authenticate {
+        get("/check_auth") {
+            call.respond(HttpStatusCode.OK)
+        }
+
+        get("/me") {
+            val principal = call.principal<JWTPrincipal>()!!
+            val user = usersService.getUserById(principal["user_id"]!!.toLong())!!
+            call.respond(usersConverter.convertUser(user))
+        }
     }
 }

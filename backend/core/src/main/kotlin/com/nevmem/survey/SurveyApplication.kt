@@ -8,11 +8,17 @@ import com.nevmem.survey.plugins.configureSecurity
 import com.nevmem.survey.plugins.configureSerialization
 import com.nevmem.survey.routing.configureRouting
 import com.nevmem.survey.setup.initializeAdminAccount
+import io.ktor.application.install
+import io.ktor.features.CallLogging
+import io.ktor.features.StatusPages
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+        install(StatusPages)
+        install(CallLogging)
+
         initializeDatabases()
         di()
         configureSerialization()
