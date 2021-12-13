@@ -20,6 +20,12 @@ class Client:
             }
         )
 
+    def test_question(self, token: str, body):
+        return self._post('/v1/test_question', body, headers={'Authorization': 'Bearer ' + token})
+
+    def questions(self, token: str):
+        return self._get('/v1/questions', headers={'Authorization': 'Bearer ' + token})
+
     def me(self, token: str):
         return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})
 
