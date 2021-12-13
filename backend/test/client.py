@@ -10,6 +10,12 @@ class Client:
     def me(self, token: str):
         return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})
 
+    def invites(self, token: str):
+        return self._get('/v1/my_invites', headers={'Authorization': 'Bearer ' + token})
+
+    def create_invite(self, token: str, expirationSeconds: int):
+        return self._post('/v1/create_invite', {'expirationTimeSeconds': expirationSeconds}, headers={'Authorization': 'Bearer ' + token})
+
     def ping(self):
         return self._get('/ping')
 

@@ -17,9 +17,9 @@ internal class InvitesServiceImpl : InvitesService, KoinComponent {
     override suspend fun createInvite(owner: UserEntity, expirationSeconds: Long): InviteEntity {
         val dto = transaction {
             InviteEntityDTO.new {
-                inviteId = UUID.randomUUID().toString().drop(8)
+                inviteId = UUID.randomUUID().toString().takeLast(12)
                 createdAt = System.currentTimeMillis()
-                expirationPeriod = expirationSeconds
+                expirationPeriod = expirationSeconds * 1000
                 ownerId = owner.id
                 acceptedByUserId = null
             }
@@ -31,8 +31,8 @@ internal class InvitesServiceImpl : InvitesService, KoinComponent {
         return transaction {
             InviteEntityDTO.find {
                 InvitesTable.inviteId like inviteId
-            }
-        }.firstOrNull()?.toEntity()
+            }.firstOrNull()?.toEntity()
+        }
     }
 
     override suspend fun acceptedBy(inviteEntity: InviteEntity, user: UserEntity) {
@@ -47,8 +47,8 @@ internal class InvitesServiceImpl : InvitesService, KoinComponent {
         return transaction {
             InviteEntityDTO.find {
                 InvitesTable.ownerId eq ownerId
-            }
-        }.map { it.toEntity() }
+            }.map { it.toEntity() }
+        }
     }
 
     private fun InviteEntityDTO.toEntity(): InviteEntity {
