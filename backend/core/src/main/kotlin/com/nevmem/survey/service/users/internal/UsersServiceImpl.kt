@@ -42,8 +42,8 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
             UserEntityDTO.find {
                 UsersTable.login like credentials.login
                 UsersTable.password like passwordEncoder.encodePassword(credentials.password)
-            }
-        }.firstOrNull()?.toEntity()
+            }.firstOrNull()?.toEntity()
+        }
     }
 
     override suspend fun hasUserWithCredentials(credentials: UsersService.Credentials): Boolean {
@@ -55,8 +55,8 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
         return transaction {
             UserEntityDTO.find {
                 UsersTable.id eq id
-            }
-        }.firstOrNull()?.toEntity()
+            }.firstOrNull()?.toEntity()
+        }
     }
 
     private fun UserEntityDTO.toEntity(): UserEntity {

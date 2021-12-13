@@ -4,6 +4,12 @@ class Client:
     def __init__(self, base_url: str):
         self.base_url = base_url
 
+    def login(self, login: str, password: str):
+        return self._post('/v1/login', {'login': login, 'password': password})
+
+    def me(self, token: str):
+        return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})
+
     def ping(self):
         return self._get('/ping')
 
