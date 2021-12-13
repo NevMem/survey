@@ -1,5 +1,6 @@
 package com.nevmem.survey.service.users.internal
 
+import com.nevmem.survey.role.RoleEntity
 import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.service.security.auth.PasswordEncoder
 import com.nevmem.survey.service.users.UsersService
@@ -14,7 +15,8 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
 
     override suspend fun createUser(
         credentials: UsersService.Credentials,
-        personal: UsersService.Personal
+        personal: UsersService.Personal,
+        roles: List<RoleEntity>,
     ): UserEntity {
         val dto = transaction {
             UserEntityDTO.new {
@@ -24,7 +26,7 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
                 name = personal.name
                 surname = personal.surname
                 email = personal.email
-                roles = "admin"
+                this.roles = roleConverter.rolesToString(roles)
             }
         }
         return UserEntity(

@@ -11,5 +11,5 @@ internal class RoleSerializerImpl(private val roleModel: RoleModel) : RoleSerial
         roles.joinToString(",") { it.roleId }
 
     override fun stringToRoles(rolesString: String): List<RoleEntity> =
-        rolesString.split(",").map { roleModel.roleById(it) }
+        rolesString.split(",").filter { it.isNotEmpty() }.map { roleModel.roleById(it) }
 }

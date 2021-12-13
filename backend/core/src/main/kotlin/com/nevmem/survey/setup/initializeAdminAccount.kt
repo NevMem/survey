@@ -1,6 +1,7 @@
 package com.nevmem.survey.setup
 
 import com.nevmem.survey.env.EnvVars
+import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.service.users.UsersService
 import io.ktor.application.Application
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -11,6 +12,8 @@ import org.koin.ktor.ext.inject
 @DelicateCoroutinesApi
 fun Application.initializeAdminAccount() {
     val usersService by inject<UsersService>()
+    val roleModel by inject<RoleModel>()
+
     val password = EnvVars.Admin.password
     if (password != null) {
         GlobalScope.launch {
@@ -23,7 +26,8 @@ fun Application.initializeAdminAccount() {
                     "admin",
                     "admin",
                     "email@admin.com",
-                )
+                ),
+                listOf(roleModel.roleById("admin"))
             )
         }
     }

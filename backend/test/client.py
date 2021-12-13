@@ -7,6 +7,19 @@ class Client:
     def login(self, login: str, password: str):
         return self._post('/v1/login', {'login': login, 'password': password})
 
+    def register(self, login: str, password: str, name: str, surname: str, email: str, inviteId: str):
+        return self._post(
+            '/v1/register',
+            {
+                'login': login,
+                'password': password,
+                'name': name,
+                'surname': surname,
+                'email': email,
+                'inviteId': inviteId
+            }
+        )
+
     def me(self, token: str):
         return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})
 

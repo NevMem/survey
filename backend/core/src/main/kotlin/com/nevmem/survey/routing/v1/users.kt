@@ -100,7 +100,8 @@ fun Route.users() {
                 request.name,
                 request.surname,
                 request.email,
-            )
+            ),
+            emptyList(),
         )
 
         invitesService.acceptedBy(invite, user)

@@ -1,5 +1,6 @@
 package com.nevmem.survey.service.users
 
+import com.nevmem.survey.role.RoleEntity
 import com.nevmem.survey.service.users.data.UserEntity
 
 interface UsersService {
@@ -17,6 +18,7 @@ interface UsersService {
     suspend fun createUser(
         credentials: Credentials,
         personal: Personal,
+        roles: List<RoleEntity>,
     ): UserEntity
 
     suspend fun hasUserWithCredentials(credentials: Credentials): Boolean
