@@ -66,6 +66,10 @@ internal fun mainRoleModel(): RoleModel {
             return false
         }
 
+        override fun hasAccess(requiredRoles: List<RoleEntity>, userRoles: List<RoleEntity>): Boolean {
+            return requiredRoles.all { required -> userRoles.any { isAncestorRole(it, required) } }
+        }
+
         override fun roleById(roleId: String): RoleEntity {
             return allRoles.find { it.roleId == roleId }
                 ?: throw IllegalStateException("No role for given id: $roleId")
