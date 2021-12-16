@@ -4,8 +4,6 @@ import com.nevmem.survey.service.surveys.SurveysService
 import com.nevmem.survey.service.surveys.data.CommonQuestionEntity
 import com.nevmem.survey.service.surveys.data.QuestionEntity
 import com.nevmem.survey.service.surveys.data.SurveyEntity
-import com.nevmem.survey.service.surveys.internal.SurveysTable.active
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 

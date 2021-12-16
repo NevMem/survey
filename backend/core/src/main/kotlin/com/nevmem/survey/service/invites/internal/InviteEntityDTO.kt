@@ -6,7 +6,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 
 internal object InvitesTable : LongIdTable() {
-    val inviteId = varchar("inviteId",16)
+    val inviteId = varchar("inviteId", 16)
     val createdAt = long("createdAt")
     val expirationPeriod = long("expirationPeriod")
     val ownerId = long("ownerId")

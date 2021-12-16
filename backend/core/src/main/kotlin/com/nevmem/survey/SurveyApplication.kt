@@ -11,7 +11,6 @@ import com.nevmem.survey.routing.configureRouting
 import com.nevmem.survey.setup.initializeAdminAccount
 import io.ktor.application.install
 import io.ktor.features.CallLogging
-import io.ktor.features.StatusPages
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 

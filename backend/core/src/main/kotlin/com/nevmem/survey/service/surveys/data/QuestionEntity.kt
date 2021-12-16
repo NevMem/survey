@@ -6,17 +6,17 @@ sealed class QuestionEntity {
         val title: String,
         val min: Int,
         val max: Int,
-    ): QuestionEntity()
+    ) : QuestionEntity()
 
     data class StarsQuestionEntity(
         val id: Long,
         val title: String,
         val stars: Int,
-    ): QuestionEntity()
+    ) : QuestionEntity()
 
     data class TextQuestionEntity(
         val id: Long,
         val title: String,
         val maxLength: Int,
-    ): QuestionEntity()
+    ) : QuestionEntity()
 }

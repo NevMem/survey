@@ -27,7 +27,7 @@ internal object QuestionsTable : LongIdTable() {
     val survey = reference("survey", SurveysTable)
 }
 
-internal class SurveyEntityDTO(id: EntityID<Long>): LongEntity(id) {
+internal class SurveyEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<SurveyEntityDTO>(SurveysTable)
 
     var name by SurveysTable.name
@@ -35,7 +35,7 @@ internal class SurveyEntityDTO(id: EntityID<Long>): LongEntity(id) {
     val questions by QuestionEntityDTO referrersOn QuestionsTable.survey
 }
 
-internal class QuestionEntityDTO(id: EntityID<Long>): LongEntity(id) {
+internal class QuestionEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<QuestionEntityDTO>(QuestionsTable)
 
     var title by QuestionsTable.title

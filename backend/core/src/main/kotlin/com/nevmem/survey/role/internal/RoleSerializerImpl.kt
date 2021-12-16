@@ -1,8 +1,8 @@
 package com.nevmem.survey.role.internal
 
-import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.role.RoleEntity
 import com.nevmem.survey.role.RoleModel
+import com.nevmem.survey.role.RoleSerializer
 import org.koin.core.component.KoinComponent
 
 internal class RoleSerializerImpl(private val roleModel: RoleModel) : RoleSerializer, KoinComponent {

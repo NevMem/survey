@@ -52,7 +52,6 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
         return getUserWithCredentials(credentials) == null
     }
 
-
     override suspend fun getUserById(id: Long): UserEntity? {
         return transaction {
             UserEntityDTO.find {

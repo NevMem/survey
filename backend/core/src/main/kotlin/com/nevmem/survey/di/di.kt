@@ -1,8 +1,8 @@
 package com.nevmem.survey.di
 
 import com.nevmem.survey.converter.convertersModule
-import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.role.RoleModel
+import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.role.internal.RoleSerializerImpl
 import com.nevmem.survey.role.internal.mainRoleModel
 import com.nevmem.survey.service.auth.TokenService

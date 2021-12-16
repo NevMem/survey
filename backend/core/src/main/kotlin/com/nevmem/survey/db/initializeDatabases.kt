@@ -8,11 +8,11 @@ import com.nevmem.survey.service.users.internal.UsersTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.Application
-import java.util.Properties
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
+import java.util.Properties
 
 fun Application.initializeDatabases() {
     Database.connect(

@@ -4,12 +4,12 @@ import com.nevmem.survey.service.invites.InvitesService
 import com.nevmem.survey.service.invites.data.InviteEntity
 import com.nevmem.survey.service.users.UsersService
 import com.nevmem.survey.service.users.data.UserEntity
-import java.util.UUID
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.util.UUID
 
 internal class InvitesServiceImpl : InvitesService, KoinComponent {
     private val usersService by inject<UsersService>()
