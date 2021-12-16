@@ -1,3 +1,4 @@
+import json
 import requests
 
 class Client:
@@ -20,11 +21,11 @@ class Client:
             }
         )
 
-    def test_question(self, token: str, body):
-        return self._post('/v1/test_question', body, headers={'Authorization': 'Bearer ' + token})
+    def surveys(self, token: str):
+        return self._get('/v1/surveys', headers={'Authorization': 'Bearer ' + token})
 
-    def questions(self, token: str):
-        return self._get('/v1/questions', headers={'Authorization': 'Bearer ' + token})
+    def create_survey(self, token: str, body):
+        return self._post('/v1/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
 
     def me(self, token: str):
         return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})

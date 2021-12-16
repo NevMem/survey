@@ -10,4 +10,6 @@ interface SurveysService {
         questions: List<QuestionEntity>,
         commonQuestion: List<CommonQuestionEntity>,
     ): SurveyEntity
+
+    suspend fun allSurveys(): List<SurveyEntity>
 }
