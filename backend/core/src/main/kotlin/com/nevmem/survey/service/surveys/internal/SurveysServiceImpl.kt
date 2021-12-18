@@ -29,13 +29,13 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
                         }
 
                         is QuestionEntity.TextQuestionEntity -> {
-                            this.type = QuestionEntityType.Stars
+                            this.type = QuestionEntityType.Text
                             this.title = question.title
                             this.maxLength = question.maxLength
                         }
 
                         is QuestionEntity.RatingQuestionEntity -> {
-                            this.type = QuestionEntityType.Stars
+                            this.type = QuestionEntityType.Rating
                             this.title = question.title
                             this.min = question.min
                             this.max = question.max
@@ -44,14 +44,46 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
                     this.survey = survey.id
                 }
             }
+
+            commonQuestion.forEach { commonQuestion ->
+                CommonQuestionDTO.new {
+                    commonQuestionId = commonQuestion.id
+                    this.survey = survey.id
+                }
+            }
+
             survey
         }
 
         return transaction { SurveyEntityDTO.findById(dto.id)!!.toEntity() }
     }
 
+    override suspend fun deleteSurvey(id: Long) = transaction<Unit> {
+        SurveyEntityDTO.findById(id)?.delete()
+    }
+
     override suspend fun allSurveys(): List<SurveyEntity> {
         return transaction { SurveyEntityDTO.all().map { it.toEntity() } }
+    }
+
+    override suspend fun currentActiveSurvey(): SurveyEntity? {
+        return transaction {
+            SurveyEntityDTO.find {
+                SurveysTable.active eq true
+            }.firstOrNull()?.toEntity()
+        }
+    }
+
+    override suspend fun activateSurvey(id: Long) = transaction {
+        SurveyEntityDTO.find {
+            SurveysTable.active eq true
+        }
+            .forUpdate()
+            .forEach {
+                it.active = false
+            }
+
+        SurveyEntityDTO.findById(id)?.active = true
     }
 
     private fun SurveyEntityDTO.toEntity(): SurveyEntity {
@@ -78,7 +110,9 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
                     )
                 }
             },
-            commonQuestions = emptyList(),
+            commonQuestions = commonQuestions.map {
+                CommonQuestionEntity(it.commonQuestionId)
+            },
             active = active,
         )
     }

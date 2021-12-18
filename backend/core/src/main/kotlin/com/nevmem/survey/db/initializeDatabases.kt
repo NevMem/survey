@@ -2,6 +2,7 @@ package com.nevmem.survey.db
 
 import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.service.invites.internal.InvitesTable
+import com.nevmem.survey.service.surveys.internal.CommonQuestionsTable
 import com.nevmem.survey.service.surveys.internal.QuestionsTable
 import com.nevmem.survey.service.surveys.internal.SurveysTable
 import com.nevmem.survey.service.users.internal.UsersTable
@@ -39,5 +40,6 @@ private fun createTables() = transaction {
         InvitesTable,
         SurveysTable,
         QuestionsTable,
+        CommonQuestionsTable,
     )
 }

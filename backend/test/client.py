@@ -27,6 +27,15 @@ class Client:
     def create_survey(self, token: str, body):
         return self._post('/v1/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
 
+    def active_survey(self):
+        return self._get('/v1/active_survey')
+
+    def activate_survey(self, token: str, survey_id: int):
+        return self._post('/v1/activate_survey', {'surveyId': survey_id}, headers={'Authorization': 'Bearer ' + token})
+
+    def delete_survey(self, token: str, survey_id: int):
+        return self._post('/v1/delete_survey', {'surveyId': survey_id}, headers={'Authorization': 'Bearer ' + token})
+
     def me(self, token: str):
         return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})
 

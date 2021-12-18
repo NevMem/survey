@@ -20,7 +20,7 @@ sealed class Question {
         val stars: Int,
     ) : Question()
 
-    @SerialName("test")
+    @SerialName("text")
     @Serializable
     data class TextQuestion(
         val title: String,
