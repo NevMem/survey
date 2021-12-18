@@ -1,0 +1,26 @@
+name: Backend workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  testing_backend:
+    name: Testing backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: build core executable
+        run: ./gradlew :backend:core:build
+      - name: testing
+        run: cd backend && docker-compose build && docker-compose up -d database && sleep 1 && docker-compose up -d core && docker-compose run test
