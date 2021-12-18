@@ -9,6 +9,7 @@ import com.nevmem.survey.data.response.survey.ActiveSurveyResponse
 import com.nevmem.survey.data.response.survey.AllSurveysResponse
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
 import com.nevmem.survey.role.RoleModel
+import com.nevmem.survey.routing.checkRoles
 import com.nevmem.survey.routing.userId
 import com.nevmem.survey.service.surveys.SurveysService
 import com.nevmem.survey.service.surveys.data.CommonQuestionEntity
@@ -79,12 +80,14 @@ fun Route.surveys() {
         }
 
         post("/activate_survey") {
+            checkRoles(roleModel, usersService, listOf("survey.activate"))
             val request = call.receive<ActivateSurveyRequest>()
             surveysService.activateSurvey(request.surveyId)
             call.respond(HttpStatusCode.OK)
         }
 
         post("/delete_survey") {
+            checkRoles(roleModel, usersService, listOf("survey.manager"))
             val request = call.receive<DeleteSurveyRequest>()
             surveysService.deleteSurvey(request.surveyId)
             call.respond(HttpStatusCode.OK)
