@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  database:
+    image: 'postgres'
+    environment:
+      - POSTGRES_USER=postgres_for_testing
+      - POSTGRES_PASSWORD=postgres_for_testing
+      - POSTGRES_DB=test_db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5432"]
+      interval: 3s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+  core:
+    build:
+      context: ../
+      dockerfile: backend/core/docker/TestingDockerfile
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+    depends_on:
+      database:
+        condition: service_started
+  test:
+    build:
+      context: test/
+    depends_on:
+      core:
+        condition: service_healthy
+

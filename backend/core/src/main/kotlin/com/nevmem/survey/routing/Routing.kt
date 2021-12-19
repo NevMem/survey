@@ -1,17 +1,21 @@
 package com.nevmem.survey.routing
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import com.nevmem.survey.routing.roles.allRoles
+import com.nevmem.survey.routing.v1.v1Api
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.response.respondText
+import io.ktor.routing.get
+import io.ktor.routing.routing
 
 fun Application.configureRouting() {
     routing {
+        v1Api()
+
+        allRoles()
+
         get("/ping") {
             call.respondText("pong")
-        }
-        
-        get("/.well-known/acme-challenge/O8aCFl7hY0YNvS0lAskzzF_s6mMz0qN9CeMd6Uesv4Q") {
-            call.respondText("O8aCFl7hY0YNvS0lAskzzF_s6mMz0qN9CeMd6Uesv4Q.5N97G4tmA5CuiRNjIVVaA1ntNMIXvoBWwW72RFKLVBg")
         }
     }
 }
