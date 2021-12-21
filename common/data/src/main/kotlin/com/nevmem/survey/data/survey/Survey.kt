@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Survey(
     val id: Long,
+    val surveyId: String,
     val name: String,
     val questions: List<Question>,
     val commonQuestions: List<CommonQuestion>,
-    val active: Boolean,
 )

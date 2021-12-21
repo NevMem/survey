@@ -74,7 +74,7 @@ def test_create_survey(client: Client):
     assert len(surveys_after) == len(surveys_before) + 1
 
 
-def test_activating_survey(client: Client):
+def test_create_surveys(client: Client):
     token = client.login('admin', 'password').json()['token']
 
     surveys = client.surveys(token).json()['surveys']
@@ -86,8 +86,6 @@ def test_activating_survey(client: Client):
         'Second survey',
         'Third survey',
     ]
-
-    ids = []
 
     for name in survey_names:
         response = client.create_survey(
@@ -106,16 +104,3 @@ def test_activating_survey(client: Client):
         )
         assert response.status_code == 200
         json = response.json()
-        ids.append(json['survey']['id'])
-    
-    response = client.active_survey()
-    assert response.status_code == 200
-    assert response.json()['survey'] is None
-
-    surveys = client.surveys(token).json()['surveys']
-    for survey in surveys:
-        assert survey['active'] == False
-
-    for id in ids:
-        assert client.activate_survey(token, id).status_code == 200
-        assert client.active_survey().json()['survey']['id'] == id

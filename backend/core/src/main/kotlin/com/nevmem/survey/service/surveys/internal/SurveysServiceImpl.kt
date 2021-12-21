@@ -1,5 +1,6 @@
 package com.nevmem.survey.service.surveys.internal
 
+import com.nevmem.survey.RandomStringGenerator
 import com.nevmem.survey.service.surveys.SurveysService
 import com.nevmem.survey.service.surveys.data.CommonQuestionEntity
 import com.nevmem.survey.service.surveys.data.QuestionEntity
@@ -16,7 +17,7 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         val dto = transaction {
             val survey = SurveyEntityDTO.new {
                 this.name = name
-                this.active = false
+                this.surveyId = RandomStringGenerator.randomString(5)
             }
 
             questions.forEach { question ->
@@ -66,29 +67,10 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         return transaction { SurveyEntityDTO.all().map { it.toEntity() } }
     }
 
-    override suspend fun currentActiveSurvey(): SurveyEntity? {
-        return transaction {
-            SurveyEntityDTO.find {
-                SurveysTable.active eq true
-            }.firstOrNull()?.toEntity()
-        }
-    }
-
-    override suspend fun activateSurvey(id: Long) = transaction {
-        SurveyEntityDTO.find {
-            SurveysTable.active eq true
-        }
-            .forUpdate()
-            .forEach {
-                it.active = false
-            }
-
-        SurveyEntityDTO.findById(id)?.active = true
-    }
-
     private fun SurveyEntityDTO.toEntity(): SurveyEntity {
         return SurveyEntity(
             id = id.value,
+            surveyId = surveyId,
             name = name,
             questions = questions.map { dto ->
                 when (dto.type) {
@@ -113,7 +95,6 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
             commonQuestions = commonQuestions.map {
                 CommonQuestionEntity(it.commonQuestionId)
             },
-            active = active,
         )
     }
 }

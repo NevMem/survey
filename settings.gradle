@@ -1,5 +1,6 @@
 rootProject.name = "com.nevmem.survey"
 
 include 'backend:core'
+include 'backend:helpers'
 include 'common:data'
 

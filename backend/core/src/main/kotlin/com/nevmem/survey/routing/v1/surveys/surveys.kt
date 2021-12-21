@@ -2,10 +2,8 @@ package com.nevmem.survey.routing.v1.surveys
 
 import com.nevmem.survey.converter.SurveysConverter
 import com.nevmem.survey.data.question.Question
-import com.nevmem.survey.data.request.survey.ActivateSurveyRequest
 import com.nevmem.survey.data.request.survey.CreateSurveyRequest
 import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
-import com.nevmem.survey.data.response.survey.ActiveSurveyResponse
 import com.nevmem.survey.data.response.survey.AllSurveysResponse
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
 import com.nevmem.survey.role.RoleModel
@@ -30,10 +28,6 @@ fun Route.surveys() {
     val roleModel by inject<RoleModel>()
     val surveysService by inject<SurveysService>()
     val surveysConverter by inject<SurveysConverter>()
-
-    get("/active_survey") {
-        call.respond(ActiveSurveyResponse(surveysService.currentActiveSurvey()?.let { surveysConverter.convertSurvey(it) }))
-    }
 
     authenticate {
         post("/create_survey") {
@@ -77,13 +71,6 @@ fun Route.surveys() {
             } catch (exception: Exception) {
                 call.respond(HttpStatusCode.ExpectationFailed, CreateSurveyResponse.CreateSurveyError(exception.message ?: "Unknown error"))
             }
-        }
-
-        post("/activate_survey") {
-            checkRoles(roleModel, usersService, listOf("survey.activate"))
-            val request = call.receive<ActivateSurveyRequest>()
-            surveysService.activateSurvey(request.surveyId)
-            call.respond(HttpStatusCode.OK)
         }
 
         post("/delete_survey") {

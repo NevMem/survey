@@ -12,10 +12,10 @@ class SurveysConverter : KoinComponent {
     fun convertSurvey(survey: SurveyEntity): Survey {
         return Survey(
             id = survey.id,
+            surveyId = survey.surveyId,
             name = survey.name,
             questions = survey.questions.map { questionsConverter(it) },
             commonQuestions = survey.commonQuestions.map { commonQuestionsConverter(it) },
-            active = survey.active,
         )
     }
 }
