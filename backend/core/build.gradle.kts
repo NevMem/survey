@@ -40,5 +40,6 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     implementation(project(":common:data"))
+    implementation(project(":backend:common"))
     implementation(project(":backend:helpers"))
 }

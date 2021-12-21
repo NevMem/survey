@@ -1,7 +1,7 @@
 package com.nevmem.survey.service.invites
 
-import com.nevmem.survey.service.invites.data.InviteEntity
-import com.nevmem.survey.service.users.data.UserEntity
+import com.nevmem.survey.invite.InviteEntity
+import com.nevmem.survey.user.UserEntity
 
 interface InvitesService {
     suspend fun createInvite(owner: UserEntity, expirationSeconds: Long): InviteEntity

@@ -1,7 +1,7 @@
 package com.nevmem.survey.converter
 
 import com.nevmem.survey.data.question.Question
-import com.nevmem.survey.service.surveys.data.QuestionEntity
+import com.nevmem.survey.question.QuestionEntity
 
 class QuestionsConverter {
     fun convertQuestion(question: QuestionEntity): Question {

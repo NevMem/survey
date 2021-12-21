@@ -1,6 +1,6 @@
-package com.nevmem.survey.service.invites.data
+package com.nevmem.survey.invite
 
-import com.nevmem.survey.service.users.data.UserEntity
+import com.nevmem.survey.user.UserEntity
 
 data class InviteEntity(
     val inviteId: String,

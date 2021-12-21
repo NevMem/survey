@@ -1,4 +1,7 @@
-package com.nevmem.survey.service.surveys.data
+package com.nevmem.survey.survey
+
+import com.nevmem.survey.commonQuestion.CommonQuestionEntity
+import com.nevmem.survey.question.QuestionEntity
 
 data class SurveyEntity(
     val id: Long,

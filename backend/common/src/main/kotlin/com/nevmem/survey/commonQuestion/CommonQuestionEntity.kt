@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.surveys.data
+package com.nevmem.survey.commonQuestion
 
 data class CommonQuestionEntity(
     val id: String,

@@ -1,7 +1,7 @@
 package com.nevmem.survey.converter
 
 import com.nevmem.survey.data.survey.Survey
-import com.nevmem.survey.service.surveys.data.SurveyEntity
+import com.nevmem.survey.survey.SurveyEntity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

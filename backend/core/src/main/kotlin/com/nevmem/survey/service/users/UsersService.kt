@@ -1,7 +1,7 @@
 package com.nevmem.survey.service.users
 
 import com.nevmem.survey.role.RoleEntity
-import com.nevmem.survey.service.users.data.UserEntity
+import com.nevmem.survey.user.UserEntity
 
 interface UsersService {
     data class Credentials(

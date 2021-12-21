@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.users.data
+package com.nevmem.survey.user
 
 import com.nevmem.survey.role.RoleEntity
 

@@ -1,8 +1,8 @@
 package com.nevmem.survey.service.surveys
 
-import com.nevmem.survey.service.surveys.data.CommonQuestionEntity
-import com.nevmem.survey.service.surveys.data.QuestionEntity
-import com.nevmem.survey.service.surveys.data.SurveyEntity
+import com.nevmem.survey.commonQuestion.CommonQuestionEntity
+import com.nevmem.survey.question.QuestionEntity
+import com.nevmem.survey.survey.SurveyEntity
 
 interface SurveysService {
     suspend fun createSurvey(
