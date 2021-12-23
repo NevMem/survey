@@ -11,14 +11,16 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyAccessor
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
+import com.google.devtools.ksp.symbol.Nullability
 import java.io.File
 
+data class TsListObject(val objectType: String)
+
 sealed class TsField {
-    data class TsInteger(val name: String) : TsField()
-    data class TsString(val name: String) : TsField()
-    data class TsObject(val name: String, val objectType: String) : TsField()
-    data class TsListObject(val objectType: String) : TsField()
-    data class TsList(val name: String, val fieldType: TsField.TsListObject) : TsField()
+    data class TsInteger(val name: String, val nullable: Boolean = false) : TsField()
+    data class TsString(val name: String, val nullable: Boolean = false) : TsField()
+    data class TsObject(val name: String, val objectType: String, val nullable: Boolean = false) : TsField()
+    data class TsList(val name: String, val fieldType: TsListObject) : TsField()
 }
 
 data class TsNode(
@@ -78,19 +80,22 @@ class SurveySymbolProcessor(
                 } else {
                     write("interface ${node.name} extends ${node.parent.name} {\n")
                 }
-                node.fields.forEach {
-                    when (it) {
+                node.fields.forEach { field ->
+                    when (field) {
                         is TsField.TsInteger -> {
-                            write("\t${it.name}: number;\n")
+                            val nl = " | undefined".takeIf { field.nullable } ?: ""
+                            write("\t${field.name}: number$nl;\n")
                         }
                         is TsField.TsString -> {
-                            write("\t${it.name}: string;\n")
+                            val nl = " | undefined".takeIf { field.nullable } ?: ""
+                            write("\t${field.name}: string$nl;\n")
                         }
                         is TsField.TsObject -> {
-                            write("\t${it.name}: ${it.objectType};\n")
+                            val nl = " | undefined".takeIf { field.nullable } ?: ""
+                            write("\t${field.name}: ${field.objectType}$nl;\n")
                         }
                         is TsField.TsList -> {
-                            write("\t${it.name}: ${it.fieldType.objectType}[];\n")
+                            write("\t${field.name}: ${field.fieldType.objectType}[];\n")
                         }
                         else -> {}
                     }
@@ -131,16 +136,16 @@ class SurveySymbolProcessor(
                 "List" -> {
                     val argument = it.type.resolve().arguments.first().type.toString()
                     logger.warn("Found list with argument type $argument")
-                    fields.add(TsField.TsList(fieldName, TsField.TsListObject(argument)))
+                    fields.add(TsField.TsList(fieldName, TsListObject(argument)))
                 }
                 "Int", "Long" -> {
-                    fields.add(TsField.TsInteger(fieldName))
+                    fields.add(TsField.TsInteger(fieldName, it.type.resolve().nullability == Nullability.NULLABLE))
                 }
                 "String" -> {
-                    fields.add(TsField.TsString(fieldName))
+                    fields.add(TsField.TsString(fieldName, it.type.resolve().nullability == Nullability.NULLABLE))
                 }
                 else -> {
-                    throw IllegalStateException("Declaration $declaration is not supported")
+                    fields.add(TsField.TsObject(fieldName, declaration, it.type.resolve().nullability == Nullability.NULLABLE))
                 }
             }
         }
