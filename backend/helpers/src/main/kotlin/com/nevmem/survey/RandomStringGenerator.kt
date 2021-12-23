@@ -9,5 +9,5 @@ object RandomStringGenerator {
         }
     }
 
-    fun <T>choice(from: List<T>): T = from[Random.Default.nextInt(from.size)]
+    fun <T> choice(from: List<T>): T = from[Random.Default.nextInt(from.size)]
 }

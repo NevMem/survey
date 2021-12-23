@@ -1,9 +1,11 @@
 package com.nevmem.survey.data.question
 
+import com.nevmem.survey.Exported
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Exported
 sealed class Question {
     @SerialName("rating")
     @Serializable

@@ -1,7 +1,7 @@
 package com.nevmem.survey.converter
 
-import com.nevmem.survey.data.question.CommonQuestion
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
+import com.nevmem.survey.data.question.CommonQuestion
 
 class CommonQuestionsConverter {
     fun convertCommonQuestion(question: CommonQuestionEntity): CommonQuestion {
