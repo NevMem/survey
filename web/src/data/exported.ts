@@ -138,15 +138,15 @@ interface CreateSurveyError extends CreateSurveyResponse {
 }
 
 export function instanceOfRatingQuestion(object: Question): object is RatingQuestion {
-	return object.type == "rating";
+	return object.type === "rating";
 }
 
 export function instanceOfStarsQuestion(object: Question): object is StarsQuestion {
-	return object.type == "stars";
+	return object.type === "stars";
 }
 
 export function instanceOfTextQuestion(object: Question): object is TextQuestion {
-	return object.type == "text";
+	return object.type === "text";
 }
 
 export type {

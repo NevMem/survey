@@ -134,7 +134,7 @@ class SurveySymbolProcessor(
 
                 if (serialNames.containsKey(node.name)) {
                     write("export function instanceOf${node.name}(object: ${node.parent!!.name}): object is ${node.name} {\n")
-                    write("\treturn object.type == \"${serialNames[node.name]}\";\n")
+                    write("\treturn object.type === \"${serialNames[node.name]}\";\n")
                     write("}\n\n")
                 }
             }

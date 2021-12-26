@@ -5,7 +5,7 @@ import Text from '../../components/text/Text';
 import createSurveyService, { CreateSurveyService } from '../../service/create_survey/CreateSurveyService';
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
-import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/Question';
+import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/exported';
 import PageWrapper from '../../app/page/PageWrapper';
 import { UnsavedSurvey } from '../../data/Survey';
 import surveysService, { SurveysService } from '../../service/survey/SurveysService';

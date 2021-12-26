@@ -1,9 +1,9 @@
-import { Survey, UnsavedSurvey, SurveyMetadata } from "../data/Survey";
+import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
+import { Survey } from "../data/exported";
 
 interface BackendApiService {
     fetchSurveys(): Promise<Survey[]>
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey>
-    activateSurvey(id: number): Promise<void>
     fetchMetadata(surveyId: number): Promise<SurveyMetadata>
 }
 

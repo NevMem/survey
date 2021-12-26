@@ -10,7 +10,7 @@ import SpacedColumn from '../../app/layout/SpacedColumn';
 import CardError from '../../app/card/CardError';
 import SpacedCenteredColumn from '../../app/layout/SpacedCenteredColumn';
 import GeneralButton from '../../components/button/GeneralButton';
-import { Survey } from '../../data/Survey';
+import { Survey } from '../../data/exported';
 import { ChangeEvent, Fragment, useState } from 'react';
 
 const SurveySelector = observer((props: {surveysService: SurveysService, selectSurvey: (survey: Survey | undefined) => void}) => {

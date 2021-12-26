@@ -1,13 +1,6 @@
-import { CommonQuestion } from "./CommonQuestion";
-import { Question } from "./Question";
+import { CommonQuestion } from "./exported";
+import { Question } from "./exported";
 
-interface Survey {
-    id: number;
-    name: string;
-    questions: Question[];
-    commonQuestions: CommonQuestion[];
-    active: boolean;
-};
 
 interface SurveyMetadata {
     answers: number;
@@ -21,7 +14,6 @@ interface UnsavedSurvey {
 };
 
 export type {
-    Survey,
     SurveyMetadata,
     UnsavedSurvey,
 };

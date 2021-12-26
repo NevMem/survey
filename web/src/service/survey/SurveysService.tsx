@@ -1,5 +1,6 @@
 import { makeObservable, observable, action } from 'mobx';
-import { Survey, UnsavedSurvey } from '../../data/Survey';
+import { Survey } from '../../data/exported';
+import { UnsavedSurvey } from '../../data/Survey';
 import apiService from '../../api/backendApiServiceSingleton';
 import { NotificationAction } from '../../app/notification/data';
 
@@ -40,7 +41,6 @@ class SurveysService {
                 addingSurvey: observable,
                 activatingSurvey: observable,
                 surveysState: observable,
-                activateSurvey: action,
                 addSurvey: action,
                 _fetchSurveys: action,
                 _setAddingSurvey: action,
@@ -65,18 +65,6 @@ class SurveysService {
             })
             .catch(error => {
                 this.notificationUser?.('Ошибка добавлениия опроса', error, 'error');
-            });
-    }
-
-    activateSurvey(id: number) {
-        this.activatingSurvey = true;
-        apiService.activateSurvey(id)
-            .then(() => {
-                this._setActivatingSurvey(false);
-                this._fetchSurveys();
-            })
-            .catch(error => {
-                this.notificationUser?.('Ошибка активации опроса', error, 'error');
             });
     }
 
