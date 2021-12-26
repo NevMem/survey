@@ -72,7 +72,7 @@ const RatingQuestionBlock = (props: {setQuestion: (question: Question | undefine
     const [name, setName] = useState('');
 
     const updateQuestion = (newMin?: number, newMax?: number, newName?: string) => {
-        props.setQuestion({title: newName ?? name, min: newMin ?? min, max: newMax ?? max} as RatingQuestion);
+        props.setQuestion({type: "rating", title: newName ?? name, min: newMin ?? min, max: newMax ?? max} as RatingQuestion);
     }
 
     const changeMin = (event: any) => {
@@ -108,12 +108,12 @@ const TextQuestionBlock = (props: {setQuestion: (question: Question | undefined)
 
     const changeName = (event: any) => {
         setName(event.target.value);
-        props.setQuestion({ title: event.target.value, maxLength: maxLength } as TextQuestion);
+        props.setQuestion({ type: "text", title: event.target.value, maxLength: maxLength } as TextQuestion);
     }
 
     const changeMaxLength = (event: any) => {
         setMaxLength(event.target.value | 0);
-        props.setQuestion({ title: name, maxLength: event.target.value | 0 } as TextQuestion);
+        props.setQuestion({ type: "text", title: name, maxLength: event.target.value | 0 } as TextQuestion);
     }
 
     return (
@@ -133,12 +133,12 @@ const StarsQuestionBuilderBlock = (props: {setQuestion: (question: Question | un
 
     const changeName = (event: any) => {
         setName(event.target.value);
-        props.setQuestion({ title: event.target.value, stars: starsCount } as StarsQuestion);
+        props.setQuestion({ type: "stars", title: event.target.value, stars: starsCount } as StarsQuestion);
     }
 
     const changeStarsCount = (event: any) => {
         setStarsCount(event.target.value | 0);
-        props.setQuestion({ title: name, stars: event.target.value | 0 } as StarsQuestion);
+        props.setQuestion({ type: "stars", title: name, stars: event.target.value | 0 } as StarsQuestion);
     }
 
     return (
