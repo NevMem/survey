@@ -1,17 +1,13 @@
 import React from 'react';
-import DemoPage from './pages/demo/DemoPage';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { defaultTheme } from './theme/themes';
 import { ThemeProvider } from 'styled-components';
-import HomePage from './pages/home/HomePage';
 import AppNavbar from './app/navbar/AppNavbar';
 import AppSidebar from './app/sidebar/AppSidebar';
-import CreateSurveyPage from './pages/create_survey/CreateSurveyPage';
-import SurveysPage from './pages/surveys/SurveysPage';
-import DownloadPage from './pages/download/DownloadPage';
 import NotificationProvider, { useNotification } from './app/notification/NotificationProvider';
 import DebugPanel from './app/debug/DebugPanel';
 import surveysService from './service/survey/SurveysService';
+import pages from './pages/pages';
 
 const WithSideBar = (props: { children: any }) => {
   return (
@@ -43,11 +39,14 @@ function Root() {
             <AppNavbar />
             <WithSideBar>
                 <Routes>
-                  <Route path="/create_survey" element={<CreateSurveyPage/>} />
+                  {pages.map((info, index) => {
+                    return <Route path={info.path} key={index} element={info.component} />;
+                  })}
+                  {/* <Route path="/create_survey" element={<CreateSurveyPage/>} />
                   <Route path="/surveys" element={<SurveysPage />} />
                   <Route path="/download" element={<DownloadPage />} />
                   <Route path="/demo" element={<DemoPage />} />
-                  <Route path="/" element={<HomePage/>} />
+                  <Route path="/" element={<HomePage/>} /> */}
                 </Routes>
             </WithSideBar>
           </HashRouter>

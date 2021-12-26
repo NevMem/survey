@@ -1,6 +1,7 @@
 import Sidebar from "../../components/sidebar/Sidebar";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import pages from '../../pages/pages';
 
 const AppSidebarItem = styled.p`
     font-size: 1.2em;
@@ -23,12 +24,9 @@ const AppSidebarItem = styled.p`
 const AppSidebar = () => {
     return (
         <Sidebar>
-            <Link to='/'><AppSidebarItem>На главную</AppSidebarItem></Link>
-            <Link to='/surveys'><AppSidebarItem>Опросы</AppSidebarItem></Link>
-            <Link to='/create_survey'><AppSidebarItem>Создать опрос</AppSidebarItem></Link>
-            <Link to='/push'><AppSidebarItem>Пуши</AppSidebarItem></Link>
-            <Link to='/download'><AppSidebarItem>Выгрузка данных</AppSidebarItem></Link>
-            <Link to='/demo'><AppSidebarItem>[demo] компоненты</AppSidebarItem></Link>
+            {pages.filter(info => info.useInSidebar).map((info, index) => {
+                return <Link key={index} to={info.path}><AppSidebarItem>{info.name}</AppSidebarItem></Link>
+            })}
         </Sidebar>
     );
 };
