@@ -35,6 +35,7 @@ class SurveySymbolProcessor(
 ) : SymbolProcessor {
 
     private val nodes = mutableListOf<TsNode>()
+    private val serialNames = mutableMapOf<String, String>()
 
     private var counter = 0
 
@@ -61,6 +62,28 @@ class SurveySymbolProcessor(
                 }
             }, Unit)
             logger.warn("done processing $it")
+        }
+
+        resolver.getSymbolsWithAnnotation("kotlinx.serialization.SerialName").forEach {
+            it.accept(
+                object : KSVisitorVoid() {
+                    override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
+                        super.visitClassDeclaration(classDeclaration, data)
+                        logger.warn("Found class with SerialName annotation $classDeclaration")
+                        classDeclaration.annotations.filter {
+                            it.annotationType.resolve().toString() == "SerialName"
+                        }.forEach {
+                            it.arguments.find {
+                                it.toString().startsWith("value:")
+                            }?.let {
+                                logger.warn("Serial name: ${(it.value as? String)?.replace("value:", "")}")
+                                serialNames[classDeclaration.toString()] = (it.value as? String)?.replace("value:", "") ?: ""
+                            }
+                        }
+                    }
+                },
+                Unit,
+            )
         }
 
         codeGenerator.createNewFile(
@@ -105,11 +128,17 @@ class SurveySymbolProcessor(
 
             nodes.filter { it.parent == null }.forEach(writeNode)
             nodes.filter { it.parent != null }.forEach(writeNode)
-            close()
-        }
 
-        nodes.forEach {
-            logger.warn("$it")
+            nodes.filter { it.parent != null }.forEach { node ->
+                // Writing instanceOf helpers
+
+                if (serialNames.containsKey(node.name)) {
+                    write("function instanceOf${node.name}(object: ${node.parent!!.name}): object is ${node.name} {\n")
+                    write("\t return object.type == \"${serialNames[node.name]}\";\n")
+                    write("}\n\n")
+                }
+            }
+            close()
         }
 
         return emptyList()
@@ -117,7 +146,7 @@ class SurveySymbolProcessor(
 
     private fun acceptSealedClass(decl: KSClassDeclaration) {
         logger.warn("Found sealed class $decl")
-        val node = TsNode(null, decl.toString(), emptyList())
+        val node = TsNode(null, decl.toString(), listOf(TsField.TsString("type")))
         decl.getSealedSubclasses().forEach {
             acceptClass(it, node)
         }
@@ -128,14 +157,10 @@ class SurveySymbolProcessor(
         logger.warn("Found usual class $decl")
         val fields = mutableListOf<TsField>()
         decl.getAllProperties().forEach {
-            logger.warn("$it")
             val fieldName = it.toString()
-            val declaration = it.type.resolve().declaration.toString()
-            logger.warn("Found declaration $declaration")
-            when (declaration) {
+            when (val declaration = it.type.resolve().declaration.toString()) {
                 "List" -> {
                     val argument = it.type.resolve().arguments.first().type.toString()
-                    logger.warn("Found list with argument type $argument")
                     fields.add(TsField.TsList(fieldName, TsListObject(argument)))
                 }
                 "Int", "Long" -> {
