@@ -133,11 +133,18 @@ class SurveySymbolProcessor(
                 // Writing instanceOf helpers
 
                 if (serialNames.containsKey(node.name)) {
-                    write("function instanceOf${node.name}(object: ${node.parent!!.name}): object is ${node.name} {\n")
-                    write("\t return object.type == \"${serialNames[node.name]}\";\n")
+                    write("export function instanceOf${node.name}(object: ${node.parent!!.name}): object is ${node.name} {\n")
+                    write("\treturn object.type == \"${serialNames[node.name]}\";\n")
                     write("}\n\n")
                 }
             }
+
+            write("export type {\n")
+            nodes.map { it.name }.sorted().forEach {
+                write("\t${it},\n")
+            }
+            write("}\n")
+
             close()
         }
 
