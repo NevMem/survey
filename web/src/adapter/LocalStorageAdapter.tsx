@@ -1,6 +1,6 @@
 
 class LocalStorageAdapter {
-    _domain: string
+    private _domain: string
 
     constructor(domain: string) {
         this._domain = domain

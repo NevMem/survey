@@ -8,6 +8,7 @@ import NotificationProvider, { useNotification } from './app/notification/Notifi
 import DebugPanel from './app/debug/DebugPanel';
 import surveysService from './service/survey/SurveysService';
 import pages from './pages/pages';
+import WithAuthorization from './components/auth/WithAuthorization';
 
 const WithSideBar = (props: { children: any }) => {
   return (
@@ -40,13 +41,11 @@ function Root() {
             <WithSideBar>
                 <Routes>
                   {pages.map((info, index) => {
+                    if (info.needAuthorization) {
+                      return <Route path={info.path} key={index} element={<WithAuthorization>{info.component}</WithAuthorization>} />;
+                    }
                     return <Route path={info.path} key={index} element={info.component} />;
                   })}
-                  {/* <Route path="/create_survey" element={<CreateSurveyPage/>} />
-                  <Route path="/surveys" element={<SurveysPage />} />
-                  <Route path="/download" element={<DownloadPage />} />
-                  <Route path="/demo" element={<DemoPage />} />
-                  <Route path="/" element={<HomePage/>} /> */}
                 </Routes>
             </WithSideBar>
           </HashRouter>

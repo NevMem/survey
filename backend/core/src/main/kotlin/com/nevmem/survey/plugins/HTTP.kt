@@ -13,7 +13,6 @@ fun Application.configureHTTP() {
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
-        header("MyCustomHeader")
         anyHost()
     }
 }

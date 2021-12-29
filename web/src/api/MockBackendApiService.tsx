@@ -1,4 +1,4 @@
-import { RatingQuestion, StarsQuestion, TextQuestion } from '../data/exported';
+import { LoginResponse, RatingQuestion, RegisterResponse, StarsQuestion, TextQuestion } from '../data/exported';
 import { SurveyMetadata, UnsavedSurvey } from '../data/Survey';
 import { networkFailuresFeature } from '../service/experiments/experiments';
 import { isFeatureEnabled } from '../service/experiments/utils';
@@ -59,6 +59,18 @@ class MockBackendApiService implements BackendApiService {
                 commonQuestions: [],
             }
         ]
+    }
+
+    checkAuth(token: string): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
+    login(login: string, password: string): Promise<LoginResponse> {
+        throw new Error('Method not implemented.');
+    }
+
+    register(name: string, surname: string, login: string, password: string, email: string, inviteId: string): Promise<RegisterResponse> {
+        throw new Error('Method not implemented.');
     }
 
     fetchSurveys(): Promise<Survey[]> {

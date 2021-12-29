@@ -10,6 +10,7 @@ interface PageInfo {
     component: any;
     path: string;
     useInSidebar: boolean;
+    needAuthorization: boolean;
 }
 
 const pages: PageInfo[] = [
@@ -18,36 +19,42 @@ const pages: PageInfo[] = [
         component: <HomePage />,
         path : '/',
         useInSidebar: false,
+        needAuthorization: true,
     },
     {
         name: 'Опросы',
         component: <SurveysPage />,
         path : '/surveys',
         useInSidebar: true,
+        needAuthorization: true,
     },
     {
         name: 'Создать опрос',
         component: <CreateSurveyPage />,
         path : '/create_survey',
         useInSidebar: true,
+        needAuthorization: true,
     },
     {
         name: "Выгрузка данных",
         component: <DownloadPage />,
         path: "/download",
         useInSidebar: true,
+        needAuthorization: true,
     },
     {
         name: "Пуши",
         component: <PushPage />,
         path: "/push",
         useInSidebar: true,
+        needAuthorization: true,
     },
     {
         name: '[dev] Demo page',
         component: <DemoPage />,
         path: '/demo',
         useInSidebar: true,
+        needAuthorization: true,
     },
 ]
 
