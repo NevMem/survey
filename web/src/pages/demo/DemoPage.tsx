@@ -7,6 +7,7 @@ import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
 import Badge from '../../components/badge/Badge';
 import Notification from '../../components/notification/Notification';
 import { useNotification } from '../../app/notification/NotificationProvider';
+import ThemePicker from '../../components/theme/ThemePicker';
 
 const NotificationsBlock = () => {
     const notificationUser = useNotification();
@@ -84,6 +85,8 @@ export default function DemoPage() {
                             <Notification title='Нотификация' text='Просто какое-то уведомление' type='success' />
                             <Notification title='Нотификация' text='Просто какое-то уведомление' type='error' />
                             <Notification title='Нотификация' text='Просто какое-то уведомление' type='warning' />
+
+                            <ThemePicker />
                         </ThemeProvider>
                     </section>
                 )
