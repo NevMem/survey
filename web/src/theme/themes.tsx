@@ -1,3 +1,4 @@
+import { createLocalStorageAdapter } from "../adapter/LocalStorageAdapter";
 import { Theme, PaletteTheme, SizesTheme } from "./theme";
 
 const applyAlpha = (color: string, alpha: number) => {
@@ -42,6 +43,7 @@ class AlphaTheme implements PaletteTheme {
 };
 
 class ThemeImpl implements Theme {
+    name: string;
     palette: PaletteTheme;
     primary: string;
     secondary: string;
@@ -57,7 +59,9 @@ class ThemeImpl implements Theme {
     warning: string;
     grey: string;
 
-    constructor(palette: PaletteTheme, sizes: SizesTheme) {
+    constructor(name: string, palette: PaletteTheme, sizes: SizesTheme) {
+        this.name = name;
+
         this.palette = palette;
         
         this.primary = palette.primary;
@@ -83,41 +87,47 @@ class ThemeImpl implements Theme {
 };
 
 const createDefaultTheme = (): Theme => {
-    return new ThemeImpl({
-        primary: '#ff6347',
-        secondary: '#a03020',
-        foreground: '#FFFFFF',
-        background: '#FFFFFF',
-        secondaryBackground: '#f5f5f5',
-        success: '#61E294',
-        warning: '#FFD25A',
-        error: '#FF785A',
-        grey: '#d0d0d0',
-    }, {
-        smallTextSize: '0.7em',
-        mediumTextSize: '1em',
-        largeTextSize: '1.3em',
-        headerTextSize: '2em',
-    });
+    return new ThemeImpl(
+        'default',
+        {
+            primary: '#ff6347',
+            secondary: '#a03020',
+            foreground: '#FFFFFF',
+            background: '#FFFFFF',
+            secondaryBackground: '#f5f5f5',
+            success: '#61E294',
+            warning: '#FFD25A',
+            error: '#FF785A',
+            grey: '#d0d0d0',
+        }, {
+            smallTextSize: '0.7em',
+            mediumTextSize: '1em',
+            largeTextSize: '1.3em',
+            headerTextSize: '2em',
+        }
+    );
 }
 
 const createDebugTheme = (): Theme => {
-    return new ThemeImpl({
-        primary: '#00FF00',
-        secondary: '#FF0000',
-        foreground: '#0000FF',
-        background: '#FFFFFF',
-        secondaryBackground: '#e0e0e0',
-        success: '#61E294',
-        warning: '#FFD25A',
-        error: '#FF785A',
-        grey: '#e0e0e0',
-    }, {
-        smallTextSize: '0.7em',
-        mediumTextSize: '1em',
-        largeTextSize: '1.3em',
-        headerTextSize: '2em',
-    });
+    return new ThemeImpl(
+        'debug theme',
+        {
+            primary: '#00FF00',
+            secondary: '#FF0000',
+            foreground: '#0000FF',
+            background: '#FFFFFF',
+            secondaryBackground: '#e0e0e0',
+            success: '#61E294',
+            warning: '#FFD25A',
+            error: '#FF785A',
+            grey: '#e0e0e0',
+        }, {
+            smallTextSize: '0.7em',
+            mediumTextSize: '1em',
+            largeTextSize: '1.3em',
+            headerTextSize: '2em',
+        }
+    );
 }
 
 const defaultTheme = createDefaultTheme();
@@ -127,7 +137,24 @@ const themes: Theme[] = [
     createDebugTheme(),
 ]
 
+const saveTheme = (name: string) => {
+    const adapter = createLocalStorageAdapter('theme');
+    adapter.set('name', name);
+    window.location.reload();
+};
+
+const getSelectedTheme = (): Theme => {
+    const adapter = createLocalStorageAdapter('theme');
+    const name = adapter.get('name');
+    const foundTheme = themes.find(theme => theme.name === name);
+    if (foundTheme === undefined) {
+        return defaultTheme;
+    }
+    return foundTheme;
+};
+
 export default themes;
 export {
-    defaultTheme
+    getSelectedTheme,
+    saveTheme,
 };

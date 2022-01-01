@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import themes from '../../theme/themes';
+import themes, { saveTheme } from '../../theme/themes';
+import { Theme } from '../../theme/theme';
 
 const DropdownContent = styled.div`
     display: none;
@@ -37,12 +38,17 @@ const CurrentThemeBadge = styled.div`
 `;
 
 const ThemePicker = () => {
+
+    const selectTheme = (theme: Theme) => {
+        saveTheme(theme.name);
+    };
+
     return (
         <Dropdown>
             <CurrentThemeBadge />
             <DropdownContent>
                 {themes.map((theme, index) => {
-                    return <ThemeBadge style={{backgroundColor: theme.primary}} key={index}></ThemeBadge>
+                    return <ThemeBadge onClick={() => selectTheme(theme)} style={{backgroundColor: theme.primary}} key={index}></ThemeBadge>
                 })}
             </DropdownContent>
         </Dropdown>

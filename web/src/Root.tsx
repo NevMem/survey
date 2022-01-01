@@ -1,6 +1,6 @@
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { defaultTheme } from './theme/themes';
+import { getSelectedTheme } from './theme/themes';
 import { ThemeProvider } from 'styled-components';
 import AppNavbar from './app/navbar/AppNavbar';
 import AppSidebar from './app/sidebar/AppSidebar';
@@ -33,7 +33,7 @@ const NotificationHelper = () => {
 function Root() {
   return (
     <div>
-      <ThemeProvider theme={defaultTheme}>
+      <ThemeProvider theme={getSelectedTheme()}>
         <NotificationProvider>
           <NotificationHelper />
           <HashRouter>

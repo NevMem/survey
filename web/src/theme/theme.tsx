@@ -18,6 +18,7 @@ interface PaletteTheme {
 };
 
 export interface Theme extends PaletteTheme, SizesTheme {
+    name: string;
     withAlpha(alpha: number): PaletteTheme;
 };
 
