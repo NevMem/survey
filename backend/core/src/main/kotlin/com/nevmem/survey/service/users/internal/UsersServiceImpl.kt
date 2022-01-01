@@ -5,6 +5,7 @@ import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.service.security.auth.PasswordEncoder
 import com.nevmem.survey.service.users.UsersService
 import com.nevmem.survey.user.UserEntity
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -42,8 +43,8 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
     override suspend fun getUserWithCredentials(credentials: UsersService.Credentials): UserEntity? {
         return transaction {
             UserEntityDTO.find {
-                UsersTable.login like credentials.login
-                UsersTable.password like passwordEncoder.encodePassword(credentials.password)
+                (UsersTable.login like credentials.login) and
+                (UsersTable.password like passwordEncoder.encodePassword(credentials.password))
             }.firstOrNull()?.toEntity()
         }
     }
