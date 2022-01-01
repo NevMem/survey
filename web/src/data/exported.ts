@@ -149,6 +149,38 @@ export function instanceOfTextQuestion(object: Question): object is TextQuestion
 	return object.type === "text";
 }
 
+export function instanceOfLoginSuccessful(object: LoginResponse): object is LoginSuccessful {
+	return object.type === "success";
+}
+
+export function instanceOfLoginError(object: LoginResponse): object is LoginError {
+	return object.type === "error";
+}
+
+export function instanceOfRegisterSuccessful(object: RegisterResponse): object is RegisterSuccessful {
+	return object.type === "success";
+}
+
+export function instanceOfRegisterError(object: RegisterResponse): object is RegisterError {
+	return object.type === "error";
+}
+
+export function instanceOfCreateInviteError(object: CreateInviteResponse): object is CreateInviteError {
+	return object.type === "error";
+}
+
+export function instanceOfCreateInviteSuccess(object: CreateInviteResponse): object is CreateInviteSuccess {
+	return object.type === "success";
+}
+
+export function instanceOfCreateSurveySuccess(object: CreateSurveyResponse): object is CreateSurveySuccess {
+	return object.type === "success";
+}
+
+export function instanceOfCreateSurveyError(object: CreateSurveyResponse): object is CreateSurveyError {
+	return object.type === "error";
+}
+
 export type {
 	AllSurveysResponse,
 	CommonQuestion,
