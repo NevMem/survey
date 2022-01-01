@@ -5,8 +5,6 @@ import { Navigate } from 'react-router';
 
 
 const WithAuthorization = observer((props: {authService: AuthorizationService, children: any}) => {
-    console.log('WithAuthorization');
-    console.log(props.authService.authorized);
     if (props.authService.authorized) {
         return props.children;
     }

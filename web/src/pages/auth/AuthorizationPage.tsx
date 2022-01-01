@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Card from "../../app/card/Card";
 import CardError from "../../app/card/CardError";
+import CardSuccess from "../../app/card/CardSuccess";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import SpacedColumn from "../../app/layout/SpacedColumn";
@@ -14,6 +15,7 @@ const LoginBlock = (props: {switchToRegister: () => void}) => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | undefined>(undefined);
+    const [success, setSuccess] = useState(false);
 
     const performLogin = () => {
         authService.login(login, password)
@@ -21,7 +23,8 @@ const LoginBlock = (props: {switchToRegister: () => void}) => {
                 if (result instanceof LoginError) {
                     setError(result.message);
                 } else if (result instanceof LoginSuccess) {
-                    console.log("Hehehe!!!");
+                    setError(undefined);
+                    setSuccess(true);
                 }
             });
     };
@@ -43,6 +46,8 @@ const LoginBlock = (props: {switchToRegister: () => void}) => {
                     </SpacedCenteredColumn>
 
                     {error && <CardError><Text>{error}</Text></CardError>}
+
+                    {success && <CardSuccess><Text>Залогинились</Text></CardSuccess>}
 
                     <SpacedCenteredColumn rowGap={16}>
                         <SpaceAroundRow><GeneralButton onClick={performLogin}>Войти</GeneralButton></SpaceAroundRow>
