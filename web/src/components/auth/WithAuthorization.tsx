@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import authService, { AuthorizationService } from '../../service/authorization/AuthorizationService';
 import CardError from '../../app/card/CardError';
+import { Navigate } from 'react-router';
 
 
 const WithAuthorization = observer((props: {authService: AuthorizationService, children: any}) => {
@@ -10,10 +11,8 @@ const WithAuthorization = observer((props: {authService: AuthorizationService, c
         return props.children;
     }
     return (
-        <CardError>
-
-        </CardError>
-    )
+        <Navigate to="/auth" />
+    );
 })
 
 const WithAuthorizationWrapper = (props: {children: any}) => {

@@ -4,6 +4,7 @@ import CreateSurveyPage from './create_survey/CreateSurveyPage';
 import DemoPage from './demo/DemoPage';
 import DownloadPage from './download/DownloadPage';
 import PushPage from './push/PushPage';
+import AuthorizationPage from './auth/AuthorizationPage';
 
 interface PageInfo {
     name: string;
@@ -55,6 +56,13 @@ const pages: PageInfo[] = [
         path: '/demo',
         useInSidebar: true,
         needAuthorization: true,
+    },
+    {
+        name: 'Authorization page',
+        component: <AuthorizationPage />,
+        path: '/auth',
+        useInSidebar: false,
+        needAuthorization: false,
     },
 ]
 

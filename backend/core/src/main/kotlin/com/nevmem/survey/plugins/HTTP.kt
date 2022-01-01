@@ -12,7 +12,10 @@ fun Application.configureHTTP() {
         method(HttpMethod.Put)
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
-        header(HttpHeaders.Authorization)
+        method(HttpMethod.Post)
+        method(HttpMethod.Get)
         anyHost()
+        header(HttpHeaders.ContentType)
+        header(HttpHeaders.Authorization)
     }
 }
