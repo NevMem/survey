@@ -15,7 +15,7 @@ class BackendApiServiceImpl implements BackendApiService {
     fetchSurveys(): Promise<Survey[]> {
         return this.get<AllSurveysResponse>('/v1/surveys')
             .then(data => data.data.surveys)
-            .catch(err => { throw err + ""; });
+            .catch(err => { throw new Error(err + ""); });
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey> {

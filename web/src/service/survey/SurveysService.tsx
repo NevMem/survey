@@ -72,7 +72,7 @@ class SurveysService {
                 this.fetchSurveys();
             })
             .catch(error => {
-                this.notificationUser?.('Ошибка добавлениия опроса', error, 'error');
+                this.notificationUser?.('Ошибка добавлениия опроса', error + "", 'error');
             });
     }
 
