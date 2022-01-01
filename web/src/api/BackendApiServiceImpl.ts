@@ -1,4 +1,4 @@
-import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse } from "../data/exported";
+import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest } from "../data/exported";
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
@@ -14,8 +14,7 @@ class BackendApiServiceImpl implements BackendApiService {
 
     fetchSurveys(): Promise<Survey[]> {
         return this.get<AllSurveysResponse>('/v1/surveys')
-            .then(data => data.data.surveys)
-            .catch(err => { throw new Error(err + ""); });
+            .then(data => data.data.surveys);
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey> {
@@ -27,7 +26,8 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     checkAuth(token: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        return this.get<void>('/v1/check_auth')
+            .then(data => data.data);
     }
 
     login(login: string, password: string): Promise<LoginResponse> {
@@ -40,7 +40,17 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     register(name: string, surname: string, login: string, password: string, email: string, inviteId: string): Promise<RegisterResponse> {
-        throw new Error("Method not implemented.");
+        const request: RegisterRequest = {
+            name: name,
+            surname: surname,
+            login: login,
+            password: password,
+            email: email,
+            inviteId: inviteId,
+        };
+
+        return this.post<RegisterResponse, RegisterRequest>('/v1/register', request)
+            .then(data => data.data);
     }
 
     private post<T, U>(path: string, body: U): Promise<AxiosResponse<T>> {
