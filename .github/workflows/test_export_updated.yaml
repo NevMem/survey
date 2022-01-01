@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  testing_backend:
-    name: Testing backend
+  checking_export_not_changed:
+    name: Testing export not changed
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
