@@ -1,4 +1,4 @@
-import { Survey, LoginResponse, RegisterResponse, LoginRequest } from "../data/exported";
+import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse } from "../data/exported";
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
@@ -13,12 +13,9 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     fetchSurveys(): Promise<Survey[]> {
-        this.get('/v1/surveys')
-            .then(data => console.log(data))
-            .catch(err => {
-                console.log(err);
-            })
-        return new Promise((res, rej) => rej());
+        return this.get<AllSurveysResponse>('/v1/surveys')
+            .then(data => data.data.surveys)
+            .catch(err => { throw err + ""; });
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey> {
