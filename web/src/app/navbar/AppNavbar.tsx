@@ -1,7 +1,6 @@
 import GeneralNavbar from "../../components/navbar/GeneralNavbar";
 import Text from "../../components/text/Text";
 import ThemePicker from "../../components/theme/ThemePicker";
-import SpaceAroundRow from "../layout/SpaceAroundRow";
 import SpaceBetweenRow from "../layout/SpaceBetweenRow";
 import Logo from "../logo/Logo";
 
