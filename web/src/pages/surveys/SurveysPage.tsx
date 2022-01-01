@@ -108,7 +108,7 @@ const SurveysTable = (props: {surveysState: SurveysState, isActivating: boolean}
                     <SpacedCenteredColumn rowGap={16}>
                         <Text large>Ошибка загрузки опросов, ошибка:</Text>
                         <Text>{props.surveysState.error}</Text>
-                        <GeneralButton onClick={() => {surveysService._fetchSurveys()}}>Попробовать еще раз</GeneralButton>
+                        <GeneralButton onClick={() => {surveysService.fetchSurveys()}}>Попробовать еще раз</GeneralButton>
                     </SpacedCenteredColumn>
                 </SpaceAroundRow>
             </CardError>
@@ -138,6 +138,7 @@ const SurveysPage = () => {
     const initRedirect = () => {
         setRedirect(true);
     };
+    surveysService.prefetchSurveysIfNeeded();
     return (
         <PageWrapper>
             { redirect && <Navigate to="/create_survey" /> }

@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import authService, { AuthorizationService } from '../../service/authorization/AuthorizationService';
-import CardError from '../../app/card/CardError';
 import { Navigate } from 'react-router';
 
 

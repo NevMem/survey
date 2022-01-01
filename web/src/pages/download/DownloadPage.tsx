@@ -31,7 +31,7 @@ const SurveySelector = observer((props: {surveysService: SurveysService, selectS
                     <SpacedCenteredColumn rowGap={16}>
                         <Text large>Ошибка загрузки опросов, ошибка:</Text>
                         <Text>{props.surveysService.surveysState.error}</Text>
-                        <GeneralButton onClick={() => {surveysService._fetchSurveys()}}>Попробовать еще раз</GeneralButton>
+                        <GeneralButton onClick={() => {surveysService.fetchSurveys()}}>Попробовать еще раз</GeneralButton>
                     </SpacedCenteredColumn>
                 </SpaceAroundRow>
             </CardError>
@@ -124,6 +124,8 @@ const SurveyDownloadDataFilter = (props: {survey?: Survey}) => {
 
 const DownloadPage = () => {
     const [selectedSurvey, setSelectedSurvey] = useState<Survey | undefined>(undefined);
+
+    surveysService.prefetchSurveysIfNeeded();
 
     return (
         <PageWrapper>
