@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "../../app/card/Card";
+import CardError from "../../app/card/CardError";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import SpacedColumn from "../../app/layout/SpacedColumn";
@@ -40,6 +41,9 @@ const LoginBlock = (props: {switchToRegister: () => void}) => {
                             <Input onChange={ev => setPassword(ev.target.value)} value={password} type='password' />
                         </SpacedColumn>
                     </SpacedCenteredColumn>
+
+                    {error && <CardError><Text>{error}</Text></CardError>}
+
                     <SpacedCenteredColumn rowGap={16}>
                         <SpaceAroundRow><GeneralButton onClick={performLogin}>Войти</GeneralButton></SpaceAroundRow>
                         <SpaceAroundRow><GeneralButton secondary onClick={props.switchToRegister}>Зарегистрироваться</GeneralButton></SpaceAroundRow>

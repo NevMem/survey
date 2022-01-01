@@ -29,7 +29,7 @@ fun Route.users() {
     post("/login") {
         val request = call.receiveOrNull<LoginRequest>()
         if (request == null) {
-            call.respond(
+            call.respond<LoginResponse>(
                 HttpStatusCode.BadRequest,
                 LoginResponse.LoginError(
                     error = "Wrong request format",
@@ -46,7 +46,7 @@ fun Route.users() {
         )
 
         if (user == null) {
-            call.respond(
+            call.respond<LoginResponse>(
                 HttpStatusCode.Unauthorized,
                 LoginResponse.LoginError(
                     error = "User not found",
@@ -55,7 +55,7 @@ fun Route.users() {
             return@post
         }
 
-        call.respond(
+        call.respond<LoginResponse>(
             LoginResponse.LoginSuccessful(
                 token = tokenService.createTokenForUser(user),
             )
@@ -65,7 +65,7 @@ fun Route.users() {
     post("/register") {
         val request = call.receiveOrNull<RegisterRequest>()
         if (request == null) {
-            call.respond(
+            call.respond<RegisterResponse>(
                 HttpStatusCode.BadRequest,
                 RegisterResponse.RegisterError(
                     message = "Wrong request format",
@@ -76,7 +76,7 @@ fun Route.users() {
 
         val invite = invitesService.getInviteById(request.inviteId)
         if (invite == null) {
-            call.respond(
+            call.respond<RegisterResponse>(
                 HttpStatusCode.NotFound,
                 RegisterResponse.RegisterError("Invite not found")
             )
@@ -84,7 +84,7 @@ fun Route.users() {
         }
 
         if (invite.expired) {
-            call.respond(
+            call.respond<RegisterResponse>(
                 HttpStatusCode.ExpectationFailed,
                 RegisterResponse.RegisterError("Invite already expired")
             )
@@ -106,7 +106,7 @@ fun Route.users() {
 
         invitesService.acceptedBy(invite, user)
 
-        call.respond(RegisterResponse.RegisterSuccessful(tokenService.createTokenForUser(user)))
+        call.respond<RegisterResponse>(RegisterResponse.RegisterSuccessful(tokenService.createTokenForUser(user)))
     }
 
     authenticate {
