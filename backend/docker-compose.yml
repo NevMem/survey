@@ -34,4 +34,6 @@ services:
     depends_on:
       core:
         condition: service_healthy
+  s3local:
+    image: 'scality/s3server'
 
