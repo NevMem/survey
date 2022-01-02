@@ -67,9 +67,9 @@ fun Route.surveys() {
                     }
                 )
 
-                call.respond(CreateSurveyResponse.CreateSurveySuccess(surveysConverter.convertSurvey(survey)))
+                call.respond<CreateSurveyResponse>(CreateSurveyResponse.CreateSurveySuccess(surveysConverter.convertSurvey(survey)))
             } catch (exception: Exception) {
-                call.respond(HttpStatusCode.ExpectationFailed, CreateSurveyResponse.CreateSurveyError(exception.message ?: "Unknown error"))
+                call.respond<CreateSurveyResponse>(HttpStatusCode.ExpectationFailed, CreateSurveyResponse.CreateSurveyError(exception.message ?: "Unknown error"))
             }
         }
 

@@ -1,4 +1,4 @@
-import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User } from "../data/exported";
+import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, CreateInviteRequest, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError } from "../data/exported";
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
@@ -18,7 +18,23 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey> {
-        throw new Error("Method not implemented.");
+        const request: CreateSurveyRequest = {
+            name: unsavedSurvey.name,
+            questions: unsavedSurvey.questions,
+            commonQuestions: unsavedSurvey.commonQuestions,
+        };
+
+        return this.post<CreateSurveyResponse, CreateSurveyRequest>('/v1/create_survey', request)
+            .then(data => data.data)
+            .then(response => {
+                if (instanceOfCreateSurveySuccess(response)) {
+                    return response.survey;
+                }
+                if (instanceOfCreateSurveyError(response)) {
+                    throw new Error(response.message);
+                }
+                throw new Error("Unknown error");
+            });
     }
 
     fetchMetadata(surveyId: number): Promise<SurveyMetadata> {
