@@ -5,6 +5,7 @@ import DemoPage from './demo/DemoPage';
 import DownloadPage from './download/DownloadPage';
 import PushPage from './push/PushPage';
 import AuthorizationPage from './auth/AuthorizationPage';
+import ProfilePage from './profile/ProfilePage';
 
 interface PageInfo {
     name: string;
@@ -15,6 +16,13 @@ interface PageInfo {
 }
 
 const pages: PageInfo[] = [
+    {
+        name: 'Профиль',
+        component: <ProfilePage />,
+        path: '/profile',
+        useInSidebar: true,
+        needAuthorization: true,
+    },
     {
         name: 'Домашняя',
         component: <HomePage />,

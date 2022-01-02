@@ -74,6 +74,10 @@ class AuthorizationService {
             })
     }
 
+    loadMe() {
+        return backendApi.me();
+    }
+
     private storeToken(token: string) {
         this.localStorage.set("token", token);
         this.authorized = true;
@@ -89,7 +93,15 @@ class AuthorizationService {
                 config.headers = headers;
             }
             return config;
-        })
+        });
+
+        axios.interceptors.response.use(
+            function (config) { return config; },
+            function (error) {
+                console.log(error);
+                return error;
+            }
+        );
     }
 
     private checkAuthPinging() {

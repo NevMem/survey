@@ -1,5 +1,5 @@
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
-import { LoginResponse, RegisterResponse, Survey } from "../data/exported";
+import { LoginResponse, RegisterResponse, Survey, User } from "../data/exported";
 
 interface BackendApiService {
     fetchSurveys(): Promise<Survey[]>
@@ -9,6 +9,7 @@ interface BackendApiService {
     checkAuth(token: string): Promise<void>
     login(login: string, password: string): Promise<LoginResponse>
     register(name: string, surname: string, login: string, password: string, email: string, inviteId: string): Promise<RegisterResponse>
+    me(): Promise<User>
 }
 
 export type {
