@@ -85,6 +85,7 @@ const SurveyRow = (props: {survey: Survey}) => {
         <TableRow>
             <SpaceBetweenRow>
                 <Text large style={{width: '300px'}}>{props.survey.name}</Text>
+                <Text>{props.survey.surveyId}</Text>
                 <GeneralButton onClick={toggleMetadata} secondary>{expanded ? 'свернуть' : 'раскрыть'}</GeneralButton>
             </SpaceBetweenRow>
             { expanded && <SurveyMetadataRenderer survey={props.survey} /> }
