@@ -63,6 +63,7 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
     return (
         <PageWrapper>
             <Card>
+                <CardError><Text>Это пока не сделано</Text></CardError>
                 <SpacedCenteredColumn rowGap={16}>
                     <SpaceAroundRow><GeneralButton>Зарегистрироваться</GeneralButton></SpaceAroundRow>
                     <SpaceAroundRow><GeneralButton secondary onClick={props.switchToLogin}>Войти</GeneralButton></SpaceAroundRow>
