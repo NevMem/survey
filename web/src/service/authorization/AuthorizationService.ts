@@ -1,8 +1,10 @@
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { instanceOfLoginError, instanceOfLoginSuccessful, Role } from '../../data/exported';
 import LocalStorageAdapter, { createLocalStorageAdapter } from '../../adapter/LocalStorageAdapter';
 import backendApi from '../../api/backendApiServiceSingleton';
 import axios from 'axios';
+import { isFeatureEnabled } from '../experiments/utils';
+import { messUpAuthorizationHeader } from '../experiments/experiments';
 
 interface LoginStatus {
 }
@@ -46,6 +48,7 @@ class AuthorizationService {
             {
                 authorized: observable,
                 roles: observable,
+                logout: action,
             },
         );
 
@@ -78,6 +81,11 @@ class AuthorizationService {
         return backendApi.me();
     }
 
+    logout() {
+        this.localStorage.delete("token");
+        this.authorized = false;
+    }
+
     private storeToken(token: string) {
         this.localStorage.set("token", token);
         this.authorized = true;
@@ -87,19 +95,29 @@ class AuthorizationService {
         const getToken = this.getToken.bind(this);
         axios.interceptors.request.use(function (config) {
             const headers = config.headers;
-            const currentToken = getToken();
+            var currentToken = getToken();
             if (headers && currentToken !== null) {
+                if (isFeatureEnabled(messUpAuthorizationHeader)) {
+                    currentToken = currentToken + currentToken;
+                }
+
                 headers['Authorization'] = 'Bearer ' + currentToken;
                 config.headers = headers;
             }
             return config;
         });
 
+        const logout = this.logout.bind(this);
         axios.interceptors.response.use(
             function (config) { return config; },
             function (error) {
-                console.log(error);
-                return error;
+                const response = error.response;
+                if (response) {
+                    if (response.status === 401) {
+                        logout();
+                    }
+                }
+                return Promise.reject(error);
             }
         );
     }
