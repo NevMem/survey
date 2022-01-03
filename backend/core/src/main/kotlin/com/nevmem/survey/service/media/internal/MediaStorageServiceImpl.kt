@@ -3,8 +3,10 @@ package com.nevmem.survey.service.media.internal
 import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.media.MediaEntity
 import com.nevmem.survey.service.media.MediaStorageService
+import com.nevmem.survey.service.media.internal.MediaTable.bucketName
 import java.io.File
 import java.net.URI
+import org.jetbrains.exposed.sql.transactions.transaction
 import software.amazon.awssdk.auth.credentials.AwsCredentials
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.regions.Region
@@ -61,7 +63,15 @@ internal class MediaStorageServiceImpl : MediaStorageService {
                 PutObjectRequest.builder().bucket(bucketName).key(file.name).build(),
                 RequestBody.fromFile(file)
             )
-            return MediaEntity(file.name)
+
+            val dto = transaction {
+                MediaEntityDTO.new {
+                    filename = file.name
+                    bucketName = this@MediaStorageServiceImpl.bucketName
+                }
+            }
+
+            return MediaEntity(dto.filename, dto.bucketName, "https://storage.yandexcloud.net/${dto.bucketName}/${dto.filename}")
         } catch (exception: Exception) {
             println("Exception occurred while uploading")
             println(exception)
