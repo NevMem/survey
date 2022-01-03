@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Exported
-data class Media(val filename: String)
+data class Media(val filename: String, val url: String)

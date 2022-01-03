@@ -18,6 +18,6 @@ fun Route.media() {
         val multipart = call.receiveMultipart()
         val file = fsService.saveFromMultiPart(multipart)
         val media = mediaService.uploadFileToMediaStorage(file)
-        call.respond(Media(media.filename))
+        call.respond(Media(media.filename, media.url))
     }
 }

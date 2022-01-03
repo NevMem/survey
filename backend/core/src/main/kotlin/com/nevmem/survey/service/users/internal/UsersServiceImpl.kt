@@ -44,8 +44,10 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
         return transaction {
             UserEntityDTO.find {
                 (UsersTable.login like credentials.login) and
-                (UsersTable.password like passwordEncoder.encodePassword(credentials.password))
-            }.firstOrNull()?.toEntity()
+                    (UsersTable.password like passwordEncoder.encodePassword(credentials.password))
+            }
+                .firstOrNull()
+                ?.toEntity()
         }
     }
 

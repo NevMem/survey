@@ -3,9 +3,6 @@ package com.nevmem.survey.service.media.internal
 import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.media.MediaEntity
 import com.nevmem.survey.service.media.MediaStorageService
-import com.nevmem.survey.service.media.internal.MediaTable.bucketName
-import java.io.File
-import java.net.URI
 import org.jetbrains.exposed.sql.transactions.transaction
 import software.amazon.awssdk.auth.credentials.AwsCredentials
 import software.amazon.awssdk.core.sync.RequestBody
@@ -16,6 +13,8 @@ import software.amazon.awssdk.services.s3.model.CreateBucketConfiguration
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
+import java.io.File
+import java.net.URI
 
 internal class MediaStorageServiceImpl : MediaStorageService {
     private val region = Region.of(EnvVars.S3.region)
