@@ -1,5 +1,5 @@
 {
-    "required_vars": [
+    "required": [
         "DB_USERNAME",
         "DB_PASSWORD",
         "DB_DBNAME",
