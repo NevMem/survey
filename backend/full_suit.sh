@@ -6,3 +6,4 @@ sleep 1
 docker-compose up -d core
 sleep 1
 docker-compose run test
+docker-compose down

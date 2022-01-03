@@ -29,7 +29,7 @@ internal class MediaStorageServiceImpl : MediaStorageService {
         }
         .build()
 
-    private val bucketName = "media"
+    private val bucketName = "ethnosurvey-media"
 
     init {
         println("Initializing bucket")
