@@ -4,6 +4,11 @@ interface Invite {
 	isExpired: Boolean;
 }
 
+interface Media {
+	filename: string;
+	url: string;
+}
+
 interface CommonQuestion {
 	id: string;
 }
@@ -199,6 +204,7 @@ export type {
 	LoginRequest,
 	LoginResponse,
 	LoginSuccessful,
+	Media,
 	Question,
 	RatingQuestion,
 	RegisterError,
