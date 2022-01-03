@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-# source vars.sh
-# ls -la
+source env.sh
 /core/bin/core

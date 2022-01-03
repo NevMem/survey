@@ -43,6 +43,8 @@ jobs:
           registry: cr.yandex
           username: json_key
           password: ${{ secrets.REGISTRY_KEY }}
+      - name: Exporting env variables
+        run: python3 tools/bundle_env_vars.py --configuration backend/core/docker/env_vars_config.json --output backend/core/docker/env.sh
       - name: Building docker
         run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
       - name: Pushing docker

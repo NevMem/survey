@@ -1,0 +1,21 @@
+{
+    "required_vars": [
+        "DB_USERNAME",
+        "DB_PASSWORD",
+        "DB_DBNAME",
+        "DB_SERVER",
+        "DB_PORT",
+        "JWT_AUDIENCE",
+        "JWT_REALM",
+        "JWT_SECRET",
+        "JWT_DOMAIN",
+        "SECURITY_SALT",
+        "S3_REGION",
+        "S3_ACCESS_KEY",
+        "S3_SECRET_ACCESS_KEY",
+        "S3_URI"
+    ],
+    "other": [
+        "ADMIN_PASSWORD"
+    ]
+}
