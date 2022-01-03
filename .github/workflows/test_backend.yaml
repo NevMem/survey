@@ -23,4 +23,4 @@ jobs:
       - name: build core executable
         run: ./gradlew :backend:core:build
       - name: testing
-        run: cd backend && docker-compose build && docker-compose up -d database && sleep 1 && docker-compose up -d core && docker-compose run test
+        run: cd backend && ./full_suit.sh
