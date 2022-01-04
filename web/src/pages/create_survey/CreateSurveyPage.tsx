@@ -14,6 +14,7 @@ import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
 import { commonQuestions, commonQuestionTitle } from '../../data/commonQuestions';
 import { CommonQuestion } from '../../data/CommonQuestion';
 import Input from '../../components/input/Input';
+import Modal, { ModalHeader, ModalBody, ModalActions } from '../../components/modal/Modal';
 
 const WrappedRow = styled.div`
     padding: 20px;
@@ -21,35 +22,6 @@ const WrappedRow = styled.div`
     border-radius: 8px;
     margin-top: 10px;
     margin-bottom: 10px;
-`;
-
-const Modal = styled.div`
-    margin: 15% auto;
-    width: 400px;
-    background-color: ${props => props.theme.background};
-    border-radius: 8px;
-    padding: 16px;
-    clickable: true;
-    z-index: 2;
-`;
-
-const ModalHeader = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`;
-
-const ModalBody = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    padding-bottom: 20px;
-`;
-
-const ModalActions = styled.div`
-    display: flex;
-    flex-direction: row-reverse;
-    column-gap: 10px;
 `;
 
 const Selector = styled.select`
