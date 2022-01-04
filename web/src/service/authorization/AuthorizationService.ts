@@ -127,7 +127,7 @@ class AuthorizationService {
         }
     }
 
-    private getToken(): string | null {
+    getToken(): string | null {
         return this.localStorage.get("token")
     }
 }

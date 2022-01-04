@@ -7,6 +7,7 @@ import PushPage from './push/PushPage';
 import AuthorizationPage from './auth/AuthorizationPage';
 import ProfilePage from './profile/ProfilePage';
 import { Role } from '../data/exported';
+import InvitePage from './invite/InvitePage';
 
 interface PageInfo {
     name: string;
@@ -86,6 +87,16 @@ const pages: PageInfo[] = [
         useInSidebar: false,
         needAuthorization: false,
     },
+    {
+        name: "Инвайты",
+        component: <InvitePage />,
+        path: '/invites',
+        useInSidebar: true,
+        needAuthorization: true,
+        needRoles: [
+            {id: 'invite.manager'},
+        ],
+    }
 ]
 
 export default pages;

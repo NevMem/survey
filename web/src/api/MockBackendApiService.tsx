@@ -1,4 +1,4 @@
-import { LoginResponse, RatingQuestion, RegisterResponse, StarsQuestion, TextQuestion, User } from '../data/exported';
+import { GetInvitesResponse, LoginResponse, RatingQuestion, RegisterResponse, StarsQuestion, TextQuestion, User } from '../data/exported';
 import { SurveyMetadata, UnsavedSurvey } from '../data/Survey';
 import { networkFailuresFeature } from '../service/experiments/experiments';
 import { isFeatureEnabled } from '../service/experiments/utils';
@@ -119,6 +119,10 @@ class MockBackendApiService implements BackendApiService {
     }
 
     me(): Promise<User> {
+        throw new Error('Method not implemented.');
+    }
+
+    invites(): Promise<GetInvitesResponse> {
         throw new Error('Method not implemented.');
     }
 };

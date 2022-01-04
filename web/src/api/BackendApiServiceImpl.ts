@@ -1,4 +1,4 @@
-import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError } from "../data/exported";
+import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError, GetInvitesResponse } from "../data/exported";
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
@@ -72,6 +72,10 @@ class BackendApiServiceImpl implements BackendApiService {
     me(): Promise<User> {
         return this.get<User>('/v1/me')
             .then(data => data.data);
+    }
+
+    invites(): Promise<GetInvitesResponse> {
+        return this.get<GetInvitesResponse>('/v1/my_invites').then(data => data.data);
     }
 
     private post<T, U>(path: string, body: U): Promise<AxiosResponse<T>> {
