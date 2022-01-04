@@ -64,6 +64,7 @@ jobs:
           S3_ACCESS_KEY: ${{ secrets.S3_KEY_ID }}
           S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
           S3_URI: https://storage.yandexcloud.net
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       - name: Building docker
         run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
       - name: Pushing docker
