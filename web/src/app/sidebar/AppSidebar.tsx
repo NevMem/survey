@@ -96,9 +96,25 @@ const SidebarWrapper = () => {
     const userContext = useContext(UserContext);
 
     if (userContext instanceof UserLoaded) {
+        const items = pages
+            .filter(info => info.useInSidebar)
+            .filter(info => {
+                const needRoles = info.needRoles;
+                if (needRoles === undefined) {
+                    return true;
+                }
+                var result = true;
+                needRoles.forEach(needRole => {
+                    if (!userContext.user.allAvailableRoles.map(role => role.id).includes(needRole.id)) {
+                        result = false;
+                    }
+                })
+                return result;
+            });
+
         return (
             <Sidebar>
-                {pages.filter(info => info.useInSidebar).map((info, index) => {
+                {items.map((info, index) => {
                     return <Link key={index} to={info.path}><AppSidebarItem>{info.name}</AppSidebarItem></Link>
                 })}
             </Sidebar>
