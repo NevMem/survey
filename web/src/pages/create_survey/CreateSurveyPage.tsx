@@ -23,15 +23,6 @@ const WrappedRow = styled.div`
     margin-bottom: 10px;
 `;
 
-// const WrappedRow = styled.div`
-//     padding: 20px;
-//     background-color: ${props => props.theme.background};
-//     border-radius: 8px;
-//     margin-top: 10px;
-//     margin-bottom: 10px;
-//     border: 2px solid ${props => props.theme.secondaryBackground};
-// `;
-
 const Modal = styled.div`
     margin: 15% auto;
     width: 400px;

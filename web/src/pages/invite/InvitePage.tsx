@@ -7,6 +7,9 @@ import { GetInvitesResponse, Invite } from "../../data/exported";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import Card from "../../app/card/Card";
+import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
+import GeneralButton from "../../components/button/GeneralButton";
+import SpacedColumn from "../../app/layout/SpacedColumn";
 
 interface RequestState {};
 class RequestProcessing implements RequestState {};
@@ -40,6 +43,14 @@ function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) =
 };
 
 const InvitesTable = (props: { invites: Invite[] }) => {
+    if (props.invites.length === 0) {
+        return (
+            <SpaceAroundRow>
+                <Text>Нет инвайтов</Text>
+            </SpaceAroundRow>
+        );
+    }
+
     return (
         <Fragment>
             {props.invites.map((invite, index) => {
@@ -51,6 +62,26 @@ const InvitesTable = (props: { invites: Invite[] }) => {
                 )
             })}
         </Fragment>
+    );
+};
+
+const ActualPage = (props: { invites: Invite[] }) => {
+    const createInvite = () => {
+        
+    };
+
+    return (
+        <PageWrapper>
+            <SpacedColumn rowGap={16}>
+                <SpaceBetweenRow>
+                    <Text header>Инвайты</Text>
+                    <GeneralButton onClick={createInvite}>Создать инвайт</GeneralButton>
+                </SpaceBetweenRow>
+                <Card>
+                    <InvitesTable invites={props.invites} />
+                </Card>
+            </SpacedColumn>
+        </PageWrapper>
     );
 };
 
@@ -68,13 +99,7 @@ const InvitePage = () => {
     }
 
     if (result instanceof RequestSuccess) {
-        return (
-            <PageWrapper>
-                <Card>
-                    <InvitesTable invites={result.result.invites} />
-                </Card>
-            </PageWrapper>
-        );
+        return <ActualPage invites={result.result.invites} />;
     }
 
     return (
