@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import PageWrapper from "../../app/page/PageWrapper";
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";
@@ -26,8 +26,11 @@ class RequestSuccess<T> implements RequestState {
 function useAsyncRequest<T>(request: Promise<T>): RequestState {
     const [state, setState] = useState(new RequestProcessing());
 
-    request.then(data => { setState(new RequestSuccess<T>(data)); })
-        .catch(error => { setState(new RequestError(error + "")); });
+    useEffect(() => {
+        request
+            .then(data => { setState(new RequestSuccess<T>(data)); })
+            .catch(error => { setState(new RequestError(error + "")); });
+    }, []);
 
     return state;
 };
