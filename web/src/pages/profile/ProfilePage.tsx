@@ -50,6 +50,13 @@ const ProfileWrapper = (props: {user: User | undefined, error: string | undefine
                             return <Badge success key={index}>{role.id}</Badge>;
                         })}
                     </div>
+
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '16px', flexWrap: 'wrap', rowGap: '10px'}}>
+                        <Text>Доступные роли:</Text>
+                        {user.allAvailableRoles.map((role, index) => {
+                            return <Badge success key={index}>{role.id}</Badge>;
+                        })}
+                    </div>
                 </SpacedColumn>
                 <SpaceBetweenReversedRow>
                     <GeneralButton secondary onClick={logout}>Выйти</GeneralButton>

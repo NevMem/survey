@@ -13,4 +13,5 @@ data class User(
     val surname: String,
     val email: String,
     val roles: List<Role>,
+    val allAvailableRoles: List<Role>,
 )

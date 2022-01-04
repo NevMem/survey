@@ -77,5 +77,9 @@ internal fun mainRoleModel(): RoleModel {
 
         override val roles: List<RoleEntity>
             get() = allRoles
+
+        override fun findDescendantRoles(roles: List<RoleEntity>): List<RoleEntity> {
+            return allRoles.filter { role -> roles.any { isAncestorRole(it, role) } }
+        }
     }
 }

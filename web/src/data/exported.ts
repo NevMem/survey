@@ -92,6 +92,7 @@ interface User {
 	surname: string;
 	email: string;
 	roles: Role[];
+	allAvailableRoles: Role[];
 }
 
 interface RatingQuestion extends Question {

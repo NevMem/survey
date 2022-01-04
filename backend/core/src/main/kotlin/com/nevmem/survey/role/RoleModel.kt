@@ -5,4 +5,6 @@ interface RoleModel {
     fun hasAccess(requiredRoles: List<RoleEntity>, userRoles: List<RoleEntity>): Boolean
     fun roleById(roleId: String): RoleEntity
     val roles: List<RoleEntity>
+
+    fun findDescendantRoles(roles: List<RoleEntity>): List<RoleEntity>
 }
