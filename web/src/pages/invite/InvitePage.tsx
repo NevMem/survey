@@ -1,15 +1,17 @@
-import { Fragment, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import PageWrapper from "../../app/page/PageWrapper";
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";
 import Text from '../../components/text/Text';
-import { GetInvitesResponse, Invite } from "../../data/exported";
+import { CreateInviteRequest, CreateInviteResponse, GetInvitesResponse, instanceOfCreateInviteError, instanceOfCreateInviteSuccess, Invite } from "../../data/exported";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import Card from "../../app/card/Card";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import GeneralButton from "../../components/button/GeneralButton";
 import SpacedColumn from "../../app/layout/SpacedColumn";
+import { ModalActions, ModalBody, ModalHeader, ModalView, useModalState, ModalState } from "../../components/modal/Modal";
+import { Option, Select } from "../../components/select/Selector";
 
 interface RequestState {};
 class RequestProcessing implements RequestState {};
@@ -65,23 +67,113 @@ const InvitesTable = (props: { invites: Invite[] }) => {
     );
 };
 
-const ActualPage = (props: { invites: Invite[] }) => {
+const InviteCreationRequestBlock = (props: { requestBuilder: (abortController: AbortController) => Promise<CreateInviteResponse> }) => {
+    const result = useAsyncRequest(props.requestBuilder);
+
+    if (result instanceof RequestError) {
+        return <CardError><Text>{result.message}</Text></CardError>;
+    }
+
+    if (result instanceof RequestSuccess) {
+        const actual = result.result;
+        if (instanceOfCreateInviteError(actual)) {
+            return <CardError><Text>{actual.message}</Text></CardError>;
+        }
+        if (instanceOfCreateInviteSuccess(actual)) {
+            return (
+                <Card>
+                    Создали инвайт: {actual.invite.inviteId}
+                </Card>
+            );
+        }
+    }
+
+    return <SpaceAroundRow><Loader large /></SpaceAroundRow>;
+};
+
+const CreateInviteModal = (props: { state: ModalState }) => {
+    const availableExpirationTimes = [
+        {
+            caption: '1 минута',
+            seconds: 60,
+        },
+        {
+            caption: '10 минут',
+            seconds: 60 * 10,
+        },
+        {
+            caption: '1 час',
+            seconds: 60 * 60,
+        },
+        {
+            caption: '6 часов',
+            seconds: 60 * 60 * 6,
+        },
+        {
+            caption: '1 сутки',
+            seconds: 60 * 60 * 24,
+        },
+    ];
+
+    const [option, setOption] = useState(availableExpirationTimes[0]);
+    const [request, setRequest] = useState<CreateInviteRequest | undefined>(undefined);
+
     const createInvite = () => {
-        
+        const request: CreateInviteRequest = {
+            expirationTimeSeconds: option.seconds,
+        };
+        setRequest(request);
+    };
+
+    const changeSelection = (event: ChangeEvent<HTMLSelectElement>) => {
+        setOption(availableExpirationTimes.find(time => time.caption === event.target.value)!!)
     };
 
     return (
-        <PageWrapper>
-            <SpacedColumn rowGap={16}>
-                <SpaceBetweenRow>
-                    <Text header>Инвайты</Text>
-                    <GeneralButton onClick={createInvite}>Создать инвайт</GeneralButton>
-                </SpaceBetweenRow>
-                <Card>
-                    <InvitesTable invites={props.invites} />
-                </Card>
-            </SpacedColumn>
-        </PageWrapper>
+        <ModalView state={props.state}>
+            <ModalHeader>
+                <Text large>Создать инвайт</Text>
+            </ModalHeader>
+            <ModalBody>
+                <SpacedColumn rowGap={16}>
+                    {request && <InviteCreationRequestBlock requestBuilder={(controller: AbortController) => backendApi.createInvite(request, controller)} />}
+                    <Select onChange={changeSelection}>
+                        {availableExpirationTimes.map(elem => {
+                            return <Option key={elem.seconds}>{elem.caption}</Option>;
+                        })}
+                    </Select>
+                </SpacedColumn>
+            </ModalBody>
+            <ModalActions>
+                <GeneralButton onClick={createInvite}>Создать</GeneralButton>
+                <GeneralButton secondary onClick={() => props.state.close()}>Отмена</GeneralButton>
+            </ModalActions>
+        </ModalView>
+    );
+}
+
+const ActualPage = (props: { invites: Invite[] }) => {
+    const modalState = useModalState();
+
+    const openCreateInviteView = () => {
+        modalState.open();
+    };
+
+    return (
+        <Fragment>
+            <CreateInviteModal state={modalState} />
+            <PageWrapper>
+                <SpacedColumn rowGap={16}>
+                    <SpaceBetweenRow>
+                        <Text header>Инвайты</Text>
+                        <GeneralButton onClick={openCreateInviteView}>Создать инвайт</GeneralButton>
+                    </SpaceBetweenRow>
+                    <Card>
+                        <InvitesTable invites={props.invites} />
+                    </Card>
+                </SpacedColumn>
+            </PageWrapper>
+        </Fragment>
     );
 };
 

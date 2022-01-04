@@ -57,13 +57,13 @@ fun Route.invites() {
                     request.expirationTimeSeconds
                 )
 
-                call.respond(
+                call.respond<CreateInviteResponse>(
                     CreateInviteResponse.CreateInviteSuccess(
                         invitesConverter(invite)
                     )
                 )
             } catch (ex: Exception) {
-                call.respond(
+                call.respond<CreateInviteResponse>(
                     CreateInviteResponse.CreateInviteError(
                         message = ex.message ?: "Unknown error"
                     )

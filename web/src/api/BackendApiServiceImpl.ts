@@ -1,4 +1,4 @@
-import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError, GetInvitesResponse } from "../data/exported";
+import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError, GetInvitesResponse, CreateInviteRequest, CreateInviteResponse } from "../data/exported";
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
@@ -77,7 +77,14 @@ class BackendApiServiceImpl implements BackendApiService {
         return this.get<GetInvitesResponse>('/v1/my_invites').then(data => data.data);
     }
 
-    private post<T, U>(path: string, body: U): Promise<AxiosResponse<T>> {
+    createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse> {
+        return this.post<CreateInviteResponse, CreateInviteRequest>('/v1/create_invite', request).then(data => data.data);
+    }
+
+    private post<T, U>(path: string, body: U, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {
+        if (abortController) {
+            return axios.post<T>(this.baseUrl + path, body, { signal: abortController.signal });
+        }
         return axios.post<T>(this.baseUrl + path, body);
     }
     
