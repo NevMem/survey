@@ -65,7 +65,7 @@ const DebugPanel = () => {
 
                     <SpaceBetweenRow>
                         <Text large>Debug panel</Text>
-                        <Text large onClick={togglePanel}>&times;</Text>
+                        <Text large onClick={togglePanel} style={{cursor: 'pointer'}}>&times;</Text>
                     </SpaceBetweenRow>                    
 
                     <FeaturesBlock />

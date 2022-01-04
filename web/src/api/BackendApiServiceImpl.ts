@@ -1,4 +1,4 @@
-import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, CreateInviteRequest, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError } from "../data/exported";
+import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError } from "../data/exported";
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
