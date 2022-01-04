@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import authService, { AuthorizationService } from '../../service/authorization/AuthorizationService';
 import { Navigate } from 'react-router';
+import { Role } from '../../data/exported';
 
 
 const WithAuthorization = observer((props: {authService: AuthorizationService, children: any}) => {
@@ -12,7 +13,7 @@ const WithAuthorization = observer((props: {authService: AuthorizationService, c
     );
 })
 
-const WithAuthorizationWrapper = (props: {children: any}) => {
+const WithAuthorizationWrapper = (props: {children: any, needRoles?: Role[]}) => {
     return <WithAuthorization authService={authService}>{props.children}</WithAuthorization>
 };
 

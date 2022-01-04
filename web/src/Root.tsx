@@ -42,7 +42,11 @@ function Root() {
                 <Routes>
                   {pages.map((info, index) => {
                     if (info.needAuthorization) {
-                      return <Route path={info.path} key={index} element={<WithAuthorization>{info.component}</WithAuthorization>} />;
+                      return <Route
+                        path={info.path}
+                        key={index}
+                        element={<WithAuthorization needRoles={info.needRoles}>{info.component}</WithAuthorization>}
+                        />;
                     }
                     return <Route path={info.path} key={index} element={info.component} />;
                   })}

@@ -5,6 +5,7 @@ const apiMockServiceEnabled: Feature = { name: 'mock-api-service' };
 const messUpAuthorizationHeader: Feature = { name: 'mess-up-authorization' };
 const doNotClearSurveyAfterCreation: Feature = { name: 'do-not-clear-survey-after-creation' };
 const useLocalBackend: Feature = { name: 'use-local-backend' };
+const useNewSidebar: Feature = { name: 'use-new-sidebar' };
 
 const features: Feature[] = [
     networkFailuresFeature,
@@ -12,6 +13,7 @@ const features: Feature[] = [
     messUpAuthorizationHeader,
     doNotClearSurveyAfterCreation,
     useLocalBackend,
+    useNewSidebar,
 ];
 
 export {
@@ -20,6 +22,7 @@ export {
     messUpAuthorizationHeader,
     doNotClearSurveyAfterCreation,
     useLocalBackend,
+    useNewSidebar,
 
     features,
 };

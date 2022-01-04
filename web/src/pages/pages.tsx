@@ -6,6 +6,7 @@ import DownloadPage from './download/DownloadPage';
 import PushPage from './push/PushPage';
 import AuthorizationPage from './auth/AuthorizationPage';
 import ProfilePage from './profile/ProfilePage';
+import { Role } from '../data/exported';
 
 interface PageInfo {
     name: string;
@@ -13,6 +14,7 @@ interface PageInfo {
     path: string;
     useInSidebar: boolean;
     needAuthorization: boolean;
+    needRoles?: Role[];
 }
 
 const pages: PageInfo[] = [
@@ -36,6 +38,9 @@ const pages: PageInfo[] = [
         path : '/surveys',
         useInSidebar: true,
         needAuthorization: true,
+        needRoles: [
+            {id: 'survey.observer'},
+        ],
     },
     {
         name: 'Создать опрос',
@@ -43,6 +48,9 @@ const pages: PageInfo[] = [
         path : '/create_survey',
         useInSidebar: true,
         needAuthorization: true,
+        needRoles: [
+            {id: 'survey.creator'},
+        ],
     },
     {
         name: "Выгрузка данных",
@@ -50,6 +58,9 @@ const pages: PageInfo[] = [
         path: "/download",
         useInSidebar: true,
         needAuthorization: true,
+        needRoles: [
+            {id: 'survey.manager'},
+        ],
     },
     {
         name: "Пуши",
@@ -57,6 +68,9 @@ const pages: PageInfo[] = [
         path: "/push",
         useInSidebar: true,
         needAuthorization: true,
+        needRoles: [
+            {id: 'push.manager'},
+        ],
     },
     {
         name: '[dev] Demo page',

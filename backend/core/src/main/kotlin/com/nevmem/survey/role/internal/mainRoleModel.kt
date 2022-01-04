@@ -39,8 +39,8 @@ internal fun mainRoleModel(): RoleModel {
         }
 
         role("survey.manager") {
-            role("survey.create")
-            role("survey.activate")
+            role("survey.creator")
+            role("survey.observer")
         }
 
         role("role.manager")
