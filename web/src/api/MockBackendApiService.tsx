@@ -122,7 +122,7 @@ class MockBackendApiService implements BackendApiService {
         throw new Error('Method not implemented.');
     }
 
-    invites(): Promise<GetInvitesResponse> {
+    invites(abortController: AbortController): Promise<GetInvitesResponse> {
         throw new Error('Method not implemented.');
     }
 };

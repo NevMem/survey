@@ -11,7 +11,7 @@ interface BackendApiService {
     register(name: string, surname: string, login: string, password: string, email: string, inviteId: string): Promise<RegisterResponse>
     me(): Promise<User>
 
-    invites(): Promise<GetInvitesResponse>
+    invites(abortController: AbortController): Promise<GetInvitesResponse>
 }
 
 export type {

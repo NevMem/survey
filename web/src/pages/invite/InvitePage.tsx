@@ -23,13 +23,17 @@ class RequestSuccess<T> implements RequestState {
     }
 };
 
-function useAsyncRequest<T>(request: Promise<T>): RequestState {
+function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) => Promise<T>): RequestState {
     const [state, setState] = useState(new RequestProcessing());
 
     useEffect(() => {
-        request
+        const abortController = new AbortController();
+        requestBuilder(abortController)
             .then(data => { setState(new RequestSuccess<T>(data)); })
             .catch(error => { setState(new RequestError(error + "")); });
+        return () => {
+            abortController.abort();
+        };
     }, []);
 
     return state;
@@ -51,7 +55,7 @@ const InvitesTable = (props: { invites: Invite[] }) => {
 };
 
 const InvitePage = () => {
-    const result = useAsyncRequest<GetInvitesResponse>(backendApi.invites());
+    const result = useAsyncRequest<GetInvitesResponse>((controller: AbortController) => backendApi.invites(controller));
 
     if (result instanceof RequestError) {
         return (

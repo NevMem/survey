@@ -3,7 +3,6 @@ import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
 
-
 class BackendApiServiceImpl implements BackendApiService {
 
     private baseUrl: string;
@@ -82,7 +81,10 @@ class BackendApiServiceImpl implements BackendApiService {
         return axios.post<T>(this.baseUrl + path, body);
     }
     
-    private get<T>(path: string): Promise<AxiosResponse<T>> {
+    private get<T>(path: string, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {
+        if (abortController) {
+            return axios.get<T>(this.baseUrl + path, { signal: abortController.signal });
+        }
         return axios.get<T>(this.baseUrl + path);
     }
 };
