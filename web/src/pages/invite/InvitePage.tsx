@@ -12,6 +12,7 @@ import GeneralButton from "../../components/button/GeneralButton";
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import { ModalActions, ModalBody, ModalHeader, ModalView, useModalState, ModalState } from "../../components/modal/Modal";
 import { Option, Select } from "../../components/select/Selector";
+import Badge from "../../components/badge/Badge";
 
 interface RequestState {};
 class RequestProcessing implements RequestState {};
@@ -44,6 +45,15 @@ function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) =
     return state;
 };
 
+const InviteView = (props: {invite: Invite}) => {
+    return (
+        <SpaceBetweenRow>
+            <Text>{props.invite.inviteId}</Text>
+            <Text>{props.invite.isExpired ? <Badge error>просрочился</Badge> : <Badge success>активен</Badge>}</Text>
+        </SpaceBetweenRow>
+    );
+};
+
 const InvitesTable = (props: { invites: Invite[] }) => {
     if (props.invites.length === 0) {
         return (
@@ -55,14 +65,11 @@ const InvitesTable = (props: { invites: Invite[] }) => {
 
     return (
         <Fragment>
-            {props.invites.map((invite, index) => {
-                return (
-                    <SpaceAroundRow key={index}>
-                        <Text>{invite.inviteId}</Text>
-                        <Text>{invite.isExpired}</Text>
-                    </SpaceAroundRow>
-                )
-            })}
+            <SpacedColumn rowGap={16}>
+                {props.invites.map((invite, index) => {
+                    return <InviteView invite={invite} key={index} />;
+                })}
+            </SpacedColumn>
         </Fragment>
     );
 };
