@@ -74,6 +74,16 @@ const pages: PageInfo[] = [
         ],
     },
     {
+        name: "Инвайты",
+        component: <InvitePage />,
+        path: '/invites',
+        useInSidebar: true,
+        needAuthorization: true,
+        needRoles: [
+            {id: 'invite.manager'},
+        ],
+    },
+    {
         name: '[dev] Demo page',
         component: <DemoPage />,
         path: '/demo',
@@ -87,16 +97,6 @@ const pages: PageInfo[] = [
         useInSidebar: false,
         needAuthorization: false,
     },
-    {
-        name: "Инвайты",
-        component: <InvitePage />,
-        path: '/invites',
-        useInSidebar: true,
-        needAuthorization: true,
-        needRoles: [
-            {id: 'invite.manager'},
-        ],
-    }
 ]
 
 export default pages;
