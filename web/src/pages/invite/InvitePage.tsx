@@ -49,7 +49,7 @@ const InviteView = (props: {invite: Invite}) => {
     return (
         <SpaceBetweenRow>
             <Text>{props.invite.inviteId}</Text>
-            <Text>{props.invite.isExpired ? <Badge error>просрочился</Badge> : <Badge success>активен</Badge>}</Text>
+            {props.invite.isExpired ? <Badge error>просрочился</Badge> : <Badge success>активен</Badge>}
         </SpaceBetweenRow>
     );
 };
