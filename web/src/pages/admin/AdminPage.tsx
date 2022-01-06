@@ -9,6 +9,7 @@ import Text from '../../components/text/Text';
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import { Fragment } from "react";
+import SpacedColumn from "../../app/layout/SpacedColumn";
 
 
 const UsersTable = (props: {users: User[]}) => {
@@ -56,10 +57,24 @@ const AdminPageImpl = () => {
     );
 };
 
+const AdminPageHeader = () => {
+    return (
+        <Card>
+            <SpacedColumn rowGap={8}>
+                <Text header>Администрирование</Text>
+                <Text>На данной страничке можно изменять роли всех приглашенных пользователей</Text>
+            </SpacedColumn>
+        </Card>
+    );
+};
+
 const AdminPage = () => {
     return (
         <PageWrapper>
-            <AdminPageImpl />
+            <SpacedColumn rowGap={16}>
+                <AdminPageHeader />
+                <AdminPageImpl />
+            </SpacedColumn>
         </PageWrapper>
     );
 };
