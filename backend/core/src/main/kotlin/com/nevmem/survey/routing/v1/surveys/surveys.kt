@@ -34,7 +34,7 @@ fun Route.surveys() {
             try {
                 val user = usersService.getUserById(userId())!!
 
-                if (!roleModel.hasAccess(listOf(roleModel.roleById("survey.create")), user.roles)) {
+                if (!roleModel.hasAccess(listOf(roleModel.roleById("survey.creator")), user.roles)) {
                     throw IllegalStateException("Access to method denied (not enough roles)")
                 }
 
