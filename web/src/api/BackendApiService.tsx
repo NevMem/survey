@@ -8,7 +8,15 @@ interface BackendApiService {
 
     checkAuth(token: string): Promise<void>
     login(login: string, password: string): Promise<LoginResponse>
-    register(name: string, surname: string, login: string, password: string, email: string, inviteId: string): Promise<RegisterResponse>
+    register(
+        name: string,
+        surname: string,
+        login: string,
+        password: string,
+        email: string,
+        inviteId: string,
+        abortController: AbortController,
+    ): Promise<RegisterResponse>
     me(): Promise<User>
 
     invites(abortController: AbortController): Promise<GetInvitesResponse>

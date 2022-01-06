@@ -13,37 +13,7 @@ import SpacedColumn from "../../app/layout/SpacedColumn";
 import { ModalActions, ModalBody, ModalHeader, ModalView, useModalState, ModalState } from "../../components/modal/Modal";
 import { Option, Select } from "../../components/select/Selector";
 import Badge from "../../components/badge/Badge";
-
-interface RequestState {};
-class RequestProcessing implements RequestState {};
-class RequestError implements RequestState {
-    message: string;
-    constructor(message: string) {
-        this.message = message;
-    }
-};
-class RequestSuccess<T> implements RequestState {
-    result: T;
-    constructor(result: T) {
-        this.result = result;
-    }
-};
-
-function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) => Promise<T>): RequestState {
-    const [state, setState] = useState(new RequestProcessing());
-
-    useEffect(() => {
-        const abortController = new AbortController();
-        requestBuilder(abortController)
-            .then(data => { setState(new RequestSuccess<T>(data)); })
-            .catch(error => { setState(new RequestError(error + "")); });
-        return () => {
-            abortController.abort();
-        };
-    }, []);
-
-    return state;
-};
+import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
 
 const InviteView = (props: {invite: Invite}) => {
     return (
