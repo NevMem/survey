@@ -22,4 +22,6 @@ class UsersConverter : KoinComponent {
             allAvailableRoles = roleModel.findDescendantRoles(userEntity.roles).map { rolesConverter(it) },
         )
     }
+
+    operator fun invoke(userEntity: UserEntity) = convertUser(userEntity)
 }

@@ -1,5 +1,5 @@
 import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
-import { CreateInviteResponse, CreateInviteRequest, GetInvitesResponse, LoginResponse, RegisterResponse, Survey, User } from "../data/exported";
+import { CreateInviteResponse, CreateInviteRequest, GetInvitesResponse, LoginResponse, RegisterResponse, Survey, User, ManagedUsersResponse } from "../data/exported";
 
 interface BackendApiService {
     fetchSurveys(): Promise<Survey[]>
@@ -21,6 +21,7 @@ interface BackendApiService {
 
     invites(abortController: AbortController): Promise<GetInvitesResponse>
     createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse>
+    managedUsers(abortController: AbortController): Promise<ManagedUsersResponse>
 }
 
 export type {

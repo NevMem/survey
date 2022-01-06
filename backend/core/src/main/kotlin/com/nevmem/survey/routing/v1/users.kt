@@ -5,9 +5,12 @@ import com.nevmem.survey.data.request.auth.LoginRequest
 import com.nevmem.survey.data.request.auth.RegisterRequest
 import com.nevmem.survey.data.response.auth.LoginResponse
 import com.nevmem.survey.data.response.auth.RegisterResponse
+import com.nevmem.survey.data.response.managed.ManagedUsersResponse
+import com.nevmem.survey.routing.userId
 import com.nevmem.survey.service.auth.TokenService
 import com.nevmem.survey.service.invites.InvitesService
 import com.nevmem.survey.service.users.UsersService
+import com.nevmem.survey.user.UserEntity
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.auth.jwt.JWTPrincipal
@@ -118,6 +121,20 @@ fun Route.users() {
             val principal = call.principal<JWTPrincipal>()!!
             val user = usersService.getUserById(principal["user_id"]!!.toLong())!!
             call.respond(usersConverter.convertUser(user))
+        }
+
+        get("/managed_users") {
+            val user = usersService.getUserById(userId())!!
+            val invites = invitesService.userInvites(user.id)
+            val users = mutableListOf<UserEntity>()
+            val queue = invites.mapNotNull { it.acceptedBy }.toMutableList()
+            while (queue.isNotEmpty()) {
+                val processingUser = queue.removeAt(0)
+                users.add(processingUser)
+                val userInvites = invitesService.userInvites(processingUser.id)
+                userInvites.mapNotNull { it.acceptedBy }.forEach { queue.add(it) }
+            }
+            call.respond(ManagedUsersResponse(users.map { usersConverter(it) }))
         }
     }
 }

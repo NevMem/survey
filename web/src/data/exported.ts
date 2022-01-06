@@ -65,6 +65,10 @@ interface GetInvitesResponse {
 	invites: Invite[];
 }
 
+interface ManagedUsersResponse {
+	users: User[];
+}
+
 interface AllSurveysResponse {
 	surveys: Survey[];
 }
@@ -205,6 +209,7 @@ export type {
 	LoginRequest,
 	LoginResponse,
 	LoginSuccessful,
+	ManagedUsersResponse,
 	Media,
 	Question,
 	RatingQuestion,
