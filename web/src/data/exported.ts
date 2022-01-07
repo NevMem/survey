@@ -35,6 +35,11 @@ interface CreateInviteRequest {
 	expirationTimeSeconds: number;
 }
 
+interface UpdateRolesRequest {
+	user: User;
+	roles: Role[];
+}
+
 interface CreateSurveyRequest {
 	name: string;
 	questions: Question[];
@@ -70,6 +75,11 @@ interface ManagedUsersResponse {
 }
 
 interface AllRolesResponse {
+	roles: Role[];
+}
+
+interface UpdateRolesResponse {
+	user: User;
 	roles: Role[];
 }
 
@@ -227,5 +237,7 @@ export type {
 	StarsQuestion,
 	Survey,
 	TextQuestion,
+	UpdateRolesRequest,
+	UpdateRolesResponse,
 	User,
 }

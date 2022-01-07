@@ -63,6 +63,14 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
         }
     }
 
+    override suspend fun updateUserRoles(user: UserEntity, newRoles: List<RoleEntity>) {
+        transaction {
+            UserEntityDTO.find {
+                UsersTable.id eq user.id
+            }.firstOrNull()?.roles = roleConverter.rolesToString(newRoles)
+        }
+    }
+
     private fun UserEntityDTO.toEntity(): UserEntity {
         return UserEntity(
             id.value,

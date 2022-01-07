@@ -137,6 +137,10 @@ class MockBackendApiService implements BackendApiService {
     roles(): Promise<AllRolesResponse> {
         throw new Error('Method not implemented.');
     }
+
+    updateRoles(): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
 };
 
 export default MockBackendApiService;
