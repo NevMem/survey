@@ -10,7 +10,7 @@ import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import { Fragment, useState } from "react";
 import SpacedColumn from "../../app/layout/SpacedColumn";
-import { ModalBody, ModalState, ModalView, useModalState, ModalHeader, ModalActions } from "../../components/modal/Modal";
+import Modal, { ModalBody, ModalState, ModalView, useModalState, ModalHeader, ModalActions } from "../../components/modal/Modal";
 import GeneralButton from "../../components/button/GeneralButton";
 import CardSuccess from "../../app/card/CardSuccess";
 
@@ -125,7 +125,7 @@ const UserRolesModal = (props: {user: User, modalState: ModalState}) => {
                     <Text>Имя: {props.user.name}</Text>
                     <Text>Фамилия: {props.user.surname}</Text>
                     <Text>Почта: {props.user.email}</Text>
-                    <RolesRow user={props.user} setNewRoles={setNewRoles} />
+                    {props.modalState.opened && <RolesRow user={props.user} setNewRoles={setNewRoles} />}
                     {request && <PerformingRequestBlock request={request} />}
                 </SpacedColumn>
             </ModalBody>
