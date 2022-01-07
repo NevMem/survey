@@ -8,7 +8,7 @@ import { ChangeEvent, useState } from "react";
 import Input from "../../components/input/Input";
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import backendApi from '../../api/backendApiServiceSingleton';
-import { instanceOfRegisterError, instanceOfRegisterSuccessful, RegisterRequest, RegisterResponse } from "../../data/exported";
+import { instanceOfRegisterSuccessful, RegisterRequest, RegisterResponse } from "../../data/exported";
 import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
 import Loader from "../../components/loader/Loader";
 import CardError from "../../app/card/CardError";
