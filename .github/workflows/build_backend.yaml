@@ -20,6 +20,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: set up python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
       - name: build core executable
         run: ./gradlew :backend:core:build
       - name: Copy zip to root
@@ -43,6 +47,24 @@ jobs:
           registry: cr.yandex
           username: json_key
           password: ${{ secrets.REGISTRY_KEY }}
+      - name: Exporting env variables
+        run: python3 tools/bundle_env_vars.py --configuration backend/core/docker/env_vars_config.json --output backend/core/docker/env.sh
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_DBNAME: ${{ secrets.DB_DBNAME }}
+          DB_SERVER: rc1c-rj0lqxik0r20u80e.mdb.yandexcloud.net
+          DB_PORT: 6432
+          JWT_AUDIENCE: ethnosurvey.com
+          JWT_REALM: ethnosurvey.com
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_DOMAIN: ethnosurvey.com
+          SECURITY_SALT: ${{ secrets.SECURITY_SALT }}
+          S3_REGION: ru-central1
+          S3_ACCESS_KEY: ${{ secrets.S3_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
+          S3_URI: https://storage.yandexcloud.net
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       - name: Building docker
         run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
       - name: Pushing docker

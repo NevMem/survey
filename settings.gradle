@@ -1,5 +1,0 @@
-rootProject.name = "com.nevmem.survey"
-
-include 'backend:core'
-include 'common:data'
-

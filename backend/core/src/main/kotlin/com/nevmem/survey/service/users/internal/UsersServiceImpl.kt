@@ -4,7 +4,8 @@ import com.nevmem.survey.role.RoleEntity
 import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.service.security.auth.PasswordEncoder
 import com.nevmem.survey.service.users.UsersService
-import com.nevmem.survey.service.users.data.UserEntity
+import com.nevmem.survey.user.UserEntity
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -42,9 +43,11 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
     override suspend fun getUserWithCredentials(credentials: UsersService.Credentials): UserEntity? {
         return transaction {
             UserEntityDTO.find {
-                UsersTable.login like credentials.login
-                UsersTable.password like passwordEncoder.encodePassword(credentials.password)
-            }.firstOrNull()?.toEntity()
+                (UsersTable.login like credentials.login) and
+                    (UsersTable.password like passwordEncoder.encodePassword(credentials.password))
+            }
+                .firstOrNull()
+                ?.toEntity()
         }
     }
 
@@ -57,6 +60,14 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
             UserEntityDTO.find {
                 UsersTable.id eq id
             }.firstOrNull()?.toEntity()
+        }
+    }
+
+    override suspend fun updateUserRoles(user: UserEntity, newRoles: List<RoleEntity>) {
+        transaction {
+            UserEntityDTO.find {
+                UsersTable.id eq user.id
+            }.firstOrNull()?.roles = roleConverter.rolesToString(newRoles)
         }
     }
 

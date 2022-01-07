@@ -7,6 +7,11 @@ import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
 import Badge from '../../components/badge/Badge';
 import Notification from '../../components/notification/Notification';
 import { useNotification } from '../../app/notification/NotificationProvider';
+import ThemePicker from '../../components/theme/ThemePicker';
+import Card from '../../app/card/Card';
+import CardError from '../../app/card/CardError';
+import CardSuccess from '../../app/card/CardSuccess';
+import SpacedColumn from '../../app/layout/SpacedColumn';
 
 const NotificationsBlock = () => {
     const notificationUser = useNotification();
@@ -84,6 +89,22 @@ export default function DemoPage() {
                             <Notification title='Нотификация' text='Просто какое-то уведомление' type='success' />
                             <Notification title='Нотификация' text='Просто какое-то уведомление' type='error' />
                             <Notification title='Нотификация' text='Просто какое-то уведомление' type='warning' />
+
+                            <SpacedColumn rowGap={16}>
+                                <Card>
+                                    <Text>usual card</Text>
+                                </Card>
+
+                                <CardError>
+                                    <Text>error card</Text>
+                                </CardError>
+
+                                <CardSuccess>
+                                    <Text>success card</Text>
+                                </CardSuccess>
+                            </SpacedColumn>
+
+                            <ThemePicker />
                         </ThemeProvider>
                     </section>
                 )

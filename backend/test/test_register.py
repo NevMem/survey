@@ -3,7 +3,7 @@ from client import Client
 from utils import random_string
 
 def test_register(client: Client):
-    token = client.login('login', 'password').json()['token']
+    token = client.login('admin', 'password').json()['token']
     invite = client.create_invite(token, 38 * 60).json()['invite']
 
     login = random_string(10)

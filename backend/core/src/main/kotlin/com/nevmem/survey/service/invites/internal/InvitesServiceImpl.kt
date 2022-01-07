@@ -1,9 +1,9 @@
 package com.nevmem.survey.service.invites.internal
 
+import com.nevmem.survey.invite.InviteEntity
 import com.nevmem.survey.service.invites.InvitesService
-import com.nevmem.survey.service.invites.data.InviteEntity
 import com.nevmem.survey.service.users.UsersService
-import com.nevmem.survey.service.users.data.UserEntity
+import com.nevmem.survey.user.UserEntity
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update

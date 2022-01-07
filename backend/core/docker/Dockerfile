@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 
 COPY build_dir /
 COPY runner.sh /
+COPY env.sh /
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive \

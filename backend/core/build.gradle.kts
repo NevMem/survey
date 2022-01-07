@@ -37,7 +37,10 @@ dependencies {
     implementation ("org.jetbrains.exposed:exposed-jdbc:0.33.1")
     implementation ("com.zaxxer:HikariCP:4.0.3")
     implementation ("org.postgresql:postgresql:42.2.23")
+    implementation("software.amazon.awssdk:s3:2.17.102")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     implementation(project(":common:data"))
+    implementation(project(":backend:common"))
+    implementation(project(":backend:helpers"))
 }

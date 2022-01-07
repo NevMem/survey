@@ -1,12 +1,11 @@
 import PageWrapper from "../../app/page/PageWrapper";
 import Text from "../../components/text/Text";
 import styled from "styled-components";
-import { Survey } from "../../data/Survey";
+import { Survey } from "../../data/exported";
 import { observer } from "mobx-react-lite";
 import surveysService, { SurveysError, SurveysLoaded, SurveysLoading, SurveysService, SurveysState } from "../../service/survey/SurveysService";
 import Loader from "../../components/loader/Loader";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
-import Badge from "../../components/badge/Badge";
 import GeneralButton from "../../components/button/GeneralButton";
 import { Fragment, useState } from "react";
 import { Navigate } from 'react-router-dom';
@@ -77,10 +76,6 @@ const SurveyMetadataRenderer = (props: {survey: Survey}) => {
 };
 
 const SurveyRow = (props: {survey: Survey}) => {
-    const activateSurvey = () => {
-        surveysService.activateSurvey(props.survey.id);
-    };
-
     const [expanded, setExpanded] = useState(false);
     const toggleMetadata = () => {
         setExpanded(!expanded);
@@ -90,8 +85,7 @@ const SurveyRow = (props: {survey: Survey}) => {
         <TableRow>
             <SpaceBetweenRow>
                 <Text large style={{width: '300px'}}>{props.survey.name}</Text>
-                <Badge success={props.survey.active}>{props.survey.active ? 'Активный' : 'Отключен'}</Badge>
-                <GeneralButton onClick={activateSurvey} disabled={props.survey.active}>Активировать</GeneralButton>
+                <Text>{props.survey.surveyId}</Text>
                 <GeneralButton onClick={toggleMetadata} secondary>{expanded ? 'свернуть' : 'раскрыть'}</GeneralButton>
             </SpaceBetweenRow>
             { expanded && <SurveyMetadataRenderer survey={props.survey} /> }
@@ -115,7 +109,7 @@ const SurveysTable = (props: {surveysState: SurveysState, isActivating: boolean}
                     <SpacedCenteredColumn rowGap={16}>
                         <Text large>Ошибка загрузки опросов, ошибка:</Text>
                         <Text>{props.surveysState.error}</Text>
-                        <GeneralButton onClick={() => {surveysService._fetchSurveys()}}>Попробовать еще раз</GeneralButton>
+                        <GeneralButton onClick={() => {surveysService.fetchSurveys()}}>Попробовать еще раз</GeneralButton>
                     </SpacedCenteredColumn>
                 </SpaceAroundRow>
             </CardError>
@@ -145,6 +139,7 @@ const SurveysPage = () => {
     const initRedirect = () => {
         setRedirect(true);
     };
+    surveysService.prefetchSurveysIfNeeded();
     return (
         <PageWrapper>
             { redirect && <Navigate to="/create_survey" /> }

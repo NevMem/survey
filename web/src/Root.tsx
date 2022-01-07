@@ -1,17 +1,15 @@
-import React from 'react';
-import DemoPage from './pages/demo/DemoPage';
+import React, { useContext } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { defaultTheme } from './theme/themes';
-import { ThemeProvider } from 'styled-components';
-import HomePage from './pages/home/HomePage';
+import { getSelectedTheme } from './theme/themes';
+import { ThemeContext, ThemeProvider } from 'styled-components';
 import AppNavbar from './app/navbar/AppNavbar';
 import AppSidebar from './app/sidebar/AppSidebar';
-import CreateSurveyPage from './pages/create_survey/CreateSurveyPage';
-import SurveysPage from './pages/surveys/SurveysPage';
-import DownloadPage from './pages/download/DownloadPage';
 import NotificationProvider, { useNotification } from './app/notification/NotificationProvider';
 import DebugPanel from './app/debug/DebugPanel';
 import surveysService from './service/survey/SurveysService';
+import pages from './pages/pages';
+import WithAuthorization from './components/auth/WithAuthorization';
+import { Theme } from './theme/theme';
 
 const WithSideBar = (props: { children: any }) => {
   return (
@@ -33,21 +31,33 @@ const NotificationHelper = () => {
   return null;
 }
 
+const SetBackgroundColorHelper = () => {
+  const theme: Theme = useContext(ThemeContext);
+  document.body.style.backgroundColor = theme.background;
+  return null;
+}
+
 function Root() {
   return (
     <div>
-      <ThemeProvider theme={defaultTheme}>
+      <ThemeProvider theme={getSelectedTheme()}>
+        <SetBackgroundColorHelper />
         <NotificationProvider>
           <NotificationHelper />
           <HashRouter>
             <AppNavbar />
             <WithSideBar>
                 <Routes>
-                  <Route path="/create_survey" element={<CreateSurveyPage/>} />
-                  <Route path="/surveys" element={<SurveysPage />} />
-                  <Route path="/download" element={<DownloadPage />} />
-                  <Route path="/demo" element={<DemoPage />} />
-                  <Route path="/" element={<HomePage/>} />
+                  {pages.map((info, index) => {
+                    if (info.needAuthorization) {
+                      return <Route
+                        path={info.path}
+                        key={index}
+                        element={<WithAuthorization needRoles={info.needRoles}>{info.component}</WithAuthorization>}
+                        />;
+                    }
+                    return <Route path={info.path} key={index} element={info.component} />;
+                  })}
                 </Routes>
             </WithSideBar>
           </HashRouter>

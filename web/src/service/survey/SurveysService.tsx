@@ -1,5 +1,6 @@
 import { makeObservable, observable, action } from 'mobx';
-import { Survey, UnsavedSurvey } from '../../data/Survey';
+import { Survey } from '../../data/exported';
+import { UnsavedSurvey } from '../../data/Survey';
 import apiService from '../../api/backendApiServiceSingleton';
 import { NotificationAction } from '../../app/notification/data';
 
@@ -27,12 +28,14 @@ class SurveysService {
     surveysState: SurveysState;
     addingSurvey: boolean;
     activatingSurvey: boolean;
-    notificationUser?: (title: string, text: string, type?: string, actions?: NotificationAction[]) => string
+    notificationUser?: (title: string, text: string, type?: string, actions?: NotificationAction[]) => string;
+    private surveysHasBeenLoaded: boolean;
 
     constructor() {
         this.addingSurvey = false;
         this.activatingSurvey = false;
         this.surveysState = new SurveysLoading();
+        this.surveysHasBeenLoaded = false;
 
         makeObservable(
             this,
@@ -40,16 +43,21 @@ class SurveysService {
                 addingSurvey: observable,
                 activatingSurvey: observable,
                 surveysState: observable,
-                activateSurvey: action,
                 addSurvey: action,
-                _fetchSurveys: action,
+                fetchSurveys: action,
                 _setAddingSurvey: action,
                 _setActivatingSurvey: action,
                 _setSurveysState: action,
             }
         );
+    }
 
-        this._fetchSurveys();
+    prefetchSurveysIfNeeded() {
+        if (this.surveysHasBeenLoaded) {
+            return
+        }
+        this.surveysHasBeenLoaded = true;
+        this.fetchSurveys();
     }
     
     setNotificationUser(notificationUser: (title: string, text: string, type?: string, actions?: NotificationAction[]) => string) {
@@ -61,40 +69,29 @@ class SurveysService {
         apiService.addSurvey(unsavedSurvey)
             .then(survey => {
                 this._setAddingSurvey(false);
-                this._fetchSurveys();
+                this.fetchSurveys();
             })
             .catch(error => {
-                this.notificationUser?.('Ошибка добавлениия опроса', error, 'error');
+                this._setAddingSurvey(false);
+                this.notificationUser?.('Ошибка добавлениия опроса', error + "", 'error');
             });
     }
 
-    activateSurvey(id: number) {
-        this.activatingSurvey = true;
-        apiService.activateSurvey(id)
-            .then(() => {
-                this._setActivatingSurvey(false);
-                this._fetchSurveys();
-            })
-            .catch(error => {
-                this.notificationUser?.('Ошибка активации опроса', error, 'error');
-            });
-    }
-
-    _setAddingSurvey(isAdding: boolean) {
-        this.addingSurvey = isAdding;
-    }
-
-    _fetchSurveys() {
+    fetchSurveys() {
         this._setSurveysState(new SurveysLoading());
         apiService.fetchSurveys()
             .then(surveys => {
                 this._setSurveysState(new SurveysLoaded(surveys));
             })
             .catch(error => {
-                this.notificationUser?.('Ошибка загрузки опросов', error, 'error', [{message: 'Еще раз', action: () => { this._fetchSurveys() } }]);
+                this.notificationUser?.('Ошибка загрузки опросов', error + "", 'error', [{message: 'Еще раз', action: () => { this.fetchSurveys() } }]);
 
-                this._setSurveysState(new SurveysError(error));
+                this._setSurveysState(new SurveysError(error + ""));
             });
+    }
+
+    _setAddingSurvey(isAdding: boolean) {
+        this.addingSurvey = isAdding;
     }
 
     _setActivatingSurvey(isActivating: boolean) {

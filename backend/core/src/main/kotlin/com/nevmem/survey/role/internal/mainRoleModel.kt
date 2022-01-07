@@ -39,8 +39,8 @@ internal fun mainRoleModel(): RoleModel {
         }
 
         role("survey.manager") {
-            role("survey.create")
-            role("survey.activate")
+            role("survey.creator")
+            role("survey.observer")
         }
 
         role("role.manager")
@@ -77,5 +77,9 @@ internal fun mainRoleModel(): RoleModel {
 
         override val roles: List<RoleEntity>
             get() = allRoles
+
+        override fun findDescendantRoles(roles: List<RoleEntity>): List<RoleEntity> {
+            return allRoles.filter { role -> roles.any { isAncestorRole(it, role) } }
+        }
     }
 }

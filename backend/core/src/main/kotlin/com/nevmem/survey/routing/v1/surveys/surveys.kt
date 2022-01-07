@@ -1,19 +1,17 @@
 package com.nevmem.survey.routing.v1.surveys
 
+import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.converter.SurveysConverter
 import com.nevmem.survey.data.question.Question
-import com.nevmem.survey.data.request.survey.ActivateSurveyRequest
 import com.nevmem.survey.data.request.survey.CreateSurveyRequest
 import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
-import com.nevmem.survey.data.response.survey.ActiveSurveyResponse
 import com.nevmem.survey.data.response.survey.AllSurveysResponse
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
+import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.checkRoles
 import com.nevmem.survey.routing.userId
 import com.nevmem.survey.service.surveys.SurveysService
-import com.nevmem.survey.service.surveys.data.CommonQuestionEntity
-import com.nevmem.survey.service.surveys.data.QuestionEntity
 import com.nevmem.survey.service.users.UsersService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
@@ -31,16 +29,12 @@ fun Route.surveys() {
     val surveysService by inject<SurveysService>()
     val surveysConverter by inject<SurveysConverter>()
 
-    get("/active_survey") {
-        call.respond(ActiveSurveyResponse(surveysService.currentActiveSurvey()?.let { surveysConverter.convertSurvey(it) }))
-    }
-
     authenticate {
         post("/create_survey") {
             try {
                 val user = usersService.getUserById(userId())!!
 
-                if (!roleModel.hasAccess(listOf(roleModel.roleById("survey.create")), user.roles)) {
+                if (!roleModel.hasAccess(listOf(roleModel.roleById("survey.creator")), user.roles)) {
                     throw IllegalStateException("Access to method denied (not enough roles)")
                 }
 
@@ -73,17 +67,10 @@ fun Route.surveys() {
                     }
                 )
 
-                call.respond(CreateSurveyResponse.CreateSurveySuccess(surveysConverter.convertSurvey(survey)))
+                call.respond<CreateSurveyResponse>(CreateSurveyResponse.CreateSurveySuccess(surveysConverter.convertSurvey(survey)))
             } catch (exception: Exception) {
-                call.respond(HttpStatusCode.ExpectationFailed, CreateSurveyResponse.CreateSurveyError(exception.message ?: "Unknown error"))
+                call.respond<CreateSurveyResponse>(HttpStatusCode.ExpectationFailed, CreateSurveyResponse.CreateSurveyError(exception.message ?: "Unknown error"))
             }
-        }
-
-        post("/activate_survey") {
-            checkRoles(roleModel, usersService, listOf("survey.activate"))
-            val request = call.receive<ActivateSurveyRequest>()
-            surveysService.activateSurvey(request.surveyId)
-            call.respond(HttpStatusCode.OK)
         }
 
         post("/delete_survey") {

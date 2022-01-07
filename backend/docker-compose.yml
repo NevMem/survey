@@ -26,10 +26,17 @@ services:
     depends_on:
       database:
         condition: service_started
+    ports:
+      - "8080:8080"
   test:
     build:
       context: test/
     depends_on:
       core:
         condition: service_healthy
-
+  s3local:
+    image: 'scality/s3server'
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./config.json:/usr/src/app/config.json"

@@ -23,6 +23,13 @@ object EnvVars {
     object Admin {
         val password by lazy { maybeEnv("ADMIN_PASSWORD") }
     }
+
+    object S3 {
+        val region by lazy { env("S3_REGION") }
+        val accessKey by lazy { env("S3_ACCESS_KEY") }
+        val secretAccessKey by lazy { env("S3_SECRET_ACCESS_KEY") }
+        val s3Uri by lazy { env("S3_URI") }
+    }
 }
 
 private fun maybeEnv(key: String): String? = System.getenv(key)

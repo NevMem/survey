@@ -5,7 +5,7 @@ import Text from '../../components/text/Text';
 import createSurveyService, { CreateSurveyService } from '../../service/create_survey/CreateSurveyService';
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
-import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/Question';
+import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/exported';
 import PageWrapper from '../../app/page/PageWrapper';
 import { UnsavedSurvey } from '../../data/Survey';
 import surveysService, { SurveysService } from '../../service/survey/SurveysService';
@@ -14,6 +14,7 @@ import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
 import { commonQuestions, commonQuestionTitle } from '../../data/commonQuestions';
 import { CommonQuestion } from '../../data/CommonQuestion';
 import Input from '../../components/input/Input';
+import Modal, { ModalHeader, ModalBody, ModalActions } from '../../components/modal/Modal';
 
 const WrappedRow = styled.div`
     padding: 20px;
@@ -21,44 +22,6 @@ const WrappedRow = styled.div`
     border-radius: 8px;
     margin-top: 10px;
     margin-bottom: 10px;
-`;
-
-// const WrappedRow = styled.div`
-//     padding: 20px;
-//     background-color: ${props => props.theme.background};
-//     border-radius: 8px;
-//     margin-top: 10px;
-//     margin-bottom: 10px;
-//     border: 2px solid ${props => props.theme.secondaryBackground};
-// `;
-
-const Modal = styled.div`
-    margin: 15% auto;
-    width: 400px;
-    background-color: ${props => props.theme.background};
-    border-radius: 8px;
-    padding: 16px;
-    clickable: true;
-    z-index: 2;
-`;
-
-const ModalHeader = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`;
-
-const ModalBody = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    padding-bottom: 20px;
-`;
-
-const ModalActions = styled.div`
-    display: flex;
-    flex-direction: row-reverse;
-    column-gap: 10px;
 `;
 
 const Selector = styled.select`
@@ -72,7 +35,7 @@ const RatingQuestionBlock = (props: {setQuestion: (question: Question | undefine
     const [name, setName] = useState('');
 
     const updateQuestion = (newMin?: number, newMax?: number, newName?: string) => {
-        props.setQuestion({title: newName ?? name, min: newMin ?? min, max: newMax ?? max} as RatingQuestion);
+        props.setQuestion({type: "rating", title: newName ?? name, min: newMin ?? min, max: newMax ?? max} as RatingQuestion);
     }
 
     const changeMin = (event: any) => {
@@ -108,12 +71,12 @@ const TextQuestionBlock = (props: {setQuestion: (question: Question | undefined)
 
     const changeName = (event: any) => {
         setName(event.target.value);
-        props.setQuestion({ title: event.target.value, maxLength: maxLength } as TextQuestion);
+        props.setQuestion({ type: "text", title: event.target.value, maxLength: maxLength } as TextQuestion);
     }
 
     const changeMaxLength = (event: any) => {
         setMaxLength(event.target.value | 0);
-        props.setQuestion({ title: name, maxLength: event.target.value | 0 } as TextQuestion);
+        props.setQuestion({ type: "text", title: name, maxLength: event.target.value | 0 } as TextQuestion);
     }
 
     return (
@@ -133,12 +96,12 @@ const StarsQuestionBuilderBlock = (props: {setQuestion: (question: Question | un
 
     const changeName = (event: any) => {
         setName(event.target.value);
-        props.setQuestion({ title: event.target.value, stars: starsCount } as StarsQuestion);
+        props.setQuestion({ type: "stars", title: event.target.value, stars: starsCount } as StarsQuestion);
     }
 
     const changeStarsCount = (event: any) => {
         setStarsCount(event.target.value | 0);
-        props.setQuestion({ title: name, stars: event.target.value | 0 } as StarsQuestion);
+        props.setQuestion({ type: "stars", title: name, stars: event.target.value | 0 } as StarsQuestion);
     }
 
     return (

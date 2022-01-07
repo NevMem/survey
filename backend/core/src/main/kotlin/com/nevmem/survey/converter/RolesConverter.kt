@@ -10,4 +10,6 @@ class RolesConverter : KoinComponent {
             roleEntity.roleId,
         )
     }
+
+    operator fun invoke(roleEntity: RoleEntity) = convertRole(roleEntity)
 }
