@@ -69,6 +69,10 @@ interface ManagedUsersResponse {
 	users: User[];
 }
 
+interface AllRolesResponse {
+	roles: Role[];
+}
+
 interface AllSurveysResponse {
 	surveys: Survey[];
 }
@@ -192,6 +196,7 @@ export function instanceOfCreateSurveyError(object: CreateSurveyResponse): objec
 }
 
 export type {
+	AllRolesResponse,
 	AllSurveysResponse,
 	CommonQuestion,
 	CreateInviteError,
