@@ -92,7 +92,7 @@ const createDefaultTheme = (): Theme => {
         {
             primary: '#ff6347',
             secondary: '#a03020',
-            foreground: '#FFFFFF',
+            foreground: '#000000',
             background: '#FFFFFF',
             secondaryBackground: '#f5f5f5',
             success: '#61E294',
@@ -130,11 +130,35 @@ const createDebugTheme = (): Theme => {
     );
 }
 
+const createNightTheme = (): Theme => {
+    return new ThemeImpl(
+        'night theme',
+        {
+            primary: '#ff6347',
+            secondary: '#a03020',
+            foreground: '#FFFFFF',
+            background: '#101030',
+            secondaryBackground: '#303060',
+            success: '#61E294',
+            warning: '#FFD25A',
+            error: '#FF785A',
+            grey: '#d0d0d0',
+        },
+        {
+            smallTextSize: '0.7em',
+            mediumTextSize: '1em',
+            largeTextSize: '1.3em',
+            headerTextSize: '2em',
+        }
+    )
+};
+
 const defaultTheme = createDefaultTheme();
 
 const themes: Theme[] = [
     defaultTheme,
     createDebugTheme(),
+    createNightTheme(),
 ]
 
 const saveTheme = (name: string) => {

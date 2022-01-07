@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { getSelectedTheme } from './theme/themes';
-import { ThemeProvider } from 'styled-components';
+import { ThemeContext, ThemeProvider } from 'styled-components';
 import AppNavbar from './app/navbar/AppNavbar';
 import AppSidebar from './app/sidebar/AppSidebar';
 import NotificationProvider, { useNotification } from './app/notification/NotificationProvider';
@@ -9,6 +9,7 @@ import DebugPanel from './app/debug/DebugPanel';
 import surveysService from './service/survey/SurveysService';
 import pages from './pages/pages';
 import WithAuthorization from './components/auth/WithAuthorization';
+import { Theme } from './theme/theme';
 
 const WithSideBar = (props: { children: any }) => {
   return (
@@ -30,10 +31,17 @@ const NotificationHelper = () => {
   return null;
 }
 
+const SetBackgroundColorHelper = () => {
+  const theme: Theme = useContext(ThemeContext);
+  document.body.style.backgroundColor = theme.background;
+  return null;
+}
+
 function Root() {
   return (
     <div>
       <ThemeProvider theme={getSelectedTheme()}>
+        <SetBackgroundColorHelper />
         <NotificationProvider>
           <NotificationHelper />
           <HashRouter>

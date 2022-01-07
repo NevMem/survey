@@ -3,21 +3,25 @@ import styled from "styled-components";
 
 const SmallText = styled.p`
     font-size: ${props => props.theme.smallTextSize};
+    color: ${props => props.theme.foreground};
     margin: 0;
 `;
 
 const MediumText = styled.p`
     font-size: ${props => props.theme.mediumTextSize};
+    color: ${props => props.theme.foreground};
     margin: 0;
 `;
 
 const LargeText = styled.p`
     font-size: ${props => props.theme.largeTextSize};
+    color: ${props => props.theme.foreground};
     margin: 0;
 `;
 
 const HeaderText = styled.p`
     font-size: ${props => props.theme.headerTextSize};
+    color: ${props => props.theme.foreground};
     margin: 0;
 `;
 
