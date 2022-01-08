@@ -33,9 +33,9 @@ jobs:
       - name: Installing YC util
         run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
       - name: Authorizing YC util
-        run: source /opt/yandex-cloud/path.bash.inc && echo $SERVICE_KEY>service_key.json && yc config set service-account-key service_key.json
+        run: source /opt/yandex-cloud/path.bash.inc && yc config set token $YC_TOKEN 
         env:
-          SERVICE_KEY: ${{ secrets.REGISTRY_KEY }}
+          YC_TOKEN: ${{ secrets.YC_TOKEN }}
       - name: List instances
         run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
       - name: Launching roll script
