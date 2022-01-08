@@ -31,13 +31,13 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.CORE_SSH_KEY }}
       - name: Installing YC util
-        run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -a
+        run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
       - name: Check x1
         run: cat /home/runner/.bashrc
       - name: Check
         run: ls -la
       - name: Check yc
-        run: ls -la ./yandex-cloud/
+        run: ls -la ./opt/yandex-cloud/
       - name: Check x2
         run: source "/home/runner/.bashrc" && yc compute instance list
       - name: Launching roll script
