@@ -38,6 +38,8 @@ jobs:
         run: ls -la /opt/
       - name: Check yc
         run: ls -la /opt/yandex-cloud/
+      - name: cat inc
+        run: cat /opt/yandex-cloud/path.bash.inc
       - name: Check x2
         run: source "/home/runner/.bashrc" && yc compute instance list
       - name: Launching roll script
