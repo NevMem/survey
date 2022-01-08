@@ -41,6 +41,6 @@ jobs:
       - name: cat inc
         run: cat /opt/yandex-cloud/path.bash.inc
       - name: Check x2
-        run: source "/home/runner/.bashrc" && yc compute instance list
+        run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
       - name: Launching roll script
-        run: source "/home/runner/.bashrc" && python3 tools/roll_update.py core ./revisions.json ./ssh_key
+        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll_update.py core ./revisions.json ./ssh_key
