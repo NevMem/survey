@@ -37,4 +37,4 @@ jobs:
       - name: Check x2
         run: yc compute instance list
       - name: Launching roll script
-        run: source /home/runner/.bashrc && python3 tools/roll_update.py core ./revisions.json ./ssh_key
+        run: source "/home/runner/.bashrc" && python3 tools/roll_update.py core ./revisions.json ./ssh_key
