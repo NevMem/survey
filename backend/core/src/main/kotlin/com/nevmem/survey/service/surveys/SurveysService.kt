@@ -14,4 +14,6 @@ interface SurveysService {
     suspend fun deleteSurvey(id: Long)
 
     suspend fun allSurveys(): List<SurveyEntity>
+
+    suspend fun survey(surveyId: String): SurveyEntity?
 }
