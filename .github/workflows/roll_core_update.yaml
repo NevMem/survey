@@ -30,5 +30,7 @@ jobs:
         run: echo "$SSH_KEY" > ssh_key && chmod 700 ./ssh_key
         env:
           SSH_KEY: ${{ secrets.CORE_SSH_KEY }}
+      - name: Installing YC util
+        run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -h
       - name: Launching roll script
         run: python3 tools/roll_update.py core ./revisions.json ./ssh_key
