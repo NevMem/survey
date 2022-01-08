@@ -4,9 +4,7 @@
 # RUN ./gradlew :backend:core:build
 
 FROM openjdk:8-jdk-alpine AS BUILD_PHASE
-COPY . .
-RUN ls -la
-
+COPY backend backend
 
 FROM ubuntu:20.04
 
