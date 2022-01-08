@@ -39,6 +39,6 @@ jobs:
           YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
           YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
       - name: List instances
-        run: yc compute instance list
+        run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
       - name: Launching rolling script
-        run: python3 tools/roll_update.py core ./revisions.json ./ssh_key
+        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll_update.py core ./revisions.json ./ssh_key
