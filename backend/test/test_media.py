@@ -1,7 +1,9 @@
 from utils import random_string
 import requests
+import pytest
 
 
+@pytest.mark.slow
 def test_simple_media_uploading():
     with open('tmp.txt', 'w') as out:
         for _ in range(256):
@@ -10,6 +12,7 @@ def test_simple_media_uploading():
     assert response.status_code == 200
 
 
+@pytest.mark.slow
 def test_media_large_file():
     with open('tmp.txt', 'w') as out:
         for _ in range(1024):
