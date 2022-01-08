@@ -32,7 +32,5 @@ jobs:
           SSH_KEY: ${{ secrets.CORE_SSH_KEY }}
       - name: Installing YC util
         run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -a
-      - name: Update bash profile
-        run: source /home/runner/.bashrc
       - name: Launching roll script
-        run: python3 tools/roll_update.py core ./revisions.json ./ssh_key
+        run: source /home/runner/.bashrc && python3 tools/roll_update.py core ./revisions.json ./ssh_key
