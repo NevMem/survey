@@ -1,0 +1,34 @@
+name: Roll core update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - './revisions.json'
+      - '.github/workflows/roll_core_update.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - './revisions.json'
+      - '.github/workflows/roll_core_update.yaml'
+
+jobs:
+  rolling_core_update:
+    name: Rolling core update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: set up python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Storing ssh key file
+        run: echo "$SSH_KEY" > ssh_key && chmod 700 ./ssh_key
+        env:
+          SSH_KEY: ${{ secrets.CORE_SSH_KEY }}
+      - name: Launching roll script
+        run: python3 tools/roll_update.py core ./revisions.json ./ssh_key
