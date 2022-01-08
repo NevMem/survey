@@ -1,3 +1,12 @@
+interface QuestionAnswer {
+	type: string;
+}
+
+interface SurveyAnswer {
+	surveyId: string;
+	answers: QuestionAnswer[];
+}
+
 interface Invite {
 	inviteId: string;
 	acceptedBy: User | undefined;
@@ -113,6 +122,21 @@ interface User {
 	allAvailableRoles: Role[];
 }
 
+interface RatingQuestionAnswer extends QuestionAnswer {
+	number: number;
+	commonQuestionId: string | undefined;
+}
+
+interface TextQuestionAnswer extends QuestionAnswer {
+	text: string;
+	commonQuestionId: string | undefined;
+}
+
+interface StarsQuestionAnswer extends QuestionAnswer {
+	starts: number;
+	commonQuestionId: string | undefined;
+}
+
 interface RatingQuestion extends Question {
 	title: string;
 	min: number;
@@ -159,6 +183,18 @@ interface CreateSurveySuccess extends CreateSurveyResponse {
 
 interface CreateSurveyError extends CreateSurveyResponse {
 	message: string;
+}
+
+export function instanceOfRatingQuestionAnswer(object: QuestionAnswer): object is RatingQuestionAnswer {
+	return object.type === "rating";
+}
+
+export function instanceOfTextQuestionAnswer(object: QuestionAnswer): object is TextQuestionAnswer {
+	return object.type === "text";
+}
+
+export function instanceOfStarsQuestionAnswer(object: QuestionAnswer): object is StarsQuestionAnswer {
+	return object.type === "stars";
 }
 
 export function instanceOfRatingQuestion(object: Question): object is RatingQuestion {
@@ -227,7 +263,9 @@ export type {
 	ManagedUsersResponse,
 	Media,
 	Question,
+	QuestionAnswer,
 	RatingQuestion,
+	RatingQuestionAnswer,
 	RegisterError,
 	RegisterRequest,
 	RegisterResponse,
@@ -235,8 +273,11 @@ export type {
 	Role,
 	ServerError,
 	StarsQuestion,
+	StarsQuestionAnswer,
 	Survey,
+	SurveyAnswer,
 	TextQuestion,
+	TextQuestionAnswer,
 	UpdateRolesRequest,
 	UpdateRolesResponse,
 	User,
