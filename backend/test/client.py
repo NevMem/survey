@@ -51,6 +51,9 @@ class Client:
     def roles(self):
         return self._get('/roles')
 
+    def publish_answer(self, body):
+        return self._post('/v1/answers/publish', body)
+
     def _post(self, addr: str, body, headers={}):
         return requests.post(self.base_url + addr, json=body, headers=headers)
 

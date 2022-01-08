@@ -17,5 +17,5 @@ sealed class QuestionAnswer {
 
     @Serializable
     @SerialName("stars")
-    data class StarsQuestionAnswer(val starts: Int, val commonQuestionId: String? = null) : QuestionAnswer()
+    data class StarsQuestionAnswer(val stars: Int, val commonQuestionId: String? = null) : QuestionAnswer()
 }

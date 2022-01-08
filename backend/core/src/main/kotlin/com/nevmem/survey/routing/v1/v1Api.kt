@@ -1,6 +1,7 @@
 package com.nevmem.survey.routing.v1
 
 import com.nevmem.survey.routing.apiver.v1
+import com.nevmem.survey.routing.v1.answer.answers
 import com.nevmem.survey.routing.v1.invites.invites
 import com.nevmem.survey.routing.v1.media.media
 import com.nevmem.survey.routing.v1.surveys.surveys
@@ -12,5 +13,6 @@ fun Route.v1Api() {
         invites()
         surveys()
         media()
+        answers()
     }
 }

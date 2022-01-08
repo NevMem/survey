@@ -1,9 +1,9 @@
 package com.nevmem.survey.service.answer.internal
 
+import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
-import com.nevmem.survey.data.question.CommonQuestion
-import com.nevmem.survey.data.question.Question
+import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.service.answer.AlreadyPublishedAnswerException
 import com.nevmem.survey.service.answer.AnswersService
 import com.nevmem.survey.service.answer.SurveyAnswerInconsistencyException
@@ -35,16 +35,16 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
         val allQuestions = survey.commonQuestions + survey.questions
         for (index in allQuestions.indices) {
             val question = allQuestions[index]
-            if (question is Question) {
+            if (question is QuestionEntity) {
                 if (typeOfQuestion(question) != typeOfQuestionForAnswer(answer.answers[index])) {
                     throw SurveyAnswerInconsistencyException()
                 }
-            } else if (question is CommonQuestion) {
+            } else if (question is CommonQuestionEntity) {
                 if (typeOfCommonQuestion(question) != typeOfQuestionForAnswer(answer.answers[index])) {
                     throw SurveyAnswerInconsistencyException()
                 }
             } else {
-                throw IllegalStateException("Some shit happened")
+                throw IllegalStateException("Some shit happened $question")
             }
         }
 
@@ -82,18 +82,18 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
         }
     }
 
-    private fun typeOfCommonQuestion(question: CommonQuestion): QuestionType {
+    private fun typeOfCommonQuestion(question: CommonQuestionEntity): QuestionType {
         return when (question.id) {
             "age" -> QuestionType.Rating
             else -> throw UnknownCommonQuestionException(question.id)
         }
     }
 
-    private fun typeOfQuestion(question: Question): QuestionType {
+    private fun typeOfQuestion(question: QuestionEntity): QuestionType {
         return when (question) {
-            is Question.RatingQuestion -> QuestionType.Rating
-            is Question.TextQuestion -> QuestionType.Text
-            is Question.StarsQuestion -> QuestionType.Stars
+            is QuestionEntity.RatingQuestionEntity -> QuestionType.Rating
+            is QuestionEntity.TextQuestionEntity -> QuestionType.Text
+            is QuestionEntity.StarsQuestionEntity -> QuestionType.Stars
         }
     }
 
