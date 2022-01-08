@@ -32,15 +32,11 @@ jobs:
           SSH_KEY: ${{ secrets.CORE_SSH_KEY }}
       - name: Installing YC util
         run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
-      - name: Check
-        run: ls -la /
-      - name: Check opt
-        run: ls -la /opt/
-      - name: Check yc
-        run: ls -la /opt/yandex-cloud/
-      - name: cat inc
-        run: cat /opt/yandex-cloud/path.bash.inc
-      - name: Check x2
+      - name: Authorizing YC util
+        run: source /opt/yandex-cloud/path.bash.inc && echo $SERVICE_KEY>service_key.json && yc config set service-account-key service_key.json
+        env:
+          SERVICE_KEY: ${{ secrets.REGISTRY_KEY }}
+      - name: List instances
         run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
       - name: Launching roll script
         run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll_update.py core ./revisions.json ./ssh_key
