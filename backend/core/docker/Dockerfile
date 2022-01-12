@@ -15,8 +15,8 @@ RUN apt update && \
     openjdk-8-jdk \
     nginx
     
-RUN sudo snap install core
-RUN sudo snap refresh core
+RUN snap install core
+RUN snap refresh core
 
 CMD [ "./runner.sh" ]
 
