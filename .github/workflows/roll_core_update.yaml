@@ -5,13 +5,13 @@ on:
     branches:
       - main
     paths:
-      - './revisions.json'
+      - 'revisions.json'
       - '.github/workflows/roll_core_update.yaml'
   pull_request:
     branches:
       - main
     paths:
-      - './revisions.json'
+      - 'revisions.json'
       - '.github/workflows/roll_core_update.yaml'
 
 jobs:
