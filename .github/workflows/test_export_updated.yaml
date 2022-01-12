@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - common/data/*
+      - util/exporter/*
   pull_request:
     branches:
       - main
+    paths:
+      - common/data/*
+      - util/exporter/*
 
 jobs:
   checking_export_not_changed:
