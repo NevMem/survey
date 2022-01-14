@@ -1,5 +1,6 @@
 package com.nevmem.survey.routing.v1.answer
 
+import com.nevmem.survey.data.request.answer.LoadAnswersRequest
 import com.nevmem.survey.data.request.answer.PublishAnswerRequest
 import com.nevmem.survey.data.response.answer.PublishAnswerResponse
 import com.nevmem.survey.service.answer.AnswersService
@@ -18,6 +19,11 @@ private fun Route.answersImpl() {
         val request = call.receive<PublishAnswerRequest>()
         answersService.publishAnswer(request.answer, request.publisherId)
         call.respond(PublishAnswerResponse(request.answer.surveyId))
+    }
+
+    post("/load") {
+        val request = call.receive<LoadAnswersRequest>()
+        call.respond(answersService.getAnswers(request.surveyId))
     }
 }
 

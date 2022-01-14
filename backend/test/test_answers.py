@@ -33,5 +33,7 @@ def test_simple_answer(client: Client):
             ],
         }
     })
-    print(response.status_code)
+    assert response.status_code == 200
+
+    response = client.load_answers(surveyId)
     print(response.text)

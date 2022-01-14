@@ -9,7 +9,10 @@ import com.nevmem.survey.service.answer.AnswersService
 import com.nevmem.survey.service.answer.SurveyAnswerInconsistencyException
 import com.nevmem.survey.service.answer.SurveyNotFoundException
 import com.nevmem.survey.service.answer.UnknownCommonQuestionException
+import com.nevmem.survey.service.answer.internal.SurveyAnswerTable.publisherId
 import com.nevmem.survey.service.surveys.SurveysService
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -80,6 +83,26 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
                 }
             }
         }
+    }
+
+    override suspend fun getAnswers(surveyId: String): String = transaction {
+        val dto = SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }
+
+        @Serializable
+        data class DebugQuestionAnswer(val type: SurveyAnswerType, val jsonAnswer: String)
+        @Serializable
+        data class DebugSurveyAnswer(val publisherId: String, val answers: List<DebugQuestionAnswer>)
+
+        val result = dto.map {
+            DebugSurveyAnswer(
+                publisherId = it.publisherId,
+                answers = it.answers.map { answerDto ->
+                    DebugQuestionAnswer(answerDto.type, answerDto.jsonAnswer)
+                }
+            )
+        }
+
+        Json.encodeToString(result)
     }
 
     private fun typeOfCommonQuestion(question: CommonQuestionEntity): QuestionType {
