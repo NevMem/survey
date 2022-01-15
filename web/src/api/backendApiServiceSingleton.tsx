@@ -8,7 +8,7 @@ var service: BackendApiService
 if (isFeatureEnabled(apiMockServiceEnabled)) {
     service = new MockBackendApiService();
 } else {
-    var backendUrl = "http://ethnosurvey.com"
+    var backendUrl = "https://ethnosurvey.com"
     if (isFeatureEnabled(useLocalBackend)) {
         backendUrl = "http://localhost:8080"
     }
