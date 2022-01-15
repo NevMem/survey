@@ -3,6 +3,7 @@ FROM ubuntu:20.04
 COPY build_dir /
 COPY runner.sh /
 COPY env.sh /
+COPY nginx-production-config.conf /
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive \
@@ -26,4 +27,4 @@ RUN certbot certonly --nginx
 
 CMD [ "./runner.sh" ]
 
-EXPOSE 80 443 8080
+EXPOSE 80 443
