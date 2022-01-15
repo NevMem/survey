@@ -50,7 +50,7 @@ def deploy_to_one_machine(identity_file_path: str, container_name: str, image_ta
     launch(['sudo', 'docker', 'pull', image_tag])
     launch(['sudo', 'docker', 'stop', container_name])
     launch(['sudo', 'docker', 'rm', container_name])
-    launch(['sudo', 'docker', 'run', '-d', '-p', '80:80', '--name', container_name, image_tag])
+    launch(['sudo', 'docker', 'run', '-d', '-p', '80:80,443:443', '--name', container_name, image_tag])
 
 
 def main():
