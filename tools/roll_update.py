@@ -32,7 +32,7 @@ def get_machines_list() -> List[Machine]:
 
 
 def launch_remote_command(user_name: str, ip: str, identity_file_path: str, command: List[str]):
-    sp.check_call([
+    proc = sp.Popen([
         'ssh',
         '-o',
         'StrictHostKeyChecking=no',
@@ -41,6 +41,8 @@ def launch_remote_command(user_name: str, ip: str, identity_file_path: str, comm
         identity_file_path,
         *command
     ])
+    proc.wait()
+    print(command, 'exit code:', proc.returncode)
 
 
 def deploy_to_one_machine(identity_file_path: str, container_name: str, image_tag: str, machine: Machine):
