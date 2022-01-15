@@ -67,6 +67,12 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         return transaction { SurveyEntityDTO.all().map { it.toEntity() } }
     }
 
+    override suspend fun survey(surveyId: String): SurveyEntity? = transaction {
+        SurveyEntityDTO.find {
+            SurveysTable.surveyId eq surveyId
+        }.firstOrNull()?.toEntity()
+    }
+
     private fun SurveyEntityDTO.toEntity(): SurveyEntity {
         return SurveyEntity(
             id = id.value,

@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'revisions.json'
+      - '.github/workflows/roll_core_update.yaml'
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'revisions.json'
+      - '.github/workflows/roll_core_update.yaml'
 
 jobs:
   build_an_publish_docker:
@@ -65,6 +71,20 @@ jobs:
           S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
           S3_URI: https://storage.yandexcloud.net
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      - name: Installing YC util
+        run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
+      - name: Authorizing YC util
+        run: source /opt/yandex-cloud/path.bash.inc && echo $SERVICE_KEY>service_key.json && yc config profile create sa-profile && yc config set service-account-key service_key.json && yc config set cloud-id $YC_CLOUD_ID && yc config set folder-id $YC_FOLDER_ID
+        env:
+          SERVICE_KEY: ${{ secrets.REGISTRY_KEY }}
+          YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
+          YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
+      - name: Getting ssl keychain
+        run: |
+          source /opt/yandex-cloud/path.bash.inc &&
+          yc certificate-manager certificate content --id $CERT_ID --chain backend/core/docker/build_dir/certificate_full_chain.pem --key backend/core/docker/build_dir/private_key.pem
+        env:
+          CERT_ID: ${{ secrets.CERT_ID }}
       - name: Building docker
         run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
       - name: Pushing docker

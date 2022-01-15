@@ -1,5 +1,4 @@
 name: Roll core update
-
 on:
   push:
     branches:
@@ -13,7 +12,6 @@ on:
     paths:
       - 'revisions.json'
       - '.github/workflows/roll_core_update.yaml'
-
 jobs:
   rolling_core_update:
     name: Rolling core update

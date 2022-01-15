@@ -5,6 +5,8 @@ import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.role.internal.RoleSerializerImpl
 import com.nevmem.survey.role.internal.mainRoleModel
+import com.nevmem.survey.service.answer.AnswersService
+import com.nevmem.survey.service.answer.internal.AnswersServiceImpl
 import com.nevmem.survey.service.auth.TokenService
 import com.nevmem.survey.service.auth.internal.TokenServiceImpl
 import com.nevmem.survey.service.fs.FileSystemService
@@ -33,6 +35,7 @@ private val coreModule = module {
     single<SurveysService> { SurveysServiceImpl() }
     single<FileSystemService> { FileSystemServiceImpl() }
     single<MediaStorageService> { MediaStorageServiceImpl() }
+    single<AnswersService> { AnswersServiceImpl() }
 }
 
 private val servicesModule = module {

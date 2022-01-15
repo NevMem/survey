@@ -4,9 +4,7 @@
 # RUN ./gradlew :backend:core:build
 
 FROM openjdk:8-jdk-alpine AS BUILD_PHASE
-COPY . .
-RUN ls -la
-
+COPY backend backend
 
 FROM ubuntu:20.04
 
@@ -23,6 +21,8 @@ RUN apt update && \
     unzip
 
 COPY --from=BUILD_PHASE backend/core/build/distributions/core-0.0.1.zip /
+COPY ./backend/core/docker/testing_runner.sh .
+COPY ./backend/core/docker/nginx-config.conf .
 RUN unzip core-0.0.1.zip
 
 ENV JWT_AUDIENCE=some_audience
@@ -43,7 +43,6 @@ ENV S3_ACCESS_KEY=accessKey1
 ENV S3_SECRET_ACCESS_KEY=verySecretKey1
 ENV S3_URI=http://s3local:8000
 
-CMD ["ls -la"]
-CMD ["core-0.0.1/bin/core"]
+CMD ["./testing_runner.sh"]
 
-EXPOSE 80 443 8080
+EXPOSE 80 443
