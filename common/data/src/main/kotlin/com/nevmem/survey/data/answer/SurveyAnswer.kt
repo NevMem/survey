@@ -1,6 +1,7 @@
 package com.nevmem.survey.data.answer
 
 import com.nevmem.survey.Exported
+import com.nevmem.survey.data.media.MediaGallery
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,4 +9,5 @@ import kotlinx.serialization.Serializable
 data class SurveyAnswer(
     val surveyId: String,
     val answers: List<QuestionAnswer>,
+    val gallery: MediaGallery?,
 )

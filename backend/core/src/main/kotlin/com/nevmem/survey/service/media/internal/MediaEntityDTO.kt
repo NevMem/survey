@@ -10,9 +10,19 @@ internal object MediaTable : LongIdTable() {
     val filename = varchar("filename", 128)
 }
 
+internal object MediaGalleryTable : LongIdTable() {
+    val medias = varchar("medias", 512)
+}
+
 internal class MediaEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<MediaEntityDTO>(MediaTable)
 
     var bucketName by MediaTable.bucketName
     var filename by MediaTable.filename
+}
+
+internal class MediaGalleryDTO(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<MediaGalleryDTO>(MediaGalleryTable)
+
+    var medias by MediaGalleryTable.medias
 }

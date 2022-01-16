@@ -2,6 +2,7 @@ package com.nevmem.survey.service.media.internal
 
 import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.media.MediaEntity
+import com.nevmem.survey.media.MediaGalleryEntity
 import com.nevmem.survey.service.media.MediaStorageService
 import org.jetbrains.exposed.sql.transactions.transaction
 import software.amazon.awssdk.auth.credentials.AwsCredentials
@@ -70,11 +71,43 @@ internal class MediaStorageServiceImpl : MediaStorageService {
                 }
             }
 
-            return MediaEntity(dto.filename, dto.bucketName, "https://storage.yandexcloud.net/${dto.bucketName}/${dto.filename}")
+            return dto.entity
         } catch (exception: Exception) {
             println("Exception occurred while uploading")
             println(exception)
             throw IllegalStateException("Upload to media storage failed")
         }
     }
+
+    override suspend fun createMediaGallery(medias: List<MediaEntity>): MediaGalleryEntity {
+        val galleryDto: Pair<List<MediaEntityDTO>, MediaGalleryDTO> = transaction {
+            val dtos = medias.mapNotNull { entity ->
+                MediaEntityDTO.find {
+                    MediaTable.id eq entity.id
+                }.firstOrNull()
+            }
+
+            dtos to MediaGalleryDTO.new {
+                this.medias = dtos.map { it.toString() }.joinToString(",")
+            }
+        }
+
+        return MediaGalleryEntity(
+            id = galleryDto.second.id.value,
+            medias = galleryDto.second.medias.split(",")
+                .map { it.toLong() }
+                .mapNotNull { id ->
+                    galleryDto.first.find { it.id.value == id }
+                }
+                .map { it.entity },
+        )
+    }
+
+    private val MediaEntityDTO.entity: MediaEntity
+        get() = MediaEntity(
+            this.id.value,
+            this.filename,
+            this.bucketName,
+            "https://storage.yandexcloud.net/${this.bucketName}/${this.filename}",
+        )
 }

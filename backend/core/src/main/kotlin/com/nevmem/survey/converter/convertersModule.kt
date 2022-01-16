@@ -9,4 +9,6 @@ val convertersModule = module {
     single { QuestionsConverter() }
     single { CommonQuestionsConverter() }
     single { SurveysConverter() }
+    single { MediaConverter() }
+    single { MediaGalleryConverter() }
 }

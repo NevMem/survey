@@ -5,9 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Exported
-data class Media(
+data class MediaGallery(
     val id: Long,
-    val filename: String,
-    val url: String,
-    val bucketName: String,
+    val gallery: List<Media>,
 )

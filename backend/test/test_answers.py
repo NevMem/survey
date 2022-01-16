@@ -31,6 +31,7 @@ def test_simple_answer(client: Client):
                     'stars': 4,
                 }
             ],
+            'gallery': None,
         }
     })
     assert response.status_code == 200
