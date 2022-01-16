@@ -79,20 +79,17 @@ internal class MediaStorageServiceImpl : MediaStorageService {
         }
     }
 
-    override suspend fun createMediaGallery(medias: List<MediaEntity>): MediaGalleryEntity {
-        val galleryDto: Pair<List<MediaEntityDTO>, MediaGalleryDTO> = transaction {
-            val dtos = medias.mapNotNull { entity ->
-                MediaEntityDTO.find {
-                    MediaTable.id eq entity.id
-                }.firstOrNull()
-            }
-
-            dtos to MediaGalleryDTO.new {
-                this.medias = dtos.map { it.toString() }.joinToString(",")
-            }
+    override suspend fun createMediaGallery(medias: List<MediaEntity>): MediaGalleryEntity = transaction {
+        val dtos = medias.mapNotNull { entity ->
+            MediaEntityDTO.find {
+                MediaTable.id eq entity.id
+            }.firstOrNull()
+        }
+        val galleryDto: Pair<List<MediaEntityDTO>, MediaGalleryDTO> = dtos to MediaGalleryDTO.new {
+            this.medias = dtos.map { it.id.value.toString() }.joinToString(",")
         }
 
-        return MediaGalleryEntity(
+        MediaGalleryEntity(
             id = galleryDto.second.id.value,
             medias = galleryDto.second.medias.split(",")
                 .map { it.toLong() }

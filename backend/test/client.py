@@ -1,5 +1,22 @@
-import json
 import requests
+import time
+import logging
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
+
+
+def timed(func):
+    def inner(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        delta = time.time() - start
+        logger.debug(args[1:])
+        logger.debug(f"Time passed: {delta}")
+        return result
+    return inner
+
 
 class Client:
     def __init__(self, base_url: str):
@@ -57,8 +74,17 @@ class Client:
     def load_answers(self, surveyId: str):
         return self._post('/v1/answers/load', {'surveyId': surveyId})
 
+    def create_gallery(self, medias):
+        return self._post('/v1/media/create_gallery', {'gallery': medias})
+
+    @timed
+    def upload_media(self, stream):
+        return requests.post(self.base_url + '/v1/media/upload', files={'file': stream})
+
+    @timed
     def _post(self, addr: str, body, headers={}):
         return requests.post(self.base_url + addr, json=body, headers=headers)
 
+    @timed
     def _get(self, addr: str, headers={}):
         return requests.get(self.base_url + addr, headers=headers)
