@@ -39,28 +39,22 @@ class Client:
         )
 
     def surveys(self, token: str):
-        return self._get('/v1/surveys', headers={'Authorization': 'Bearer ' + token})
+        return self._get('/v1/survey/surveys', headers={'Authorization': 'Bearer ' + token})
 
     def create_survey(self, token: str, body):
-        return self._post('/v1/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
-
-    def active_survey(self):
-        return self._get('/v1/active_survey')
-
-    def activate_survey(self, token: str, survey_id: int):
-        return self._post('/v1/activate_survey', {'surveyId': survey_id}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v1/survey/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
 
     def delete_survey(self, token: str, survey_id: int):
-        return self._post('/v1/delete_survey', {'surveyId': survey_id}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v1/survey/delete_survey', {'surveyId': survey_id}, headers={'Authorization': 'Bearer ' + token})
 
     def me(self, token: str):
         return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})
 
     def invites(self, token: str):
-        return self._get('/v1/my_invites', headers={'Authorization': 'Bearer ' + token})
+        return self._get('/v1/invite/my_invites', headers={'Authorization': 'Bearer ' + token})
 
     def create_invite(self, token: str, expirationSeconds: int):
-        return self._post('/v1/create_invite', {'expirationTimeSeconds': expirationSeconds}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v1/invite/create_invite', {'expirationTimeSeconds': expirationSeconds}, headers={'Authorization': 'Bearer ' + token})
 
     def ping(self):
         return self._get('/ping')
@@ -76,6 +70,12 @@ class Client:
 
     def create_gallery(self, medias):
         return self._post('/v1/media/create_gallery', {'gallery': medias})
+
+    def managed_users(self, token):
+        return self._get('/v1/role/managed_users', headers={'Authorization': 'Bearer ' + token})
+
+    def update_roles(self, token, body):
+        return self._post('/v1/role/update_roles', body, headers={'Authorization': 'Bearer ' + token})
 
     @timed
     def upload_media(self, stream):

@@ -25,6 +25,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
+import io.ktor.routing.route
 import org.koin.ktor.ext.inject
 
 fun Route.users() {
@@ -128,37 +129,40 @@ fun Route.users() {
             call.respond(usersConverter.convertUser(user))
         }
 
-        get("/managed_users") {
-            val user = usersService.getUserById(userId())!!
-            val invites = invitesService.userInvites(user.id)
-            val users = mutableListOf<UserEntity>()
-            val queue = invites.mapNotNull { it.acceptedBy }.toMutableList()
-            while (queue.isNotEmpty()) {
-                val processingUser = queue.removeAt(0)
-                users.add(processingUser)
-                val userInvites = invitesService.userInvites(processingUser.id)
-                userInvites.mapNotNull { it.acceptedBy }.forEach { queue.add(it) }
-            }
-            call.respond(ManagedUsersResponse(users.map { usersConverter(it) }))
-        }
-
-        post("/update_roles") {
-            val user = usersService.getUserById(userId())!!
-            val request = call.receive<UpdateRolesRequest>()
-
-            if (!roleModel.hasAccess(listOf(roleModel.roleById("role.manager")), user.roles)) {
-                throw IllegalStateException("Access to method denied (not enough roles)")
+        route("/role") {
+            get("/managed_users") {
+                val user = usersService.getUserById(userId())!!
+                val invites = invitesService.userInvites(user.id)
+                val users = mutableListOf<UserEntity>()
+                val queue = invites.mapNotNull { it.acceptedBy }.toMutableList()
+                while (queue.isNotEmpty()) {
+                    val processingUser = queue.removeAt(0)
+                    users.add(processingUser)
+                    val userInvites = invitesService.userInvites(processingUser.id)
+                    userInvites.mapNotNull { it.acceptedBy }.forEach { queue.add(it) }
+                }
+                call.respond(ManagedUsersResponse(users.map { usersConverter(it) }))
             }
 
-            val updatingUser = usersService.getUserById(request.user.id) ?: throw IllegalStateException("User not found")
+            post("/update_roles") {
+                val user = usersService.getUserById(userId())!!
+                val request = call.receive<UpdateRolesRequest>()
 
-            if (user.id == updatingUser.id) {
-                throw IllegalStateException("You cannot update your own roles")
+                if (!roleModel.hasAccess(listOf(roleModel.roleById("role.manager")), user.roles)) {
+                    throw IllegalStateException("Access to method denied (not enough roles)")
+                }
+
+                val updatingUser =
+                    usersService.getUserById(request.user.id) ?: throw IllegalStateException("User not found")
+
+                if (user.id == updatingUser.id) {
+                    throw IllegalStateException("You cannot update your own roles")
+                }
+
+                usersService.updateUserRoles(updatingUser, request.roles.map { roleModel.roleById(it.id) })
+
+                call.respond(UpdateRolesResponse(request.user, request.roles))
             }
-
-            usersService.updateUserRoles(updatingUser, request.roles.map { roleModel.roleById(it.id) })
-
-            call.respond(UpdateRolesResponse(request.user, request.roles))
         }
     }
 }
