@@ -65,7 +65,7 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
                 <Text>{props.provider.metadata?.answersCount}</Text>
             </SpaceBetweenRow>
             <SpaceBetweenRow>
-                <Text>Файлов: </Text>
+                <Text>Файлов: (подсчет этих данных пока не поддержан)</Text>
                 <Text>{props.provider.metadata?.filesCount}</Text>
             </SpaceBetweenRow>
             <SpaceBetweenReversedRow>
