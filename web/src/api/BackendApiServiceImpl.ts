@@ -1,7 +1,28 @@
-import { Survey, LoginResponse, RegisterResponse, LoginRequest, AllSurveysResponse, RegisterRequest, User, CreateSurveyRequest, CreateSurveyResponse, instanceOfCreateSurveySuccess, instanceOfCreateSurveyError, GetInvitesResponse, CreateInviteRequest, CreateInviteResponse, ManagedUsersResponse, AllRolesResponse, UpdateRolesRequest } from "../data/exported";
-import { UnsavedSurvey, SurveyMetadata } from "../data/Survey";
+import {
+    AllRolesResponse,
+    AllSurveysResponse,
+    CreateInviteRequest,
+    CreateInviteResponse,
+    CreateSurveyRequest,
+    CreateSurveyResponse,
+    GetInvitesResponse,
+    instanceOfCreateSurveyError,
+    instanceOfCreateSurveySuccess,
+    LoadSurveyMetadataRequest,
+    LoadSurveyMetadataResponse,
+    LoginRequest,
+    LoginResponse,
+    ManagedUsersResponse,
+    RegisterRequest,
+    RegisterResponse,
+    Survey,
+    UpdateRolesRequest,
+    User,
+} from "../data/exported";
+import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
 import axios, { AxiosResponse } from 'axios';
+import { SurveyMetadata } from "../data/exported";
 
 class BackendApiServiceImpl implements BackendApiService {
 
@@ -12,7 +33,7 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     fetchSurveys(): Promise<Survey[]> {
-        return this.get<AllSurveysResponse>('/v1/surveys')
+        return this.get<AllSurveysResponse>('/v1/survey/surveys')
             .then(data => data.data.surveys);
     }
 
@@ -23,7 +44,7 @@ class BackendApiServiceImpl implements BackendApiService {
             commonQuestions: unsavedSurvey.commonQuestions,
         };
 
-        return this.post<CreateSurveyResponse, CreateSurveyRequest>('/v1/create_survey', request)
+        return this.post<CreateSurveyResponse, CreateSurveyRequest>('/v1/survey/create_survey', request)
             .then(data => data.data)
             .then(response => {
                 if (instanceOfCreateSurveySuccess(response)) {
@@ -37,7 +58,13 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     fetchMetadata(surveyId: number): Promise<SurveyMetadata> {
-        throw new Error("Method not implemented.");
+        let request: LoadSurveyMetadataRequest = {
+            surveyId: surveyId,
+        };
+
+        return this.post<LoadSurveyMetadataResponse, LoadSurveyMetadataRequest>('/v1/survey/metadata', request)
+            .then(data => data.data)
+            .then(data => data.surveyMetadata);
     }
 
     checkAuth(token: string): Promise<void> {
@@ -74,15 +101,15 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     invites(): Promise<GetInvitesResponse> {
-        return this.get<GetInvitesResponse>('/v1/my_invites').then(data => data.data);
+        return this.get<GetInvitesResponse>('/v1/invite/my_invites').then(data => data.data);
     }
 
     createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse> {
-        return this.post<CreateInviteResponse, CreateInviteRequest>('/v1/create_invite', request, abortController).then(data => data.data);
+        return this.post<CreateInviteResponse, CreateInviteRequest>('/v1/invite/create_invite', request, abortController).then(data => data.data);
     }
 
     managedUsers(abortController: AbortController): Promise<ManagedUsersResponse> {
-        return this.get<ManagedUsersResponse>('/v1/managed_users', abortController).then(data => data.data);
+        return this.get<ManagedUsersResponse>('/v1/role/managed_users', abortController).then(data => data.data);
     }
 
     roles(abortController: AbortController): Promise<AllRolesResponse> {
@@ -90,7 +117,7 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void> {
-        return this.post<void, UpdateRolesRequest>('/v1/update_roles', request, abortController).then(data => data.data);
+        return this.post<void, UpdateRolesRequest>('/v1/role/update_roles', request, abortController).then(data => data.data);
     }
 
     private post<T, U>(path: string, body: U, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {

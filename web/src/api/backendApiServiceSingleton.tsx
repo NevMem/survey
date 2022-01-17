@@ -10,7 +10,7 @@ if (isFeatureEnabled(apiMockServiceEnabled)) {
 } else {
     var backendUrl = "https://ethnosurvey.com"
     if (isFeatureEnabled(useLocalBackend)) {
-        backendUrl = "http://localhost:8080"
+        backendUrl = "http://localhost:80"
     }
     service = new BackendApiServiceImpl(backendUrl);
 }

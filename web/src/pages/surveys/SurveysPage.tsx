@@ -47,6 +47,14 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
         return <SpaceAroundRow><Loader large/></SpaceAroundRow>
     }
 
+    if (props.provider.error) {
+        return (
+            <CardError>
+                <Text large>{props.provider.error}</Text>
+            </CardError>
+        );
+    }
+
     const gotoDownloadAnswers = () => {  
     };
 
@@ -54,11 +62,11 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
         <Fragment>
             <SpaceBetweenRow>
                 <Text>Ответов: </Text>
-                <Text>{props.provider.metadata?.answers}</Text>
+                <Text>{props.provider.metadata?.answersCount}</Text>
             </SpaceBetweenRow>
             <SpaceBetweenRow>
                 <Text>Файлов: </Text>
-                <Text>{props.provider.metadata?.files}</Text>
+                <Text>{props.provider.metadata?.filesCount}</Text>
             </SpaceBetweenRow>
             <SpaceBetweenReversedRow>
                 <GeneralButton onClick={gotoDownloadAnswers}>Выгрузить ответы</GeneralButton>
