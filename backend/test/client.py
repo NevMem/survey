@@ -77,6 +77,9 @@ class Client:
     def update_roles(self, token, body):
         return self._post('/v1/role/update_roles', body, headers={'Authorization': 'Bearer ' + token})
 
+    def survey_metadata(self, token, surveyId):
+        return self._post('/v1/survey/metadata', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
+
     @timed
     def upload_media(self, stream):
         return requests.post(self.base_url + '/v1/media/upload', files={'file': stream})

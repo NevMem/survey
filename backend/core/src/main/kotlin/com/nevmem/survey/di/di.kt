@@ -17,7 +17,9 @@ import com.nevmem.survey.service.media.MediaStorageService
 import com.nevmem.survey.service.media.internal.MediaStorageServiceImpl
 import com.nevmem.survey.service.security.auth.PasswordEncoder
 import com.nevmem.survey.service.security.auth.internal.PasswordEncoderImpl
+import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
 import com.nevmem.survey.service.surveys.SurveysService
+import com.nevmem.survey.service.surveys.internal.SurveysMetadataAssembleImpl
 import com.nevmem.survey.service.surveys.internal.SurveysServiceImpl
 import com.nevmem.survey.service.users.UsersService
 import com.nevmem.survey.service.users.internal.UsersServiceImpl
@@ -36,6 +38,7 @@ private val coreModule = module {
     single<FileSystemService> { FileSystemServiceImpl() }
     single<MediaStorageService> { MediaStorageServiceImpl() }
     single<AnswersService> { AnswersServiceImpl() }
+    single<SurveysMetadataAssembler> { SurveysMetadataAssembleImpl() }
 }
 
 private val servicesModule = module {
