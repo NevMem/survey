@@ -19,16 +19,16 @@ def test_create_invite(client: Client):
     assert invite in client.invites(token).json()['invites']
 
 
+def create_user_credentials():
+    return [random_string(10) for _ in range(4)] + [random_string(10) + '@gmail.com']
+
+
 @pytest.mark.invite
 def test_invited_user_roles(client: Client):
     token = client.login('admin', 'password').json()['token']
     invite = client.create_invite(token, 60 * 30).json()['invite']
 
-    login = random_string(10)
-    password = random_string(10)
-    name = random_string(10)
-    surname = random_string(10)
-    email = random_string(10) + '@gmail.com'
+    login, password, name, surname, email = create_user_credentials()
 
     response = client.register(
         login=login,
@@ -54,11 +54,7 @@ def test_role_changes(client: Client):
     token = client.login('admin', 'password').json()['token']
     invite = client.create_invite(token, 60 * 30).json()['invite']
 
-    login = random_string(10)
-    password = random_string(10)
-    name = random_string(10)
-    surname = random_string(10)
-    email = random_string(10) + '@gmail.com'
+    login, password, name, surname, email = create_user_credentials()
 
     response = client.register(
         login=login,
@@ -100,3 +96,48 @@ def test_role_changes(client: Client):
     assert 'allAvailableRoles' in me
     assert len(me['roles']) == 2
     assert len(me['allAvailableRoles']) == 2
+
+
+@pytest.mark.invite
+def test_managed_users(client: Client):
+    admin_token = client.login('admin', 'password').json()['token']
+    invite = client.create_invite(admin_token, 60 * 30).json()['invite']
+
+    login, password, name, surname, email = create_user_credentials()
+
+    response = client.register(
+        login=login,
+        password=password,
+        name=name,
+        surname=surname,
+        email=email,
+        inviteId=invite['inviteId']
+    ).json()
+
+    user_token = response['token']
+
+    response = client.managed_users(admin_token)
+    current_user = None
+    for user in response.json()['users']:
+        if user['login'] == login:
+            current_user = user
+    assert current_user is not None
+
+    roles = [
+        {'id': 'invite.manager'},
+    ]
+
+    response = client.update_roles(admin_token, {'user': current_user, 'roles': roles})
+
+    managed_users = client.managed_users(user_token).json()['users']
+    assert len(managed_users) == 0
+
+    users = []
+    for _ in range(20):
+        users.append(create_user_credentials())
+        login, password, name, surname, email = users[-1]
+        invite = client.create_invite(user_token, 60 * 30).json()['invite']
+        client.register(login, password, name, surname, email, invite['inviteId'])
+
+    managed_users = client.managed_users(user_token).json()['users']
+    assert len(managed_users) == 20
