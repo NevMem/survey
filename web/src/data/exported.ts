@@ -5,6 +5,7 @@ interface QuestionAnswer {
 interface SurveyAnswer {
 	surveyId: string;
 	answers: QuestionAnswer[];
+	gallery: MediaGallery | undefined;
 }
 
 interface Invite {
@@ -14,8 +15,15 @@ interface Invite {
 }
 
 interface Media {
+	id: number;
 	filename: string;
 	url: string;
+	bucketName: string;
+}
+
+interface MediaGallery {
+	id: number;
+	gallery: Media[];
 }
 
 interface CommonQuestion {
@@ -56,6 +64,10 @@ interface CreateSurveyRequest {
 }
 
 interface DeleteSurveyRequest {
+	surveyId: number;
+}
+
+interface LoadSurveyMetadataRequest {
 	surveyId: number;
 }
 
@@ -100,6 +112,10 @@ interface CreateSurveyResponse {
 	type: string;
 }
 
+interface LoadSurveyMetadataResponse {
+	surveyMetadata: SurveyMetadata;
+}
+
 interface Role {
 	id: string;
 }
@@ -110,6 +126,11 @@ interface Survey {
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
+}
+
+interface SurveyMetadata {
+	answersCount: number;
+	filesCount: number;
 }
 
 interface User {
@@ -133,7 +154,7 @@ interface TextQuestionAnswer extends QuestionAnswer {
 }
 
 interface StarsQuestionAnswer extends QuestionAnswer {
-	starts: number;
+	stars: number;
 	commonQuestionId: string | undefined;
 }
 
@@ -256,12 +277,15 @@ export type {
 	DeleteSurveyRequest,
 	GetInvitesResponse,
 	Invite,
+	LoadSurveyMetadataRequest,
+	LoadSurveyMetadataResponse,
 	LoginError,
 	LoginRequest,
 	LoginResponse,
 	LoginSuccessful,
 	ManagedUsersResponse,
 	Media,
+	MediaGallery,
 	Question,
 	QuestionAnswer,
 	RatingQuestion,
@@ -276,6 +300,7 @@ export type {
 	StarsQuestionAnswer,
 	Survey,
 	SurveyAnswer,
+	SurveyMetadata,
 	TextQuestion,
 	TextQuestionAnswer,
 	UpdateRolesRequest,

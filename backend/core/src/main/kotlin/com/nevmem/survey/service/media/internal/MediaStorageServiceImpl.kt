@@ -17,6 +17,12 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import java.io.File
 import java.net.URI
 
+private class MediaUrlCreator {
+    fun createUrl(dto: MediaEntityDTO): String {
+        return "${EnvVars.S3.s3Uri}/${dto.bucketName}/${dto.filename}"
+    }
+}
+
 internal class MediaStorageServiceImpl : MediaStorageService {
     private val region = Region.of(EnvVars.S3.region)
     private val client: S3Client = S3Client.builder()
@@ -30,6 +36,8 @@ internal class MediaStorageServiceImpl : MediaStorageService {
             }
         }
         .build()
+
+    private val mediaUrlCreator = MediaUrlCreator()
 
     private val bucketName = "ethnosurvey-media"
 
@@ -79,20 +87,17 @@ internal class MediaStorageServiceImpl : MediaStorageService {
         }
     }
 
-    override suspend fun createMediaGallery(medias: List<MediaEntity>): MediaGalleryEntity {
-        val galleryDto: Pair<List<MediaEntityDTO>, MediaGalleryDTO> = transaction {
-            val dtos = medias.mapNotNull { entity ->
-                MediaEntityDTO.find {
-                    MediaTable.id eq entity.id
-                }.firstOrNull()
-            }
-
-            dtos to MediaGalleryDTO.new {
-                this.medias = dtos.map { it.toString() }.joinToString(",")
-            }
+    override suspend fun createMediaGallery(medias: List<MediaEntity>): MediaGalleryEntity = transaction {
+        val dtos = medias.mapNotNull { entity ->
+            MediaEntityDTO.find {
+                MediaTable.id eq entity.id
+            }.firstOrNull()
+        }
+        val galleryDto: Pair<List<MediaEntityDTO>, MediaGalleryDTO> = dtos to MediaGalleryDTO.new {
+            this.medias = dtos.map { it.id.value.toString() }.joinToString(",")
         }
 
-        return MediaGalleryEntity(
+        MediaGalleryEntity(
             id = galleryDto.second.id.value,
             medias = galleryDto.second.medias.split(",")
                 .map { it.toLong() }
@@ -108,6 +113,6 @@ internal class MediaStorageServiceImpl : MediaStorageService {
             this.id.value,
             this.filename,
             this.bucketName,
-            "https://storage.yandexcloud.net/${this.bucketName}/${this.filename}",
+            mediaUrlCreator.createUrl(this),
         )
 }

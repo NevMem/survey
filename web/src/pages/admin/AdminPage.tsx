@@ -154,7 +154,7 @@ const UserRow = (props: {user: User}) => {
 
 const UsersTable = (props: {users: User[]}) => {
     return (
-        <SpacedColumn rowGap={12}>
+        <SpacedColumn rowGap={16}>
             {props.users.map(user => {
                 return (
                     <UserRow user={user} key={user.id} />

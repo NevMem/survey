@@ -1,5 +1,17 @@
-import { AllRolesResponse, CreateInviteResponse, GetInvitesResponse, LoginResponse, ManagedUsersResponse, RatingQuestion, RegisterResponse, StarsQuestion, TextQuestion, User } from '../data/exported';
-import { SurveyMetadata, UnsavedSurvey } from '../data/Survey';
+import {
+    AllRolesResponse,
+    CreateInviteResponse,
+    GetInvitesResponse,
+    LoginResponse,
+    ManagedUsersResponse,
+    RatingQuestion,
+    RegisterResponse,
+    StarsQuestion,
+    SurveyMetadata,
+    TextQuestion,
+    User,
+} from '../data/exported';
+import { UnsavedSurvey } from '../data/Survey';
 import { networkFailuresFeature } from '../service/experiments/experiments';
 import { isFeatureEnabled } from '../service/experiments/utils';
 import { BackendApiService } from './BackendApiService';
@@ -112,8 +124,8 @@ class MockBackendApiService implements BackendApiService {
         return new Promise(resolve => setTimeout(resolve, 1000))
             .then(() => {
                 return {
-                    files: 56,
-                    answers: 48,
+                    answersCount: 56,
+                    filesCount: 48,
                 };
             });
     }

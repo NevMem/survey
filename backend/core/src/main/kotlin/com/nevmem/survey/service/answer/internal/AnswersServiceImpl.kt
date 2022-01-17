@@ -105,6 +105,14 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
         Json.encodeToString(result)
     }
 
+    override suspend fun getAnswersCount(surveyId: String): Long {
+        return transaction {
+            SurveyAnswerDTO.find {
+                SurveyAnswerTable.surveyId eq surveyId
+            }.count()
+        }
+    }
+
     private fun typeOfCommonQuestion(question: CommonQuestionEntity): QuestionType {
         return when (question.id) {
             "age" -> QuestionType.Rating

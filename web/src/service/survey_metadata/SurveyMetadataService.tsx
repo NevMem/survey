@@ -1,10 +1,11 @@
 import { action, makeObservable, observable } from 'mobx';
 import apiService from '../../api/backendApiServiceSingleton';
-import { SurveyMetadata } from '../../data/Survey';
+import { SurveyMetadata } from '../../data/exported';
 
 interface SurveyMetadataProvider {
     metadata: SurveyMetadata | undefined;
     loading: boolean;
+    error: string | undefined;
 };
 
 class SurveyMetadataProviderImpl implements SurveyMetadataProvider {
@@ -12,6 +13,7 @@ class SurveyMetadataProviderImpl implements SurveyMetadataProvider {
 
     metadata: SurveyMetadata | undefined;
     loading: boolean;
+    error: string | undefined;
     
     constructor(surveyId: number) {
         this.metadata = undefined;
@@ -23,6 +25,7 @@ class SurveyMetadataProviderImpl implements SurveyMetadataProvider {
             {
                 metadata: observable,
                 loading: observable,
+                error: observable,
                 _setMetadata: action,
             }
         );
@@ -34,6 +37,10 @@ class SurveyMetadataProviderImpl implements SurveyMetadataProvider {
         apiService.fetchMetadata(this.surveyId_)
             .then(metadata => {
                 this._setMetadata(metadata);
+            })
+            .catch(error => {
+                this.error = JSON.stringify(error);
+                this.loading = false;
             });
     }
 

@@ -5,12 +5,15 @@ import com.nevmem.survey.converter.SurveysConverter
 import com.nevmem.survey.data.question.Question
 import com.nevmem.survey.data.request.survey.CreateSurveyRequest
 import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
+import com.nevmem.survey.data.request.survey.LoadSurveyMetadataRequest
 import com.nevmem.survey.data.response.survey.AllSurveysResponse
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
+import com.nevmem.survey.data.response.survey.LoadSurveyMetadataResponse
 import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.checkRoles
 import com.nevmem.survey.routing.userId
+import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
 import com.nevmem.survey.service.surveys.SurveysService
 import com.nevmem.survey.service.users.UsersService
 import io.ktor.application.call
@@ -21,13 +24,15 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
+import io.ktor.routing.route
 import org.koin.ktor.ext.inject
 
-fun Route.surveys() {
+private fun Route.surveysImpl() {
     val usersService by inject<UsersService>()
     val roleModel by inject<RoleModel>()
     val surveysService by inject<SurveysService>()
     val surveysConverter by inject<SurveysConverter>()
+    val surveysMetadataAssembler by inject<SurveysMetadataAssembler>()
 
     authenticate {
         post("/create_survey") {
@@ -87,5 +92,17 @@ fun Route.surveys() {
                 )
             )
         }
+
+        post("/metadata") {
+            checkRoles(roleModel, usersService, listOf("survey.observer"))
+            val request = call.receive<LoadSurveyMetadataRequest>()
+            call.respond(LoadSurveyMetadataResponse(surveysMetadataAssembler.assembleMetadata(request.surveyId)))
+        }
+    }
+}
+
+fun Route.surveys() {
+    route("/survey") {
+        surveysImpl()
     }
 }
