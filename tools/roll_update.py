@@ -3,32 +3,7 @@ import subprocess as sp
 import json
 import sys
 import argparse
-
-
-class Machine:
-    name: str
-    ip: str
-
-    def __init__(self, name: str, ip: str):
-        self.name = name
-        self.ip = ip
-
-    def __str__(self):
-        return f"Machine(name: {self.name}, ip: {self.ip})"
-
-    def __repr__(self):
-        return str(self)
-
-
-def get_machines_list() -> List[Machine]: 
-    output = sp.check_output(['yc', 'compute', 'instance', 'list', '--format', 'json'])
-    data = json.loads(output)
-    result = []
-    for vm in data:
-        name = vm['name']
-        ip = vm['network_interfaces'][0]['primary_v4_address']['one_to_one_nat']['address']
-        result.append(Machine(name, ip))
-    return result
+from machines import Machine, get_machines_for_service
 
 
 def launch_remote_command(user_name: str, ip: str, identity_file_path: str, command: List[str]):
@@ -66,8 +41,7 @@ def main():
         revisions = json.loads(inp.read())
         docker_image_tag = revisions[args.service]
 
-    machines = get_machines_list()
-    machines = list(filter(lambda x: x.name.startswith('survey'), machines))
+    machines = get_machines_for_service(args.service)
     
     if len(machines) == 0:
         print('Machines not found exiting')

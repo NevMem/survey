@@ -1,3 +1,4 @@
 {
-    "core": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:ba89c0b"
+    "core": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:1d7d7a5",
+    "metrics": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:1d7d7a5"
 }
