@@ -39,7 +39,7 @@ jobs:
       - name: List instances
         run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
       - name: Launching rolling script
-        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll_update.py core ./revisions.json ./ssh_key
+        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll_update.py core ./revisions.json ./ssh_key --port 80 443
   rolling_metrics_update:
     name: Rolling metrics update
     runs-on: ubuntu-latest
@@ -66,4 +66,4 @@ jobs:
       - name: List instances
         run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
       - name: Launching rolling script
-        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll_update.py metrics ./revisions.json ./ssh_key
+        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll_update.py metrics ./revisions.json ./ssh_key --port 9090
