@@ -5,7 +5,7 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 
-object InvitesTable : LongIdTable() {
+internal object InvitesTable : LongIdTable() {
     val inviteId = varchar("inviteId", 16)
     val createdAt = long("createdAt")
     val expirationPeriod = long("expirationPeriod")

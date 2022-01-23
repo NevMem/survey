@@ -21,8 +21,8 @@ import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
 import com.nevmem.survey.service.surveys.SurveysService
 import com.nevmem.survey.service.surveys.internal.SurveysMetadataAssembleImpl
 import com.nevmem.survey.service.surveys.internal.SurveysServiceImpl
-import com.nevmem.survey.service.users.createUsersService
 import com.nevmem.survey.users.UsersService
+import com.nevmem.survey.users.createUsersService
 import io.ktor.application.Application
 import io.ktor.application.install
 import org.koin.dsl.module
