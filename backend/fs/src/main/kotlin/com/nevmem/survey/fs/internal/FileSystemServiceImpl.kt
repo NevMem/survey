@@ -1,7 +1,7 @@
-package com.nevmem.survey.service.fs.internal
+package com.nevmem.survey.fs.internal
 
 import com.nevmem.survey.RandomStringGenerator
-import com.nevmem.survey.service.fs.FileSystemService
+import com.nevmem.survey.fs.FileSystemService
 import io.ktor.http.content.MultiPartData
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart

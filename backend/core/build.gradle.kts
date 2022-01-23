@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":backend:common"))
     implementation(project(":backend:converters"))
     implementation(project(":backend:env"))
+    implementation(project(":backend:fs"))
     implementation(project(":backend:helpers"))
     implementation(project(":backend:invites"))
     implementation(project(":backend:media"))
