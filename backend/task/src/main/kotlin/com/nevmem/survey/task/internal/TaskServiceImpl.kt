@@ -4,7 +4,9 @@ import com.nevmem.survey.task.ExportDataTaskEntity
 import com.nevmem.survey.task.TaskLogEntity
 import com.nevmem.survey.task.TaskService
 import com.nevmem.survey.task.TaskStateEntity
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 internal class TaskServiceImpl : TaskService {
     override suspend fun createExportTask(surveyId: Long): ExportDataTaskEntity = transaction {
@@ -22,6 +24,39 @@ internal class TaskServiceImpl : TaskService {
                 }
                 it.entity(log.toList())
             }
+    }
+
+    override suspend fun exportWaitingTasks(): List<ExportDataTaskEntity> = transaction {
+        ExportDataTaskDTO.find {
+            ExportDataTaskTable.state eq TaskStateDTO.Waiting
+        }.map { it.entity(emptyList()) }
+    }
+
+    override suspend fun atomicallyTransferToExecutingState(entity: ExportDataTaskEntity): ExportDataTaskEntity? {
+        val result = ExportDataTaskTable.update({
+            (ExportDataTaskTable.surveyId eq entity.surveyId) and
+                (ExportDataTaskTable.id eq entity.id) and
+                (ExportDataTaskTable.state eq TaskStateDTO.Waiting)
+        }) {
+            it[state] = TaskStateDTO.Executing
+        }
+
+        println("Value after update $result")
+
+        if (result != 1) {
+            return null
+        }
+
+        return taskWithId(entity.id)
+    }
+
+    private fun taskWithId(id: Long) = transaction {
+        val log = TaskLogDTO.find {
+            TaskLogTable.taskId eq id
+        }
+        ExportDataTaskDTO.find {
+            ExportDataTaskTable.id eq id
+        }.firstOrNull()?.entity(log.toList())
     }
 
     private fun ExportDataTaskDTO.entity(log: List<TaskLogDTO>): ExportDataTaskEntity {
