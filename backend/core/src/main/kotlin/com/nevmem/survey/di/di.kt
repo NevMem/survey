@@ -14,8 +14,8 @@ import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.role.RoleSerializerImpl
 import com.nevmem.survey.role.mainRoleModel
-import com.nevmem.survey.survey.AnswersService
 import com.nevmem.survey.service.auth.createTokenService
+import com.nevmem.survey.survey.AnswersService
 import com.nevmem.survey.survey.SurveysMetadataAssembler
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.createAnswersService
