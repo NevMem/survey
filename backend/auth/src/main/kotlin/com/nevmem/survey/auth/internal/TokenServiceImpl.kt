@@ -3,8 +3,8 @@ package com.nevmem.survey.auth.internal
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.auth.TokenService
+import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.user.UserEntity
 
 internal class TokenServiceImpl : TokenService {

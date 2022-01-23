@@ -1,7 +1,7 @@
 package com.nevmem.survey.plugins
 
-import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.auth.TokenService
+import com.nevmem.survey.env.EnvVars
 import io.ktor.application.Application
 import io.ktor.auth.authentication
 import io.ktor.auth.jwt.JWTPrincipal
