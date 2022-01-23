@@ -1,4 +1,4 @@
-package com.nevmem.survey.converters
+package com.nevmem.survey.di
 
 import com.nevmem.surveys.converters.CommonQuestionsConverter
 import com.nevmem.surveys.converters.InvitesConverter

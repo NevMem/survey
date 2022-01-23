@@ -1,6 +1,10 @@
-package com.nevmem.survey.role
+package com.nevmem.survey.role.internal
 
-class RoleSerializerImpl(private val roleModel: RoleModel) : RoleSerializer {
+import com.nevmem.survey.role.RoleEntity
+import com.nevmem.survey.role.RoleModel
+import com.nevmem.survey.role.RoleSerializer
+
+internal class RoleSerializerImpl(private val roleModel: RoleModel) : RoleSerializer {
 
     override fun rolesToString(roles: List<RoleEntity>): String =
         roles.joinToString(",") { it.roleId }

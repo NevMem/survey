@@ -3,7 +3,6 @@ package com.nevmem.survey.di
 import com.nevmem.survey.auth.PasswordEncoder
 import com.nevmem.survey.auth.TokenService
 import com.nevmem.survey.auth.createPasswordEncoder
-import com.nevmem.survey.converters.convertersModule
 import com.nevmem.survey.fs.FileSystemService
 import com.nevmem.survey.fs.createFileSystemService
 import com.nevmem.survey.invites.InvitesService
@@ -12,7 +11,7 @@ import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.survey.media.createMediaStorageService
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.role.RoleSerializer
-import com.nevmem.survey.role.RoleSerializerImpl
+import com.nevmem.survey.role.createRoleSerializer
 import com.nevmem.survey.role.mainRoleModel
 import com.nevmem.survey.service.auth.createTokenService
 import com.nevmem.survey.survey.AnswersService
@@ -30,7 +29,7 @@ import org.koin.ktor.ext.Koin
 
 private val coreModule = module {
     single<RoleModel> { mainRoleModel() }
-    single<RoleSerializer> { RoleSerializerImpl(get()) }
+    single<RoleSerializer> { createRoleSerializer(get()) }
     single<TokenService> { createTokenService() }
     single<PasswordEncoder> { createPasswordEncoder() }
     single<InvitesService> { createInvitesService() }
