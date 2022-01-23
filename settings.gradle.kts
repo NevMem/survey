@@ -11,9 +11,11 @@ pluginManagement {
 
 rootProject.name = "com.nevmem.survey"
 
+include("backend:converters")
 include("backend:core")
 include("backend:helpers")
 include("backend:common")
+include("backend:role")
 include("common:data")
 include("util")
 include("util:exporter")

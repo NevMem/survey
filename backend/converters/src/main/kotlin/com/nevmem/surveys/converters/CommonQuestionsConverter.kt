@@ -1,4 +1,4 @@
-package com.nevmem.survey.converter
+package com.nevmem.surveys.converters
 
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.question.CommonQuestion

@@ -1,4 +1,4 @@
-package com.nevmem.survey.converter
+package com.nevmem.surveys.converters
 
 import com.nevmem.survey.data.media.MediaGallery
 import com.nevmem.survey.media.MediaGalleryEntity

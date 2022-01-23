@@ -1,4 +1,4 @@
-package com.nevmem.survey.converter
+package com.nevmem.surveys.converters
 
 import com.nevmem.survey.data.user.User
 import com.nevmem.survey.role.RoleModel

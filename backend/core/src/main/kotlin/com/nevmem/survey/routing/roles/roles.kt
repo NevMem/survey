@@ -1,6 +1,6 @@
 package com.nevmem.survey.routing.roles
 
-import com.nevmem.survey.converter.RolesConverter
+import com.nevmem.surveys.converters.RolesConverter
 import com.nevmem.survey.data.response.role.AllRolesResponse
 import com.nevmem.survey.role.RoleModel
 import io.ktor.application.call

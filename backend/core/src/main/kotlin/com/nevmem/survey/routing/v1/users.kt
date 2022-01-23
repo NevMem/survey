@@ -1,6 +1,6 @@
 package com.nevmem.survey.routing.v1
 
-import com.nevmem.survey.converter.UsersConverter
+import com.nevmem.surveys.converters.UsersConverter
 import com.nevmem.survey.data.request.auth.LoginRequest
 import com.nevmem.survey.data.request.auth.RegisterRequest
 import com.nevmem.survey.data.request.role.UpdateRolesRequest

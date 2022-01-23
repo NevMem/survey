@@ -1,8 +1,4 @@
-package com.nevmem.survey.role.internal
-
-import com.nevmem.survey.role.RoleEntity
-import com.nevmem.survey.role.RoleModel
-import org.slf4j.LoggerFactory
+package com.nevmem.survey.role
 
 typealias RoleEntityVisitor = (RoleEntity) -> Unit
 
@@ -30,7 +26,7 @@ private fun role(
     return rootRole
 }
 
-internal fun mainRoleModel(): RoleModel {
+fun mainRoleModel(): RoleModel {
     val allRoles = mutableListOf<RoleEntity>()
     role("admin", { allRoles += it }) {
         role("push.manager") {
@@ -46,12 +42,6 @@ internal fun mainRoleModel(): RoleModel {
         role("role.manager")
 
         role("invite.manager")
-    }
-
-    LoggerFactory.getLogger(RoleModel::class.simpleName).apply {
-        allRoles.forEach {
-            info("role parent: ${it.parentRole?.roleId}, child: ${it.roleId}")
-        }
     }
 
     return object : RoleModel {

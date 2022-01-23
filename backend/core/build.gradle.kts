@@ -42,5 +42,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     implementation(project(":common:data"))
     implementation(project(":backend:common"))
+    implementation(project(":backend:converters"))
     implementation(project(":backend:helpers"))
+    implementation(project(":backend:role"))
 }

@@ -1,8 +1,7 @@
 package com.nevmem.survey.routing.v1.media
 
-import com.nevmem.survey.converter.MediaConverter
-import com.nevmem.survey.converter.MediaGalleryConverter
-import com.nevmem.survey.data.media.Media
+import com.nevmem.surveys.converters.MediaConverter
+import com.nevmem.surveys.converters.MediaGalleryConverter
 import com.nevmem.survey.data.request.media.CreateGalleryRequest
 import com.nevmem.survey.data.response.media.CreateGalleryResponse
 import com.nevmem.survey.media.MediaEntity

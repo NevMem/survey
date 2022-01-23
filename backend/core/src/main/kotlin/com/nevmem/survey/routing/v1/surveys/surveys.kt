@@ -1,7 +1,7 @@
 package com.nevmem.survey.routing.v1.surveys
 
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
-import com.nevmem.survey.converter.SurveysConverter
+import com.nevmem.surveys.converters.SurveysConverter
 import com.nevmem.survey.data.question.Question
 import com.nevmem.survey.data.request.survey.CreateSurveyRequest
 import com.nevmem.survey.data.request.survey.DeleteSurveyRequest

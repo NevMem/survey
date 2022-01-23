@@ -1,10 +1,9 @@
-package com.nevmem.survey.converter
+package com.nevmem.surveys.converters
 
 import com.nevmem.survey.data.role.Role
 import com.nevmem.survey.role.RoleEntity
-import org.koin.core.component.KoinComponent
 
-class RolesConverter : KoinComponent {
+class RolesConverter {
     fun convertRole(roleEntity: RoleEntity): Role {
         return Role(
             roleEntity.roleId,
