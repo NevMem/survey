@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.answer
+package com.nevmem.survey.survey
 
 class AlreadyPublishedAnswerException : Exception("Answer was already published")
 

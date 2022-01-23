@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.surveys
+package com.nevmem.survey.survey
 
 import com.nevmem.survey.data.survey.SurveyMetadata
 

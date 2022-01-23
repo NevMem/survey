@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.answer
+package com.nevmem.survey.survey
 
 import com.nevmem.survey.data.answer.SurveyAnswer
 

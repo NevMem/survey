@@ -3,11 +3,8 @@ package com.nevmem.survey.db
 import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.invites.invitesTables
 import com.nevmem.survey.media.mediaTables
-import com.nevmem.survey.service.answer.internal.QuestionAnswerTable
-import com.nevmem.survey.service.answer.internal.SurveyAnswerTable
-import com.nevmem.survey.service.surveys.internal.CommonQuestionsTable
-import com.nevmem.survey.service.surveys.internal.QuestionsTable
-import com.nevmem.survey.service.surveys.internal.SurveysTable
+import com.nevmem.survey.survey.answersTables
+import com.nevmem.survey.survey.surveysTables
 import com.nevmem.survey.users.usersTables
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -39,11 +36,8 @@ fun Application.initializeDatabases() {
 
 private fun createTables() = transaction {
     SchemaUtils.create(
-        SurveysTable,
-        QuestionsTable,
-        CommonQuestionsTable,
-        SurveyAnswerTable,
-        QuestionAnswerTable,
+        *surveysTables().toTypedArray(),
+        *answersTables().toTypedArray(),
         *usersTables().toTypedArray(),
         *invitesTables().toTypedArray(),
         *mediaTables().toTypedArray(),

@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.surveys
+package com.nevmem.survey.survey
 
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.question.QuestionEntity

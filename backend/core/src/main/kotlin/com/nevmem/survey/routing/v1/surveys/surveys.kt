@@ -12,8 +12,8 @@ import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.checkRoles
 import com.nevmem.survey.routing.userId
-import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
-import com.nevmem.survey.service.surveys.SurveysService
+import com.nevmem.survey.survey.SurveysMetadataAssembler
+import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.users.UsersService
 import com.nevmem.surveys.converters.SurveysConverter
 import io.ktor.application.call

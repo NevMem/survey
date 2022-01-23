@@ -14,13 +14,13 @@ import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.role.RoleSerializerImpl
 import com.nevmem.survey.role.mainRoleModel
-import com.nevmem.survey.service.answer.AnswersService
-import com.nevmem.survey.service.answer.internal.AnswersServiceImpl
+import com.nevmem.survey.survey.AnswersService
 import com.nevmem.survey.service.auth.createTokenService
-import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
-import com.nevmem.survey.service.surveys.SurveysService
-import com.nevmem.survey.service.surveys.internal.SurveysMetadataAssembleImpl
-import com.nevmem.survey.service.surveys.internal.SurveysServiceImpl
+import com.nevmem.survey.survey.SurveysMetadataAssembler
+import com.nevmem.survey.survey.SurveysService
+import com.nevmem.survey.survey.createAnswersService
+import com.nevmem.survey.survey.createSurveyMetadataAssembler
+import com.nevmem.survey.survey.createSurveysService
 import com.nevmem.survey.users.UsersService
 import com.nevmem.survey.users.createUsersService
 import io.ktor.application.Application
@@ -34,11 +34,11 @@ private val coreModule = module {
     single<TokenService> { createTokenService() }
     single<PasswordEncoder> { createPasswordEncoder() }
     single<InvitesService> { createInvitesService() }
-    single<SurveysService> { SurveysServiceImpl() }
+    single<SurveysService> { createSurveysService() }
     single<FileSystemService> { createFileSystemService() }
     single<MediaStorageService> { createMediaStorageService() }
-    single<AnswersService> { AnswersServiceImpl() }
-    single<SurveysMetadataAssembler> { SurveysMetadataAssembleImpl() }
+    single<AnswersService> { createAnswersService() }
+    single<SurveysMetadataAssembler> { createSurveyMetadataAssembler() }
     single<UsersService> { createUsersService() }
 }
 

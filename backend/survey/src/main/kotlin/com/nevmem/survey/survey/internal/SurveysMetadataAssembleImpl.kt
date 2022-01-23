@@ -1,13 +1,13 @@
-package com.nevmem.survey.service.surveys.internal
+package com.nevmem.survey.survey.internal
 
 import com.nevmem.survey.data.survey.SurveyMetadata
-import com.nevmem.survey.service.answer.AnswersService
-import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
-import com.nevmem.survey.service.surveys.SurveysService
+import com.nevmem.survey.survey.AnswersService
+import com.nevmem.survey.survey.SurveysMetadataAssembler
+import com.nevmem.survey.survey.SurveysService
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class SurveysMetadataAssembleImpl : SurveysMetadataAssembler, KoinComponent {
+internal class SurveysMetadataAssembleImpl : SurveysMetadataAssembler, KoinComponent {
     private val surveysService by inject<SurveysService>()
     private val answersService by inject<AnswersService>()
 

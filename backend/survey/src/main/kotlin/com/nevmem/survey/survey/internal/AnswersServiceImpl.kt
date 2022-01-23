@@ -1,16 +1,15 @@
-package com.nevmem.survey.service.answer.internal
+package com.nevmem.survey.survey.internal
 
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
 import com.nevmem.survey.question.QuestionEntity
-import com.nevmem.survey.service.answer.AlreadyPublishedAnswerException
-import com.nevmem.survey.service.answer.AnswersService
-import com.nevmem.survey.service.answer.SurveyAnswerInconsistencyException
-import com.nevmem.survey.service.answer.SurveyNotFoundException
-import com.nevmem.survey.service.answer.UnknownCommonQuestionException
-import com.nevmem.survey.service.answer.internal.SurveyAnswerTable.publisherId
-import com.nevmem.survey.service.surveys.SurveysService
+import com.nevmem.survey.survey.AlreadyPublishedAnswerException
+import com.nevmem.survey.survey.AnswersService
+import com.nevmem.survey.survey.SurveyAnswerInconsistencyException
+import com.nevmem.survey.survey.SurveyNotFoundException
+import com.nevmem.survey.survey.SurveysService
+import com.nevmem.survey.survey.UnknownCommonQuestionException
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

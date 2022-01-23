@@ -1,9 +1,9 @@
-package com.nevmem.survey.service.surveys.internal
+package com.nevmem.survey.survey.internal
 
 import com.nevmem.survey.RandomStringGenerator
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.question.QuestionEntity
-import com.nevmem.survey.service.surveys.SurveysService
+import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.SurveyEntity
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
