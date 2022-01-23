@@ -15,7 +15,7 @@ import com.nevmem.survey.routing.checkRoles
 import com.nevmem.survey.routing.userId
 import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
 import com.nevmem.survey.service.surveys.SurveysService
-import com.nevmem.survey.service.users.UsersService
+import com.nevmem.survey.users.UsersService
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.HttpStatusCode

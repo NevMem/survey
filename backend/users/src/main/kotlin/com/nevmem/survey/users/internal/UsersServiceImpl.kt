@@ -1,9 +1,9 @@
-package com.nevmem.survey.service.users.internal
+package com.nevmem.survey.users.internal
 
 import com.nevmem.survey.role.RoleEntity
 import com.nevmem.survey.role.RoleSerializer
-import com.nevmem.survey.service.security.auth.PasswordEncoder
-import com.nevmem.survey.service.users.UsersService
+import com.nevmem.survey.auth.PasswordEncoder
+import com.nevmem.survey.users.UsersService
 import com.nevmem.survey.user.UserEntity
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction

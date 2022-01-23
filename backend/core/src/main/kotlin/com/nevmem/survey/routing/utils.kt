@@ -1,7 +1,7 @@
 package com.nevmem.survey.routing
 
 import com.nevmem.survey.role.RoleModel
-import com.nevmem.survey.service.users.UsersService
+import com.nevmem.survey.users.UsersService
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.auth.jwt.JWTPrincipal

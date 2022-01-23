@@ -1,8 +1,10 @@
+val ktor_version: String by project
+
 plugins {
     kotlin("jvm")
 }
 
-group = "com.nevmem.survey.converters"
+group = "com.nevmem.survey.auth"
 version = "0.0.1"
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
@@ -12,8 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.insert-koin:koin-core:3.1.4")
-    implementation(project(":common:data"))
+    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
     implementation(project(":backend:common"))
-    implementation(project(":backend:role"))
+    implementation(project(":backend:env"))
 }

@@ -1,15 +1,15 @@
 package com.nevmem.survey.db
 
 import com.nevmem.survey.env.EnvVars
+import com.nevmem.survey.invites.internal.InvitesTable
 import com.nevmem.survey.service.answer.internal.QuestionAnswerTable
 import com.nevmem.survey.service.answer.internal.SurveyAnswerTable
-import com.nevmem.survey.service.invites.internal.InvitesTable
 import com.nevmem.survey.service.media.internal.MediaGalleryTable
 import com.nevmem.survey.service.media.internal.MediaTable
 import com.nevmem.survey.service.surveys.internal.CommonQuestionsTable
 import com.nevmem.survey.service.surveys.internal.QuestionsTable
 import com.nevmem.survey.service.surveys.internal.SurveysTable
-import com.nevmem.survey.service.users.internal.UsersTable
+import com.nevmem.survey.users.internal.UsersTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.Application

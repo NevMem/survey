@@ -1,7 +1,7 @@
-package com.nevmem.survey.service.security.auth.internal
+package com.nevmem.survey.auth.internal
 
 import com.nevmem.survey.env.EnvVars
-import com.nevmem.survey.service.security.auth.PasswordEncoder
+import com.nevmem.survey.auth.PasswordEncoder
 import java.security.MessageDigest
 
 internal class PasswordEncoderImpl : PasswordEncoder {

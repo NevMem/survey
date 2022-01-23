@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "com.nevmem.survey.role"
+group = "com.nevmem.survey.env"
 version = "0.0.1"
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
@@ -12,6 +12,4 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":backend:common"))
-    implementation(project(":common:data"))
 }

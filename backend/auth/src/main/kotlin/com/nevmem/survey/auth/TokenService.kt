@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.auth
+package com.nevmem.survey.auth
 
 import com.auth0.jwt.JWTVerifier
 import com.nevmem.survey.user.UserEntity

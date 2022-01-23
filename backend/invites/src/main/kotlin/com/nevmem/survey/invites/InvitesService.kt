@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.invites
+package com.nevmem.survey.invites
 
 import com.nevmem.survey.invite.InviteEntity
 import com.nevmem.survey.user.UserEntity

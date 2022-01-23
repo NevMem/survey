@@ -1,11 +1,11 @@
-package com.nevmem.survey.service.users.internal
+package com.nevmem.survey.users.internal
 
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 
-internal object UsersTable : LongIdTable() {
+object UsersTable : LongIdTable() {
     val login = varchar("login", 32)
     val password = varchar("password", 64)
     val name = varchar("name", 32)

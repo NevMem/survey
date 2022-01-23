@@ -2,7 +2,7 @@ package com.nevmem.survey.setup
 
 import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.role.RoleModel
-import com.nevmem.survey.service.users.UsersService
+import com.nevmem.survey.users.UsersService
 import io.ktor.application.Application
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope

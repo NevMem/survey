@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.security.auth
+package com.nevmem.survey.auth
 
 interface PasswordEncoder {
     fun encodePassword(password: String): String

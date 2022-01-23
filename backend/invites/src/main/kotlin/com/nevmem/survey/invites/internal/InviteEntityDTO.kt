@@ -1,11 +1,11 @@
-package com.nevmem.survey.service.invites.internal
+package com.nevmem.survey.invites.internal
 
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 
-internal object InvitesTable : LongIdTable() {
+object InvitesTable : LongIdTable() {
     val inviteId = varchar("inviteId", 16)
     val createdAt = long("createdAt")
     val expirationPeriod = long("expirationPeriod")
