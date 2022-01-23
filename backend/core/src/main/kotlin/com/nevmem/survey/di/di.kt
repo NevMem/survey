@@ -20,6 +20,7 @@ import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.createAnswersService
 import com.nevmem.survey.survey.createSurveyMetadataAssembler
 import com.nevmem.survey.survey.createSurveysService
+import com.nevmem.survey.task.createTaskService
 import com.nevmem.survey.users.UsersService
 import com.nevmem.survey.users.createUsersService
 import io.ktor.application.Application
@@ -39,6 +40,7 @@ private val coreModule = module {
     single<AnswersService> { createAnswersService() }
     single<SurveysMetadataAssembler> { createSurveyMetadataAssembler() }
     single<UsersService> { createUsersService() }
+    single { createTaskService() }
 }
 
 fun Application.di() {

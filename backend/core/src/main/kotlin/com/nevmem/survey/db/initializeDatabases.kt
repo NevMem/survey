@@ -5,6 +5,7 @@ import com.nevmem.survey.invites.invitesTables
 import com.nevmem.survey.media.mediaTables
 import com.nevmem.survey.survey.answersTables
 import com.nevmem.survey.survey.surveysTables
+import com.nevmem.survey.task.tasksTables
 import com.nevmem.survey.users.usersTables
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -41,5 +42,6 @@ private fun createTables() = transaction {
         *usersTables().toTypedArray(),
         *invitesTables().toTypedArray(),
         *mediaTables().toTypedArray(),
+        *tasksTables().toTypedArray(),
     )
 }

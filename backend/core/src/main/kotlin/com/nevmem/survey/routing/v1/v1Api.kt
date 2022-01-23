@@ -5,6 +5,7 @@ import com.nevmem.survey.routing.v1.answer.answers
 import com.nevmem.survey.routing.v1.invites.invites
 import com.nevmem.survey.routing.v1.media.media
 import com.nevmem.survey.routing.v1.surveys.surveys
+import com.nevmem.survey.routing.v1.task.task
 import io.ktor.routing.Route
 
 fun Route.v1Api() {
@@ -14,5 +15,6 @@ fun Route.v1Api() {
         surveys()
         media()
         answers()
+        task()
     }
 }

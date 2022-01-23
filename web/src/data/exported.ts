@@ -71,6 +71,10 @@ interface LoadSurveyMetadataRequest {
 	surveyId: number;
 }
 
+interface CreateExportDataTaskRequest {
+	surveyId: number;
+}
+
 interface LoginResponse {
 	type: string;
 }
@@ -131,6 +135,17 @@ interface Survey {
 interface SurveyMetadata {
 	answersCount: number;
 	filesCount: number;
+}
+
+interface Task {
+	id: number;
+	state: TaskState;
+	log: TaskLog[];
+}
+
+interface TaskLog {
+	message: string;
+	timestamp: number;
 }
 
 interface User {
@@ -266,6 +281,7 @@ export type {
 	AllRolesResponse,
 	AllSurveysResponse,
 	CommonQuestion,
+	CreateExportDataTaskRequest,
 	CreateInviteError,
 	CreateInviteRequest,
 	CreateInviteResponse,
@@ -301,6 +317,8 @@ export type {
 	Survey,
 	SurveyAnswer,
 	SurveyMetadata,
+	Task,
+	TaskLog,
 	TextQuestion,
 	TextQuestionAnswer,
 	UpdateRolesRequest,
