@@ -12,11 +12,11 @@ import com.nevmem.survey.service.fs.FileSystemService
 import com.nevmem.survey.service.fs.internal.FileSystemServiceImpl
 import com.nevmem.survey.invites.InvitesService
 import com.nevmem.survey.service.auth.createTokenService
-import com.nevmem.survey.service.media.MediaStorageService
-import com.nevmem.survey.service.media.internal.MediaStorageServiceImpl
+import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.survey.auth.PasswordEncoder
 import com.nevmem.survey.auth.createPasswordEncoder
 import com.nevmem.survey.invites.createInvitesService
+import com.nevmem.survey.media.createMediaStorageService
 import com.nevmem.survey.service.surveys.SurveysMetadataAssembler
 import com.nevmem.survey.service.surveys.SurveysService
 import com.nevmem.survey.service.surveys.internal.SurveysMetadataAssembleImpl
@@ -36,7 +36,7 @@ private val coreModule = module {
     single<InvitesService> { createInvitesService() }
     single<SurveysService> { SurveysServiceImpl() }
     single<FileSystemService> { FileSystemServiceImpl() }
-    single<MediaStorageService> { MediaStorageServiceImpl() }
+    single<MediaStorageService> { createMediaStorageService() }
     single<AnswersService> { AnswersServiceImpl() }
     single<SurveysMetadataAssembler> { SurveysMetadataAssembleImpl() }
     single<UsersService> { createUsersService() }

@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.media.internal
+package com.nevmem.survey.media.internal
 
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass

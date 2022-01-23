@@ -1,7 +1,5 @@
-package com.nevmem.survey.service.media
+package com.nevmem.survey.media
 
-import com.nevmem.survey.media.MediaEntity
-import com.nevmem.survey.media.MediaGalleryEntity
 import java.io.File
 
 interface MediaStorageService {

@@ -1,9 +1,9 @@
-package com.nevmem.survey.service.media.internal
+package com.nevmem.survey.media.internal
 
 import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.media.MediaEntity
 import com.nevmem.survey.media.MediaGalleryEntity
-import com.nevmem.survey.service.media.MediaStorageService
+import com.nevmem.survey.media.MediaStorageService
 import org.jetbrains.exposed.sql.transactions.transaction
 import software.amazon.awssdk.auth.credentials.AwsCredentials
 import software.amazon.awssdk.core.sync.RequestBody

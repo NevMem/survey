@@ -6,7 +6,7 @@ import com.nevmem.survey.data.request.media.CreateGalleryRequest
 import com.nevmem.survey.data.response.media.CreateGalleryResponse
 import com.nevmem.survey.media.MediaEntity
 import com.nevmem.survey.service.fs.FileSystemService
-import com.nevmem.survey.service.media.MediaStorageService
+import com.nevmem.survey.media.MediaStorageService
 import io.ktor.application.call
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
