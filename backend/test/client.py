@@ -80,6 +80,15 @@ class Client:
     def survey_metadata(self, token, surveyId):
         return self._post('/v1/survey/metadata', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
 
+    def tasks(self, token):
+        return self._get('/v1/task/tasks', headers={'Authorization': 'Bearer ' + token})
+
+    def task(self, token, id):
+        return self._post('/v1/task/task', {'id': id}, headers={'Authorization': 'Bearer ' + token})
+
+    def create_export_data_task(self, token, surveyId):
+        return self._post('/v1/task/create_export_data_task', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
+
     @timed
     def upload_media(self, stream):
         return requests.post(self.base_url + '/v1/media/upload', files={'file': stream})

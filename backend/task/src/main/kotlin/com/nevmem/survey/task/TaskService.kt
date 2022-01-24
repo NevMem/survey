@@ -8,4 +8,6 @@ interface TaskService {
     suspend fun exportWaitingTasks(): List<ExportDataTaskEntity>
 
     suspend fun atomicallyTransferToExecutingState(entity: ExportDataTaskEntity): ExportDataTaskEntity?
+
+    suspend fun getTask(id: Long): ExportDataTaskEntity?
 }

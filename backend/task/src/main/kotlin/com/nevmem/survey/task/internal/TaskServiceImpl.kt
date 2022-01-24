@@ -32,7 +32,7 @@ internal class TaskServiceImpl : TaskService {
         }.map { it.entity(emptyList()) }
     }
 
-    override suspend fun atomicallyTransferToExecutingState(entity: ExportDataTaskEntity): ExportDataTaskEntity? {
+    override suspend fun atomicallyTransferToExecutingState(entity: ExportDataTaskEntity): ExportDataTaskEntity? = transaction {
         val result = ExportDataTaskTable.update({
             (ExportDataTaskTable.surveyId eq entity.surveyId) and
                 (ExportDataTaskTable.id eq entity.id) and
@@ -44,11 +44,13 @@ internal class TaskServiceImpl : TaskService {
         println("Value after update $result")
 
         if (result != 1) {
-            return null
+            null
+        } else {
+            taskWithId(entity.id)
         }
-
-        return taskWithId(entity.id)
     }
+
+    override suspend fun getTask(id: Long): ExportDataTaskEntity? = taskWithId(id)
 
     private fun taskWithId(id: Long) = transaction {
         val log = TaskLogDTO.find {

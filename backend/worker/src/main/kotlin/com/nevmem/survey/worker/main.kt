@@ -16,7 +16,6 @@ fun main() {
     setupDatabases()
 
     startKoin {
-        printLogger()
         modules(
             coreModule,
         )

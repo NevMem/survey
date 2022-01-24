@@ -1,6 +1,8 @@
 package com.nevmem.survey.routing.v1.task
 
 import com.nevmem.survey.data.request.task.CreateExportDataTaskRequest
+import com.nevmem.survey.data.request.task.LoadTaskRequest
+import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.userId
 import com.nevmem.survey.task.TaskService
@@ -31,6 +33,20 @@ private fun Route.taskImpl() {
             }
 
             call.respond(taskService.exportTasks().map { exportDataTaskConverter(it) })
+        }
+
+        post("/task") {
+            val user = usersService.getUserById(userId())!!
+
+            if (!roleModel.hasAccess(listOf(roleModel.roleById("survey.manager")), user.roles)) {
+                throw IllegalStateException("Access to method denied (not enough roles)")
+            }
+
+            val request = call.receive<LoadTaskRequest>()
+
+            val task = taskService.getTask(request.id) ?: throw NotFoundException()
+
+            call.respond(exportDataTaskConverter(task))
         }
 
         post("/create_export_data_task") {

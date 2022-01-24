@@ -2,6 +2,7 @@ package com.nevmem.survey.plugins
 
 import com.nevmem.survey.data.response.error.ServerError
 import com.nevmem.survey.exception.ForbiddenException
+import com.nevmem.survey.exception.NotFoundException
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -15,6 +16,13 @@ fun Application.statusPages() {
             call.respond(
                 HttpStatusCode.Forbidden,
                 ServerError(it.message ?: "Unknown error"),
+            )
+        }
+
+        exception<NotFoundException> {
+            call.respond(
+                HttpStatusCode.NotFound,
+                ServerError("Resource not found")
             )
         }
 
