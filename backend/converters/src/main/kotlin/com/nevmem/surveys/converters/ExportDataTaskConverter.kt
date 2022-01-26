@@ -8,7 +8,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ExportDataTaskConverter : KoinComponent {
-    private val taskLogConverter: TaskLogConverter by inject<TaskLogConverter>()
+    private val taskLogConverter by inject<TaskLogConverter>()
+    private val mediaConverter by inject<MediaConverter>()
 
     operator fun invoke(entity: ExportDataTaskEntity): Task = Task(
         id = entity.id,
@@ -19,5 +20,6 @@ class ExportDataTaskConverter : KoinComponent {
             TaskStateEntity.Error -> TaskState.Error
         },
         log = entity.log.map { taskLogConverter(it) },
+        outputs = entity.outputs.map { mediaConverter(it) }
     )
 }

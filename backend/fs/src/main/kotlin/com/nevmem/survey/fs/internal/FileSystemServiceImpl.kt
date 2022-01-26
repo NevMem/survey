@@ -40,4 +40,13 @@ internal class FileSystemServiceImpl : FileSystemService {
 
         return file
     }
+
+    override suspend fun createFile(type: FileSystemService.FileType): File {
+        val extension = when (type) {
+            FileSystemService.FileType.CSV -> "csv"
+            FileSystemService.FileType.TXT -> "txt"
+        }
+
+        return File("$tmpDirPath/${RandomStringGenerator.randomString(32)}.$extension")
+    }
 }

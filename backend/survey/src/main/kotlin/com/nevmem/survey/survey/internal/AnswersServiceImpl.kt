@@ -13,6 +13,7 @@ import com.nevmem.survey.survey.UnknownCommonQuestionException
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
@@ -66,6 +67,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             val surveyAnswer = SurveyAnswerDTO.new {
                 this.publisherId = publisherId
                 this.surveyId = answer.surveyId
+                this.mediaGalleryId = answer.gallery?.id
             }
 
             answer.answers.forEach { actualAnswer ->
@@ -82,6 +84,11 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
                 }
             }
         }
+    }
+
+    override suspend fun answers(surveyId: String): List<SurveyAnswer> = transaction {
+        val dtos = SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }
+        dtos.map { it.entity() }
     }
 
     override suspend fun getAnswers(surveyId: String): String = transaction {
@@ -133,5 +140,17 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             is QuestionAnswer.StarsQuestionAnswer -> QuestionType.Stars
             is QuestionAnswer.RatingQuestionAnswer -> QuestionType.Rating
         }
+    }
+
+    private fun SurveyAnswerDTO.entity(): SurveyAnswer {
+        return SurveyAnswer(
+            surveyId = this.surveyId,
+            gallery = null,
+            answers = this.answers.map { it.entity() }
+        )
+    }
+
+    private fun QuestionAnswerDTO.entity(): QuestionAnswer {
+        return Json.decodeFromString(QuestionAnswer.serializer(), this.jsonAnswer)
     }
 }

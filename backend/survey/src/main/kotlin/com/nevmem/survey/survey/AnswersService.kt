@@ -7,5 +7,7 @@ interface AnswersService {
 
     suspend fun getAnswers(surveyId: String): String
 
+    suspend fun answers(surveyId: String): List<SurveyAnswer>
+
     suspend fun getAnswersCount(surveyId: String): Long
 }

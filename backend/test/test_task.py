@@ -45,6 +45,7 @@ def test_simple_task(client: Client):
         assert response.status_code == 200
 
     response = client.create_export_data_task(token, surveyId)
+    print(response.json())
     assert response.status_code == 200
     taskId = response.json()['id']
 
@@ -55,8 +56,9 @@ def test_simple_task(client: Client):
     assert response.status_code == 200
     assert response.json()['state'] == 'Executing' or response.json()['state'] == 'Waiting'
 
-    time.sleep(2)
+    time.sleep(6)
 
     response = client.task(token, taskId)
+    print(response.json())
     assert response.status_code == 200
-    assert response.json()['state'] == 'Executing' or response.json()['state'] == 'Success'
+    assert response.json()['state'] == 'Success'

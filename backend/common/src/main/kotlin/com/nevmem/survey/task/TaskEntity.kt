@@ -1,5 +1,7 @@
 package com.nevmem.survey.task
 
+import com.nevmem.survey.media.MediaEntity
+
 interface TaskEntity
 
 data class ExportDataTaskEntity(
@@ -7,4 +9,5 @@ data class ExportDataTaskEntity(
     val state: TaskStateEntity,
     val surveyId: Long,
     val log: List<TaskLogEntity>,
+    val outputs: List<MediaEntity>,
 ) : TaskEntity

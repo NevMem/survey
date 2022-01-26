@@ -108,6 +108,12 @@ internal class MediaStorageServiceImpl : MediaStorageService {
         )
     }
 
+    override fun mediaById(id: Long): MediaEntity? = transaction {
+        MediaEntityDTO.find {
+            MediaTable.id eq id
+        }.firstOrNull()?.entity
+    }
+
     private val MediaEntityDTO.entity: MediaEntity
         get() = MediaEntity(
             this.id.value,

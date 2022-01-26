@@ -26,6 +26,7 @@ dependencies {
     implementation ("org.postgresql:postgresql:42.2.23")
     implementation(project(":backend:common"))
     implementation(project(":backend:env"))
+    implementation(project(":backend:fs"))
     implementation(project(":common:data"))
     implementation(project(":backend:task"))
     implementation(project(":backend:survey"))
