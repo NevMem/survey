@@ -16,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.HeadBucketRequest
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import java.io.File
 import java.net.URI
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 private class MediaUrlCreator {
     fun createUrl(dto: MediaEntityDTO): String {
@@ -106,6 +107,24 @@ internal class MediaStorageServiceImpl : MediaStorageService {
                 }
                 .map { it.entity },
         )
+    }
+
+    override suspend fun downloadToFile(file: File, entity: MediaEntity) {
+        val response = client.getObject(GetObjectRequest.builder()
+            .bucket(bucketName)
+            .key(entity.filename)
+            .build())
+        file.outputStream().apply {
+            var readLen = 0
+            val array = ByteArray(1024)
+            readLen = response.read(array)
+            while (readLen > 0) {
+                write(array, 0, readLen)
+                readLen = response.read(array)
+            }
+            flush()
+            close()
+        }
     }
 
     override fun mediaById(id: Long): MediaEntity? = transaction {

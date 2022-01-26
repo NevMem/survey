@@ -35,7 +35,7 @@ class Exporter : KoinComponent {
 
             val writer = file.bufferedWriter()
             answers.forEach {
-                writer.write(it.csvLine())
+                writer.write(it.csvLine() + "\n")
                 tasksService.appendLog(task, "Writed line: " + it.csvLine())
             }
             withContext(Dispatchers.IO) {

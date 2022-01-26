@@ -2,6 +2,7 @@ package com.nevmem.survey.routing.v1.media
 
 import com.nevmem.survey.data.request.media.CreateGalleryRequest
 import com.nevmem.survey.data.response.media.CreateGalleryResponse
+import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.fs.FileSystemService
 import com.nevmem.survey.media.MediaEntity
 import com.nevmem.survey.media.MediaStorageService
@@ -11,7 +12,9 @@ import io.ktor.application.call
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
+import io.ktor.response.respondFile
 import io.ktor.routing.Route
+import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
 import org.koin.ktor.ext.inject
@@ -37,6 +40,20 @@ fun Route.mediaImpl() {
                 gallery = mediaGalleryConverter(gallery),
             )
         )
+    }
+
+    get("/get/{mediaId}") {
+        val mediaId = call.parameters["mediaId"]?.toLong() ?: throw IllegalStateException("Media id not present in path")
+        val media = mediaService.mediaById(mediaId) ?: throw NotFoundException()
+        val ext = media.filename.split(".").last()
+        val fileType = when (ext) {
+            "txt" -> FileSystemService.FileType.TXT
+            "csv" -> FileSystemService.FileType.CSV
+            else -> throw IllegalStateException("unknown file type")
+        }
+        val file = fsService.createFile(fileType)
+        mediaService.downloadToFile(file, media)
+        call.respondFile(file)
     }
 }
 
