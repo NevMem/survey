@@ -6,7 +6,7 @@ cd ../../../
 ./gradlew backend:worker:build
 cd ./backend/worker/docker
 
-cp ../backend/worker/build/distributions/worker-0.0.1.zip ./tmp/
+cp ../build/distributions/worker-0.0.1.zip ./tmp/
 
 python3 ../tools/bundle_env_vars.py ./env_vars_config.sh ./env.sh
 
