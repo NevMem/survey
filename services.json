@@ -1,7 +1,8 @@
-[
-    {
-        "name": "worker",
+{
+    "worker": {
         "tag": "worker",
-        "container-tag": "",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:e776f03",
+        "ports": [
+        ]
     }
-]
+}
