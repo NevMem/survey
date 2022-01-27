@@ -1,0 +1,53 @@
+name: Worker workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_an_publish_docker:
+    name: Building and publishing worke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: set up python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Login to registry
+        uses: docker/login-action@v1
+        with:
+          registry: cr.yandex
+          username: json_key
+          password: ${{ secrets.REGISTRY_KEY }}
+      - name: Installing YC util
+        run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
+      - name: Authorizing YC util
+        run: source /opt/yandex-cloud/path.bash.inc && echo $SERVICE_KEY>service_key.json && yc config profile create sa-profile && yc config set service-account-key service_key.json && yc config set cloud-id $YC_CLOUD_ID && yc config set folder-id $YC_FOLDER_ID
+        env:
+          SERVICE_KEY: ${{ secrets.REGISTRY_KEY }}
+          YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
+          YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
+      - name: Building
+        run: cd backend/worker/docker && ./build_worker_docker.sh
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_DBNAME: ${{ secrets.DB_DBNAME }}
+          DB_SERVER: rc1c-rj0lqxik0r20u80e.mdb.yandexcloud.net
+          DB_PORT: 6432
+          S3_REGION: ru-central1
+          S3_ACCESS_KEY: ${{ secrets.S3_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
+          S3_URI: https://storage.yandexcloud.net
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
