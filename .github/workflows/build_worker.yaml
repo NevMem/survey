@@ -10,7 +10,7 @@ on:
 
 jobs:
   build_an_publish_docker:
-    name: Building and publishing worke
+    name: Building and publishing worker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
