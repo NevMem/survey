@@ -38,7 +38,7 @@ jobs:
           SERVICE_KEY: ${{ secrets.REGISTRY_KEY }}
           YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
           YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
-      - name: Building
+      - name: Building and pushing docker
         run: cd backend/worker/docker && ./build_worker_docker.sh
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
