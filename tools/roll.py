@@ -17,26 +17,36 @@ class RemoteCommandExecutor:
         self.identity_file_path = identity_file_path
 
     def launch_command(self, command: List[str]) -> int:
-        proc = sp.Popen([
-            'ssh',
-            '-o',
-            'StrictHostKeyChecking=no',
-            f"{self.username}@{self.ip}",
-            '-i',
-            self.identity_file_path,
-            *command
-        ])
+        proc = sp.Popen(
+            [
+                'ssh',
+                '-o',
+                'StrictHostKeyChecking=no',
+                f"{self.username}@{self.ip}",
+                '-i',
+                self.identity_file_path,
+                *command
+            ],
+            stdout=sp.PIPE
+        )
         proc.wait()
+        stdout = []
+        for line in proc.stdout:
+            stdout.append(line.decode())
         print(command, 'exit code:', proc.returncode)
-        return proc.returncode
+        print(stdout)
+        return proc.returncode, stdout
 
     def is_docker_installer(self):
-        return self.launch_command(['docker', '-v']) == 0
+        return self.launch_command(['docker', '-v'])[0] == 0
 
     def install_docker(self, token):
         self.launch_command(['curl', '-fsSL', 'https://get.docker.com', '-o', 'get-docker.sh'])
         self.launch_command(['sudo', 'sh', 'get-docker.sh'])
         self.launch_command(['sudo', 'docker', 'login', '--username', 'oauth', '--password', token, 'cr.yandex'])
+
+    def get_containers(self):
+        return json.loads('[' + ', '.join(self.launch_command(['sudo', 'docker', 'ps', '--format="{{json .}}"'])[1]) + ']')
 
 
 def deploy(executor: RemoteCommandExecutor, image_tag: str, machine: Machine, ports: List[int], container_name: str):
@@ -84,13 +94,23 @@ def main():
             executor = RemoteCommandExecutor('nevmem', machine.ip, args.identity_file)
             if not executor.is_docker_installer():
                 executor.install_docker(args.token)
-            deploy(
-                executor=executor,
-                image_tag=service_config['container-tag'],
-                machine=machine,
-                ports=service_config['ports'],
-                container_name=f"{service}-{index}",
-            )
+            containers = executor.get_containers()
+            need_update = True
+            for container in containers:
+                if container['Names'] == f"{service}-{index}" and container['Image'] == service_config['container-tag']:
+                    need_update = False
+            
+            if need_update:
+                print('Deploying')
+                deploy(
+                    executor=executor,
+                    image_tag=service_config['container-tag'],
+                    machine=machine,
+                    ports=service_config['ports'],
+                    container_name=f"{service}-{index}",
+                )
+            else:
+                print('No need for redeploy')
 
 
 if __name__ == '__main__':
