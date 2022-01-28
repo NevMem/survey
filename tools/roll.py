@@ -33,9 +33,10 @@ class RemoteCommandExecutor:
     def is_docker_installer(self):
         return self.launch_command(['docker', '-v']) == 0
 
-    def install_docker(self):
+    def install_docker(self, token):
         self.launch_command(['curl', '-fsSL', 'https://get.docker.com', '-o', 'get-docker.sh'])
         self.launch_command(['sudo', 'sh', 'get-docker.sh'])
+        self.launch_command(['sudo', 'docker', 'login', '--username', 'oauth', '--password', token, 'cr.yandex'])
 
 
 def deploy(executor: RemoteCommandExecutor, image_tag: str, machine: Machine, ports: List[int], container_name: str):
@@ -56,6 +57,7 @@ def parse_args():
     parser.add_argument("service")
     parser.add_argument("services_file")
     parser.add_argument("identity_file")
+    parser.add_argument("token")
     return parser.parse_args()
 
 
@@ -81,7 +83,7 @@ def main():
             index += 1
             executor = RemoteCommandExecutor('nevmem', machine.ip, args.identity_file)
             if not executor.is_docker_installer():
-                executor.install_docker()
+                executor.install_docker(args.token)
             deploy(
                 executor=executor,
                 image_tag=service_config['container-tag'],

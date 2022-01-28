@@ -12,7 +12,7 @@ RUN apt update && \
     unzip
 
 COPY /tmp/ /
-COPY testing_runner.sh .
+COPY runner.sh .
 COPY env.sh .
 RUN unzip worker-0.0.1.zip
 
