@@ -8,11 +8,8 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSPropertyAccessor
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.symbol.Nullability
-import java.io.File
 
 data class TsListObject(val objectType: String)
 
@@ -62,19 +59,22 @@ class SurveySymbolProcessor(
 
         resolver.getSymbolsWithAnnotation("com.nevmem.survey.Exported").forEach {
             logger.warn("processing $it")
-            it.accept(object : KSVisitorVoid() {
-                override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
-                    super.visitClassDeclaration(classDeclaration, data)
-                    if (classDeclaration.getSealedSubclasses().toList().isNotEmpty()) {
-                        acceptSealedClass(classDeclaration)
-                    } else if (classDeclaration.classKind == ClassKind.ENUM_CLASS) {
-                        logger.warn("Found enum class $classDeclaration")
-                        acceptEnumClass(classDeclaration)
-                    } else {
-                        acceptClass(classDeclaration)
+            it.accept(
+                object : KSVisitorVoid() {
+                    override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
+                        super.visitClassDeclaration(classDeclaration, data)
+                        if (classDeclaration.getSealedSubclasses().toList().isNotEmpty()) {
+                            acceptSealedClass(classDeclaration)
+                        } else if (classDeclaration.classKind == ClassKind.ENUM_CLASS) {
+                            logger.warn("Found enum class $classDeclaration")
+                            acceptEnumClass(classDeclaration)
+                        } else {
+                            acceptClass(classDeclaration)
+                        }
                     }
-                }
-            }, Unit)
+                },
+                Unit
+            )
             logger.warn("done processing $it")
         }
 
@@ -109,74 +109,75 @@ class SurveySymbolProcessor(
             "exported",
             "ts"
         )
-        .writer()
-        .apply {
-            val writeNode: (TsClass) -> Unit = { node ->
-                if (node.parent == null) {
-                    write("interface ${node.name} {\n")
-                } else {
-                    write("interface ${node.name} extends ${node.parent.name} {\n")
-                }
-                node.fields.forEach { field ->
-                    when (field) {
-                        is TsField.TsInteger -> {
-                            val nl = " | undefined".takeIf { field.nullable } ?: ""
-                            write("\t${field.name}: number$nl;\n")
-                        }
-                        is TsField.TsString -> {
-                            val nl = " | undefined".takeIf { field.nullable } ?: ""
-                            write("\t${field.name}: string$nl;\n")
-                        }
-                        is TsField.TsObject -> {
-                            val nl = " | undefined".takeIf { field.nullable } ?: ""
-                            write("\t${field.name}: ${field.objectType}$nl;\n")
-                        }
-                        is TsField.TsList -> {
-                            write("\t${field.name}: ${field.fieldType.objectType}[];\n")
-                        }
-                        else -> {}
+            .writer()
+            .apply {
+                val writeNode: (TsClass) -> Unit = { node ->
+                    if (node.parent == null) {
+                        write("interface ${node.name} {\n")
+                    } else {
+                        write("interface ${node.name} extends ${node.parent.name} {\n")
                     }
-                }
-                write("}\n\n")
-            }
-
-            nodes.filterIsInstance<TsClass>().forEach(writeNode)
-
-            nodes.filterIsInstance<TsClass>().filter { it.parent != null }.forEach { node ->
-                // Writing instanceOf helpers
-
-                if (serialNames.containsKey(node.name)) {
-                    write("export function instanceOf${node.name}(object: ${node.parent!!.name}): object is ${node.name} {\n")
-                    write("\treturn object.type === \"${serialNames[node.name]}\";\n")
+                    node.fields.forEach { field ->
+                        when (field) {
+                            is TsField.TsInteger -> {
+                                val nl = " | undefined".takeIf { field.nullable } ?: ""
+                                write("\t${field.name}: number$nl;\n")
+                            }
+                            is TsField.TsString -> {
+                                val nl = " | undefined".takeIf { field.nullable } ?: ""
+                                write("\t${field.name}: string$nl;\n")
+                            }
+                            is TsField.TsObject -> {
+                                val nl = " | undefined".takeIf { field.nullable } ?: ""
+                                write("\t${field.name}: ${field.objectType}$nl;\n")
+                            }
+                            is TsField.TsList -> {
+                                write("\t${field.name}: ${field.fieldType.objectType}[];\n")
+                            }
+                            else -> {}
+                        }
+                    }
                     write("}\n\n")
                 }
-            }
 
-            nodes.filterIsInstance<TsEnum>().forEach {
-                write("enum ${it.name} {\n")
-                write(
-                    it.cases.map { case -> case.name + " = \"${case.name}\"" }
-                        .joinToString(",\n") { "    $it" }
-                )
-                write("\n}\n\n")
-            }
+                nodes.filterIsInstance<TsClass>().forEach(writeNode)
 
-            write("export type {\n")
-            nodes.map {
-                    when (it) {
-                        is TsClass -> it.name
-                        is TsEnum -> it.name
-                        else -> throw IllegalStateException()
+                nodes.filterIsInstance<TsClass>().filter { it.parent != null }.forEach { node ->
+                    // Writing instanceOf helpers
+
+                    if (serialNames.containsKey(node.name)) {
+                        write("export function instanceOf${node.name}(object: ${node.parent!!.name}): object is ${node.name} {\n")
+                        write("\treturn object.type === \"${serialNames[node.name]}\";\n")
+                        write("}\n\n")
                     }
                 }
-                .sorted()
-                .forEach {
-                    write("\t${it},\n")
-                }
-            write("}\n")
 
-            close()
-        }
+                nodes.filterIsInstance<TsEnum>().forEach {
+                    write("enum ${it.name} {\n")
+                    write(
+                        it.cases.map { case -> case.name + " = \"${case.name}\"" }
+                            .joinToString(",\n") { "    $it" }
+                    )
+                    write("\n}\n\n")
+                }
+
+                write("export type {\n")
+                nodes
+                    .map {
+                        when (it) {
+                            is TsClass -> it.name
+                            is TsEnum -> it.name
+                            else -> throw IllegalStateException()
+                        }
+                    }
+                    .sorted()
+                    .forEach {
+                        write("\t$it,\n")
+                    }
+                write("}\n")
+
+                close()
+            }
 
         return emptyList()
     }

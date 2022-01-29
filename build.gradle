@@ -35,7 +35,7 @@ task ktlint(type: JavaExec, group: "verification") {
     description = "Check Kotlin code style."
     main = "com.pinterest.ktlint.Main"
     classpath = configurations.ktlint
-    args "backend/**/src/**/*.kt", "android/**/src/**/*kt", "shared/**/src/**/*kt"
+    args "backend/**/src/**/*.kt", "android/**/src/**/*kt", "shared/**/src/**/*kt", "util/**/src/**/*kt"
 }
 check.dependsOn ktlint
 
@@ -43,7 +43,7 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
     description = "Fix Kotlin code style deviations."
     main = "com.pinterest.ktlint.Main"
     classpath = configurations.ktlint
-    args "-F", "backend/**/src/**/*.kt", "android/**/src/**/*kt", "shared/**/src/**/*kt"
+    args "-F", "backend/**/src/**/*.kt", "android/**/src/**/*kt", "shared/**/src/**/*kt", "util/**/src/**/*kt"
 }
 
 apply plugin: 'org.jetbrains.kotlin.jvm'
