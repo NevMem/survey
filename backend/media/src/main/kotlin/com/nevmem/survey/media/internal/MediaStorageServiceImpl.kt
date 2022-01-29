@@ -12,11 +12,11 @@ import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.S3Configuration
 import software.amazon.awssdk.services.s3.model.CreateBucketConfiguration
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import java.io.File
 import java.net.URI
-import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 private class MediaUrlCreator {
     fun createUrl(dto: MediaEntityDTO): String {
@@ -110,10 +110,12 @@ internal class MediaStorageServiceImpl : MediaStorageService {
     }
 
     override suspend fun downloadToFile(file: File, entity: MediaEntity) {
-        val response = client.getObject(GetObjectRequest.builder()
-            .bucket(bucketName)
-            .key(entity.filename)
-            .build())
+        val response = client.getObject(
+            GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(entity.filename)
+                .build()
+        )
         file.outputStream().apply {
             var readLen = 0
             val array = ByteArray(1024)
