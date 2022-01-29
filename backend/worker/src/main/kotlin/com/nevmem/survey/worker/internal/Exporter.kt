@@ -58,7 +58,7 @@ class Exporter : KoinComponent {
     }
 
     private fun SurveyAnswer.csvLine(): String {
-        return answers.map { answer ->
+        val answers = answers.map { answer ->
             when (answer) {
                 is QuestionAnswer.RatingQuestionAnswer -> {
                     answer.number
@@ -70,6 +70,8 @@ class Exporter : KoinComponent {
                     answer.stars
                 }
             }
-        }.joinToString(",") { it.toString() }
+        }
+
+        return (listOf(publisherId) + answers).joinToString(",") { it.toString() }
     }
 }

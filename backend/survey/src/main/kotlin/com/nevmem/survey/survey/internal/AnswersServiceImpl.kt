@@ -29,7 +29,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
 
     private val surveysService by inject<SurveysService>()
 
-    override suspend fun publishAnswer(answer: SurveyAnswer, publisherId: String) {
+    override suspend fun publishAnswer(answer: SurveyAnswer) {
         val survey = surveysService.survey(answer.surveyId) ?: throw SurveyNotFoundException()
         if (survey.questions.size + survey.commonQuestions.size != answer.answers.size) {
             throw SurveyAnswerInconsistencyException()
@@ -53,7 +53,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
 
         val count = transaction {
             SurveyAnswerDTO.find {
-                (SurveyAnswerTable.publisherId eq publisherId) and
+                (SurveyAnswerTable.publisherId eq answer.publisherId) and
                     (SurveyAnswerTable.surveyId eq answer.surveyId)
             }.count()
         }
@@ -146,7 +146,8 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
         return SurveyAnswer(
             surveyId = this.surveyId,
             gallery = null,
-            answers = this.answers.map { it.entity() }
+            answers = this.answers.map { it.entity() },
+            publisherId = this.publisherId,
         )
     }
 

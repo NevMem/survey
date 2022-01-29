@@ -17,7 +17,7 @@ private fun Route.answersImpl() {
 
     post("/publish") {
         val request = call.receive<PublishAnswerRequest>()
-        answersService.publishAnswer(request.answer, request.publisherId)
+        answersService.publishAnswer(request.answer)
         call.respond(PublishAnswerResponse(request.answer.surveyId))
     }
 
