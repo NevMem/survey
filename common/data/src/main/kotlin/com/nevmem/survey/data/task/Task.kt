@@ -5,6 +5,7 @@ import com.nevmem.survey.data.media.Media
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Exported
 enum class TaskState {
     Waiting,
     Executing,

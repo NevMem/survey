@@ -23,11 +23,22 @@ sealed class TsField {
     data class TsList(val name: String, val fieldType: TsListObject) : TsField()
 }
 
-data class TsNode(
-    val parent: TsNode?,
+interface TsNode
+
+data class TsClass(
+    val parent: TsClass?,
     val name: String,
     val fields: List<TsField>,
+) : TsNode
+
+data class TsEnumCase(
+    val name: String,
 )
+
+data class TsEnum(
+    val name: String,
+    val cases: List<TsEnumCase>
+) : TsNode
 
 class SurveySymbolProcessor(
     private val codeGenerator: CodeGenerator,
@@ -56,6 +67,9 @@ class SurveySymbolProcessor(
                     super.visitClassDeclaration(classDeclaration, data)
                     if (classDeclaration.getSealedSubclasses().toList().isNotEmpty()) {
                         acceptSealedClass(classDeclaration)
+                    } else if (classDeclaration.classKind == ClassKind.ENUM_CLASS) {
+                        logger.warn("Found enum class $classDeclaration")
+                        acceptEnumClass(classDeclaration)
                     } else {
                         acceptClass(classDeclaration)
                     }
@@ -97,7 +111,7 @@ class SurveySymbolProcessor(
         )
         .writer()
         .apply {
-            val writeNode: (TsNode) -> Unit = { node ->
+            val writeNode: (TsClass) -> Unit = { node ->
                 if (node.parent == null) {
                     write("interface ${node.name} {\n")
                 } else {
@@ -126,10 +140,9 @@ class SurveySymbolProcessor(
                 write("}\n\n")
             }
 
-            nodes.filter { it.parent == null }.forEach(writeNode)
-            nodes.filter { it.parent != null }.forEach(writeNode)
+            nodes.filterIsInstance<TsClass>().forEach(writeNode)
 
-            nodes.filter { it.parent != null }.forEach { node ->
+            nodes.filterIsInstance<TsClass>().filter { it.parent != null }.forEach { node ->
                 // Writing instanceOf helpers
 
                 if (serialNames.containsKey(node.name)) {
@@ -139,10 +152,27 @@ class SurveySymbolProcessor(
                 }
             }
 
-            write("export type {\n")
-            nodes.map { it.name }.sorted().forEach {
-                write("\t${it},\n")
+            nodes.filterIsInstance<TsEnum>().forEach {
+                write("enum ${it.name} {\n")
+                write(
+                    it.cases.map { case -> case.name + " = \"${case.name}\"" }
+                        .joinToString(",\n") { "    $it" }
+                )
+                write("\n}\n\n")
             }
+
+            write("export type {\n")
+            nodes.map {
+                    when (it) {
+                        is TsClass -> it.name
+                        is TsEnum -> it.name
+                        else -> throw IllegalStateException()
+                    }
+                }
+                .sorted()
+                .forEach {
+                    write("\t${it},\n")
+                }
             write("}\n")
 
             close()
@@ -153,14 +183,26 @@ class SurveySymbolProcessor(
 
     private fun acceptSealedClass(decl: KSClassDeclaration) {
         logger.warn("Found sealed class $decl")
-        val node = TsNode(null, decl.toString(), listOf(TsField.TsString("type")))
+        val node = TsClass(null, decl.toString(), listOf(TsField.TsString("type")))
         decl.getSealedSubclasses().forEach {
             acceptClass(it, node)
         }
         nodes.add(node)
     }
 
-    private fun acceptClass(decl: KSClassDeclaration, parent: TsNode? = null) {
+    private fun acceptEnumClass(decl: KSClassDeclaration) {
+        check(decl.classKind == ClassKind.ENUM_CLASS) { "Something went wrong" }
+
+        val cases = mutableListOf<TsEnumCase>()
+
+        decl.declarations.filterIsInstance<KSClassDeclaration>().forEach {
+            cases.add(TsEnumCase(it.simpleName.asString()))
+        }
+
+        nodes.add(TsEnum(decl.simpleName.asString(), cases))
+    }
+
+    private fun acceptClass(decl: KSClassDeclaration, parent: TsClass? = null) {
         logger.warn("Found usual class $decl")
         val fields = mutableListOf<TsField>()
         decl.getAllProperties().forEach {
@@ -181,7 +223,7 @@ class SurveySymbolProcessor(
                 }
             }
         }
-        val node = TsNode(parent, decl.toString(), fields)
+        val node = TsClass(parent, decl.toString(), fields)
         nodes.add(node)
     }
 }

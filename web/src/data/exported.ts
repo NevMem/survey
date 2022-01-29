@@ -1,8 +1,24 @@
+interface RatingQuestionAnswer extends QuestionAnswer {
+	number: number;
+	commonQuestionId: string | undefined;
+}
+
+interface TextQuestionAnswer extends QuestionAnswer {
+	text: string;
+	commonQuestionId: string | undefined;
+}
+
+interface StarsQuestionAnswer extends QuestionAnswer {
+	stars: number;
+	commonQuestionId: string | undefined;
+}
+
 interface QuestionAnswer {
 	type: string;
 }
 
 interface SurveyAnswer {
+	publisherId: string;
 	surveyId: string;
 	answers: QuestionAnswer[];
 	gallery: MediaGallery | undefined;
@@ -28,6 +44,22 @@ interface MediaGallery {
 
 interface CommonQuestion {
 	id: string;
+}
+
+interface RatingQuestion extends Question {
+	title: string;
+	min: number;
+	max: number;
+}
+
+interface StarsQuestion extends Question {
+	title: string;
+	stars: number;
+}
+
+interface TextQuestion extends Question {
+	title: string;
+	maxLength: number;
 }
 
 interface Question {
@@ -75,8 +107,28 @@ interface CreateExportDataTaskRequest {
 	surveyId: number;
 }
 
+interface LoadTaskRequest {
+	id: number;
+}
+
+interface LoginSuccessful extends LoginResponse {
+	token: string;
+}
+
+interface LoginError extends LoginResponse {
+	error: string;
+}
+
 interface LoginResponse {
 	type: string;
+}
+
+interface RegisterSuccessful extends RegisterResponse {
+	token: string;
+}
+
+interface RegisterError extends RegisterResponse {
+	message: string;
 }
 
 interface RegisterResponse {
@@ -85,6 +137,14 @@ interface RegisterResponse {
 
 interface ServerError {
 	message: string;
+}
+
+interface CreateInviteError extends CreateInviteResponse {
+	message: string;
+}
+
+interface CreateInviteSuccess extends CreateInviteResponse {
+	invite: Invite;
 }
 
 interface CreateInviteResponse {
@@ -110,6 +170,14 @@ interface UpdateRolesResponse {
 
 interface AllSurveysResponse {
 	surveys: Survey[];
+}
+
+interface CreateSurveySuccess extends CreateSurveyResponse {
+	survey: Survey;
+}
+
+interface CreateSurveyError extends CreateSurveyResponse {
+	message: string;
 }
 
 interface CreateSurveyResponse {
@@ -141,6 +209,7 @@ interface Task {
 	id: number;
 	state: TaskState;
 	log: TaskLog[];
+	outputs: Media[];
 }
 
 interface TaskLog {
@@ -156,69 +225,6 @@ interface User {
 	email: string;
 	roles: Role[];
 	allAvailableRoles: Role[];
-}
-
-interface RatingQuestionAnswer extends QuestionAnswer {
-	number: number;
-	commonQuestionId: string | undefined;
-}
-
-interface TextQuestionAnswer extends QuestionAnswer {
-	text: string;
-	commonQuestionId: string | undefined;
-}
-
-interface StarsQuestionAnswer extends QuestionAnswer {
-	stars: number;
-	commonQuestionId: string | undefined;
-}
-
-interface RatingQuestion extends Question {
-	title: string;
-	min: number;
-	max: number;
-}
-
-interface StarsQuestion extends Question {
-	title: string;
-	stars: number;
-}
-
-interface TextQuestion extends Question {
-	title: string;
-	maxLength: number;
-}
-
-interface LoginSuccessful extends LoginResponse {
-	token: string;
-}
-
-interface LoginError extends LoginResponse {
-	error: string;
-}
-
-interface RegisterSuccessful extends RegisterResponse {
-	token: string;
-}
-
-interface RegisterError extends RegisterResponse {
-	message: string;
-}
-
-interface CreateInviteError extends CreateInviteResponse {
-	message: string;
-}
-
-interface CreateInviteSuccess extends CreateInviteResponse {
-	invite: Invite;
-}
-
-interface CreateSurveySuccess extends CreateSurveyResponse {
-	survey: Survey;
-}
-
-interface CreateSurveyError extends CreateSurveyResponse {
-	message: string;
 }
 
 export function instanceOfRatingQuestionAnswer(object: QuestionAnswer): object is RatingQuestionAnswer {
@@ -277,6 +283,13 @@ export function instanceOfCreateSurveyError(object: CreateSurveyResponse): objec
 	return object.type === "error";
 }
 
+enum TaskState {
+    Waiting = "Waiting",
+    Executing = "Executing",
+    Success = "Success",
+    Error = "Error"
+}
+
 export type {
 	AllRolesResponse,
 	AllSurveysResponse,
@@ -295,6 +308,7 @@ export type {
 	Invite,
 	LoadSurveyMetadataRequest,
 	LoadSurveyMetadataResponse,
+	LoadTaskRequest,
 	LoginError,
 	LoginRequest,
 	LoginResponse,
@@ -319,6 +333,7 @@ export type {
 	SurveyMetadata,
 	Task,
 	TaskLog,
+	TaskState,
 	TextQuestion,
 	TextQuestionAnswer,
 	UpdateRolesRequest,
