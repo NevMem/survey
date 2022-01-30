@@ -290,6 +290,10 @@ enum TaskState {
     Error = "Error"
 }
 
+export {
+	TaskState,
+}
+
 export type {
 	AllRolesResponse,
 	AllSurveysResponse,
@@ -333,7 +337,6 @@ export type {
 	SurveyMetadata,
 	Task,
 	TaskLog,
-	TaskState,
 	TextQuestion,
 	TextQuestionAnswer,
 	UpdateRolesRequest,
