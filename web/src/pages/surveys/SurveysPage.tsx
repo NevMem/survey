@@ -69,7 +69,7 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
                 <Text>{props.provider.metadata?.filesCount}</Text>
             </SpaceBetweenRow>
             <SpaceBetweenReversedRow>
-                <GeneralButton onClick={gotoDownloadAnswers}>Выгрузить ответы</GeneralButton>
+                <GeneralButton disabled onClick={gotoDownloadAnswers}>Выгрузить ответы</GeneralButton>
             </SpaceBetweenReversedRow>
         </Fragment>
     );
@@ -78,6 +78,16 @@ const MetadataWrapper = observer((props: {provider: SurveyMetadataProvider}) => 
 const SurveyMetadataRenderer = (props: {survey: Survey}) => {
     return (
         <MetadataContainer>
+            {props.survey.commonQuestions.map((elem, index) => {
+                return (
+                    <Text key={index}>{JSON.stringify(elem)}</Text>
+                )
+            })}
+            {props.survey.questions.map((elem, index) => {
+                return (
+                    <Text key={index}>{JSON.stringify(elem)}</Text>
+                )
+            })}
             <MetadataWrapper provider={surveyMetadataService.createProvider(props.survey.id)} />
         </MetadataContainer>
     );
