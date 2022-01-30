@@ -20,7 +20,5 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: build core executable
-        run: ./gradlew :backend:core:build
       - name: testing
         run: cd backend && ./full_suit.sh
