@@ -4,5 +4,20 @@
         "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:8680aa6",
         "ports": [
         ]
+    },
+    "core": {
+        "tag": "core",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:204e9c5",
+        "ports": [
+            80,
+            443
+        ]
+    },
+    "metrics": {
+        "tag": "metrics",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:1d7d7a5",
+        "ports": [
+            9090
+        ]
     }
 }
