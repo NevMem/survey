@@ -3,15 +3,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'revisions.json'
-      - '.github/workflows/roll_core_update.yaml'
   pull_request:
     branches:
       - main
-    paths:
-      - 'revisions.json'
-      - '.github/workflows/roll_core_update.yaml'
 jobs:
   rolling_updates:
     name: Rolling everything updates
