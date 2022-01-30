@@ -1,6 +1,10 @@
 package com.nevmem.survey.env
 
 object EnvVars {
+    object Self {
+        val uri: String by lazy { env("SELF_URI") }
+    }
+
     object DataSource {
         val user: String by lazy { env("DB_USERNAME") }
         val password: String by lazy { env("DB_PASSWORD") }

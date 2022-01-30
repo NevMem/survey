@@ -43,6 +43,8 @@ ENV S3_ACCESS_KEY=accessKey1
 ENV S3_SECRET_ACCESS_KEY=verySecretKey1
 ENV S3_URI=http://s3local:8000
 
+ENV SELF_URI=http://localhost
+
 CMD ["./testing_runner.sh"]
 
 EXPOSE 80 443

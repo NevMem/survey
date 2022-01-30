@@ -30,9 +30,9 @@ def test_simple_task(client: Client):
     for _ in range(10):
         publisherId = random_string(12)
         response = client.publish_answer({
-            'publisherId': publisherId,
             'answer': {
                 'surveyId': surveyLiteral,
+                'publisherId': publisherId,
                 'answers': [
                     {
                         'type': 'stars',

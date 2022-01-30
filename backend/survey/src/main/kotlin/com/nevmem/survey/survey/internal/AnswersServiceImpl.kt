@@ -64,7 +64,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
 
         transaction {
             val surveyAnswer = SurveyAnswerDTO.new {
-                this.publisherId = publisherId
+                this.publisherId = answer.publisherId
                 this.surveyId = answer.surveyId
                 this.mediaGalleryId = answer.gallery?.id
             }

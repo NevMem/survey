@@ -20,7 +20,7 @@ import java.net.URI
 
 private class MediaUrlCreator {
     fun createUrl(dto: MediaEntityDTO): String {
-        return "${EnvVars.S3.s3Uri}/${dto.bucketName}/${dto.filename}"
+        return "${EnvVars.Self.uri}/v1/media/get/${dto.id.value}"
     }
 }
 
