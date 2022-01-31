@@ -4,6 +4,7 @@ import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
 import com.nevmem.survey.fs.FileSystemService
 import com.nevmem.survey.media.MediaStorageService
+import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.survey.AnswersService
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.task.ExportDataTaskEntity
@@ -33,12 +34,25 @@ class Exporter : KoinComponent {
 
             tasksService.appendLog(task, "Exporting answers")
 
-            val writer = file.bufferedWriter()
-            answers.forEach {
-                writer.write(it.csvLine() + "\n")
-                tasksService.appendLog(task, "Writed line: " + it.csvLine())
-            }
             withContext(Dispatchers.IO) {
+                val writer = file.bufferedWriter()
+
+                val headerLine =
+                    listOf("publisherId") +
+                    survey.commonQuestions.map { it.id } +
+                    survey.questions.map {
+                        when (it) {
+                            is QuestionEntity.StarsQuestionEntity -> it.title
+                            is QuestionEntity.TextQuestionEntity -> it.title
+                            is QuestionEntity.RatingQuestionEntity -> it.title
+                        }
+                    }
+
+                writer.write(headerLine.joinToString(","))
+                answers.forEach {
+                    writer.write(it.csvLine() + "\n")
+                    tasksService.appendLog(task, "Written line: " + it.csvLine())
+                }
                 writer.flush()
                 writer.close()
             }
