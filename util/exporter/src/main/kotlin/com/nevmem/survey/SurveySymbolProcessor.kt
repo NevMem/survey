@@ -161,12 +161,27 @@ class SurveySymbolProcessor(
                     write("\n}\n\n")
                 }
 
+                write("export {\n")
+                nodes
+                    .filter { it is TsEnum }
+                    .map {
+                        when (it) {
+                            is TsEnum -> it.name
+                            else -> throw IllegalStateException()
+                        }
+                    }
+                    .sorted()
+                    .forEach {
+                        write("\t$it,\n")
+                    }
+                write("}\n\n")
+
                 write("export type {\n")
                 nodes
+                    .filter { it is TsClass }
                     .map {
                         when (it) {
                             is TsClass -> it.name
-                            is TsEnum -> it.name
                             else -> throw IllegalStateException()
                         }
                     }
