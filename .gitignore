@@ -34,3 +34,5 @@ hs_err_pid*
 *.iml
 
 **/__pycache__/**
+
+local.properties

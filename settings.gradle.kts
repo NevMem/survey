@@ -28,3 +28,6 @@ include("backend:worker")
 include("common:data")
 include("util")
 include("util:exporter")
+
+include(":android")
+include(":android:app")
