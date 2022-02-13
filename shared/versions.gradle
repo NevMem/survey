@@ -1,4 +1,4 @@
-ext.gradlePluginVersion = '4.2.0'
+ext.gradlePluginVersion = '7.0.0'
 ext.globalCompileSdkVersion = 31
 ext.globalMinSdkVersion = 23
 ext.globalTargetSdkVersion = 31
