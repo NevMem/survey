@@ -13,6 +13,9 @@ android {
         applicationId "com.nevmem.survey"
         minSdkVersion globalMinSdkVersion
         targetSdkVersion globalTargetSdkVersion
+
+        versionCode 1
+        versionName "0.0.1"
     }
 
     signingConfigs {
