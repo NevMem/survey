@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: 11
       - name: Build android
-        run: ./gradlew android:app:asembleDebug
+        run: ./gradlew android:app:assembleDebug
       - uses: actions/upload-artifact@v2
         with:
           name: apks
