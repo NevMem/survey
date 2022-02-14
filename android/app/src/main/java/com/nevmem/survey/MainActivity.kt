@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.google.android.material.composethemeadapter3.Mdc3Theme
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +20,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SplashScreen()
+            Mdc3Theme {
+                SplashScreen()
+            }
         }
     }
 

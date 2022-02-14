@@ -11,7 +11,7 @@ class SurveyApplication : Application() {
         super.onCreate()
 
         startKoin {
-            androidLogger()
+//            androidLogger()
             androidContext(this@SurveyApplication)
             modules(createAppModule())
         }
