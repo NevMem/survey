@@ -4,10 +4,13 @@ import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.question.Question
 import com.nevmem.survey.data.request.survey.CreateSurveyRequest
 import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
+import com.nevmem.survey.data.request.survey.GetSurveyRequest
 import com.nevmem.survey.data.request.survey.LoadSurveyMetadataRequest
 import com.nevmem.survey.data.response.survey.AllSurveysResponse
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
+import com.nevmem.survey.data.response.survey.GetSurveyResponse
 import com.nevmem.survey.data.response.survey.LoadSurveyMetadataResponse
+import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.checkRoles
@@ -33,6 +36,18 @@ private fun Route.surveysImpl() {
     val surveysService by inject<SurveysService>()
     val surveysConverter by inject<SurveysConverter>()
     val surveysMetadataAssembler by inject<SurveysMetadataAssembler>()
+
+    post("/get") {
+        val request = call.receive<GetSurveyRequest>()
+        val survey = surveysService.survey(request.surveyId) ?: throw NotFoundException()
+        call.respond(
+            GetSurveyResponse(
+                surveysConverter.convertSurvey(
+                    survey
+                )
+            )
+        )
+    }
 
     authenticate {
         post("/create_survey") {

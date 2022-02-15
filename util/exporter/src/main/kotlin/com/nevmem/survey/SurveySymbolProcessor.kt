@@ -140,9 +140,9 @@ class SurveySymbolProcessor(
                     write("}\n\n")
                 }
 
-                nodes.filterIsInstance<TsClass>().forEach(writeNode)
+                nodes.filterIsInstance<TsClass>().sortedBy { it.name }.forEach(writeNode)
 
-                nodes.filterIsInstance<TsClass>().filter { it.parent != null }.forEach { node ->
+                nodes.filterIsInstance<TsClass>().sortedBy { it.name }.filter { it.parent != null }.forEach { node ->
                     // Writing instanceOf helpers
 
                     if (serialNames.containsKey(node.name)) {
@@ -152,7 +152,7 @@ class SurveySymbolProcessor(
                     }
                 }
 
-                nodes.filterIsInstance<TsEnum>().forEach {
+                nodes.filterIsInstance<TsEnum>().sortedBy { it.name }.forEach {
                     write("enum ${it.name} {\n")
                     write(
                         it.cases.map { case -> case.name + " = \"${case.name}\"" }

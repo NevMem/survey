@@ -1,33 +1,106 @@
-interface RatingQuestionAnswer extends QuestionAnswer {
-	number: number;
-	commonQuestionId: string | undefined;
+interface AllRolesResponse {
+	roles: Role[];
 }
 
-interface TextQuestionAnswer extends QuestionAnswer {
-	text: string;
-	commonQuestionId: string | undefined;
+interface AllSurveysResponse {
+	surveys: Survey[];
 }
 
-interface StarsQuestionAnswer extends QuestionAnswer {
-	stars: number;
-	commonQuestionId: string | undefined;
+interface CommonQuestion {
+	id: string;
 }
 
-interface QuestionAnswer {
+interface CreateExportDataTaskRequest {
+	surveyId: number;
+}
+
+interface CreateInviteError extends CreateInviteResponse {
+	message: string;
+}
+
+interface CreateInviteRequest {
+	expirationTimeSeconds: number;
+}
+
+interface CreateInviteResponse {
 	type: string;
 }
 
-interface SurveyAnswer {
-	publisherId: string;
+interface CreateInviteSuccess extends CreateInviteResponse {
+	invite: Invite;
+}
+
+interface CreateSurveyError extends CreateSurveyResponse {
+	message: string;
+}
+
+interface CreateSurveyRequest {
+	name: string;
+	questions: Question[];
+	commonQuestions: CommonQuestion[];
+}
+
+interface CreateSurveyResponse {
+	type: string;
+}
+
+interface CreateSurveySuccess extends CreateSurveyResponse {
+	survey: Survey;
+}
+
+interface DeleteSurveyRequest {
+	surveyId: number;
+}
+
+interface GetInvitesResponse {
+	invites: Invite[];
+}
+
+interface GetSurveyRequest {
 	surveyId: string;
-	answers: QuestionAnswer[];
-	gallery: MediaGallery | undefined;
+}
+
+interface GetSurveyResponse {
+	survey: Survey;
 }
 
 interface Invite {
 	inviteId: string;
 	acceptedBy: User | undefined;
 	isExpired: Boolean;
+}
+
+interface LoadSurveyMetadataRequest {
+	surveyId: number;
+}
+
+interface LoadSurveyMetadataResponse {
+	surveyMetadata: SurveyMetadata;
+}
+
+interface LoadTaskRequest {
+	id: number;
+}
+
+interface LoginError extends LoginResponse {
+	error: string;
+}
+
+interface LoginRequest {
+	login: string;
+	password: string;
+}
+
+interface LoginResponse {
+	type: string;
+}
+
+interface LoginSuccessful extends LoginResponse {
+	token: string;
+}
+
+interface ManagedUsersResponse {
+	users: User[];
 }
 
 interface Media {
@@ -42,8 +115,12 @@ interface MediaGallery {
 	gallery: Media[];
 }
 
-interface CommonQuestion {
-	id: string;
+interface Question {
+	type: string;
+}
+
+interface QuestionAnswer {
+	type: string;
 }
 
 interface RatingQuestion extends Question {
@@ -52,23 +129,13 @@ interface RatingQuestion extends Question {
 	max: number;
 }
 
-interface StarsQuestion extends Question {
-	title: string;
-	stars: number;
+interface RatingQuestionAnswer extends QuestionAnswer {
+	number: number;
+	commonQuestionId: string | undefined;
 }
 
-interface TextQuestion extends Question {
-	title: string;
-	maxLength: number;
-}
-
-interface Question {
-	type: string;
-}
-
-interface LoginRequest {
-	login: string;
-	password: string;
+interface RegisterError extends RegisterResponse {
+	message: string;
 }
 
 interface RegisterRequest {
@@ -80,46 +147,7 @@ interface RegisterRequest {
 	inviteId: string;
 }
 
-interface CreateInviteRequest {
-	expirationTimeSeconds: number;
-}
-
-interface UpdateRolesRequest {
-	user: User;
-	roles: Role[];
-}
-
-interface CreateSurveyRequest {
-	name: string;
-	questions: Question[];
-	commonQuestions: CommonQuestion[];
-}
-
-interface DeleteSurveyRequest {
-	surveyId: number;
-}
-
-interface LoadSurveyMetadataRequest {
-	surveyId: number;
-}
-
-interface CreateExportDataTaskRequest {
-	surveyId: number;
-}
-
-interface LoadTaskRequest {
-	id: number;
-}
-
-interface LoginSuccessful extends LoginResponse {
-	token: string;
-}
-
-interface LoginError extends LoginResponse {
-	error: string;
-}
-
-interface LoginResponse {
+interface RegisterResponse {
 	type: string;
 }
 
@@ -127,69 +155,22 @@ interface RegisterSuccessful extends RegisterResponse {
 	token: string;
 }
 
-interface RegisterError extends RegisterResponse {
-	message: string;
-}
-
-interface RegisterResponse {
-	type: string;
+interface Role {
+	id: string;
 }
 
 interface ServerError {
 	message: string;
 }
 
-interface CreateInviteError extends CreateInviteResponse {
-	message: string;
+interface StarsQuestion extends Question {
+	title: string;
+	stars: number;
 }
 
-interface CreateInviteSuccess extends CreateInviteResponse {
-	invite: Invite;
-}
-
-interface CreateInviteResponse {
-	type: string;
-}
-
-interface GetInvitesResponse {
-	invites: Invite[];
-}
-
-interface ManagedUsersResponse {
-	users: User[];
-}
-
-interface AllRolesResponse {
-	roles: Role[];
-}
-
-interface UpdateRolesResponse {
-	user: User;
-	roles: Role[];
-}
-
-interface AllSurveysResponse {
-	surveys: Survey[];
-}
-
-interface CreateSurveySuccess extends CreateSurveyResponse {
-	survey: Survey;
-}
-
-interface CreateSurveyError extends CreateSurveyResponse {
-	message: string;
-}
-
-interface CreateSurveyResponse {
-	type: string;
-}
-
-interface LoadSurveyMetadataResponse {
-	surveyMetadata: SurveyMetadata;
-}
-
-interface Role {
-	id: string;
+interface StarsQuestionAnswer extends QuestionAnswer {
+	stars: number;
+	commonQuestionId: string | undefined;
 }
 
 interface Survey {
@@ -198,6 +179,13 @@ interface Survey {
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
+}
+
+interface SurveyAnswer {
+	publisherId: string;
+	surveyId: string;
+	answers: QuestionAnswer[];
+	gallery: MediaGallery | undefined;
 }
 
 interface SurveyMetadata {
@@ -217,6 +205,26 @@ interface TaskLog {
 	timestamp: number;
 }
 
+interface TextQuestion extends Question {
+	title: string;
+	maxLength: number;
+}
+
+interface TextQuestionAnswer extends QuestionAnswer {
+	text: string;
+	commonQuestionId: string | undefined;
+}
+
+interface UpdateRolesRequest {
+	user: User;
+	roles: Role[];
+}
+
+interface UpdateRolesResponse {
+	user: User;
+	roles: Role[];
+}
+
 interface User {
 	id: number;
 	login: string;
@@ -227,46 +235,6 @@ interface User {
 	allAvailableRoles: Role[];
 }
 
-export function instanceOfRatingQuestionAnswer(object: QuestionAnswer): object is RatingQuestionAnswer {
-	return object.type === "rating";
-}
-
-export function instanceOfTextQuestionAnswer(object: QuestionAnswer): object is TextQuestionAnswer {
-	return object.type === "text";
-}
-
-export function instanceOfStarsQuestionAnswer(object: QuestionAnswer): object is StarsQuestionAnswer {
-	return object.type === "stars";
-}
-
-export function instanceOfRatingQuestion(object: Question): object is RatingQuestion {
-	return object.type === "rating";
-}
-
-export function instanceOfStarsQuestion(object: Question): object is StarsQuestion {
-	return object.type === "stars";
-}
-
-export function instanceOfTextQuestion(object: Question): object is TextQuestion {
-	return object.type === "text";
-}
-
-export function instanceOfLoginSuccessful(object: LoginResponse): object is LoginSuccessful {
-	return object.type === "success";
-}
-
-export function instanceOfLoginError(object: LoginResponse): object is LoginError {
-	return object.type === "error";
-}
-
-export function instanceOfRegisterSuccessful(object: RegisterResponse): object is RegisterSuccessful {
-	return object.type === "success";
-}
-
-export function instanceOfRegisterError(object: RegisterResponse): object is RegisterError {
-	return object.type === "error";
-}
-
 export function instanceOfCreateInviteError(object: CreateInviteResponse): object is CreateInviteError {
 	return object.type === "error";
 }
@@ -275,12 +243,52 @@ export function instanceOfCreateInviteSuccess(object: CreateInviteResponse): obj
 	return object.type === "success";
 }
 
+export function instanceOfCreateSurveyError(object: CreateSurveyResponse): object is CreateSurveyError {
+	return object.type === "error";
+}
+
 export function instanceOfCreateSurveySuccess(object: CreateSurveyResponse): object is CreateSurveySuccess {
 	return object.type === "success";
 }
 
-export function instanceOfCreateSurveyError(object: CreateSurveyResponse): object is CreateSurveyError {
+export function instanceOfLoginError(object: LoginResponse): object is LoginError {
 	return object.type === "error";
+}
+
+export function instanceOfLoginSuccessful(object: LoginResponse): object is LoginSuccessful {
+	return object.type === "success";
+}
+
+export function instanceOfRatingQuestion(object: Question): object is RatingQuestion {
+	return object.type === "rating";
+}
+
+export function instanceOfRatingQuestionAnswer(object: QuestionAnswer): object is RatingQuestionAnswer {
+	return object.type === "rating";
+}
+
+export function instanceOfRegisterError(object: RegisterResponse): object is RegisterError {
+	return object.type === "error";
+}
+
+export function instanceOfRegisterSuccessful(object: RegisterResponse): object is RegisterSuccessful {
+	return object.type === "success";
+}
+
+export function instanceOfStarsQuestion(object: Question): object is StarsQuestion {
+	return object.type === "stars";
+}
+
+export function instanceOfStarsQuestionAnswer(object: QuestionAnswer): object is StarsQuestionAnswer {
+	return object.type === "stars";
+}
+
+export function instanceOfTextQuestion(object: Question): object is TextQuestion {
+	return object.type === "text";
+}
+
+export function instanceOfTextQuestionAnswer(object: QuestionAnswer): object is TextQuestionAnswer {
+	return object.type === "text";
 }
 
 enum TaskState {
@@ -309,6 +317,8 @@ export type {
 	CreateSurveySuccess,
 	DeleteSurveyRequest,
 	GetInvitesResponse,
+	GetSurveyRequest,
+	GetSurveyResponse,
 	Invite,
 	LoadSurveyMetadataRequest,
 	LoadSurveyMetadataResponse,

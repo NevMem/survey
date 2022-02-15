@@ -3,16 +3,12 @@ package com.nevmem.survey
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.android.material.composethemeadapter3.Mdc3Theme
-
+import com.nevmem.survey.ui.home.HomeScreen
+import com.nevmem.survey.ui.splash.SplashScreen
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,21 +17,12 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             Mdc3Theme {
-                SplashScreen()
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "splash") {
+                    composable("splash") { SplashScreen(navController) }
+                    composable("home") { HomeScreen() }
+                }
             }
         }
-    }
-
-    @Composable
-    private fun SplashScreen() {
-        Text(
-            text = "Ethnosurvey",
-            style = MaterialTheme.typography.h3,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .wrapContentWidth()
-                .wrapContentHeight()
-        )
     }
 }

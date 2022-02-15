@@ -31,3 +31,4 @@ include("util:exporter")
 
 include(":android")
 include(":android:app")
+include(":android:network")
