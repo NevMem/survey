@@ -3,6 +3,8 @@ package com.nevmem.survey
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,10 +19,13 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             Mdc3Theme {
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "splash") {
-                    composable("splash") { SplashScreen(navController) }
-                    composable("home") { HomeScreen() }
+                val scaffoldState = rememberScaffoldState()
+                Scaffold(scaffoldState = scaffoldState) {
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "splash") {
+                        composable("splash") { SplashScreen(navController) }
+                        composable("home") { HomeScreen(scaffoldState) }
+                    }
                 }
             }
         }

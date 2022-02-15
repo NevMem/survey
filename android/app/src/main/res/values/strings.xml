@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Ethnosurvey</string>
+
+    <string name="enter_survey_id">Введите идентификатор опроса чтобы начать</string>
+    <string name="survey_id_label">Идентификатор опроса</string>
 </resources>

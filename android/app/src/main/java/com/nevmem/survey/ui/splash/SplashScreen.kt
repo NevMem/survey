@@ -24,7 +24,7 @@ fun SplashScreen(navController: NavController) {
             .wrapContentHeight()
     )
     LaunchedEffect(null) {
-        delay(1500L)
+        delay(150L)
         navController.navigate("home")
     }
 }
