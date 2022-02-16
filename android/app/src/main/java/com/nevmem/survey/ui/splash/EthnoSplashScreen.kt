@@ -10,10 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import kotlinx.coroutines.delay
+import org.koin.androidx.compose.viewModel
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun EthnoSplashScreen(navController: NavController) {
+
+    val viewModel: EthnoSplashScreenViewModel by viewModel()
+
     Text(
         text = "Ethnosurvey",
         style = MaterialTheme.typography.h3,
@@ -23,8 +26,11 @@ fun SplashScreen(navController: NavController) {
             .wrapContentWidth()
             .wrapContentHeight()
     )
-    LaunchedEffect(null) {
-        delay(150L)
-        navController.navigate("home")
+    LaunchedEffect(viewModel.destination.value) {
+        if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Join) {
+            navController.navigate("join")
+        } else if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Home) {
+            navController.navigate("home")
+        }
     }
 }

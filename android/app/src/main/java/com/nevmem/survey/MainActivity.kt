@@ -10,7 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.material.composethemeadapter3.Mdc3Theme
 import com.nevmem.survey.ui.home.HomeScreen
-import com.nevmem.survey.ui.splash.SplashScreen
+import com.nevmem.survey.ui.join.JoinScreen
+import com.nevmem.survey.ui.splash.EthnoSplashScreen
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,8 +24,9 @@ class MainActivity : AppCompatActivity() {
                 Scaffold(scaffoldState = scaffoldState) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "splash") {
-                        composable("splash") { SplashScreen(navController) }
-                        composable("home") { HomeScreen(scaffoldState) }
+                        composable("splash") { EthnoSplashScreen(navController) }
+                        composable("join") { JoinScreen(navController, scaffoldState) }
+                        composable("home") { HomeScreen() }
                     }
                 }
             }

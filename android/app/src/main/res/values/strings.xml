@@ -4,4 +4,6 @@
 
     <string name="enter_survey_id">Введите идентификатор опроса чтобы начать</string>
     <string name="survey_id_label">Идентификатор опроса</string>
+
+    <string name="home_survey_id">Идентификатор опроса:</string>
 </resources>

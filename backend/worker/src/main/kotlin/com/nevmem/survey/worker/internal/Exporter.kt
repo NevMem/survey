@@ -39,14 +39,14 @@ class Exporter : KoinComponent {
 
                 val headerLine =
                     listOf("publisherId") +
-                    survey.commonQuestions.map { it.id } +
-                    survey.questions.map {
-                        when (it) {
-                            is QuestionEntity.StarsQuestionEntity -> it.title
-                            is QuestionEntity.TextQuestionEntity -> it.title
-                            is QuestionEntity.RatingQuestionEntity -> it.title
+                        survey.commonQuestions.map { it.id } +
+                        survey.questions.map {
+                            when (it) {
+                                is QuestionEntity.StarsQuestionEntity -> it.title
+                                is QuestionEntity.TextQuestionEntity -> it.title
+                                is QuestionEntity.RatingQuestionEntity -> it.title
+                            }
                         }
-                    }
 
                 writer.write(headerLine.joinToString(",") + "\n")
                 answers.forEach {

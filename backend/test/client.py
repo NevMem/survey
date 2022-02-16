@@ -83,6 +83,9 @@ class Client:
     def tasks(self, token):
         return self._get('/v1/task/tasks', headers={'Authorization': 'Bearer ' + token})
 
+    def get_survey(self, survey_id):
+        return self._post('/v1/survey/get', {'surveyId': survey_id})
+
     def task(self, token, id):
         return self._post('/v1/task/task', {'id': id}, headers={'Authorization': 'Bearer ' + token})
 
