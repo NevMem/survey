@@ -7,7 +7,7 @@
     },
     "core": {
         "tag": "core",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:204e9c5",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:480d698",
         "ports": [
             80,
             443
