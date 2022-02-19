@@ -24,6 +24,8 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,15 +42,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nevmem.survey.R
+import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.util.getText
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.viewModel
 
 @ExperimentalComposeUiApi
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    scaffoldState: ScaffoldState,
+) {
     val viewModel: HomeScreenViewModel by viewModel()
 
     val survey = viewModel.survey.value
+
+    var currentAnswer: QuestionAnswer? by rememberSaveable { mutableStateOf(null) }
+    val setCurrentAnswer = { answer: QuestionAnswer ->
+        currentAnswer = answer
+    }
+
+    val needAnswerMessage = getText(id = R.string.wait_for_answer)
+    val moveNext = {
+        if (currentAnswer == null) {
+            GlobalScope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(needAnswerMessage)
+            }
+        } else {
+            viewModel.next(currentAnswer!!)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -76,7 +99,10 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
         ) {
-            HomeScreenItemImpl(item = viewModel.currentItem.value)
+            HomeScreenItemImpl(
+                item = viewModel.currentItem.value,
+                setCurrentAnswer = setCurrentAnswer,
+            )
         }
 
         Row(
@@ -88,7 +114,7 @@ fun HomeScreen() {
             OutlinedButton(onClick = { viewModel.previous() }) {
                 Text(getText(id = R.string.previous), modifier = Modifier.padding(4.dp))
             }
-            Button(onClick = { viewModel.next() }) {
+            Button(onClick = { moveNext() }) {
                 Text(getText(id = R.string.next), modifier = Modifier.padding(4.dp))
             }
         }
@@ -97,44 +123,98 @@ fun HomeScreen() {
 
 @ExperimentalComposeUiApi
 @Composable
-private fun HomeScreenItemImpl(item: HomeScreenItem) {
+private fun HomeScreenItemImpl(
+    item: HomeScreenItem,
+    setCurrentAnswer: (QuestionAnswer) -> Unit,
+) {
     when (item) {
-        is RatingQuestion -> {
-            QuestionCard {
-                Column {
-                    Text(
-                        item.title,
-                        style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    Text(
-                        item.min.toString(),
-                        style = MaterialTheme.typography.body2,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    Text(
-                        item.max.toString(),
-                        style = MaterialTheme.typography.body2,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+        is RatingQuestion -> { RatingQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
+        is TextQuestion -> { TextQuestionImpl(item = item) }
+        is StarsQuestion -> { StarsQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
+    }
+}
+
+@Composable
+fun RatingQuestionImpl(
+    item: RatingQuestion,
+    setCurrentAnswer: (QuestionAnswer) -> Unit,
+) {
+    var sliderValue by rememberSaveable { mutableStateOf(item.min.toFloat()) }
+    QuestionCard {
+        Column {
+            Text(
+                item.title,
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier.padding(8.dp),
+            )
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    item.min.toString(),
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.padding(8.dp),
+                )
+                Slider(
+                    value = sliderValue,
+                    onValueChange = {
+                        sliderValue = it
+                        setCurrentAnswer(QuestionAnswer.RatingQuestionAnswer(it.toInt()))
+                    },
+                    steps = item.max - item.min - 1,
+                    valueRange = item.min.toFloat()..item.max.toFloat(),
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    item.max.toString(),
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.padding(8.dp),
+                )
             }
         }
-        is TextQuestion -> { TextQuestionImpl(item = item) }
-        is StarsQuestion -> {
-            QuestionCard {
-                Column {
-                    Text(
-                        item.title,
-                        style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    Text(
-                        item.stars.toString(),
-                        style = MaterialTheme.typography.body2,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
+    }
+}
+
+@Composable
+fun StarsQuestionImpl(
+    item: StarsQuestion,
+    setCurrentAnswer: (QuestionAnswer) -> Unit,
+) {
+    var sliderValue by rememberSaveable { mutableStateOf((item.stars / 2 + 1).toFloat()) }
+    QuestionCard {
+        Column {
+            Text(
+                item.title,
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier.padding(8.dp)
+            )
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    "1",
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.padding(8.dp),
+                )
+                Slider(
+                    value = sliderValue,
+                    onValueChange = {
+                        sliderValue = it
+                        setCurrentAnswer(QuestionAnswer.RatingQuestionAnswer(it.toInt()))
+                    },
+                    steps = item.stars - 2,
+                    valueRange = 1f..item.stars.toFloat(),
+                    modifier = Modifier.weight(1f),
+                )
+                Text(
+                    item.stars.toString(),
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.padding(8.dp),
+                )
             }
         }
     }
@@ -153,7 +233,7 @@ fun TextQuestionImpl(item: TextQuestion) {
         Column(modifier = Modifier) {
             Text(
                 item.title,
-                style = MaterialTheme.typography.subtitle1,
+                style = MaterialTheme.typography.h5,
                 overflow = TextOverflow.Visible,
             )
             OutlinedTextField(

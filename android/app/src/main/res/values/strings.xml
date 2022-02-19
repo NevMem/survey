@@ -9,4 +9,6 @@
 
     <string name="next">Следующий</string>
     <string name="previous">Предыдущий</string>
+
+    <string name="wait_for_answer">Пожалуйста ответьте на вопрос</string>
 </resources>

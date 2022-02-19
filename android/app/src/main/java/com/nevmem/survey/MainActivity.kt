@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                     NavHost(navController = navController, startDestination = "splash") {
                         composable("splash") { EthnoSplashScreen(navController) }
                         composable("join") { JoinScreen(navController, scaffoldState) }
-                        composable("home") { HomeScreen() }
+                        composable("home") { HomeScreen(scaffoldState) }
                     }
                 }
             }
