@@ -1,19 +1,13 @@
 package com.nevmem.survey.ui.home
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -70,6 +64,7 @@ fun HomeScreen(
             }
         } else {
             viewModel.next(currentAnswer!!)
+            currentAnswer = null
         }
     }
 
@@ -129,7 +124,7 @@ private fun HomeScreenItemImpl(
 ) {
     when (item) {
         is RatingQuestion -> { RatingQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
-        is TextQuestion -> { TextQuestionImpl(item = item) }
+        is TextQuestion -> { TextQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is StarsQuestion -> { StarsQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
     }
 }
@@ -222,7 +217,10 @@ fun StarsQuestionImpl(
 
 @ExperimentalComposeUiApi
 @Composable
-fun TextQuestionImpl(item: TextQuestion) {
+fun TextQuestionImpl(
+    item: TextQuestion,
+    setCurrentAnswer: (QuestionAnswer) -> Unit,
+) {
     var text by rememberSaveable { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -244,6 +242,7 @@ fun TextQuestionImpl(item: TextQuestion) {
                 onValueChange = {
                     if (it.length <= item.maxLength) {
                         text = it
+                        setCurrentAnswer(QuestionAnswer.TextQuestionAnswer(text))
                     }
                 },
                 keyboardActions = KeyboardActions(onDone = { keyboardController?.hide(); focusManager.clearFocus() }),
