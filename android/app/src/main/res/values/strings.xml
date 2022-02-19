@@ -6,4 +6,7 @@
     <string name="survey_id_label">Идентификатор опроса</string>
 
     <string name="home_survey_id">Идентификатор опроса:</string>
+
+    <string name="next">Следующий</string>
+    <string name="previous">Предыдущий</string>
 </resources>
