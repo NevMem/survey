@@ -9,19 +9,19 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.android.material.composethemeadapter3.Mdc3Theme
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.nevmem.survey.ui.home.HomeScreen
 import com.nevmem.survey.ui.join.JoinScreen
 import com.nevmem.survey.ui.splash.EthnoSplashScreen
 
+@ExperimentalComposeUiApi
 class MainActivity : AppCompatActivity() {
 
-    @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Mdc3Theme {
+            MdcTheme {
                 val scaffoldState = rememberScaffoldState()
                 Scaffold(scaffoldState = scaffoldState) {
                     val navController = rememberNavController()
