@@ -45,16 +45,17 @@ internal class NetworkServiceImpl : NetworkService {
         publisherId: String,
         answers: List<QuestionAnswer>
     ) {
+        val request = PublishAnswerRequest(
+            answer = SurveyAnswer(
+                publisherId = publisherId,
+                surveyId = surveyId,
+                answers = answers,
+                gallery = null,
+            ),
+        )
         post<PublishAnswerRequest, PublishAnswerResponse>(
             "$baseUrl/v1/answers/publish",
-            PublishAnswerRequest(
-                answer = SurveyAnswer(
-                    publisherId = publisherId,
-                    surveyId = surveyId,
-                    answers = answers,
-                    gallery = null,
-                ),
-            )
+            request,
         )
     }
 

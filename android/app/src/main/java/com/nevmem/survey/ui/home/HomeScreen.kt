@@ -300,7 +300,7 @@ private fun StarsQuestionImpl(
                     value = sliderValue,
                     onValueChange = {
                         sliderValue = it
-                        setCurrentAnswer(QuestionAnswer.RatingQuestionAnswer(it.toInt()))
+                        setCurrentAnswer(QuestionAnswer.StarsQuestionAnswer(it.toInt()))
                     },
                     steps = item.stars - 2,
                     valueRange = 1f..item.stars.toFloat(),
