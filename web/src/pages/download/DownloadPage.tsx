@@ -190,13 +190,10 @@ const PollingTaskView = (props: {task: Task}) => {
             return backendApi.loadTask({id: props.task.id}, controller);
         },
         (state: PollingState) => {
-            if (state instanceof PollingError) {
-                return false;
-            }
             if (state instanceof PollingSuccess && state.result.state == TaskState.Success) {
                 return true;
             }
-            return true;
+            return false;
         }
     );
 
@@ -249,6 +246,7 @@ const ExportTaskBlock = (props: {survey: Survey}) => {
 
 const SurveyDownloadDataBlock = (props: {survey?: Survey}) => {
     const [download, setDownload] = useState(false);
+    const [requestIndex, setRequestIndex] = useState(0);
 
     if (!props.survey) {
         return null;
@@ -257,6 +255,7 @@ const SurveyDownloadDataBlock = (props: {survey?: Survey}) => {
     const { survey } = props;
 
     const startDownloading = () => {
+        setRequestIndex(requestIndex + 1);
         setDownload(true);
     };
 
@@ -265,7 +264,7 @@ const SurveyDownloadDataBlock = (props: {survey?: Survey}) => {
             <SpaceAroundRow>
                 <GeneralButton onClick={startDownloading}>Выгрузить</GeneralButton>
             </SpaceAroundRow>
-            {download && <ExportTaskBlock survey={survey} />}
+            {download && <ExportTaskBlock survey={survey} key={requestIndex} />}
         </Card>
     );
 };

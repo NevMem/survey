@@ -50,7 +50,7 @@ function usePollingRequest<T>(
 
     useEffect(() => {
         const id = setInterval(() => {
-            setRequestIndex(requestIndex + 1);
+            setRequestIndex((index) => index + 1);
         }, 1000);
         setIntervalId(id);
         return () => {
