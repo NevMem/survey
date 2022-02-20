@@ -8,8 +8,12 @@
     <string name="home_survey_id">Идентификатор опроса:</string>
 
     <string name="next">Следующий</string>
+    <string name="retry">Попробовать еще раз</string>
     <string name="send">Отправить</string>
     <string name="previous">Предыдущий</string>
 
     <string name="wait_for_answer">Пожалуйста ответьте на вопрос</string>
+
+    <string name="sending_answers_failed">Произошла ошибка</string>
+    <string name="sending_answers_failed_description">Мы уже работаем над её исправлением</string>
 </resources>

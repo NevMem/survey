@@ -1,7 +1,11 @@
 package com.nevmem.survey.internal
 
 import com.nevmem.survey.api.NetworkService
+import com.nevmem.survey.data.answer.QuestionAnswer
+import com.nevmem.survey.data.answer.SurveyAnswer
+import com.nevmem.survey.data.request.answer.PublishAnswerRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
+import com.nevmem.survey.data.response.answer.PublishAnswerResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
 import com.nevmem.survey.data.survey.Survey
 import io.ktor.client.HttpClient
@@ -34,5 +38,30 @@ internal class NetworkServiceImpl : NetworkService {
             contentType(ContentType.Application.Json)
             body = GetSurveyRequest(surveyId)
         }.survey
+    }
+
+    override suspend fun sendSurvey(
+        surveyId: String,
+        publisherId: String,
+        answers: List<QuestionAnswer>
+    ) {
+        post<PublishAnswerRequest, PublishAnswerResponse>(
+            "$baseUrl/v1/answers/publish",
+            PublishAnswerRequest(
+                answer = SurveyAnswer(
+                    publisherId = publisherId,
+                    surveyId = surveyId,
+                    answers = answers,
+                    gallery = null,
+                ),
+            )
+        )
+    }
+
+    private suspend inline fun<U : Any, reified T : Any> post(url: String, data: U): T {
+        return client.post(url) {
+            contentType(ContentType.Application.Json)
+            body = data
+        }
     }
 }

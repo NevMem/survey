@@ -3,6 +3,7 @@ package com.nevmem.survey.di
 import android.content.Context
 import com.nevmem.survey.api.createNetworkService
 import com.nevmem.survey.service.preferences.PreferencesService
+import com.nevmem.survey.service.publisher.PublisherIdProvider
 import com.nevmem.survey.service.survey.SurveyService
 import com.nevmem.survey.ui.home.HomeScreenViewModel
 import com.nevmem.survey.ui.join.JoinScreenViewModel
@@ -23,9 +24,10 @@ fun createAppModule(context: Context) = module {
 
     single { context.getSharedPreferences("storage", Context.MODE_PRIVATE) }
     single { PreferencesService(get()) }
-    single { SurveyService(get()) }
+    single { SurveyService(get(), get(), get()) }
+    single { PublisherIdProvider() }
 
     viewModel { JoinScreenViewModel(get(), get()) }
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
-    viewModel { HomeScreenViewModel(get()) }
+    viewModel { HomeScreenViewModel(get(), get(named("background"))) }
 }

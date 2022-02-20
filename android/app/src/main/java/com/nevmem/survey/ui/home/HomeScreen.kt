@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -68,6 +69,17 @@ fun HomeScreen(
         }
     }
 
+    val send: () -> Unit = {
+        if (currentAnswer == null) {
+            GlobalScope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(needAnswerMessage)
+            }
+        } else {
+            viewModel.dispatch(HomeScreenAction.Send(currentAnswer!!))
+            currentAnswer = null
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -80,14 +92,6 @@ fun HomeScreen(
                 Text(survey.name, style = MaterialTheme.typography.h5)
             }
 
-//            Text("${viewModel.progress.value + 1} / ${survey.questions.size}")
-//
-//            LinearProgressIndicator(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp, top = 8.dp),
-//                progress = (viewModel.progress.value.toFloat() + 1) / survey.questions.size,
-//            )
             HomeScreenProgressBar(viewModel.uiState.value)
         }
 
@@ -101,34 +105,23 @@ fun HomeScreen(
             )
         }
 
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp),
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//        ) {
-//            OutlinedButton(onClick = { viewModel.previous() }) {
-//                Text(getText(id = R.string.previous), modifier = Modifier.padding(4.dp))
-//            }
-//            Button(onClick = { moveNext() }) {
-//                Text(getText(id = R.string.next), modifier = Modifier.padding(4.dp))
-//            }
-//        }
         ActionsRow(
             actions = viewModel.uiState.value.actions,
             moveNext = moveNext,
-            movePrev = {},
-            send = { viewModel.dispatch(HomeScreenAction.Send) }
+            movePrev = { viewModel.dispatch(HomeScreenAction.Previous) },
+            send = send,
+            retry = { viewModel.dispatch(HomeScreenAction.Retry) }
         )
     }
 }
 
 @Composable
-fun ActionsRow(
+private fun ActionsRow(
     actions: List<HomeScreenActionType>,
     moveNext: () -> Unit,
     movePrev: () -> Unit,
     send: () -> Unit,
+    retry: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -141,34 +134,42 @@ fun ActionsRow(
                 HomeScreenActionType.Next -> NextAction(moveNext = moveNext)
                 HomeScreenActionType.Send -> SendAction(send = send)
                 HomeScreenActionType.Previous -> PrevAction(movePrev = movePrev)
+                HomeScreenActionType.Retry -> RetryAction(retry = retry)
             }
         }
     }
 }
 
 @Composable
-fun NextAction(moveNext: () -> Unit) {
+private fun NextAction(moveNext: () -> Unit) {
     Button(onClick = { moveNext() }) {
         Text(getText(id = R.string.next), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
     }
 }
 
 @Composable
-fun PrevAction(movePrev: () -> Unit) {
+private fun PrevAction(movePrev: () -> Unit) {
     OutlinedButton(onClick = { movePrev() }) {
         Text(getText(id = R.string.previous), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
     }
 }
 
 @Composable
-fun SendAction(send: () -> Unit) {
+private fun SendAction(send: () -> Unit) {
     Button(onClick = { send() }) {
         Text(getText(id = R.string.send), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
     }
 }
 
 @Composable
-fun HomeScreenProgressBar(uiState: HomeScreenUiState) {
+private fun RetryAction(retry: () -> Unit) {
+    Button(onClick = { retry() }) {
+        Text(getText(id = R.string.retry), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+    }
+}
+
+@Composable
+private fun HomeScreenProgressBar(uiState: HomeScreenUiState) {
     if (uiState.progress is ProgressState.ActualProgress) {
         Text("${uiState.progress.progress} / ${uiState.progress.outOf}")
 
@@ -191,11 +192,46 @@ private fun HomeScreenItemImpl(
         is RatingQuestion -> { RatingQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is TextQuestion -> { TextQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is StarsQuestion -> { StarsQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
+        else -> { SendingView(item = item) }
     }
 }
 
 @Composable
-fun RatingQuestionImpl(
+private fun SendingView(item: HomeScreenItem) {
+    QuestionCard {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            when (item) {
+                SendingAnswers.Sending -> {
+                    CircularProgressIndicator()
+                }
+                is SendingAnswers.Error -> {
+                    Column {
+                        Text(
+                            getText(id = R.string.sending_answers_failed),
+                            style = MaterialTheme.typography.h4,
+                        )
+                        Text(
+                            getText(id = R.string.sending_answers_failed_description),
+                            modifier = Modifier.padding(top = 12.dp),
+                            style = MaterialTheme.typography.subtitle2,
+                        )
+                        Text(
+                            item.message,
+                            modifier = Modifier.padding(top = 8.dp),
+                        )
+                    }
+                }
+                SendingAnswers.Success -> {
+                    Text("Success")
+                }
+                else -> throw IllegalStateException()
+            }
+        }
+    }
+}
+
+@Composable
+private fun RatingQuestionImpl(
     item: RatingQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
@@ -238,7 +274,7 @@ fun RatingQuestionImpl(
 }
 
 @Composable
-fun StarsQuestionImpl(
+private fun StarsQuestionImpl(
     item: StarsQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
@@ -282,7 +318,7 @@ fun StarsQuestionImpl(
 
 @ExperimentalComposeUiApi
 @Composable
-fun TextQuestionImpl(
+private fun TextQuestionImpl(
     item: TextQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
@@ -324,7 +360,7 @@ fun TextQuestionImpl(
 }
 
 @Composable
-fun QuestionCard(content: @Composable () -> Unit) {
+private fun QuestionCard(content: @Composable () -> Unit) {
     Card(
         modifier = Modifier
             .padding(16.dp)

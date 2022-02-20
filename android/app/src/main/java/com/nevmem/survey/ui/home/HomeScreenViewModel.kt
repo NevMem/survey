@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.question.Question
 import com.nevmem.survey.service.survey.SurveyService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 sealed class ProgressState {
     data class ActualProgress(val progress: Int, val outOf: Int) : ProgressState() {
@@ -15,13 +19,14 @@ sealed class ProgressState {
 }
 
 enum class HomeScreenActionType {
-    Next, Previous, Send,
+    Next, Previous, Send, Retry,
 }
 
 sealed class HomeScreenAction {
     data class Next(val answer: QuestionAnswer) : HomeScreenAction()
     object Previous : HomeScreenAction()
-    object Send : HomeScreenAction()
+    data class Send(val answer: QuestionAnswer) : HomeScreenAction()
+    object Retry : HomeScreenAction()
 }
 
 data class HomeScreenUiState(
@@ -31,7 +36,8 @@ data class HomeScreenUiState(
 )
 
 class HomeScreenViewModel(
-    surveyService: SurveyService,
+    private val surveyService: SurveyService,
+    private val background: CoroutineScope,
 ) : ViewModel() {
     val survey = mutableStateOf(surveyService.survey)
 
@@ -50,6 +56,8 @@ class HomeScreenViewModel(
         answers[questionIndex] = answer
         questionIndex += 1
 
+        assert(questionIndex in survey.value.questions.indices)
+
         if (questionIndex in survey.value.questions.indices) {
             uiState.value = HomeScreenUiState(
                 currentItem = survey.value.questions[questionIndex].buildItem(),
@@ -62,18 +70,47 @@ class HomeScreenViewModel(
                         HomeScreenActionType.Send,
                 )
             )
-        } else {
-            uiState.value = HomeScreenUiState(
-                currentItem = SendingAnswers.Sending,
-                progress = ProgressState.None,
-                actions = emptyList(),
-            )
+        }
+    }
+
+    private fun send(answer: QuestionAnswer) {
+        answers[questionIndex] = answer
+        sendImpl()
+    }
+
+    private fun sendImpl() {
+        uiState.value = HomeScreenUiState(
+            currentItem = SendingAnswers.Sending,
+            progress = ProgressState.None,
+            actions = emptyList(),
+        )
+        background.launch {
+            try {
+                surveyService.sendAnswer(answers.map { it!! })
+                withContext(Dispatchers.Main) {
+                    uiState.value = HomeScreenUiState(
+                        currentItem = SendingAnswers.Success,
+                        progress = ProgressState.None,
+                        actions = emptyList(),
+                    )
+                }
+            } catch (exception: Exception) {
+                withContext(Dispatchers.Main) {
+                    uiState.value = HomeScreenUiState(
+                        currentItem = SendingAnswers.Error(exception.message ?: ""),
+                        progress = ProgressState.None,
+                        actions = listOf(HomeScreenActionType.Retry),
+                    )
+                }
+            }
         }
     }
 
     fun dispatch(action: HomeScreenAction) {
         when (action) {
             is HomeScreenAction.Next -> next(action.answer)
+            is HomeScreenAction.Send -> send(action.answer)
+            is HomeScreenAction.Retry -> sendImpl()
         }
     }
 
