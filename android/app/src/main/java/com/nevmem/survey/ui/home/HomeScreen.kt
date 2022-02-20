@@ -57,13 +57,13 @@ fun HomeScreen(
     }
 
     val needAnswerMessage = getText(id = R.string.wait_for_answer)
-    val moveNext = {
+    val moveNext: () -> Unit = {
         if (currentAnswer == null) {
             GlobalScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(needAnswerMessage)
             }
         } else {
-            viewModel.next(currentAnswer!!)
+            viewModel.dispatch(HomeScreenAction.Next(currentAnswer!!))
             currentAnswer = null
         }
     }
@@ -80,14 +80,15 @@ fun HomeScreen(
                 Text(survey.name, style = MaterialTheme.typography.h5)
             }
 
-            Text("${viewModel.progress.value + 1} / ${survey.questions.size}")
-
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp, top = 8.dp),
-                progress = (viewModel.progress.value.toFloat() + 1) / survey.questions.size,
-            )
+//            Text("${viewModel.progress.value + 1} / ${survey.questions.size}")
+//
+//            LinearProgressIndicator(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp, top = 8.dp),
+//                progress = (viewModel.progress.value.toFloat() + 1) / survey.questions.size,
+//            )
+            HomeScreenProgressBar(viewModel.uiState.value)
         }
 
         Column(
@@ -95,24 +96,88 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
         ) {
             HomeScreenItemImpl(
-                item = viewModel.currentItem.value,
+                item = viewModel.uiState.value.currentItem,
                 setCurrentAnswer = setCurrentAnswer,
             )
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            OutlinedButton(onClick = { viewModel.previous() }) {
-                Text(getText(id = R.string.previous), modifier = Modifier.padding(4.dp))
-            }
-            Button(onClick = { moveNext() }) {
-                Text(getText(id = R.string.next), modifier = Modifier.padding(4.dp))
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//        ) {
+//            OutlinedButton(onClick = { viewModel.previous() }) {
+//                Text(getText(id = R.string.previous), modifier = Modifier.padding(4.dp))
+//            }
+//            Button(onClick = { moveNext() }) {
+//                Text(getText(id = R.string.next), modifier = Modifier.padding(4.dp))
+//            }
+//        }
+        ActionsRow(
+            actions = viewModel.uiState.value.actions,
+            moveNext = moveNext,
+            movePrev = {},
+            send = { viewModel.dispatch(HomeScreenAction.Send) }
+        )
+    }
+}
+
+@Composable
+fun ActionsRow(
+    actions: List<HomeScreenActionType>,
+    moveNext: () -> Unit,
+    movePrev: () -> Unit,
+    send: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp),
+        horizontalArrangement = if (actions.size >= 2) Arrangement.SpaceBetween else Arrangement.SpaceAround,
+    ) {
+        actions.forEach {
+            when (it) {
+                HomeScreenActionType.Next -> NextAction(moveNext = moveNext)
+                HomeScreenActionType.Send -> SendAction(send = send)
+                HomeScreenActionType.Previous -> PrevAction(movePrev = movePrev)
             }
         }
+    }
+}
+
+@Composable
+fun NextAction(moveNext: () -> Unit) {
+    Button(onClick = { moveNext() }) {
+        Text(getText(id = R.string.next), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+    }
+}
+
+@Composable
+fun PrevAction(movePrev: () -> Unit) {
+    OutlinedButton(onClick = { movePrev() }) {
+        Text(getText(id = R.string.previous), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+    }
+}
+
+@Composable
+fun SendAction(send: () -> Unit) {
+    Button(onClick = { send() }) {
+        Text(getText(id = R.string.send), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+    }
+}
+
+@Composable
+fun HomeScreenProgressBar(uiState: HomeScreenUiState) {
+    if (uiState.progress is ProgressState.ActualProgress) {
+        Text("${uiState.progress.progress} / ${uiState.progress.outOf}")
+
+        LinearProgressIndicator(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp, top = 8.dp),
+            progress = uiState.progress.percentage,
+        )
     }
 }
 
