@@ -36,6 +36,14 @@ fun Application.initializeDatabases() {
 }
 
 private fun createTables() = transaction {
+    SchemaUtils.drop(
+        *surveysTables().toTypedArray(),
+        *answersTables().toTypedArray(),
+        *usersTables().toTypedArray(),
+        *invitesTables().toTypedArray(),
+        *mediaTables().toTypedArray(),
+        *tasksTables().toTypedArray(),
+    )
     SchemaUtils.create(
         *surveysTables().toTypedArray(),
         *answersTables().toTypedArray(),
