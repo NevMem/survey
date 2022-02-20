@@ -59,7 +59,7 @@ internal class NetworkServiceImpl : NetworkService {
         )
     }
 
-    private suspend inline fun<U : Any, reified T : Any> post(url: String, data: U): T {
+    private suspend inline fun <U : Any, reified T : Any> post(url: String, data: U): T {
         return client.post(url) {
             contentType(ContentType.Application.Json)
             body = data

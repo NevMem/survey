@@ -243,7 +243,7 @@ private fun RatingQuestionImpl(
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier.padding(8.dp),
             )
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
@@ -286,7 +286,7 @@ private fun StarsQuestionImpl(
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier.padding(8.dp)
             )
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
