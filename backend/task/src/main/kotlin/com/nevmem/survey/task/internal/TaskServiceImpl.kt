@@ -90,7 +90,7 @@ internal class TaskServiceImpl : TaskService, KoinComponent {
         ExportDataTaskDTO.find {
             ExportDataTaskTable.id eq task.id
         }.first().let {
-            it.medias = (it.medias.split(",") + media.id.toString()).joinToString(",")
+            it.medias = (it.medias.split(",").filter { it.isNotEmpty() } + media.id.toString()).joinToString(",")
         }
 
         ExportDataTaskDTO.find {
