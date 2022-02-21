@@ -1,0 +1,14 @@
+{
+    "required": [
+        "DB_USERNAME",
+        "DB_PASSWORD",
+        "DB_DBNAME",
+        "DB_SERVER",
+        "DB_PORT",
+        "S3_REGION",
+        "S3_ACCESS_KEY",
+        "S3_SECRET_ACCESS_KEY",
+        "S3_URI",
+        "SELF_URI"
+    ]
+}

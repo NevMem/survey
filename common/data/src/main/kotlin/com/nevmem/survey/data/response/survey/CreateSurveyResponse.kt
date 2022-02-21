@@ -12,11 +12,11 @@ sealed class CreateSurveyResponse {
     @SerialName("success")
     data class CreateSurveySuccess(
         val survey: Survey,
-    ): CreateSurveyResponse()
+    ) : CreateSurveyResponse()
 
     @Serializable
     @SerialName("error")
     data class CreateSurveyError(
         val message: String,
-    ): CreateSurveyResponse()
+    ) : CreateSurveyResponse()
 }

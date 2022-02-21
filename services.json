@@ -1,0 +1,23 @@
+{
+    "worker": {
+        "tag": "worker",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:a18b1af",
+        "ports": [
+        ]
+    },
+    "core": {
+        "tag": "core",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:a18b1af",
+        "ports": [
+            80,
+            443
+        ]
+    },
+    "metrics": {
+        "tag": "metrics",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:1d7d7a5",
+        "ports": [
+            9090
+        ]
+    }
+}

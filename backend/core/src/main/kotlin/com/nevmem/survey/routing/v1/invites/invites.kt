@@ -1,13 +1,12 @@
 package com.nevmem.survey.routing.v1.invites
 
-import com.nevmem.survey.converter.InvitesConverter
 import com.nevmem.survey.data.request.invite.CreateInviteRequest
 import com.nevmem.survey.data.response.invite.CreateInviteResponse
 import com.nevmem.survey.data.response.invite.GetInvitesResponse
-import com.nevmem.survey.env.EnvVars.DataSource.user
+import com.nevmem.survey.invites.InvitesService
 import com.nevmem.survey.role.RoleModel
-import com.nevmem.survey.service.invites.InvitesService
-import com.nevmem.survey.service.users.UsersService
+import com.nevmem.survey.users.UsersService
+import com.nevmem.surveys.converters.InvitesConverter
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.auth.jwt.JWTPrincipal

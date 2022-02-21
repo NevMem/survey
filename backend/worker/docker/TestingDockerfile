@@ -1,0 +1,41 @@
+# FROM openjdk:8-jdk-alpine AS BUILD_PHASE
+# COPY . .
+# RUN ls -la
+# RUN ./gradlew :backend:core:build
+
+FROM openjdk:8-jdk-alpine AS BUILD_PHASE
+COPY backend backend
+
+FROM ubuntu:20.04
+
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+    vim \
+    telnet \
+    lsof \
+    syslog-ng \
+    curl \
+    openjdk-8-jdk \
+    unzip
+
+COPY --from=BUILD_PHASE backend/worker/build/distributions/worker-0.0.1.zip /
+COPY ./backend/worker/docker/testing_runner.sh .
+RUN unzip worker-0.0.1.zip
+
+ENV DB_USERNAME=postgres_for_testing
+ENV DB_PASSWORD=postgres_for_testing
+ENV DB_DBNAME=test_db
+ENV DB_SERVER=database
+ENV DB_PORT=5432
+
+ENV S3_REGION=us-east-1
+ENV S3_ACCESS_KEY=accessKey1
+ENV S3_SECRET_ACCESS_KEY=verySecretKey1
+ENV S3_URI=http://s3local:8000
+
+ENV SELF_URI=http://localhost
+
+CMD ["./testing_runner.sh"]
+
+EXPOSE 80 443

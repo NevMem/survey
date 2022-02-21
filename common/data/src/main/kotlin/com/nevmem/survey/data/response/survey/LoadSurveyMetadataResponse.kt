@@ -9,4 +9,3 @@ import kotlinx.serialization.Serializable
 data class LoadSurveyMetadataResponse(
     val surveyMetadata: SurveyMetadata,
 )
-

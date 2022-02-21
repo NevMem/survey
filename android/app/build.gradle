@@ -1,0 +1,94 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+    compileSdkVersion globalCompileSdkVersion
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.nevmem.survey"
+        minSdkVersion globalMinSdkVersion
+        targetSdkVersion globalTargetSdkVersion
+
+        versionCode 1
+        versionName "0.0.1"
+    }
+
+    signingConfigs {
+        release {
+            if (System.env.SIGN_APP != null) {
+                storeFile file(System.env.RELEASE_SIGNING_KEY_FILE)
+                storePassword System.env.RELEASE_SIGN_PASSWORD
+                keyAlias System.env.RELEASE_SIGN_KEY_ALIAS
+                keyPassword System.env.RELEASE_SIGN_KEY_PASSWORD
+
+                v1SigningEnabled true
+                v2SigningEnabled true
+            }
+        }
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.0'
+    }
+}
+
+dependencies {
+    implementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintLayout"
+    implementation "androidx.core:core-ktx:$versions.coreKtx"
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
+    implementation "com.google.android.material:material:$versions.material"
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation "com.yandex.android:mobmetricalib:$versions.metrica"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "io.insert-koin:koin-android:$versions.koin"
+    implementation "io.insert-koin:koin-androidx-compose:$versions.koin"
+    implementation "com.bluelinelabs:conductor:$versions.conductor"
+    implementation "com.bluelinelabs:conductor-androidx-transition:$versions.conductor"
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.compose.material:material:1.1.0'
+    implementation 'androidx.compose.foundation:foundation:1.1.0'
+    implementation 'androidx.compose.animation:animation:1.1.0'
+    implementation 'androidx.compose.ui:ui-tooling:1.1.0'
+    implementation "androidx.compose.ui:ui-tooling-preview:1.1.0"
+    implementation "com.google.android.material:compose-theme-adapter:1.1.4"
+    implementation "androidx.navigation:navigation-compose:2.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
+
+    implementation project(":android:network")
+    implementation project(":common:data")
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.7'
+}

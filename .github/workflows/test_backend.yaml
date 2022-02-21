@@ -16,11 +16,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: set up JDK 1.8
+      - name: set up JDK 11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
-      - name: build core executable
-        run: ./gradlew :backend:core:build
+          java-version: 11
       - name: testing
         run: cd backend && ./full_suit.sh

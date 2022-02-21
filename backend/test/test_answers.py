@@ -25,9 +25,9 @@ def test_simple_answer(client: Client):
     surveyId = response.json()['survey']['surveyId']
     publisherId = random_string(12)
     response = client.publish_answer({
-        'publisherId': publisherId,
         'answer': {
             'surveyId': surveyId,
+            'publisherId': publisherId,
             'answers': [
                 {
                     'type': 'stars',
@@ -72,9 +72,9 @@ def test_survey_metadata(client: Client):
     for _ in range(10):
         publisherId = random_string(12)
         response = client.publish_answer({
-            'publisherId': publisherId,
             'answer': {
                 'surveyId': surveyLiteral,
+                'publisherId': publisherId,
                 'answers': [
                     {
                         'type': 'stars',

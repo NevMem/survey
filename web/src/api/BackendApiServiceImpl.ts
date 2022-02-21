@@ -1,6 +1,7 @@
 import {
     AllRolesResponse,
     AllSurveysResponse,
+    CreateExportDataTaskRequest,
     CreateInviteRequest,
     CreateInviteResponse,
     CreateSurveyRequest,
@@ -10,12 +11,14 @@ import {
     instanceOfCreateSurveySuccess,
     LoadSurveyMetadataRequest,
     LoadSurveyMetadataResponse,
+    LoadTaskRequest,
     LoginRequest,
     LoginResponse,
     ManagedUsersResponse,
     RegisterRequest,
     RegisterResponse,
     Survey,
+    Task,
     UpdateRolesRequest,
     User,
 } from "../data/exported";
@@ -118,6 +121,14 @@ class BackendApiServiceImpl implements BackendApiService {
 
     updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void> {
         return this.post<void, UpdateRolesRequest>('/v1/role/update_roles', request, abortController).then(data => data.data);
+    }
+
+    createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task> {
+        return this.post<Task, CreateExportDataTaskRequest>('/v1/task/create_export_data_task', request, abortController).then(data => data.data);
+    }
+
+    loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task> {
+        return this.post<Task, LoadTaskRequest>('/v1/task/task', request, abortController).then(data => data.data);
     }
 
     private post<T, U>(path: string, body: U, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {

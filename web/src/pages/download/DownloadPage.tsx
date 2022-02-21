@@ -10,8 +10,14 @@ import SpacedColumn from '../../app/layout/SpacedColumn';
 import CardError from '../../app/card/CardError';
 import SpacedCenteredColumn from '../../app/layout/SpacedCenteredColumn';
 import GeneralButton from '../../components/button/GeneralButton';
-import { Survey } from '../../data/exported';
-import { ChangeEvent, Fragment, useState } from 'react';
+import { Survey, Task, TaskState } from '../../data/exported';
+import { ChangeEvent, useState } from 'react';
+import useAsyncRequest, { RequestError, RequestSuccess } from '../../utils/useAsyncUtils';
+import backendApi from '../../api/backendApiServiceSingleton';
+import Badge from '../../components/badge/Badge';
+import usePollingRequest, { PollingError, PollingState, PollingSuccess } from '../../utils/usePollingRequest';
+import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
+import Row from '../../app/layout/Row';
 
 const SurveySelector = observer((props: {surveysService: SurveysService, selectSurvey: (survey: Survey | undefined) => void}) => {
     if (props.surveysService.surveysState instanceof SurveysLoading) {
@@ -114,11 +120,152 @@ const SurveyDownloadDataFilter = (props: {survey?: Survey}) => {
     }
 
     return (
-        <Fragment>
-            {/*props.survey.questions.map((question, index) => {
-                return <QuestionFilter question={question} key={question.title} index={index} />
-            })*/}
-        </Fragment>
+        <CardError>
+            <SpaceAroundRow>
+                <Text large>Выгрузка данных с фильтрацией пока не доступна</Text>
+            </SpaceAroundRow>
+            <SpaceAroundRow>
+                <Text>Вы можете выгрузить данные без фильтрации по кнопке ниже</Text>
+            </SpaceAroundRow>
+        </CardError>
+    )
+};
+
+const TaskLogsView = (props: {task: Task}) => {
+    return (
+        <SpacedColumn rowGap={4}>
+            {props.task.log.map((elem, index) => {
+                return <Text key={index}>{elem.timestamp}:{elem.message}</Text>;
+            })}
+        </SpacedColumn>
+    );
+};
+
+const TaskOutputsView = (props: {task: Task}) => {
+    return (
+        <SpaceAroundRow>
+            {props.task.outputs.map((elem, index) => {
+                return (
+                    <a key={index} href={elem.url}>{elem.filename}</a>
+                );
+            })}
+        </SpaceAroundRow>
+    );
+};
+
+const TaskView = (props: {task: Task}) => {
+    const { task } = props;
+
+    if (task.state == TaskState.Waiting) {
+        return (
+            <Row>
+                <Loader small/>
+                <Text>{task.state}</Text>
+            </Row>
+        );
+    }
+
+    if (task.state == TaskState.Success) {
+        return (
+            <SpacedCenteredColumn rowGap={8}>
+                <Badge success>{task.state}</Badge>
+                <TaskLogsView task={task}/>
+                <TaskOutputsView task={task} />
+            </SpacedCenteredColumn>
+        );
+    }
+
+    return (
+        <SpacedCenteredColumn rowGap={8}>
+            <Badge warning>{task.state}</Badge>
+            <TaskLogsView task={task}/>
+        </SpacedCenteredColumn>
+    );
+};
+
+
+const PollingTaskView = (props: {task: Task}) => {
+    const request = usePollingRequest(
+        (controller: AbortController) => {
+            return backendApi.loadTask({id: props.task.id}, controller);
+        },
+        (state: PollingState) => {
+            if (state instanceof PollingSuccess && state.result.state == TaskState.Success) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    if (request instanceof PollingError) {
+        return (
+            <CardError>
+                {request.message}
+            </CardError>
+        );
+    }
+    
+    if (request instanceof PollingSuccess) {
+        return (
+            <TaskView task={request.result} />
+        );
+    }
+
+    return (
+        <Loader />
+    );
+};
+
+const ExportTaskBlock = (props: {survey: Survey}) => {
+    const request = useAsyncRequest((controller: AbortController) => {
+        return backendApi.createExportDataTask({surveyId: props.survey.id}, controller);
+    });
+
+    if (request instanceof RequestError) {
+        return (
+            <CardError>
+                <SpaceAroundRow><Text large>{request.message}</Text></SpaceAroundRow>
+            </CardError>
+        );
+    }
+
+    if (request instanceof RequestSuccess) {
+        return (
+            <Card>
+                <PollingTaskView task={request.result} />
+            </Card>
+        );
+    }
+
+    return (
+        <SpaceAroundRow>
+            <Loader />
+        </SpaceAroundRow>
+    )
+};
+
+const SurveyDownloadDataBlock = (props: {survey?: Survey}) => {
+    const [download, setDownload] = useState(false);
+    const [requestIndex, setRequestIndex] = useState(0);
+
+    if (!props.survey) {
+        return null;
+    }
+
+    const { survey } = props;
+
+    const startDownloading = () => {
+        setRequestIndex(requestIndex + 1);
+        setDownload(true);
+    };
+
+    return (
+        <Card>
+            <SpaceAroundRow>
+                <GeneralButton onClick={startDownloading}>Выгрузить</GeneralButton>
+            </SpaceAroundRow>
+            {download && <ExportTaskBlock survey={survey} key={requestIndex} />}
+        </Card>
     );
 };
 
@@ -134,6 +281,7 @@ const DownloadPage = () => {
                 <SurveySelector surveysService={surveysService} selectSurvey={(survey) => {setSelectedSurvey(survey)}} />
 
                 <SurveyDownloadDataFilter survey={selectedSurvey} />
+                <SurveyDownloadDataBlock survey={selectedSurvey} />
             </SpacedColumn>
         </PageWrapper>
     );

@@ -1,6 +1,6 @@
 package com.nevmem.survey.routing.v1
 
-import com.nevmem.survey.converter.UsersConverter
+import com.nevmem.survey.auth.TokenService
 import com.nevmem.survey.data.request.auth.LoginRequest
 import com.nevmem.survey.data.request.auth.RegisterRequest
 import com.nevmem.survey.data.request.role.UpdateRolesRequest
@@ -8,12 +8,12 @@ import com.nevmem.survey.data.response.auth.LoginResponse
 import com.nevmem.survey.data.response.auth.RegisterResponse
 import com.nevmem.survey.data.response.managed.ManagedUsersResponse
 import com.nevmem.survey.data.response.role.UpdateRolesResponse
+import com.nevmem.survey.invites.InvitesService
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.userId
-import com.nevmem.survey.service.auth.TokenService
-import com.nevmem.survey.service.invites.InvitesService
-import com.nevmem.survey.service.users.UsersService
 import com.nevmem.survey.user.UserEntity
+import com.nevmem.survey.users.UsersService
+import com.nevmem.surveys.converters.UsersConverter
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.auth.jwt.JWTPrincipal

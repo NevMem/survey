@@ -19,9 +19,10 @@ def main():
                 sys.exit(1)
             out.write(f"export {required}={os.environ[required]}\n")
 
-        for other in data['other']:
-            if other in os.environ:
-                out.write(f"export {other}={os.environ[other]}\n")
+        if 'other' in data:
+            for other in data['other']:
+                if other in os.environ:
+                    out.write(f"export {other}={os.environ[other]}\n")
 
 
 if __name__ == '__main__':

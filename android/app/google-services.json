@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "100319495710",
+    "project_id": "ethnosurvey-3cd53",
+    "storage_bucket": "ethnosurvey-3cd53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100319495710:android:3703f68ee583333b9f900f",
+        "android_client_info": {
+          "package_name": "com.nevmem.survey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "100319495710-rm7ln6j2kbjhk3kn13bheb0d5jv8krmp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5EdLwFPqjCvLvzm-aflSqKbMWQX8I1VI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "100319495710-rm7ln6j2kbjhk3kn13bheb0d5jv8krmp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

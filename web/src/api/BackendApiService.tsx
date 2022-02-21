@@ -1,14 +1,17 @@
 import { UnsavedSurvey } from "../data/Survey";
 import {
     AllRolesResponse,
+    CreateExportDataTaskRequest,
     CreateInviteRequest,
     CreateInviteResponse,
     GetInvitesResponse,
+    LoadTaskRequest,
     LoginResponse,
     ManagedUsersResponse,
     RegisterResponse,
     Survey,
     SurveyMetadata,
+    Task,
     UpdateRolesRequest,
     User,
 } from "../data/exported";
@@ -37,6 +40,9 @@ interface BackendApiService {
 
     roles(abortController: AbortController): Promise<AllRolesResponse>
     updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void>
+
+    createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task>
+    loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task>
 }
 
 export type {

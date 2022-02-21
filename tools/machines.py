@@ -7,13 +7,15 @@ import re
 class Machine:
     name: str
     ip: str
+    tags: List[str]
 
-    def __init__(self, name: str, ip: str):
+    def __init__(self, name: str, ip: str, tags: List[str]):
         self.name = name
         self.ip = ip
+        self.tags = tags
 
     def __str__(self):
-        return f"Machine(name: {self.name}, ip: {self.ip})"
+        return f"Machine(name: {self.name}, ip: {self.ip}, tags: {self.tags})"
 
     def __repr__(self):
         return str(self)
@@ -26,7 +28,8 @@ def get_machines_list() -> List[Machine]:
     for vm in data:
         name = vm['name']
         ip = vm['network_interfaces'][0]['primary_v4_address']['one_to_one_nat']['address']
-        result.append(Machine(name, ip))
+        tags = vm['description'].split(',')
+        result.append(Machine(name, ip, tags))
     return result
 
 

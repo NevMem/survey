@@ -74,6 +74,35 @@ def test_create_survey(client: Client):
     assert len(surveys_after) == len(surveys_before) + 1
 
 
+def test_get_survey(client: Client):
+    token = client.login('admin', 'password').json()['token']
+
+    created = client.create_survey(
+        token,
+        {
+            'name': 'first survey',
+            'questions': [
+                {
+                    'type': 'stars',
+                    'stars': 5,
+                    'title': 'Please rate:'
+                },
+            ],
+            'commonQuestions': [
+                {
+                    'id': 'age',
+                },
+                {
+                    'id': 'school',
+                },
+            ],
+        }
+    )
+    assert created.status_code == 200
+    json = created.json()
+    assert client.get_survey(json['survey']['surveyId']).status_code == 200
+
+
 def test_create_surveys(client: Client):
     token = client.login('admin', 'password').json()['token']
 

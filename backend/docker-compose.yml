@@ -28,6 +28,10 @@ services:
         condition: service_started
     ports:
       - "80:80"
+  worker:
+    build:
+      context: ../
+      dockerfile: backend/worker/docker/TestingDockerfile
   test:
     build:
       context: test/

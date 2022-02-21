@@ -6,5 +6,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PublishAnswerRequest(
     val answer: SurveyAnswer,
-    val publisherId: String,
 )

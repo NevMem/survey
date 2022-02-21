@@ -1,15 +1,12 @@
 package com.nevmem.survey.db
 
 import com.nevmem.survey.env.EnvVars
-import com.nevmem.survey.service.answer.internal.QuestionAnswerTable
-import com.nevmem.survey.service.answer.internal.SurveyAnswerTable
-import com.nevmem.survey.service.invites.internal.InvitesTable
-import com.nevmem.survey.service.media.internal.MediaGalleryTable
-import com.nevmem.survey.service.media.internal.MediaTable
-import com.nevmem.survey.service.surveys.internal.CommonQuestionsTable
-import com.nevmem.survey.service.surveys.internal.QuestionsTable
-import com.nevmem.survey.service.surveys.internal.SurveysTable
-import com.nevmem.survey.service.users.internal.UsersTable
+import com.nevmem.survey.invites.invitesTables
+import com.nevmem.survey.media.mediaTables
+import com.nevmem.survey.survey.answersTables
+import com.nevmem.survey.survey.surveysTables
+import com.nevmem.survey.task.tasksTables
+import com.nevmem.survey.users.usersTables
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.Application
@@ -40,14 +37,11 @@ fun Application.initializeDatabases() {
 
 private fun createTables() = transaction {
     SchemaUtils.create(
-        UsersTable,
-        InvitesTable,
-        SurveysTable,
-        QuestionsTable,
-        CommonQuestionsTable,
-        MediaTable,
-        SurveyAnswerTable,
-        QuestionAnswerTable,
-        MediaGalleryTable,
+        *surveysTables().toTypedArray(),
+        *answersTables().toTypedArray(),
+        *usersTables().toTypedArray(),
+        *invitesTables().toTypedArray(),
+        *mediaTables().toTypedArray(),
+        *tasksTables().toTypedArray(),
     )
 }

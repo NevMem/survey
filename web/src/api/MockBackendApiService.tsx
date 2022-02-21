@@ -1,13 +1,16 @@
 import {
     AllRolesResponse,
+    CreateExportDataTaskRequest,
     CreateInviteResponse,
     GetInvitesResponse,
+    LoadTaskRequest,
     LoginResponse,
     ManagedUsersResponse,
     RatingQuestion,
     RegisterResponse,
     StarsQuestion,
     SurveyMetadata,
+    Task,
     TextQuestion,
     User,
 } from '../data/exported';
@@ -151,6 +154,14 @@ class MockBackendApiService implements BackendApiService {
     }
 
     updateRoles(): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
+    createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task> {
+        throw new Error('Method not implemented.');
+    }
+
+    loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task> {
         throw new Error('Method not implemented.');
     }
 };
