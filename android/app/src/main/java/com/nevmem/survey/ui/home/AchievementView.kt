@@ -1,13 +1,20 @@
 package com.nevmem.survey.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,7 +29,7 @@ fun AchievementView(achievement: Achievement) {
         }
         is Achievement.VeryFirstAchievement -> {
             if (achievement.id == "very-first-survey") {
-                VeryFirstAchievement()
+                VeryFirstAchievement(achievement)
             } else {
                 Text("Unsupported achievement ${achievement.title}")
             }
@@ -31,12 +38,15 @@ fun AchievementView(achievement: Achievement) {
 }
 
 @Composable
-fun VeryFirstAchievement() {
+fun VeryFirstAchievement(achievement: Achievement.VeryFirstAchievement) {
+    var dialogOpen by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .padding(8.dp)
             .size(48.dp)
             .clip(CircleShape)
+            .clickable { dialogOpen = true }
             .background(MaterialTheme.colors.primary.copy(alpha = 0.75f)),
         contentAlignment = Alignment.Center,
     ) {
@@ -47,7 +57,21 @@ fun VeryFirstAchievement() {
         Text(
             text = "st",
             style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.background),
-            modifier = Modifier.align(Alignment.BottomEnd).padding(bottom = 6.dp, end = 6.dp),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 6.dp, end = 6.dp),
+        )
+    }
+
+    if (dialogOpen) {
+        AlertDialog(
+            onDismissRequest = { dialogOpen = false },
+            title = { Text(achievement.title) },
+            confirmButton = {
+                Button(onClick = { dialogOpen = false }, modifier = Modifier.padding(8.dp)) {
+                    Text("Ok")
+                }
+            },
         )
     }
 }
