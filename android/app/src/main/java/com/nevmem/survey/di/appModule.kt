@@ -2,9 +2,11 @@ package com.nevmem.survey.di
 
 import android.content.Context
 import com.nevmem.survey.api.createNetworkService
+import com.nevmem.survey.service.achievement.api.createAchievementService
 import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.publisher.PublisherIdProvider
 import com.nevmem.survey.service.survey.SurveyService
+import com.nevmem.survey.ui.home.HomeScreenViewModel
 import com.nevmem.survey.ui.survey.SurveyScreenViewModel
 import com.nevmem.survey.ui.join.JoinScreenViewModel
 import com.nevmem.survey.ui.splash.EthnoSplashScreenViewModel
@@ -26,8 +28,10 @@ fun createAppModule(context: Context) = module {
     single { PreferencesService(get()) }
     single { SurveyService(get(), get(), get()) }
     single { PublisherIdProvider() }
+    single { createAchievementService(get(named("background")), get()) }
 
     viewModel { JoinScreenViewModel(get(), get()) }
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
-    viewModel { SurveyScreenViewModel(get(), get(named("background"))) }
+    viewModel { SurveyScreenViewModel(get(), get(named("background")), get()) }
+    viewModel { HomeScreenViewModel(get(named("background")), get(), get()) }
 }

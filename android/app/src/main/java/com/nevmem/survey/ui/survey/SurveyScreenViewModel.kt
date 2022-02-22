@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.question.Question
+import com.nevmem.survey.service.achievement.api.AchievementService
 import com.nevmem.survey.service.survey.SurveyService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,7 @@ data class SurveyScreenUiState(
 class SurveyScreenViewModel(
     private val surveyService: SurveyService,
     private val background: CoroutineScope,
+    private val achievementService: AchievementService,
 ) : ViewModel() {
     val survey = mutableStateOf(surveyService.survey)
 
@@ -87,6 +89,7 @@ class SurveyScreenViewModel(
         background.launch {
             try {
                 surveyService.sendAnswer(answers.map { it!! })
+                achievementService.reportSurveyCompleted()
                 withContext(Dispatchers.Main) {
                     uiState.value = SurveyScreenUiState(
                         currentItem = SendingAnswers.Success,
