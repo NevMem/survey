@@ -1,4 +1,4 @@
-package com.nevmem.survey.ui.home
+package com.nevmem.survey.ui.survey
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -18,24 +18,24 @@ sealed class ProgressState {
     object None : ProgressState()
 }
 
-enum class HomeScreenActionType {
+enum class SurveyScreenActionType {
     Next, Previous, Send, Retry,
 }
 
-sealed class HomeScreenAction {
-    data class Next(val answer: QuestionAnswer) : HomeScreenAction()
-    object Previous : HomeScreenAction()
-    data class Send(val answer: QuestionAnswer) : HomeScreenAction()
-    object Retry : HomeScreenAction()
+sealed class SurveyScreenAction {
+    data class Next(val answer: QuestionAnswer) : SurveyScreenAction()
+    object Previous : SurveyScreenAction()
+    data class Send(val answer: QuestionAnswer) : SurveyScreenAction()
+    object Retry : SurveyScreenAction()
 }
 
-data class HomeScreenUiState(
-    val currentItem: HomeScreenItem,
+data class SurveyScreenUiState(
+    val currentItem: SurveyScreenItem,
     val progress: ProgressState,
-    val actions: List<HomeScreenActionType>,
+    val actions: List<SurveyScreenActionType>,
 )
 
-class HomeScreenViewModel(
+class SurveyScreenViewModel(
     private val surveyService: SurveyService,
     private val background: CoroutineScope,
 ) : ViewModel() {
@@ -45,10 +45,10 @@ class HomeScreenViewModel(
     private val answers: MutableList<QuestionAnswer?> = survey.value.questions.map { null }.toMutableList()
 
     val uiState = mutableStateOf(
-        HomeScreenUiState(
+        SurveyScreenUiState(
             currentItem = survey.value.questions[questionIndex].buildItem(),
             progress = ProgressState.ActualProgress(1, survey.value.questions.size),
-            actions = listOf(HomeScreenActionType.Next),
+            actions = listOf(SurveyScreenActionType.Next),
         )
     )
 
@@ -59,15 +59,15 @@ class HomeScreenViewModel(
         assert(questionIndex in survey.value.questions.indices)
 
         if (questionIndex in survey.value.questions.indices) {
-            uiState.value = HomeScreenUiState(
+            uiState.value = SurveyScreenUiState(
                 currentItem = survey.value.questions[questionIndex].buildItem(),
                 progress = ProgressState.ActualProgress(questionIndex + 1, survey.value.questions.size),
                 actions = listOf(
-                    HomeScreenActionType.Previous,
+                    SurveyScreenActionType.Previous,
                     if (questionIndex + 1 in survey.value.questions.indices)
-                        HomeScreenActionType.Next
+                        SurveyScreenActionType.Next
                     else
-                        HomeScreenActionType.Send,
+                        SurveyScreenActionType.Send,
                 )
             )
         }
@@ -79,7 +79,7 @@ class HomeScreenViewModel(
     }
 
     private fun sendImpl() {
-        uiState.value = HomeScreenUiState(
+        uiState.value = SurveyScreenUiState(
             currentItem = SendingAnswers.Sending,
             progress = ProgressState.None,
             actions = emptyList(),
@@ -88,7 +88,7 @@ class HomeScreenViewModel(
             try {
                 surveyService.sendAnswer(answers.map { it!! })
                 withContext(Dispatchers.Main) {
-                    uiState.value = HomeScreenUiState(
+                    uiState.value = SurveyScreenUiState(
                         currentItem = SendingAnswers.Success,
                         progress = ProgressState.None,
                         actions = emptyList(),
@@ -96,25 +96,25 @@ class HomeScreenViewModel(
                 }
             } catch (exception: Exception) {
                 withContext(Dispatchers.Main) {
-                    uiState.value = HomeScreenUiState(
+                    uiState.value = SurveyScreenUiState(
                         currentItem = SendingAnswers.Error(exception.message ?: ""),
                         progress = ProgressState.None,
-                        actions = listOf(HomeScreenActionType.Retry),
+                        actions = listOf(SurveyScreenActionType.Retry),
                     )
                 }
             }
         }
     }
 
-    fun dispatch(action: HomeScreenAction) {
+    fun dispatch(action: SurveyScreenAction) {
         when (action) {
-            is HomeScreenAction.Next -> next(action.answer)
-            is HomeScreenAction.Send -> send(action.answer)
-            is HomeScreenAction.Retry -> sendImpl()
+            is SurveyScreenAction.Next -> next(action.answer)
+            is SurveyScreenAction.Send -> send(action.answer)
+            is SurveyScreenAction.Retry -> sendImpl()
         }
     }
 
-    private fun Question.buildItem(): HomeScreenItem = when (this) {
+    private fun Question.buildItem(): SurveyScreenItem = when (this) {
         is Question.RatingQuestion -> RatingQuestion(title, min, max)
         is Question.StarsQuestion -> StarsQuestion(title, stars)
         is Question.TextQuestion -> TextQuestion(title, maxLength)

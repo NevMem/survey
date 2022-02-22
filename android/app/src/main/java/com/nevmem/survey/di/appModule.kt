@@ -5,7 +5,7 @@ import com.nevmem.survey.api.createNetworkService
 import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.publisher.PublisherIdProvider
 import com.nevmem.survey.service.survey.SurveyService
-import com.nevmem.survey.ui.home.HomeScreenViewModel
+import com.nevmem.survey.ui.survey.SurveyScreenViewModel
 import com.nevmem.survey.ui.join.JoinScreenViewModel
 import com.nevmem.survey.ui.splash.EthnoSplashScreenViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -29,5 +29,5 @@ fun createAppModule(context: Context) = module {
 
     viewModel { JoinScreenViewModel(get(), get()) }
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
-    viewModel { HomeScreenViewModel(get(), get(named("background"))) }
+    viewModel { SurveyScreenViewModel(get(), get(named("background"))) }
 }

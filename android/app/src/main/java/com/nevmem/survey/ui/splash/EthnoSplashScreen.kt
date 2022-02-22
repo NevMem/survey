@@ -29,8 +29,8 @@ fun EthnoSplashScreen(navController: NavController) {
     LaunchedEffect(viewModel.destination.value) {
         if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Join) {
             navController.navigate("join")
-        } else if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Home) {
-            navController.navigate("home")
+        } else if (viewModel.destination.value == EthnoSplashScreenViewModel.Destination.Survey) {
+            navController.navigate("survey")
         }
     }
 }

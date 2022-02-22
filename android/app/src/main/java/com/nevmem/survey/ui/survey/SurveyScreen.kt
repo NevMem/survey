@@ -1,4 +1,4 @@
-package com.nevmem.survey.ui.home
+package com.nevmem.survey.ui.survey
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -45,10 +45,10 @@ import org.koin.androidx.compose.viewModel
 
 @ExperimentalComposeUiApi
 @Composable
-fun HomeScreen(
+fun SurveyScreen(
     scaffoldState: ScaffoldState,
 ) {
-    val viewModel: HomeScreenViewModel by viewModel()
+    val viewModel: SurveyScreenViewModel by viewModel()
 
     val survey = viewModel.survey.value
 
@@ -64,7 +64,7 @@ fun HomeScreen(
                 scaffoldState.snackbarHostState.showSnackbar(needAnswerMessage)
             }
         } else {
-            viewModel.dispatch(HomeScreenAction.Next(currentAnswer!!))
+            viewModel.dispatch(SurveyScreenAction.Next(currentAnswer!!))
             currentAnswer = null
         }
     }
@@ -75,7 +75,7 @@ fun HomeScreen(
                 scaffoldState.snackbarHostState.showSnackbar(needAnswerMessage)
             }
         } else {
-            viewModel.dispatch(HomeScreenAction.Send(currentAnswer!!))
+            viewModel.dispatch(SurveyScreenAction.Send(currentAnswer!!))
             currentAnswer = null
         }
     }
@@ -92,14 +92,14 @@ fun HomeScreen(
                 Text(survey.name, style = MaterialTheme.typography.h5)
             }
 
-            HomeScreenProgressBar(viewModel.uiState.value)
+            SurveyScreenProgressBar(viewModel.uiState.value)
         }
 
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
         ) {
-            HomeScreenItemImpl(
+            SurveyScreenItemImpl(
                 item = viewModel.uiState.value.currentItem,
                 setCurrentAnswer = setCurrentAnswer,
             )
@@ -108,16 +108,16 @@ fun HomeScreen(
         ActionsRow(
             actions = viewModel.uiState.value.actions,
             moveNext = moveNext,
-            movePrev = { viewModel.dispatch(HomeScreenAction.Previous) },
+            movePrev = { viewModel.dispatch(SurveyScreenAction.Previous) },
             send = send,
-            retry = { viewModel.dispatch(HomeScreenAction.Retry) }
+            retry = { viewModel.dispatch(SurveyScreenAction.Retry) }
         )
     }
 }
 
 @Composable
 private fun ActionsRow(
-    actions: List<HomeScreenActionType>,
+    actions: List<SurveyScreenActionType>,
     moveNext: () -> Unit,
     movePrev: () -> Unit,
     send: () -> Unit,
@@ -131,10 +131,10 @@ private fun ActionsRow(
     ) {
         actions.forEach {
             when (it) {
-                HomeScreenActionType.Next -> NextAction(moveNext = moveNext)
-                HomeScreenActionType.Send -> SendAction(send = send)
-                HomeScreenActionType.Previous -> PrevAction(movePrev = movePrev)
-                HomeScreenActionType.Retry -> RetryAction(retry = retry)
+                SurveyScreenActionType.Next -> NextAction(moveNext = moveNext)
+                SurveyScreenActionType.Send -> SendAction(send = send)
+                SurveyScreenActionType.Previous -> PrevAction(movePrev = movePrev)
+                SurveyScreenActionType.Retry -> RetryAction(retry = retry)
             }
         }
     }
@@ -169,7 +169,7 @@ private fun RetryAction(retry: () -> Unit) {
 }
 
 @Composable
-private fun HomeScreenProgressBar(uiState: HomeScreenUiState) {
+private fun SurveyScreenProgressBar(uiState: SurveyScreenUiState) {
     if (uiState.progress is ProgressState.ActualProgress) {
         Text("${uiState.progress.progress} / ${uiState.progress.outOf}")
 
@@ -184,8 +184,8 @@ private fun HomeScreenProgressBar(uiState: HomeScreenUiState) {
 
 @ExperimentalComposeUiApi
 @Composable
-private fun HomeScreenItemImpl(
-    item: HomeScreenItem,
+private fun SurveyScreenItemImpl(
+    item: SurveyScreenItem,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
     when (item) {
@@ -197,7 +197,7 @@ private fun HomeScreenItemImpl(
 }
 
 @Composable
-private fun SendingView(item: HomeScreenItem) {
+private fun SendingView(item: SurveyScreenItem) {
     QuestionCard {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             when (item) {
