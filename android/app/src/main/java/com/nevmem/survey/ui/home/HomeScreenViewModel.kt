@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeScreenViewModel(
-    private val background: CoroutineScope,
+    background: CoroutineScope,
     private val achievementService: AchievementService,
     private val surveyService: SurveyService,
 ) : ViewModel() {

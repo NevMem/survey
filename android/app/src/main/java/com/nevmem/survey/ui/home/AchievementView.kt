@@ -19,13 +19,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.nevmem.survey.R
 import com.nevmem.survey.service.achievement.api.Achievement
+import com.nevmem.survey.util.getText
 
 @Composable
 fun AchievementView(achievement: Achievement) {
     when (achievement) {
         is Achievement.CounterAchievement -> {
-            Text(achievement.title + " " + achievement.result.toString())
+            if (achievement.id == "surveys-counter") {
+                SurveysCounterAchievement(achievement)
+            } else {
+                Text("Unsupported achievement ${achievement.title}")
+            }
         }
         is Achievement.VeryFirstAchievement -> {
             if (achievement.id == "very-first-survey") {
@@ -34,6 +40,38 @@ fun AchievementView(achievement: Achievement) {
                 Text("Unsupported achievement ${achievement.title}")
             }
         }
+    }
+}
+
+@Composable
+fun SurveysCounterAchievement(achievement: Achievement.CounterAchievement) {
+    var dialogOpen by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .size(48.dp)
+            .clip(CircleShape)
+            .clickable { dialogOpen = true }
+            .background(MaterialTheme.colors.primary.copy(alpha = 0.75f)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = achievement.result.toString(),
+            style = MaterialTheme.typography.h5.copy(color = MaterialTheme.colors.background),
+        )
+    }
+
+    if (dialogOpen) {
+        AlertDialog(
+            onDismissRequest = { dialogOpen = false },
+            title = { Text(achievement.title) },
+            confirmButton = {
+                Button(onClick = { dialogOpen = false }, modifier = Modifier.padding(8.dp)) {
+                    Text(getText(id = R.string.ok))
+                }
+            },
+        )
     }
 }
 
@@ -69,7 +107,7 @@ fun VeryFirstAchievement(achievement: Achievement.VeryFirstAchievement) {
             title = { Text(achievement.title) },
             confirmButton = {
                 Button(onClick = { dialogOpen = false }, modifier = Modifier.padding(8.dp)) {
-                    Text("Ok")
+                    Text(getText(id = R.string.ok))
                 }
             },
         )

@@ -11,6 +11,7 @@
     <string name="retry">Попробовать еще раз</string>
     <string name="send">Отправить</string>
     <string name="previous">Предыдущий</string>
+    <string name="ok">Ок</string>
 
     <string name="wait_for_answer">Пожалуйста ответьте на вопрос</string>
 
