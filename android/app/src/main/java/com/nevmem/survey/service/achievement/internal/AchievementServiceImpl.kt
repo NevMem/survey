@@ -13,10 +13,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.startWith
 import kotlinx.coroutines.launch
 
 private enum class AchievementType {
@@ -57,7 +55,7 @@ private class VeryFirstAchievementState(
     reports: Flow<String>,
 ) : AchievementState {
     private val mutableAchievement = MutableStateFlow<Achievement?>(null)
-    override val achievement =  mutableAchievement.filterNotNull()
+    override val achievement = mutableAchievement.filterNotNull()
 
     init {
         check(rule is AchievementRule.VeryFirstAchievementRule) { }
@@ -93,7 +91,7 @@ private class CounterAchievementState(
     reports: Flow<String>,
 ) : AchievementState {
     private val mutableAchievement = MutableStateFlow<Achievement?>(null)
-    override val achievement =  mutableAchievement.filterNotNull()
+    override val achievement = mutableAchievement.filterNotNull()
 
     init {
         check(rule is AchievementRule.CounterAchievementRule) { }

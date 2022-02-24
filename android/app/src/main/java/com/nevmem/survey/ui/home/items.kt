@@ -10,7 +10,7 @@ object HomeScreenHeader : HomeScreenItem()
 sealed class SurveyState : HomeScreenItem() {
     object NoSurvey : SurveyState()
     data class AlreadyAnsweredSurvey(val survey: Survey) : SurveyState()
-    data class ReadySurvey(val survey: Survey): SurveyState()
+    data class ReadySurvey(val survey: Survey) : SurveyState()
 }
 
 data class AchievementsState(

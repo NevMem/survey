@@ -7,10 +7,10 @@ import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.publisher.PublisherIdProvider
 import com.nevmem.survey.service.survey.SurveyService
 import com.nevmem.survey.ui.home.HomeScreenViewModel
-import com.nevmem.survey.ui.survey.SurveyScreenViewModel
 import com.nevmem.survey.ui.join.JoinScreenViewModel
 import com.nevmem.survey.ui.settings.SettingsScreenViewModel
 import com.nevmem.survey.ui.splash.EthnoSplashScreenViewModel
+import com.nevmem.survey.ui.survey.SurveyScreenViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

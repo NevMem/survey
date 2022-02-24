@@ -11,10 +11,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.nevmem.survey.ui.home.HomeScreen
-import com.nevmem.survey.ui.survey.SurveyScreen
 import com.nevmem.survey.ui.join.JoinScreen
 import com.nevmem.survey.ui.settings.SettingsScreen
 import com.nevmem.survey.ui.splash.EthnoSplashScreen
+import com.nevmem.survey.ui.survey.SurveyScreen
 
 @ExperimentalComposeUiApi
 class MainActivity : AppCompatActivity() {

@@ -66,7 +66,8 @@ private fun AchievementsView(item: AchievementsState) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp), elevation = 8.dp,
+            .padding(16.dp),
+        elevation = 8.dp,
         shape = RoundedCornerShape(8.dp),
     ) {
         Column {
