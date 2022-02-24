@@ -38,6 +38,11 @@ class SurveyService(
         }
     }
 
+    fun leaveSurvey() {
+        currentSurvey = null
+        preferencesService.delete("currentSurvey")
+    }
+
     fun saveSurvey(survey: Survey) {
         currentSurvey = survey
         preferencesService.put("currentSurvey", Json.encodeToString(Survey.serializer(), survey))

@@ -14,4 +14,6 @@ class PreferencesService(
     }
 
     fun get(key: String): String? = prefs.getString(key, null)
+
+    fun delete(key: String) = prefs.edit().remove(key).apply()
 }

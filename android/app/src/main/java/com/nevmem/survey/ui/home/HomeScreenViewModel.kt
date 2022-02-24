@@ -34,6 +34,10 @@ class HomeScreenViewModel(
         }
     }
 
+    fun leaveSurvey() {
+        surveyService.leaveSurvey()
+    }
+
     private fun Survey?.item(): HomeScreenItem {
         if (this == null) {
             return SurveyState.NoSurvey
