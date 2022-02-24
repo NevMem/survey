@@ -9,6 +9,7 @@ import com.nevmem.survey.service.survey.SurveyService
 import com.nevmem.survey.ui.home.HomeScreenViewModel
 import com.nevmem.survey.ui.survey.SurveyScreenViewModel
 import com.nevmem.survey.ui.join.JoinScreenViewModel
+import com.nevmem.survey.ui.settings.SettingsScreenViewModel
 import com.nevmem.survey.ui.splash.EthnoSplashScreenViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,4 +35,5 @@ fun createAppModule(context: Context) = module {
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
     viewModel { SurveyScreenViewModel(get(), get(named("background")), get()) }
     viewModel { HomeScreenViewModel(get(named("background")), get(), get()) }
+    viewModel { SettingsScreenViewModel(get(named("background"))) }
 }

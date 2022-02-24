@@ -13,6 +13,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import com.nevmem.survey.ui.home.HomeScreen
 import com.nevmem.survey.ui.survey.SurveyScreen
 import com.nevmem.survey.ui.join.JoinScreen
+import com.nevmem.survey.ui.settings.SettingsScreen
 import com.nevmem.survey.ui.splash.EthnoSplashScreen
 
 @ExperimentalComposeUiApi
@@ -24,13 +25,16 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MdcTheme {
                 val scaffoldState = rememberScaffoldState()
-                Scaffold(scaffoldState = scaffoldState) {
+                Scaffold(
+                    scaffoldState = scaffoldState,
+                ) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "splash") {
                         composable("splash") { EthnoSplashScreen(navController) }
                         composable("join") { JoinScreen(navController, scaffoldState) }
                         composable("survey") { SurveyScreen(scaffoldState) }
                         composable("home") { HomeScreen(navController) }
+                        composable("settings") { SettingsScreen(navController) }
                     }
                 }
             }

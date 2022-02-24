@@ -26,4 +26,6 @@
     <string name="achievements_title">Достижения</string>
 
     <string name="confirm_leave_survey">Вы уверены что хотите покинуть опрос?</string>
+
+    <string name="settings_title">Настройки</string>
 </resources>

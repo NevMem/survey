@@ -1,5 +1,6 @@
 package com.nevmem.survey.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,19 +42,20 @@ fun HomeScreen(
             when (homeItem) {
                 is AchievementsState -> item { AchievementsView(homeItem) }
                 is SurveyState -> item { SurveyView(navController, homeItem) { vm.leaveSurvey() } }
-                HomeScreenHeader -> item { HeaderItem() }
+                HomeScreenHeader -> item { HeaderItem(navController) }
             }
         }
     }
 }
 
 @Composable
-private fun HeaderItem() {
+private fun HeaderItem(navController: NavController) {
     Text(
         getText(id = R.string.app_name),
         modifier = Modifier
             .padding(top = 32.dp, bottom = 16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { navController.navigate("settings") },
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.h3,
     )
