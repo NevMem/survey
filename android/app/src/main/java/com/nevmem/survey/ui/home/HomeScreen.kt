@@ -14,20 +14,29 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.nevmem.survey.R
-import com.nevmem.survey.util.getText
+import com.nevmem.survey.service.achievement.api.Achievement
 import org.koin.androidx.compose.viewModel
 
 @Composable
@@ -40,10 +49,64 @@ fun HomeScreen(
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items.forEach { homeItem ->
             when (homeItem) {
-                is AchievementsState -> item { AchievementsView(homeItem) }
+                is AchievementsState -> item { AchievementsView(homeItem.achievements) }
                 is SurveyState -> item { SurveyView(navController, homeItem) { vm.leaveSurvey() } }
                 HomeScreenHeader -> item { HeaderItem(navController) }
+                FooterScreenHeader -> item { FooterView() }
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenPreview() {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = remember {
+            object : Arrangement.Vertical {
+                override fun Density.arrange(
+                    totalSize: Int,
+                    sizes: IntArray,
+                    outPositions: IntArray
+                ) {
+                    var currentOffset = 0
+                    sizes.forEachIndexed { index, size ->
+                        if (index == sizes.lastIndex) {
+                            outPositions[index] = totalSize - size
+                        } else {
+                            outPositions[index] = currentOffset
+                            currentOffset += size
+                        }
+                    }
+                }
+            }
+        },
+    ) {
+        item { HeaderItem(rememberNavController()) }
+        item { AchievementsView(emptyList()) }
+        item { SurveyView(rememberNavController(), SurveyState.NoSurvey) {  } }
+        item { FooterView() }
+    }
+}
+
+@Composable
+private fun FooterView() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = {  }) {
+            Icon(imageVector = Icons.Filled.Settings, contentDescription = "settings button")
+        }
+        Button(
+            onClick = {},
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Text(stringResource(id = R.string.take_survey_long))
         }
     }
 }
@@ -51,7 +114,7 @@ fun HomeScreen(
 @Composable
 private fun HeaderItem(navController: NavController) {
     Text(
-        getText(id = R.string.app_name),
+        stringResource(id = R.string.app_name),
         modifier = Modifier
             .padding(top = 32.dp, bottom = 16.dp)
             .fillMaxWidth()
@@ -62,7 +125,7 @@ private fun HeaderItem(navController: NavController) {
 }
 
 @Composable
-private fun AchievementsView(item: AchievementsState) {
+private fun AchievementsView(achievements: List<Achievement>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,7 +135,7 @@ private fun AchievementsView(item: AchievementsState) {
     ) {
         Column {
             Text(
-                getText(id = R.string.achievements_title),
+                stringResource(id = R.string.achievements_title),
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
                 style = MaterialTheme.typography.subtitle1,
             )
@@ -82,7 +145,7 @@ private fun AchievementsView(item: AchievementsState) {
                     .fillMaxSize()
                     .horizontalScroll(rememberScrollState()),
             ) {
-                item.achievements.forEach {
+                achievements.forEach {
                     AchievementView(it)
                 }
             }
@@ -131,7 +194,7 @@ private fun NoSurveyView(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Button(onClick = { navController.navigate("join") }) {
-            Text(getText(id = R.string.join_survey))
+            Text(stringResource(id = R.string.join_survey))
         }
     }
 }
@@ -145,7 +208,7 @@ private fun ReadySurveyView(
     var dialogOpened by remember { mutableStateOf(false) }
 
     Text(
-        getText(id = R.string.home_screen_joined_survey),
+        stringResource(id = R.string.home_screen_joined_survey),
         style = MaterialTheme.typography.subtitle1,
     )
     Text(
@@ -162,21 +225,21 @@ private fun ReadySurveyView(
         Button(
             onClick = { navController.navigate("survey") },
         ) {
-            Text(getText(id = R.string.take_survey))
+            Text(stringResource(id = R.string.take_survey))
         }
         OutlinedButton(
             onClick = { dialogOpened = true }
         ) {
-            Text(getText(id = R.string.leave_survey))
+            Text(stringResource(id = R.string.leave_survey))
         }
     }
 
     if (dialogOpened) {
         AlertDialog(
-            title = { Text(getText(id = R.string.confirm_leave_survey)) },
+            title = { Text(stringResource(id = R.string.confirm_leave_survey)) },
             onDismissRequest = { dialogOpened = false },
-            confirmButton = { Button(onClick = { leaveSurvey(); dialogOpened = false }) { Text(getText(id = R.string.ok)) } },
-            dismissButton = { OutlinedButton(onClick = { dialogOpened = false }) { Text(getText(id = R.string.cancel)) } },
+            confirmButton = { Button(onClick = { leaveSurvey(); dialogOpened = false }) { Text(stringResource(id = R.string.ok)) } },
+            dismissButton = { OutlinedButton(onClick = { dialogOpened = false }) { Text(stringResource(id = R.string.cancel)) } },
         )
     }
 }

@@ -20,6 +20,7 @@
     <string name="sending_answers_failed_description">Мы уже работаем над её исправлением</string>
 
     <string name="take_survey">Пройти</string>
+    <string name="take_survey_long">Пройти опрос</string>
     <string name="leave_survey">Покинуть опрос</string>
     <string name="join_survey">Присоединиться к опросу</string>
     <string name="home_screen_joined_survey">Вы участвуете в опросе</string>

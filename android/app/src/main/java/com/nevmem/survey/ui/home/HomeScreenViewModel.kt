@@ -25,7 +25,7 @@ class HomeScreenViewModel(
                 surveyService.surveys,
                 achievementService.achievements,
             ) { survey: Survey?, achievements: List<Achievement> ->
-                listOf(HomeScreenHeader, achievements.item(), survey.item())
+                listOf(HomeScreenHeader, achievements.item(), survey.item(), FooterScreenHeader)
             }.collect {
                 withContext(Dispatchers.Main) {
                     uiState.value = it

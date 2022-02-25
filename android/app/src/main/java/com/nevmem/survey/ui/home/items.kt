@@ -6,6 +6,7 @@ import com.nevmem.survey.service.achievement.api.Achievement
 sealed class HomeScreenItem
 
 object HomeScreenHeader : HomeScreenItem()
+object FooterScreenHeader : HomeScreenItem()
 
 sealed class SurveyState : HomeScreenItem() {
     object NoSurvey : SurveyState()
