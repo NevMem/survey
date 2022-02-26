@@ -2,7 +2,7 @@ package com.nevmem.survey.ui.join
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.nevmem.survey.api.NetworkService
+import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.service.survey.SurveyService
 import com.nevmem.survey.util.injectBackgroundScope
 import kotlinx.coroutines.Dispatchers

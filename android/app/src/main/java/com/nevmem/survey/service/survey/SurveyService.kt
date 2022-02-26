@@ -1,6 +1,6 @@
 package com.nevmem.survey.service.survey
 
-import com.nevmem.survey.api.NetworkService
+import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.service.preferences.PreferencesService

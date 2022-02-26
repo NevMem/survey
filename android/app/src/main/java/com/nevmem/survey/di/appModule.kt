@@ -1,7 +1,7 @@
 package com.nevmem.survey.di
 
 import android.content.Context
-import com.nevmem.survey.api.createNetworkService
+import com.nevmem.survey.network.api.createNetworkService
 import com.nevmem.survey.service.achievement.api.createAchievementService
 import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.publisher.PublisherIdProvider

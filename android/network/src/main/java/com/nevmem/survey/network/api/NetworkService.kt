@@ -1,4 +1,4 @@
-package com.nevmem.survey.api
+package com.nevmem.survey.network.api
 
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.survey.Survey

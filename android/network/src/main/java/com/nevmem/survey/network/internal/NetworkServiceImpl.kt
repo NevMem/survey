@@ -1,6 +1,6 @@
-package com.nevmem.survey.internal
+package com.nevmem.survey.network.internal
 
-import com.nevmem.survey.api.NetworkService
+import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
 import com.nevmem.survey.data.request.answer.PublishAnswerRequest

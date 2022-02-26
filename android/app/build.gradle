@@ -64,18 +64,16 @@ android {
 dependencies {
     implementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintLayout"
     implementation "androidx.core:core-ktx:$versions.coreKtx"
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
     implementation "com.google.android.material:material:$versions.material"
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
     implementation "com.yandex.android:mobmetricalib:$versions.metrica"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "io.insert-koin:koin-android:$versions.koin"
     implementation "io.insert-koin:koin-androidx-compose:$versions.koin"
-    implementation "com.bluelinelabs:conductor:$versions.conductor"
-    implementation "com.bluelinelabs:conductor-androidx-transition:$versions.conductor"
     implementation 'androidx.activity:activity-compose:1.4.0'
     implementation 'androidx.compose.material:material:1.1.0'
     implementation 'androidx.compose.foundation:foundation:1.1.0'
