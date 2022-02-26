@@ -3,6 +3,7 @@ package com.nevmem.survey.service.survey
 import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.survey.Survey
+import com.nevmem.survey.report.report
 import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.uid.UserIdProvider
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +27,7 @@ class SurveyService(
         get() = currentSurvey!!
 
     init {
+        report("survey-service", "init")
         val prefValue = preferencesService.get("currentSurvey")
         currentSurvey = if (prefValue != null) {
             try {

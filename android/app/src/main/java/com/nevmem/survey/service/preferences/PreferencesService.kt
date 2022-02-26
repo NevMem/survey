@@ -2,6 +2,7 @@ package com.nevmem.survey.service.preferences
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import com.nevmem.survey.report.report
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,6 +17,7 @@ class PreferencesService(
     private val changes = MutableSharedFlow<String>(1)
 
     init {
+        report("preferences-service", "init")
         prefs.registerOnSharedPreferenceChangeListener { _, key ->
             background.launch {
                 changes.emit(key)

@@ -2,12 +2,11 @@ package com.nevmem.survey.service.push.internal
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.nevmem.survey.network.api.NetworkService
-import com.nevmem.survey.service.preferences.PreferencesService
+import com.nevmem.survey.report.report
 import com.nevmem.survey.service.push.api.PushService
 import com.nevmem.survey.service.settings.api.SettingsService
 import com.nevmem.survey.service.uid.UserIdProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 internal class PushServiceImpl(
@@ -20,6 +19,7 @@ internal class PushServiceImpl(
     private var currentToken: String? = null
 
     init {
+        report("push-service", "init")
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             currentToken = if (!it.isSuccessful) {
                 null

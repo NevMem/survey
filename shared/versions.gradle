@@ -15,5 +15,5 @@ ext.versions = [
     'kotlinxSerializationJson': '1.3.1',
     'lifecycleExtensions': '2.2.0',
     'material': '1.5.0',
-    'metrica': '3.16.1',
+    'metrica': '4.1.1',
 ]

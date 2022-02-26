@@ -1,5 +1,6 @@
 package com.nevmem.survey.service.achievement.internal
 
+import com.nevmem.survey.report.report
 import com.nevmem.survey.service.achievement.api.Achievement
 import com.nevmem.survey.service.achievement.api.AchievementService
 import com.nevmem.survey.service.preferences.PreferencesService
@@ -165,6 +166,10 @@ internal class AchievementServiceImpl(
     private val reports = MutableSharedFlow<String>()
     private val achievementsState = AchievementsState(background, preferencesService, reports)
     override val achievements = achievementsState.achievements
+
+    init {
+        report("achievement-service", "init")
+    }
 
     override fun reportSurveyCompleted() {
         background.launch {

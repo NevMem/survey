@@ -1,5 +1,6 @@
 package com.nevmem.survey.service.settings.internal
 
+import com.nevmem.survey.report.report
 import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.settings.api.Setting
 import com.nevmem.survey.service.settings.api.SettingsService
@@ -33,6 +34,10 @@ internal class SettingsServiceImpl(
     private val preferencesService: PreferencesService,
 ) : SettingsService {
     override val isPushNotificationsEnabled: Setting<Boolean> = boolSetting("push_notifications_enabled")
+
+    init {
+        report("settings-service", "init")
+    }
 
     private fun boolSetting(name: String) = BoolSettingImpl(preferencesService, name)
 

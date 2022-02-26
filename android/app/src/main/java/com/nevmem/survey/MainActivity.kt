@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.material.composethemeadapter.MdcTheme
+import com.nevmem.survey.report.report
 import com.nevmem.survey.ui.home.HomeScreen
 import com.nevmem.survey.ui.join.JoinScreen
 import com.nevmem.survey.ui.settings.SettingsScreen
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        report("main-activity", "onCreate")
 
         setContent {
             MdcTheme {
