@@ -46,13 +46,34 @@ fun HomeScreen(
     val vm by viewModel<HomeScreenViewModel>()
     val items = vm.uiState.value
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = remember {
+            object : Arrangement.Vertical {
+                override fun Density.arrange(
+                    totalSize: Int,
+                    sizes: IntArray,
+                    outPositions: IntArray
+                ) {
+                    var currentOffset = 0
+                    sizes.forEachIndexed { index, size ->
+                        if (index == sizes.lastIndex) {
+                            outPositions[index] = totalSize - size
+                        } else {
+                            outPositions[index] = currentOffset
+                            currentOffset += size
+                        }
+                    }
+                }
+            }
+        },
+    ) {
         items.forEach { homeItem ->
             when (homeItem) {
                 is AchievementsState -> item { AchievementsView(homeItem.achievements) }
                 is SurveyState -> item { SurveyView(navController, homeItem) { vm.leaveSurvey() } }
-                HomeScreenHeader -> item { HeaderItem(navController) }
-                FooterScreenHeader -> item { FooterView() }
+                HomeScreenHeader -> item { HeaderItem() }
+                is HomeScreenFooter -> item { FooterView(navController, homeItem) }
             }
         }
     }
@@ -83,15 +104,18 @@ private fun HomeScreenPreview() {
             }
         },
     ) {
-        item { HeaderItem(rememberNavController()) }
+        item { HeaderItem() }
         item { AchievementsView(emptyList()) }
         item { SurveyView(rememberNavController(), SurveyState.NoSurvey) {  } }
-        item { FooterView() }
+        item { FooterView(rememberNavController(), HomeScreenFooter(true)) }
     }
 }
 
 @Composable
-private fun FooterView() {
+private fun FooterView(
+    navController: NavController,
+    item: HomeScreenFooter,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,26 +123,28 @@ private fun FooterView() {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(onClick = {  }) {
+        IconButton(onClick = { navController.navigate("settings") }) {
             Icon(imageVector = Icons.Filled.Settings, contentDescription = "settings button")
         }
         Button(
-            onClick = {},
-            shape = RoundedCornerShape(16.dp),
+            onClick = { navController.navigate("survey") },
+            enabled = item.canStartSurvey,
         ) {
-            Text(stringResource(id = R.string.take_survey_long))
+            Text(
+                stringResource(id = R.string.take_survey_long),
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
+            )
         }
     }
 }
 
 @Composable
-private fun HeaderItem(navController: NavController) {
+private fun HeaderItem() {
     Text(
         stringResource(id = R.string.app_name),
         modifier = Modifier
             .padding(top = 32.dp, bottom = 16.dp)
-            .fillMaxWidth()
-            .clickable { navController.navigate("settings") },
+            .fillMaxWidth(),
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.h3,
     )
