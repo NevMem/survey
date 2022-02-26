@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Exported
-data class User(
+data class Administrator(
     val id: Long,
     val login: String,
     val name: String,

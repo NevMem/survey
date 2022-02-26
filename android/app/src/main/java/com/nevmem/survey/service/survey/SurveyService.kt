@@ -4,7 +4,7 @@ import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.service.preferences.PreferencesService
-import com.nevmem.survey.service.publisher.PublisherIdProvider
+import com.nevmem.survey.service.uid.UserIdProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.serialization.json.Json
@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 class SurveyService(
     private val preferencesService: PreferencesService,
     private val networkService: NetworkService,
-    private val publisherIdProvider: PublisherIdProvider,
+    private val userIdProvider: UserIdProvider,
 ) {
     private var currentSurvey: Survey? = null
         set(value) {
@@ -49,6 +49,6 @@ class SurveyService(
     }
 
     suspend fun sendAnswer(answers: List<QuestionAnswer>) {
-        networkService.sendSurvey(survey.surveyId, publisherIdProvider.provide(), answers)
+        networkService.sendSurvey(survey.surveyId, userIdProvider.provide(), answers)
     }
 }

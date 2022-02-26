@@ -4,10 +4,13 @@ import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
 import com.nevmem.survey.data.request.answer.PublishAnswerRequest
+import com.nevmem.survey.data.request.push.RegisterPushTokenRegisterRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
 import com.nevmem.survey.data.response.answer.PublishAnswerResponse
+import com.nevmem.survey.data.response.push.RegisterPushTokenResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
 import com.nevmem.survey.data.survey.Survey
+import com.nevmem.survey.data.user.UserId
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -42,12 +45,12 @@ internal class NetworkServiceImpl : NetworkService {
 
     override suspend fun sendSurvey(
         surveyId: String,
-        publisherId: String,
+        uid: UserId,
         answers: List<QuestionAnswer>
     ) {
         val request = PublishAnswerRequest(
             answer = SurveyAnswer(
-                publisherId = publisherId,
+                uid = uid,
                 surveyId = surveyId,
                 answers = answers,
                 gallery = null,
@@ -55,6 +58,17 @@ internal class NetworkServiceImpl : NetworkService {
         )
         post<PublishAnswerRequest, PublishAnswerResponse>(
             "$baseUrl/v1/answers/publish",
+            request,
+        )
+    }
+
+    override suspend fun sendToken(uid: UserId, token: String?) {
+        val request = RegisterPushTokenRegisterRequest(
+            uid = uid,
+            token = token,
+        )
+        post<RegisterPushTokenRegisterRequest, RegisterPushTokenResponse>(
+            "$baseUrl/v1/push/register",
             request,
         )
     }

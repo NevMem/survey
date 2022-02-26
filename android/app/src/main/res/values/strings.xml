@@ -29,4 +29,6 @@
     <string name="confirm_leave_survey">Вы уверены что хотите покинуть опрос?</string>
 
     <string name="settings_title">Настройки</string>
+
+    <string name="notifications_enabled_setting_title">Уведомления</string>
 </resources>

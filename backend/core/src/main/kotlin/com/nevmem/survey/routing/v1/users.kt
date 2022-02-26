@@ -153,7 +153,7 @@ fun Route.users() {
                 }
 
                 val updatingUser =
-                    usersService.getUserById(request.user.id) ?: throw IllegalStateException("User not found")
+                    usersService.getUserById(request.administrator.id) ?: throw IllegalStateException("User not found")
 
                 if (user.id == updatingUser.id) {
                     throw IllegalStateException("You cannot update your own roles")
@@ -161,7 +161,7 @@ fun Route.users() {
 
                 usersService.updateUserRoles(updatingUser, request.roles.map { roleModel.roleById(it.id) })
 
-                call.respond(UpdateRolesResponse(request.user, request.roles))
+                call.respond(UpdateRolesResponse(request.administrator, request.roles))
             }
         }
     }

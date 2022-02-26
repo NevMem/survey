@@ -4,7 +4,9 @@ import android.content.Context
 import com.nevmem.survey.network.api.createNetworkService
 import com.nevmem.survey.service.achievement.api.createAchievementService
 import com.nevmem.survey.service.preferences.PreferencesService
-import com.nevmem.survey.service.publisher.PublisherIdProvider
+import com.nevmem.survey.service.push.api.createPushService
+import com.nevmem.survey.service.settings.api.createSettingsService
+import com.nevmem.survey.service.uid.UserIdProvider
 import com.nevmem.survey.service.survey.SurveyService
 import com.nevmem.survey.ui.home.HomeScreenViewModel
 import com.nevmem.survey.ui.join.JoinScreenViewModel
@@ -17,6 +19,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.plus
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 fun createAppModule(context: Context) = module {
@@ -26,14 +29,16 @@ fun createAppModule(context: Context) = module {
     single { createNetworkService() }
 
     single { context.getSharedPreferences("storage", Context.MODE_PRIVATE) }
-    single { PreferencesService(get()) }
+    single { PreferencesService(get(named("background")), get()) }
     single { SurveyService(get(), get(), get()) }
-    single { PublisherIdProvider() }
+    single { UserIdProvider() }
     single { createAchievementService(get(named("background")), get()) }
+    single { createSettingsService(get()) }
+    single { createPushService(get(named("backend")), get(), get(), get()) }
 
     viewModel { JoinScreenViewModel(get(), get()) }
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
     viewModel { SurveyScreenViewModel(get(), get(named("background")), get()) }
     viewModel { HomeScreenViewModel(get(named("background")), get(), get()) }
-    viewModel { SettingsScreenViewModel(get(named("background"))) }
+    viewModel { SettingsScreenViewModel(get(named("background")), get()) }
 }
