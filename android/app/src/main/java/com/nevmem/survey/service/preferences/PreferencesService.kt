@@ -16,13 +16,16 @@ class PreferencesService(
 ) {
     private val changes = MutableSharedFlow<String>(1)
 
+    private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        report("preference-changed", mapOf("key" to key))
+        background.launch {
+            changes.emit(key)
+        }
+    }
+
     init {
         report("preferences-service", "init")
-        prefs.registerOnSharedPreferenceChangeListener { _, key ->
-            background.launch {
-                changes.emit(key)
-            }
-        }
+        prefs.registerOnSharedPreferenceChangeListener(prefsListener)
     }
 
     @SuppressLint("ApplySharedPref")

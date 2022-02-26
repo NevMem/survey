@@ -20,6 +20,9 @@ internal class PushServiceImpl(
 
     init {
         report("push-service", "init")
+    }
+
+    override fun start() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             currentToken = if (!it.isSuccessful) {
                 null
@@ -41,6 +44,7 @@ internal class PushServiceImpl(
         if (!settingsService.isPushNotificationsEnabled.value) {
             token = null
         }
+        report("sending-push-token", mapOf("token" to token))
         val uid = userIdProvider.provide()
         background.launch {
             try {

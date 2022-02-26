@@ -13,7 +13,7 @@ fun report(event: String, message: String?) {
     YandexMetrica.reportEvent(event, message)
 }
 
-fun report(event: String, params: Map<String, String>) {
+fun report(event: String, params: Map<String, Any?>) {
     Log.d("report", "Event: $event params: $params")
     YandexMetrica.reportEvent(event, params)
 }

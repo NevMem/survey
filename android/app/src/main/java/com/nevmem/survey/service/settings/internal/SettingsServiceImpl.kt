@@ -4,6 +4,7 @@ import com.nevmem.survey.report.report
 import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.settings.api.Setting
 import com.nevmem.survey.service.settings.api.SettingsService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,11 +24,12 @@ private class BoolSettingImpl(
             }
         }
 
-    override val changes: Flow<Boolean> = preferencesService
-        .prefChanges(name)
-        .map {
-            value
-        }
+    override val changes: Flow<Boolean>
+        get() = preferencesService
+            .prefChanges(name)
+            .map {
+                value
+            }
 }
 
 internal class SettingsServiceImpl(
@@ -40,24 +42,4 @@ internal class SettingsServiceImpl(
     }
 
     private fun boolSetting(name: String) = BoolSettingImpl(preferencesService, name)
-
-    /* private fun boolSetting(name: String): Setting<Boolean> {
-        return object : Setting<Boolean> {
-            override var value: Boolean
-                get() {
-                    return preferencesService.get(name) == "true"
-                }
-                set(value) {
-                    if (value) {
-                        preferencesService.put(name, "true")
-                    } else {
-                        preferencesService.delete(name)
-                    }
-                }
-
-            override val changes: Flow<Boolean> = preferencesService.prefChanges(name).map {
-                value
-            }
-        }
-    } */
 }

@@ -34,7 +34,7 @@ fun createAppModule(context: Context) = module {
     single { UserIdProvider() }
     single { createAchievementService(get(named("background")), get()) }
     single { createSettingsService(get()) }
-    single { createPushService(get(named("backend")), get(), get(), get()) }
+    single { createPushService(get(named("background")), get(), get(), get()) }
 
     viewModel { JoinScreenViewModel(get(), get()) }
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
