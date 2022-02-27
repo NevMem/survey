@@ -1,5 +1,6 @@
 package com.nevmem.survey.ui.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,10 +39,27 @@ fun SettingsScreen(
         vm.uiState.value.forEach {
             when (it) {
                 HeaderSettingsScreenItem -> item { HeaderView(navController) }
-                is AboutSettingsScreenItem -> item { AboutView(it) }
+                is AboutSettingsScreenItem -> item { AboutView(it) { vm.onTitleClick() } }
                 is SwitchSettingsScreenItem -> item { SwitchView(it) }
+                DeveloperSettingsHomeScreenItem -> item { DeveloperSettingsItem(navController) }
             }
         }
+    }
+}
+
+@Composable
+private fun DeveloperSettingsItem(
+    navController: NavController,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { navController.navigate("developer-settings") },
+    ) {
+        Text(
+            "Developer settings",
+            modifier = Modifier.padding(16.dp),
+        )
     }
 }
 
@@ -56,6 +73,7 @@ private fun SwitchView(item: SwitchSettingsScreenItem) {
             .padding(16.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(stringResource(id = item.title))
         Switch(
@@ -68,14 +86,23 @@ private fun SwitchView(item: SwitchSettingsScreenItem) {
 }
 
 @Composable
-private fun AboutView(item: AboutSettingsScreenItem) {
+private fun AboutView(
+    item: AboutSettingsScreenItem,
+    onTitleClick: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(stringResource(id = R.string.app_name), style = MaterialTheme.typography.h4)
+        Text(
+            stringResource(id = R.string.app_name),
+            style = MaterialTheme.typography.h4,
+            modifier = Modifier.clickable {
+                onTitleClick()
+            },
+        )
         Text("Version: ${item.version}", style = MaterialTheme.typography.body2)
     }
 }
@@ -99,6 +126,6 @@ private fun HeaderView(navController: NavController) {
 private fun SettingsScreenPreview() {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { HeaderView(navController = rememberNavController()) }
-        item { AboutView(item = AboutSettingsScreenItem("0.0.0")) }
+        item { AboutView(item = AboutSettingsScreenItem("0.0.0")) {} }
     }
 }

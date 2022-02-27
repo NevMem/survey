@@ -40,5 +40,5 @@ fun createAppModule(context: Context) = module {
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
     viewModel { SurveyScreenViewModel(get(), get(named("background")), get()) }
     viewModel { HomeScreenViewModel(get(named("background")), get(), get()) }
-    viewModel { SettingsScreenViewModel(get(named("background")), get()) }
+    viewModel { SettingsScreenViewModel(get(named("background")), get(), get()) }
 }

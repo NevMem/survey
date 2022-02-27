@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                         composable("survey") { SurveyScreen(scaffoldState) }
                         composable("home") { HomeScreen(navController) }
                         composable("settings") { SettingsScreen(navController) }
+                        composable("developer-settings") {  }
                     }
                 }
             }

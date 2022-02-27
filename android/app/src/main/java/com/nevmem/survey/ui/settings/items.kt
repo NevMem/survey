@@ -8,6 +8,8 @@ sealed class SettingsScreenItem
 object HeaderSettingsScreenItem : SettingsScreenItem()
 data class AboutSettingsScreenItem(val version: String) : SettingsScreenItem()
 
+object DeveloperSettingsHomeScreenItem : SettingsScreenItem()
+
 data class SwitchSettingsScreenItem(
     @StringRes val title: Int,
     val setting: Setting<Boolean>,
