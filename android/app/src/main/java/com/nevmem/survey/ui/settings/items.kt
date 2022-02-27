@@ -14,3 +14,7 @@ data class SwitchSettingsScreenItem(
     @StringRes val title: Int,
     val setting: Setting<Boolean>,
 ) : SettingsScreenItem()
+
+data class BlockSettingsScreenItem(
+    val list: List<SettingsScreenItem>,
+) : SettingsScreenItem()

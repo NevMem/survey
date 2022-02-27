@@ -39,9 +39,13 @@ class SettingsScreenViewModel(
         background.launch(Dispatchers.Main) {
             val items = mutableListOf(
                 HeaderSettingsScreenItem,
-                SwitchSettingsScreenItem(
-                    R.string.notifications_enabled_setting_title,
-                    settingsService.isPushNotificationsEnabled,
+                BlockSettingsScreenItem(
+                    listOf(
+                        SwitchSettingsScreenItem(
+                            R.string.notifications_enabled_setting_title,
+                            settingsService.isPushNotificationsEnabled,
+                        ),
+                    ),
                 ),
             )
 

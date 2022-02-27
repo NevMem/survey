@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -42,6 +45,45 @@ fun SettingsScreen(
                 is AboutSettingsScreenItem -> item { AboutView(it) { vm.onTitleClick() } }
                 is SwitchSettingsScreenItem -> item { SwitchView(it) }
                 DeveloperSettingsHomeScreenItem -> item { DeveloperSettingsItem(navController) }
+                is BlockSettingsScreenItem -> item { BlockView(vm, navController, it) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ItemBuilder(
+    navController: NavController,
+    vm: SettingsScreenViewModel,
+    item: SettingsScreenItem,
+) {
+    when (item) {
+        HeaderSettingsScreenItem -> { HeaderView(navController) }
+        is AboutSettingsScreenItem -> { AboutView(item) { vm.onTitleClick() } }
+        is SwitchSettingsScreenItem -> { SwitchView(item) }
+        DeveloperSettingsHomeScreenItem -> { DeveloperSettingsItem(navController) }
+        is BlockSettingsScreenItem -> { BlockView(vm, navController, item) }
+    }
+}
+
+@Composable
+private fun BlockView(
+    vm: SettingsScreenViewModel,
+    navController: NavController,
+    item: BlockSettingsScreenItem,
+) {
+    Card(
+        modifier = Modifier.padding(16.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+        ) {
+            item.list.map {
+                ItemBuilder(navController = navController, vm = vm, item = it)
             }
         }
     }
