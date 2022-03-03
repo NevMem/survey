@@ -38,7 +38,7 @@ class Exporter : KoinComponent {
                 val writer = file.bufferedWriter()
 
                 val headerLine =
-                    listOf("publisherId") +
+                    listOf("uuid") +
                         survey.commonQuestions.map { it.id } +
                         survey.questions.map {
                             when (it) {
@@ -86,6 +86,6 @@ class Exporter : KoinComponent {
             }
         }
 
-        return (listOf(publisherId) + answers).joinToString(",") { it.toString() }
+        return (listOf(uid.uuid) + answers).joinToString(",") { it.toString() }
     }
 }

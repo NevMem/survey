@@ -32,7 +32,7 @@ def test_simple_task(client: Client):
         response = client.publish_answer({
             'answer': {
                 'surveyId': surveyLiteral,
-                'publisherId': publisherId,
+                'uid': {'uuid': publisherId},
                 'answers': [
                     {
                         'type': 'stars',

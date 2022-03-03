@@ -27,7 +27,7 @@ def test_simple_answer(client: Client):
     response = client.publish_answer({
         'answer': {
             'surveyId': surveyId,
-            'publisherId': publisherId,
+            'uid': {'uuid': publisherId},
             'answers': [
                 {
                     'type': 'stars',
@@ -40,7 +40,6 @@ def test_simple_answer(client: Client):
     assert response.status_code == 200
 
     response = client.load_answers(surveyId)
-    print(response.text)
     assert response.status_code == 200
 
 
@@ -74,7 +73,7 @@ def test_survey_metadata(client: Client):
         response = client.publish_answer({
             'answer': {
                 'surveyId': surveyLiteral,
-                'publisherId': publisherId,
+                'uid': {'uuid': publisherId},
                 'answers': [
                     {
                         'type': 'stars',

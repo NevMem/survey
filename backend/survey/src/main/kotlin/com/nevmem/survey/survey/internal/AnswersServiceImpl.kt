@@ -3,6 +3,7 @@ package com.nevmem.survey.survey.internal
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
+import com.nevmem.survey.data.user.UserId
 import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.survey.AlreadyPublishedAnswerException
 import com.nevmem.survey.survey.AnswersService
@@ -52,7 +53,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
 
         val count = transaction {
             SurveyAnswerDTO.find {
-                (SurveyAnswerTable.publisherId eq answer.publisherId) and
+                (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
                     (SurveyAnswerTable.surveyId eq answer.surveyId)
             }.count()
         }
@@ -64,7 +65,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
 
         transaction {
             val surveyAnswer = SurveyAnswerDTO.new {
-                this.publisherId = answer.publisherId
+                this.publisherId = answer.uid.uuid
                 this.surveyId = answer.surveyId
                 this.mediaGalleryId = answer.gallery?.id
             }
@@ -146,7 +147,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             surveyId = this.surveyId,
             gallery = null,
             answers = this.answers.map { it.entity() },
-            publisherId = this.publisherId,
+            uid = UserId(this.publisherId),
         )
     }
 
