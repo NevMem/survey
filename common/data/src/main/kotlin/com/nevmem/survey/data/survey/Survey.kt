@@ -13,4 +13,9 @@ data class Survey(
     val name: String,
     val questions: List<Question>,
     val commonQuestions: List<CommonQuestion>,
-)
+    val surveyCoolDown: Long = SURVEY_COOL_DOWN_ONLY_ONCE,
+) {
+    companion object {
+        const val SURVEY_COOL_DOWN_ONLY_ONCE = -1L
+    }
+}

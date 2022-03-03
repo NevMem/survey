@@ -1,3 +1,13 @@
+interface Administrator {
+	id: number;
+	login: string;
+	name: string;
+	surname: string;
+	email: string;
+	roles: Role[];
+	allAvailableRoles: Role[];
+}
+
 interface AllRolesResponse {
 	roles: Role[];
 }
@@ -66,7 +76,7 @@ interface GetSurveyResponse {
 
 interface Invite {
 	inviteId: string;
-	acceptedBy: User | undefined;
+	acceptedBy: Administrator | undefined;
 	isExpired: Boolean;
 }
 
@@ -100,7 +110,7 @@ interface LoginSuccessful extends LoginResponse {
 }
 
 interface ManagedUsersResponse {
-	users: User[];
+	administrators: Administrator[];
 }
 
 interface Media {
@@ -179,10 +189,11 @@ interface Survey {
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
+	surveyCoolDown: number;
 }
 
 interface SurveyAnswer {
-	publisherId: string;
+	uid: UserId;
 	surveyId: string;
 	answers: QuestionAnswer[];
 	gallery: MediaGallery | undefined;
@@ -216,23 +227,17 @@ interface TextQuestionAnswer extends QuestionAnswer {
 }
 
 interface UpdateRolesRequest {
-	user: User;
+	administrator: Administrator;
 	roles: Role[];
 }
 
 interface UpdateRolesResponse {
-	user: User;
+	administrator: Administrator;
 	roles: Role[];
 }
 
-interface User {
-	id: number;
-	login: string;
-	name: string;
-	surname: string;
-	email: string;
-	roles: Role[];
-	allAvailableRoles: Role[];
+interface UserId {
+	uuid: string;
 }
 
 export function instanceOfCreateInviteError(object: CreateInviteResponse): object is CreateInviteError {
@@ -303,6 +308,7 @@ export {
 }
 
 export type {
+	Administrator,
 	AllRolesResponse,
 	AllSurveysResponse,
 	CommonQuestion,
@@ -351,5 +357,5 @@ export type {
 	TextQuestionAnswer,
 	UpdateRolesRequest,
 	UpdateRolesResponse,
-	User,
+	UserId,
 }
