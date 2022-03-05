@@ -50,6 +50,7 @@ def test_simple_task(client: Client):
     taskId = response.json()['id']
 
     response = client.tasks(token)
+    print(response.text)
     assert response.status_code == 200
 
     response = client.task(token, taskId)

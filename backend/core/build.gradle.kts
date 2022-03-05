@@ -52,4 +52,5 @@ dependencies {
     implementation(project(":backend:survey"))
     implementation(project(":backend:task"))
     implementation(project(":backend:users"))
+    implementation(project(":backend:worker:api"))
 }

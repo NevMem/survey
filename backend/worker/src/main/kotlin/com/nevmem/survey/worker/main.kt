@@ -8,10 +8,24 @@ import com.nevmem.survey.task.createTaskService
 import com.nevmem.survey.worker.internal.AvailableTasksProvider
 import com.nevmem.survey.worker.internal.Exporter
 import com.nevmem.survey.worker.internal.TaskLocker
+import com.nevmem.survey.worker.routing.configureRouting
 import com.nevmem.survey.worker.setup.setupDatabases
-import kotlinx.coroutines.runBlocking
+import com.nevmem.surveys.converters.ExportDataTaskConverter
+import com.nevmem.surveys.converters.MediaConverter
+import com.nevmem.surveys.converters.TaskLogConverter
+import io.ktor.application.install
+import io.ktor.features.CallLogging
+import io.ktor.features.ContentNegotiation
+import io.ktor.serialization.json
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import org.koin.ktor.ext.Koin
+import org.slf4j.event.Level
 
 private val coreModule = module {
     single { createTaskService() }
@@ -19,6 +33,9 @@ private val coreModule = module {
     single { createSurveysService() }
     single { createAnswersService() }
     single { createMediaStorageService() }
+    single { ExportDataTaskConverter() }
+    single { TaskLogConverter() }
+    single { MediaConverter() }
 }
 
 fun main() {
@@ -34,7 +51,7 @@ fun main() {
     val taskLocker = TaskLocker()
     val exporter = Exporter()
 
-    runBlocking {
+    GlobalScope.launch {
         tasksProvider.tasks()
             .collect {
                 val task = it.first()
@@ -45,4 +62,21 @@ fun main() {
                 exporter.runExportTask(lockedTask)
             }
     }
+
+    embeddedServer(Netty, port = 80, host = "0.0.0.0") {
+        install(CallLogging) {
+            level = Level.INFO
+        }
+//        install(Koin) {
+//            modules(coreModule)
+//        }
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    useArrayPolymorphism = false
+                }
+            )
+        }
+        configureRouting()
+    }.start(wait = true)
 }

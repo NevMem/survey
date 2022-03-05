@@ -3,6 +3,7 @@ pluginManagement {
     val kotlinVersion: String by settings
     plugins {
         id("com.google.devtools.ksp") version kspVersion
+        id("org.jetbrains.kotlin.jvm") version "1.5.30"
     }
     repositories {
         gradlePluginPortal()
@@ -32,3 +33,4 @@ include("util:exporter")
 include(":android")
 include(":android:app")
 include(":android:network")
+include(":backend:worker:api")

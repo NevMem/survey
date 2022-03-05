@@ -1,3 +1,5 @@
+set -eu
+
 docker-compose down
 cd ../
 ./gradlew backend:core:build

@@ -32,6 +32,8 @@ services:
     build:
       context: ../
       dockerfile: backend/worker/docker/TestingDockerfile
+    ports:
+      - "81:80"
   test:
     build:
       context: test/
