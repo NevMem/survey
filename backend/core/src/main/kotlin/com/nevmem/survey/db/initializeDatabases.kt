@@ -42,6 +42,5 @@ private fun createTables() = transaction {
         *usersTables().toTypedArray(),
         *invitesTables().toTypedArray(),
         *mediaTables().toTypedArray(),
-        *tasksTables().toTypedArray(),
     )
 }

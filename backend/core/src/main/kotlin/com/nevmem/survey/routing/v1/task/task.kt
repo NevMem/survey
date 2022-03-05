@@ -21,10 +21,8 @@ import io.ktor.routing.route
 import org.koin.ktor.ext.inject
 
 private fun Route.taskImpl() {
-    val taskService by inject<TaskService>()
     val usersService by inject<UsersService>()
     val roleModel by inject<RoleModel>()
-    val exportDataTaskConverter by inject<ExportDataTaskConverter>()
     val userConverter by inject<UsersConverter>()
 
     val workerApi = createWorkerApi("http://worker")
@@ -37,7 +35,6 @@ private fun Route.taskImpl() {
                 throw IllegalStateException("Access to method denied (not enough roles)")
             }
 
-//            call.respond(taskService.exportTasks().map { exportDataTaskConverter(it) })
             try {
                 call.respond(workerApi.tasks())
             } catch (exception: Exception) {
@@ -54,9 +51,6 @@ private fun Route.taskImpl() {
 
             val request = call.receive<LoadTaskRequest>()
 
-//            val task = taskService.getTask(request.id) ?: throw NotFoundException()
-//
-//            call.respond(exportDataTaskConverter(task))
             call.respond(workerApi.getTask(userConverter(user), request.id))
         }
 
@@ -68,9 +62,7 @@ private fun Route.taskImpl() {
             }
 
             val request = call.receive<CreateExportDataTaskRequest>()
-            val task = taskService.createExportTask(request.surveyId)
-
-            call.respond(exportDataTaskConverter(task))
+            call.respond(workerApi.createExportDataTask(userConverter(user), request.surveyId))
         }
     }
 }
