@@ -1,6 +1,5 @@
 package com.nevmem.survey.network.internal
 
-import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
 import com.nevmem.survey.data.request.answer.PublishAnswerRequest
@@ -11,6 +10,7 @@ import com.nevmem.survey.data.response.push.RegisterPushTokenResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
 import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.data.user.UserId
+import com.nevmem.survey.network.api.NetworkService
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer

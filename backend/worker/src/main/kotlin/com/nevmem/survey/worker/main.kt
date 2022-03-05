@@ -20,10 +20,7 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.serialization.json
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
 import org.slf4j.event.Level

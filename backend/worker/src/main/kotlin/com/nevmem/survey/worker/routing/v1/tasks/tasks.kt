@@ -13,7 +13,6 @@ import io.ktor.routing.Route
 import io.ktor.routing.post
 import org.koin.ktor.ext.inject
 
-
 fun Route.tasks() {
     val tasksService by inject<TaskService>()
     val exportDataTaskConverter by inject<ExportDataTaskConverter>()
@@ -28,7 +27,7 @@ fun Route.tasks() {
         val task = tasksService.getTask(request.taskId)
         call.respond(
             GetTaskResponse(
-                task?.let {exportDataTaskConverter(it) }
+                task?.let { exportDataTaskConverter(it) }
             )
         )
     }

@@ -105,7 +105,7 @@ private fun HomeScreenPreview() {
     ) {
         item { HeaderItem() }
         item { AchievementsView(emptyList()) }
-        item { SurveyView(rememberNavController(), SurveyState.NoSurvey) {  } }
+        item { SurveyView(rememberNavController(), SurveyState.NoSurvey) { } }
         item { FooterView(rememberNavController(), HomeScreenFooter(true)) }
     }
 }

@@ -4,9 +4,9 @@ import com.nevmem.survey.data.task.Task
 import com.nevmem.survey.data.user.Administrator
 import com.nevmem.survey.worker.api.ErrorCreateTask
 import com.nevmem.survey.worker.api.TaskNotFoundException
+import com.nevmem.survey.worker.api.WorkerApi
 import com.nevmem.survey.worker.api.request.CreateExportDataTaskRequest
 import com.nevmem.survey.worker.api.request.GetTaskRequest
-import com.nevmem.survey.worker.api.WorkerApi
 import com.nevmem.survey.worker.api.response.CreateExportDataTaskResponse
 import com.nevmem.survey.worker.api.response.GetTaskResponse
 import io.ktor.client.HttpClient
@@ -46,7 +46,7 @@ internal class WorkerApiImpl(
         }
     }
 
-    private suspend inline fun<Req : Any, reified Res : Any> post(path: String, body: Req): Res {
+    private suspend inline fun <Req : Any, reified Res : Any> post(path: String, body: Req): Res {
         return client.post("$baseUrl$path") {
             this.body = body
             contentType(ContentType.Application.Json)

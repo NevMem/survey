@@ -6,8 +6,8 @@ import com.nevmem.survey.service.achievement.api.createAchievementService
 import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.push.api.createPushService
 import com.nevmem.survey.service.settings.api.createSettingsService
-import com.nevmem.survey.service.uid.UserIdProvider
 import com.nevmem.survey.service.survey.SurveyService
+import com.nevmem.survey.service.uid.UserIdProvider
 import com.nevmem.survey.ui.home.HomeScreenViewModel
 import com.nevmem.survey.ui.join.JoinScreenViewModel
 import com.nevmem.survey.ui.settings.SettingsScreenViewModel
@@ -19,7 +19,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.plus
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
-import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
 fun createAppModule(context: Context) = module {
