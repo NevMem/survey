@@ -2,9 +2,11 @@ package com.nevmem.survey.worker.api.internal
 
 import com.nevmem.survey.data.task.Task
 import com.nevmem.survey.data.user.Administrator
-import com.nevmem.survey.worker.api.CreateExportDataTask
-import com.nevmem.survey.worker.api.GetTaskRequest
+import com.nevmem.survey.worker.api.TaskNotFoundException
+import com.nevmem.survey.worker.api.request.CreateExportDataTaskRequest
+import com.nevmem.survey.worker.api.request.GetTaskRequest
 import com.nevmem.survey.worker.api.WorkerApi
+import com.nevmem.survey.worker.api.response.GetTaskResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -27,11 +29,12 @@ internal class WorkerApiImpl(
     }
 
     override suspend fun getTask(user: Administrator, taskId: Long): Task {
-        return post("/v1/task", GetTaskRequest(user, taskId))
+        val response = post<GetTaskRequest, GetTaskResponse>("/v1/task", GetTaskRequest(user, taskId))
+        return response.task ?: throw TaskNotFoundException(taskId)
     }
 
     override suspend fun createExportDataTask(user: Administrator, surveyId: Long): Task {
-        return post("/v1/create_export_data_task", CreateExportDataTask(user, surveyId))
+        return post("/v1/create_export_data_task", CreateExportDataTaskRequest(user, surveyId))
     }
 
     private suspend inline fun<Req : Any, reified Res : Any> post(path: String, body: Req): Res {

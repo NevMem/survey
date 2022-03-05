@@ -1,4 +1,4 @@
-package com.nevmem.survey.worker.api
+package com.nevmem.survey.worker.api.request
 
 import com.nevmem.survey.data.user.Administrator
 import kotlinx.serialization.Serializable

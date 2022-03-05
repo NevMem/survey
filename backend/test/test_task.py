@@ -54,6 +54,7 @@ def test_simple_task(client: Client):
     assert response.status_code == 200
 
     response = client.task(token, taskId)
+    print(response.text)
     assert response.status_code == 200
     assert response.json()['state'] == 'Executing' or response.json()['state'] == 'Waiting' or response.json()['state'] == 'Success'
 

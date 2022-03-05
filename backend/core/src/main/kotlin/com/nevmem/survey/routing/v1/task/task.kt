@@ -25,6 +25,7 @@ private fun Route.taskImpl() {
     val usersService by inject<UsersService>()
     val roleModel by inject<RoleModel>()
     val exportDataTaskConverter by inject<ExportDataTaskConverter>()
+    val userConverter by inject<UsersConverter>()
 
     val workerApi = createWorkerApi("http://worker")
 
@@ -53,9 +54,10 @@ private fun Route.taskImpl() {
 
             val request = call.receive<LoadTaskRequest>()
 
-            val task = taskService.getTask(request.id) ?: throw NotFoundException()
-
-            call.respond(exportDataTaskConverter(task))
+//            val task = taskService.getTask(request.id) ?: throw NotFoundException()
+//
+//            call.respond(exportDataTaskConverter(task))
+            call.respond(workerApi.getTask(userConverter(user), request.id))
         }
 
         post("/create_export_data_task") {

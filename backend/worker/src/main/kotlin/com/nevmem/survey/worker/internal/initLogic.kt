@@ -8,7 +8,7 @@ import org.koin.ktor.ext.inject
 fun Application.initLogic() {
     val tasksProvider by inject<AvailableTasksProvider>()
     val taskLocker by inject<TaskLocker>()
-    val exporter = Exporter()
+    val exporter by inject<Exporter>()
 
     GlobalScope.launch {
         tasksProvider.tasks()
