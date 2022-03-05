@@ -4,4 +4,4 @@ WORKDIR /app/
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
-ENTRYPOINT ["pytest", "-vs", "-k", "test_simple_task"]
+ENTRYPOINT ["pytest", "-vs"]
