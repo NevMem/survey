@@ -12,6 +12,10 @@ import com.nevmem.survey.worker.api.response.GetTaskResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.logging.DEFAULT
+import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -23,6 +27,10 @@ internal class WorkerApiImpl(
     private val client = HttpClient {
         install(JsonFeature) {
             serializer = KotlinxSerializer()
+        }
+        install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.BODY
         }
     }
 
