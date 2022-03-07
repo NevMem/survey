@@ -84,7 +84,8 @@ private fun Route.surveysImpl() {
                     },
                     commonQuestion = request.commonQuestions.map {
                         CommonQuestionEntity(it.id)
-                    }
+                    },
+                    answerCoolDown = request.answerCoolDown,
                 )
 
                 call.respond<CreateSurveyResponse>(CreateSurveyResponse.CreateSurveySuccess(surveysConverter.convertSurvey(survey)))

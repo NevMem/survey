@@ -8,6 +8,7 @@ interface SurveysService {
         name: String,
         questions: List<QuestionEntity>,
         commonQuestion: List<CommonQuestionEntity>,
+        answerCoolDown: Long,
     ): SurveyEntity
 
     suspend fun deleteSurvey(id: Long)

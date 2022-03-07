@@ -51,13 +51,14 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             }
         }
 
-        val count = transaction {
+        val maxTimestamp = transaction {
             SurveyAnswerDTO.find {
                 (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
                     (SurveyAnswerTable.surveyId eq answer.surveyId)
-            }.count()
+            }.maxByOrNull { SurveyAnswerTable.timestamp }?.timestamp
         }
-        if (count != 0L) {
+        println("cur_deb $maxTimestamp ${survey.answerCoolDown} ${(maxTimestamp ?: 0) + survey.answerCoolDown} ${System.currentTimeMillis()}")
+        if (maxTimestamp != null && maxTimestamp + survey.answerCoolDown >= System.currentTimeMillis()) {
             throw AlreadyPublishedAnswerException()
         }
 
@@ -68,6 +69,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
                 this.publisherId = answer.uid.uuid
                 this.surveyId = answer.surveyId
                 this.mediaGalleryId = answer.gallery?.id
+                this.timestamp = System.currentTimeMillis()
             }
 
             answer.answers.forEach { actualAnswer ->

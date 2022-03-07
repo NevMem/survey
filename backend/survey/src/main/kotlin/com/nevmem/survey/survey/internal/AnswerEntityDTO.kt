@@ -15,6 +15,7 @@ internal object SurveyAnswerTable : LongIdTable() {
     val surveyId = varchar("surveyId", 64)
     val publisherId = varchar("publisherId", 256)
     val mediaGalleryId = long("mediaGalleryId").nullable()
+    val timestamp = long("timestamp")
 }
 
 internal object QuestionAnswerTable : LongIdTable() {
@@ -40,4 +41,5 @@ internal class SurveyAnswerDTO(id: EntityID<Long>) : LongEntity(id) {
     var surveyId by SurveyAnswerTable.surveyId
     val answers by QuestionAnswerDTO referrersOn QuestionAnswerTable.surveyAnswer
     var mediaGalleryId by SurveyAnswerTable.mediaGalleryId
+    var timestamp by SurveyAnswerTable.timestamp
 }

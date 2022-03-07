@@ -9,4 +9,5 @@ data class SurveyEntity(
     val name: String,
     val questions: List<QuestionEntity>,
     val commonQuestions: List<CommonQuestionEntity>,
+    val answerCoolDown: Long,
 )

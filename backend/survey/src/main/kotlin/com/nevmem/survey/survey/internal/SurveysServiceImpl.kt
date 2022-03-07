@@ -13,11 +13,13 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         name: String,
         questions: List<QuestionEntity>,
         commonQuestion: List<CommonQuestionEntity>,
+        answerCoolDown: Long,
     ): SurveyEntity {
         val dto = transaction {
             val survey = SurveyEntityDTO.new {
                 this.name = name
                 this.surveyId = RandomStringGenerator.randomString(5)
+                this.answerCoolDown = answerCoolDown
             }
 
             questions.forEach { question ->
@@ -107,6 +109,7 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
             commonQuestions = commonQuestions.map {
                 CommonQuestionEntity(it.commonQuestionId)
             },
+            answerCoolDown = answerCoolDown,
         )
     }
 }

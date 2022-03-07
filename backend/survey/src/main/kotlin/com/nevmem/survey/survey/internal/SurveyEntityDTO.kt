@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
 internal object SurveysTable : LongIdTable() {
     val name = text("name")
     val surveyId = varchar("surveyId", 8)
+    val answerCoolDown = long("answerCoolDown")
 }
 
 internal enum class QuestionEntityType {
@@ -39,6 +40,7 @@ internal class SurveyEntityDTO(id: EntityID<Long>) : LongEntity(id) {
 
     var name by SurveysTable.name
     var surveyId by SurveysTable.surveyId
+    var answerCoolDown by SurveysTable.answerCoolDown
     val questions by QuestionEntityDTO referrersOn QuestionsTable.survey
     val commonQuestions by CommonQuestionDTO referrersOn CommonQuestionsTable.survey
 }
