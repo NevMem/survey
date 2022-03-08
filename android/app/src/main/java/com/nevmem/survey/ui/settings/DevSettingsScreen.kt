@@ -8,10 +8,10 @@ import androidx.navigation.NavController
 import org.koin.androidx.compose.viewModel
 
 @Composable
-fun SettingsScreen(
+fun DevSettingsScreen(
     navController: NavController,
 ) {
-    val vm by viewModel<SettingsScreenViewModel>()
+    val vm by viewModel<DevSettingsScreenViewModel>()
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         vm.uiState.value.forEach {
@@ -19,7 +19,6 @@ fun SettingsScreen(
                 SettingsItemBuilder(
                     navController = navController,
                     item = it,
-                    onAboutViewClick = { vm.onTitleClick() },
                 )
             }
         }

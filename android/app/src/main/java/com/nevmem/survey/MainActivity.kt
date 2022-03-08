@@ -14,6 +14,7 @@ import com.nevmem.survey.report.report
 import com.nevmem.survey.service.push.api.PushService
 import com.nevmem.survey.ui.home.HomeScreen
 import com.nevmem.survey.ui.join.JoinScreen
+import com.nevmem.survey.ui.settings.DevSettingsScreen
 import com.nevmem.survey.ui.settings.SettingsScreen
 import com.nevmem.survey.ui.splash.EthnoSplashScreen
 import com.nevmem.survey.ui.survey.SurveyScreen
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                         composable("survey") { SurveyScreen(scaffoldState) }
                         composable("home") { HomeScreen(navController) }
                         composable("settings") { SettingsScreen(navController) }
-                        composable("developer-settings") { }
+                        composable("developer-settings") { DevSettingsScreen(navController) }
                     }
                 }
             }

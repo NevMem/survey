@@ -22,9 +22,9 @@ import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-internal class NetworkServiceImpl : NetworkService {
-
-    private val baseUrl = "https://ethnosurvey.com"
+internal class NetworkServiceImpl(
+    private val baseUrl: String,
+) : NetworkService {
 
     private val client = HttpClient {
         install(Logging) {

@@ -43,6 +43,7 @@ class JoinScreenViewModel(
                 }
             } catch (exception: Exception) {
                 withContext(Dispatchers.Main) {
+                    println("cur_deb $exception")
                     state.value = UiState.Error("Some error while loading survey $surveyId ${exception.message}")
                 }
             }

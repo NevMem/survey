@@ -31,4 +31,5 @@
     <string name="settings_title">Настройки</string>
 
     <string name="notifications_enabled_setting_title">Уведомления</string>
+    <string name="http_url_setting_title">HTTP url backend uri enabled</string>
 </resources>
