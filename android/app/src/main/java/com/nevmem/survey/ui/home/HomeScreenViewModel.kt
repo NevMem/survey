@@ -30,11 +30,12 @@ class HomeScreenViewModel(
                 surveyService.surveys,
                 achievementService.achievements,
             ) { survey: Survey?, achievements: List<Achievement> ->
+                val surveyItem = survey.item()
                 listOf(
                     HomeScreenHeader,
                     achievements.item(),
-                    survey.item(),
-                    HomeScreenFooter(survey != null),
+                    surveyItem,
+                    HomeScreenFooter(surveyItem is SurveyState.ReadySurvey),
                 )
             }.collect {
                 withContext(Dispatchers.Main) {
@@ -58,14 +59,14 @@ class HomeScreenViewModel(
             return SurveyState.NoSurvey
         }
         val answeredCurrentSurveyAt =
-            preferencesService.get("answered-survey-${id}")?.toLongOrNull() ?: 0
-        if (answeredCurrentSurveyAt + surveyCoolDown >= System.currentTimeMillis() || 2 == 2) {
+            preferencesService.get("answered-survey-$id")?.toLongOrNull() ?: 0
+        if (answeredCurrentSurveyAt + surveyCoolDown >= System.currentTimeMillis() || (answeredCurrentSurveyAt != 0L && surveyCoolDown == Survey.SURVEY_COOL_DOWN_ONLY_ONCE)) {
             return SurveyState.AlreadyAnsweredSurvey(
                 this,
                 canAnswerInSeconds = if (surveyCoolDown == Survey.SURVEY_COOL_DOWN_ONLY_ONCE)
-                        null
-                    else
-                        (System.currentTimeMillis() - answeredCurrentSurveyAt) / 1000
+                    null
+                else
+                    (System.currentTimeMillis() - answeredCurrentSurveyAt) / 1000
             )
         }
         return SurveyState.ReadySurvey(this)

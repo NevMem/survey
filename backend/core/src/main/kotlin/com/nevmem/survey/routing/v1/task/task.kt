@@ -2,12 +2,10 @@ package com.nevmem.survey.routing.v1.task
 
 import com.nevmem.survey.data.request.task.CreateExportDataTaskRequest
 import com.nevmem.survey.data.request.task.LoadTaskRequest
-import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.userId
 import com.nevmem.survey.users.UsersService
 import com.nevmem.survey.worker.api.WorkerApi
-import com.nevmem.survey.worker.api.createWorkerApi
 import com.nevmem.surveys.converters.UsersConverter
 import io.ktor.application.call
 import io.ktor.auth.authenticate
