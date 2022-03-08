@@ -28,7 +28,10 @@ def get_machines_list() -> List[Machine]:
     for vm in data:
         name = vm['name']
         ip = vm['network_interfaces'][0]['primary_v4_address']['one_to_one_nat']['address']
-        tags = vm['description'].split(',')
+        if 'description' in vm:
+            tags = vm['description'].split(',')
+        else:
+            tags = []
         result.append(Machine(name, ip, tags))
     return result
 
