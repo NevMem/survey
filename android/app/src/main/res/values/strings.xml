@@ -32,4 +32,8 @@
 
     <string name="notifications_enabled_setting_title">Уведомления</string>
     <string name="http_url_setting_title">HTTP url backend uri enabled</string>
+
+    <string name="already_answered_survey_max_times">Вы уже прошли этот опрос максимальное количество раз</string>
+
+    <string name="can_answer_survey_in">Вы сможете пройти опрос через %d минут</string>
 </resources>

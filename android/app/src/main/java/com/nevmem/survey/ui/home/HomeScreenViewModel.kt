@@ -60,7 +60,13 @@ class HomeScreenViewModel(
         val answeredCurrentSurveyAt =
             preferencesService.get("answered-survey-${id}")?.toLongOrNull() ?: 0
         if (answeredCurrentSurveyAt + surveyCoolDown >= System.currentTimeMillis() || 2 == 2) {
-            return SurveyState.AlreadyAnsweredSurvey(this)
+            return SurveyState.AlreadyAnsweredSurvey(
+                this,
+                canAnswerInSeconds = if (surveyCoolDown == Survey.SURVEY_COOL_DOWN_ONLY_ONCE)
+                        null
+                    else
+                        (System.currentTimeMillis() - answeredCurrentSurveyAt) / 1000
+            )
         }
         return SurveyState.ReadySurvey(this)
     }

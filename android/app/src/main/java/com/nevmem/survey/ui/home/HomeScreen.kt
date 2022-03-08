@@ -198,7 +198,7 @@ private fun SurveyView(
         ) {
             when (item) {
                 is SurveyState.AlreadyAnsweredSurvey -> {
-                    Text(item.survey.name)
+                    AlreadyAnsweredSurveyView(item)
                 }
                 SurveyState.NoSurvey -> { NoSurveyView(navController = navController) }
                 is SurveyState.ReadySurvey -> {
@@ -222,6 +222,32 @@ private fun NoSurveyView(
             Text(stringResource(id = R.string.join_survey))
         }
     }
+}
+
+@Composable
+private fun AlreadyAnsweredSurveyView(
+    item: SurveyState.AlreadyAnsweredSurvey,
+) {
+    val canAnswerInSeconds = item.canAnswerInSeconds
+    if (canAnswerInSeconds == null) {
+        Text(
+            item.survey.name,
+            style = MaterialTheme.typography.subtitle1,
+        )
+        Text(
+            stringResource(id = R.string.already_answered_survey_max_times),
+            style = MaterialTheme.typography.body2,
+        )
+        return
+    }
+    Text(
+        item.survey.name,
+        style = MaterialTheme.typography.subtitle1,
+    )
+    Text(
+        stringResource(id = R.string.can_answer_survey_in, canAnswerInSeconds / 60),
+        style = MaterialTheme.typography.subtitle2,
+    )
 }
 
 @Composable

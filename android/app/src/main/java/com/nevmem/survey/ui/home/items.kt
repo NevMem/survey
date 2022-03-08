@@ -10,7 +10,10 @@ data class HomeScreenFooter(val canStartSurvey: Boolean) : HomeScreenItem()
 
 sealed class SurveyState : HomeScreenItem() {
     object NoSurvey : SurveyState()
-    data class AlreadyAnsweredSurvey(val survey: Survey) : SurveyState()
+    data class AlreadyAnsweredSurvey(
+        val survey: Survey,
+        val canAnswerInSeconds: Long?,
+    ) : SurveyState()
     data class ReadySurvey(val survey: Survey) : SurveyState()
 }
 
