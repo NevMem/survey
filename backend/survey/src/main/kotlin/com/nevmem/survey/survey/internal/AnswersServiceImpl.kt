@@ -57,7 +57,6 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
                     (SurveyAnswerTable.surveyId eq answer.surveyId)
             }.maxByOrNull { SurveyAnswerTable.timestamp }?.timestamp
         }
-        println("cur_deb $maxTimestamp ${survey.answerCoolDown} ${(maxTimestamp ?: 0) + survey.answerCoolDown} ${System.currentTimeMillis()}")
         if (maxTimestamp != null && maxTimestamp + survey.answerCoolDown >= System.currentTimeMillis()) {
             throw AlreadyPublishedAnswerException()
         }
