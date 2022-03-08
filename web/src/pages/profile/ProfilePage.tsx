@@ -3,7 +3,7 @@ import CardError from '../../app/card/CardError';
 import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
 import PageWrapper from '../../app/page/PageWrapper';
 import Loader from '../../components/loader/Loader';
-import { User } from '../../data/exported';
+import { Administrator } from '../../data/exported';
 import authService from '../../service/authorization/AuthorizationService';
 import Text from '../../components/text/Text';
 import Card from '../../app/card/Card';
@@ -12,7 +12,7 @@ import Badge from '../../components/badge/Badge';
 import SpaceBetweenReversedRow from '../../app/layout/SpaceBetweenReversedRow';
 import GeneralButton from '../../components/button/GeneralButton';
 
-const ProfileWrapper = (props: {user: User | undefined, error: string | undefined, loading?: boolean}) => {
+const ProfileWrapper = (props: {user: Administrator | undefined, error: string | undefined, loading?: boolean}) => {
     if (props.loading) {
         return (
             <SpaceAroundRow>
@@ -69,7 +69,7 @@ const ProfileWrapper = (props: {user: User | undefined, error: string | undefine
 };
 
 const ProfilePage = () => {
-    const [user, setUser] = useState<User | undefined>(undefined);
+    const [user, setUser] = useState<Administrator | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(true);
 

@@ -13,7 +13,7 @@ import {
     SurveyMetadata,
     Task,
     UpdateRolesRequest,
-    User,
+    Administrator,
 } from "../data/exported";
 
 interface BackendApiService {
@@ -32,7 +32,7 @@ interface BackendApiService {
         inviteId: string,
         abortController: AbortController,
     ): Promise<RegisterResponse>
-    me(): Promise<User>
+    me(): Promise<Administrator>
 
     invites(abortController: AbortController): Promise<GetInvitesResponse>
     createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse>

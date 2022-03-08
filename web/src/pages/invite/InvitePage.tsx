@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useState } from "react";
 import PageWrapper from "../../app/page/PageWrapper";
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";

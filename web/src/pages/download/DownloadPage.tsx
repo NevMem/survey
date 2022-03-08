@@ -16,7 +16,6 @@ import useAsyncRequest, { RequestError, RequestSuccess } from '../../utils/useAs
 import backendApi from '../../api/backendApiServiceSingleton';
 import Badge from '../../components/badge/Badge';
 import usePollingRequest, { PollingError, PollingState, PollingSuccess } from '../../utils/usePollingRequest';
-import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
 import Row from '../../app/layout/Row';
 
 const SurveySelector = observer((props: {surveysService: SurveysService, selectSurvey: (survey: Survey | undefined) => void}) => {
@@ -156,7 +155,7 @@ const TaskOutputsView = (props: {task: Task}) => {
 const TaskView = (props: {task: Task}) => {
     const { task } = props;
 
-    if (task.state == TaskState.Waiting) {
+    if (task.state === TaskState.Waiting) {
         return (
             <Row>
                 <Loader small/>
@@ -165,7 +164,7 @@ const TaskView = (props: {task: Task}) => {
         );
     }
 
-    if (task.state == TaskState.Success) {
+    if (task.state === TaskState.Success) {
         return (
             <SpacedCenteredColumn rowGap={8}>
                 <Badge success>{task.state}</Badge>
@@ -190,7 +189,7 @@ const PollingTaskView = (props: {task: Task}) => {
             return backendApi.loadTask({id: props.task.id}, controller);
         },
         (state: PollingState) => {
-            if (state instanceof PollingSuccess && state.result.state == TaskState.Success) {
+            if (state instanceof PollingSuccess && state.result.state === TaskState.Success) {
                 return true;
             }
             return false;

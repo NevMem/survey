@@ -48,6 +48,7 @@ interface CreateSurveyRequest {
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
+	answerCoolDown: number;
 }
 
 interface CreateSurveyResponse {

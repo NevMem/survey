@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import pages from '../../pages/pages';
 import { createContext, useContext } from "react";
-import { User } from "../../data/exported";
+import { Administrator } from "../../data/exported";
 import authorizationService, { AuthorizationService } from "../../service/authorization/AuthorizationService";
 import { observer } from 'mobx-react';
 import { useState, useEffect } from "react";
@@ -34,8 +34,8 @@ interface UserState {};
 class UserLoading implements UserState {};
 class UserUnauthorized implements UserState {};
 class UserLoaded implements UserState {
-    user: User;
-    constructor(user: User) {
+    user: Administrator;
+    constructor(user: Administrator) {
         this.user = user;
     }
 };
@@ -43,7 +43,7 @@ class UserLoaded implements UserState {
 const UserContext = createContext<UserState>(new UserLoading());
 
 const UserProvider = observer((props: { children: any, authService: AuthorizationService }) => {
-    const [user, setUser] = useState<User | undefined>(undefined);
+    const [user, setUser] = useState<Administrator | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(true);
 
@@ -87,6 +87,7 @@ const UserProvider = observer((props: { children: any, authService: Authorizatio
 
     return (
         <UserContext.Provider value={new UserUnauthorized()}>
+            {error}
             {props.children}
         </UserContext.Provider>
     );
