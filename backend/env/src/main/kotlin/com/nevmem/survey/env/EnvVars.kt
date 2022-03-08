@@ -34,6 +34,10 @@ object EnvVars {
         val secretAccessKey by lazy { env("S3_SECRET_ACCESS_KEY") }
         val s3Uri by lazy { env("S3_URI") }
     }
+
+    object Worker {
+        val uri by lazy { maybeEnv("WORKER_URI") }
+    }
 }
 
 private fun maybeEnv(key: String): String? = System.getenv(key)

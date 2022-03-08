@@ -3,6 +3,7 @@ package com.nevmem.survey.di
 import com.nevmem.survey.auth.PasswordEncoder
 import com.nevmem.survey.auth.TokenService
 import com.nevmem.survey.auth.createPasswordEncoder
+import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.fs.FileSystemService
 import com.nevmem.survey.fs.createFileSystemService
 import com.nevmem.survey.invites.InvitesService
@@ -22,6 +23,7 @@ import com.nevmem.survey.survey.createSurveyMetadataAssembler
 import com.nevmem.survey.survey.createSurveysService
 import com.nevmem.survey.users.UsersService
 import com.nevmem.survey.users.createUsersService
+import com.nevmem.survey.worker.api.createWorkerApi
 import io.ktor.application.Application
 import io.ktor.application.install
 import org.koin.dsl.module
@@ -39,6 +41,7 @@ private val coreModule = module {
     single<AnswersService> { createAnswersService() }
     single<SurveysMetadataAssembler> { createSurveyMetadataAssembler() }
     single<UsersService> { createUsersService() }
+    single { createWorkerApi(EnvVars.Worker.uri!!) }
 }
 
 fun Application.di() {

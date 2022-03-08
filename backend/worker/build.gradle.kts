@@ -1,5 +1,6 @@
 val ktor_version: String by project
 val logback_version: String by project
+val prometeus_version: String by project
 
 plugins {
     application
@@ -33,6 +34,8 @@ dependencies {
     implementation ("com.zaxxer:HikariCP:4.0.3")
     implementation ("org.postgresql:postgresql:42.2.23")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
+    implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation(project(":backend:common"))
     implementation(project(":backend:converters"))
     implementation(project(":backend:env"))
