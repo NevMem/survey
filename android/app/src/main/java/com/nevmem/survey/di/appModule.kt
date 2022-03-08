@@ -49,7 +49,7 @@ fun createAppModule(context: Context) = module {
     viewModel { JoinScreenViewModel(get(), get()) }
     viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
     viewModel { SurveyScreenViewModel(get(), get(named("background")), get()) }
-    viewModel { HomeScreenViewModel(get(named("background")), get(), get()) }
+    viewModel { HomeScreenViewModel(get(named("background")), get(), get(), get()) }
     viewModel { SettingsScreenViewModel(get(named("background")), get(), get()) }
     viewModel { DevSettingsScreenViewModel(get()) }
 }
