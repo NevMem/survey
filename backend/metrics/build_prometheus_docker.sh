@@ -1,3 +1,5 @@
+set -eu
+
 mkdir tmp
 
 pip3 install -r requirements.txt

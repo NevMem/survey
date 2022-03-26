@@ -39,7 +39,7 @@ jobs:
           YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
           YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
       - name: Building and pushing docker
-        run: cd backend/metrics/ && ./build_prometheus_docker.sh
+        run: cd backend/metrics/ && source /opt/yandex-cloud/path.bash.inc && ./build_prometheus_docker.sh
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
