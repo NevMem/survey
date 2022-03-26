@@ -3,6 +3,7 @@
         "tag": "worker",
         "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:a18b1af",
         "ports": [
+            80
         ]
     },
     "core": {
