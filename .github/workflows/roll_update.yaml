@@ -1,4 +1,4 @@
-name: Roll core update
+name: Rolling updates
 on:
   push:
     branches:
