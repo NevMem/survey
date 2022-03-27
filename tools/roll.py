@@ -4,6 +4,7 @@ from machines import Machine, get_machines_for_service
 from typing import List
 import subprocess as sp
 from machines import get_machines_list
+from notify import Notificator
 
 
 class RemoteCommandExecutor:
@@ -84,6 +85,8 @@ def main():
     service_config = services[service]
 
     machines = get_machines_list()
+
+    notificator = Notificator()
     
     for machine in machines:
         index = 0
@@ -102,6 +105,7 @@ def main():
             
             if need_update:
                 print('Deploying')
+                notificator.send_message(f"⚠️ Need to redeploy {machine.name} by tag: {tag}")
                 deploy(
                     executor=executor,
                     image_tag=service_config['container-tag'],
@@ -110,6 +114,7 @@ def main():
                     container_name=f"{service}-{index}",
                 )
             else:
+                notificator.send_message(f"✅ Not need to redeploy {machine.name} by tag: {tag}")
                 print('No need for redeploy')
 
 
