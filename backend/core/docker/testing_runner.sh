@@ -2,6 +2,9 @@
 
 set -eu
 
+./wait-for-it.sh s3local:8000 -t 60
+./wait-for-it.sh database:5432 -t 60
+
 cp nginx-config.conf /etc/nginx/sites-enabled/ethno.conf
 cat /etc/nginx/sites-enabled/ethno.conf
 rm /etc/nginx/sites-enabled/default

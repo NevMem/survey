@@ -21,6 +21,7 @@ RUN apt update && \
 
 COPY --from=BUILD_PHASE backend/worker/build/distributions/worker-0.0.1.zip /
 COPY ./backend/worker/docker/testing_runner.sh .
+COPY ./backend/wait-for-it.sh .
 RUN unzip worker-0.0.1.zip
 
 ENV DB_USERNAME=postgres_for_testing
