@@ -16,7 +16,7 @@
     },
     "metrics": {
         "tag": "metrics",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:7f39429",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:651ac12",
         "ports": [
             9090
         ]
