@@ -11,6 +11,6 @@ class Notificator:
             self._send(message, chat_id)
 
     def _send(self, message: str, chat_id: str):
-        url = 'https://api.telegram.org/bot' + self.bot_token + '/sendMessage?chat_id=' + chat_id + '&text=' + message
+        url = 'https://api.telegram.org/bot' + self._bot_token + '/sendMessage?chat_id=' + chat_id + '&text=' + message
         response = requests.get(url)
         assert(response.status_code == 200)
