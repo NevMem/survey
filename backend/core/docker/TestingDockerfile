@@ -50,4 +50,4 @@ ENV SELF_URI=http://localhost
 
 CMD ["./testing_runner.sh"]
 
-EXPOSE 80 443
+EXPOSE 8080
