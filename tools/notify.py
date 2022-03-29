@@ -21,6 +21,6 @@ def with_exception_notificator(func):
         try:
             func()
         except Exception as exception:
-            Notificator().send_message(str(exception))
+            Notificator().send_message(f"❌ Exception in {__name__} occurred: {str(exception)}")
             raise exception
     return wrapper
