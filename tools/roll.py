@@ -4,7 +4,7 @@ from machines import Machine, get_machines_for_service
 from typing import List
 import subprocess as sp
 from machines import get_machines_list
-from notify import Notificator
+from notify import Notificator, with_exception_notificator
 
 
 class RemoteCommandExecutor:
@@ -65,57 +65,64 @@ def deploy(executor: RemoteCommandExecutor, image_tag: str, machine: Machine, po
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("service")
+    parser.add_argument("services")
     parser.add_argument("services_file")
     parser.add_argument("identity_file")
     parser.add_argument("token")
     return parser.parse_args()
 
 
+@with_exception_notificator
 def main():
     args = parse_args()
 
     with open(args.services_file, 'r') as inp:
-        services = json.load(inp)
+        services_config = json.load(inp)
 
-    service = args.service
+    services = args.services.split(',')
 
-    assert service in services
+    logs = []
 
-    service_config = services[service]
+    for service in services:
+        assert service in service_config
 
-    machines = get_machines_list()
+    for service in services:
+        service_config = services_config[service]
 
-    notificator = Notificator()
-    
-    for machine in machines:
-        index = 0
-        for tag in machine.tags:
-            if tag != service:
-                continue
-            index += 1
-            executor = RemoteCommandExecutor('nevmem', machine.ip, args.identity_file)
-            if not executor.is_docker_installer():
-                executor.install_docker(args.token)
-            containers = executor.get_containers()
-            need_update = True
-            for container in containers:
-                if container['Names'] == f"{service}-{index}" and container['Image'] == service_config['container-tag']:
-                    need_update = False
-            
-            if need_update:
-                print('Deploying')
-                notificator.send_message(f"⚠️ Need to redeploy {machine.name} by tag: {tag}")
-                deploy(
-                    executor=executor,
-                    image_tag=service_config['container-tag'],
-                    machine=machine,
-                    ports=service_config['ports'],
-                    container_name=f"{service}-{index}",
-                )
-            else:
-                notificator.send_message(f"✅ Not need to redeploy {machine.name} by tag: {tag}")
-                print('No need for redeploy')
+        logs.append(f"Working with service {service}")
+
+        machines = get_machines_list()
+        
+        for machine in machines:
+            index = 0
+            for tag in machine.tags:
+                if tag != service:
+                    continue
+                index += 1
+                executor = RemoteCommandExecutor('nevmem', machine.ip, args.identity_file)
+                if not executor.is_docker_installer():
+                    executor.install_docker(args.token)
+                containers = executor.get_containers()
+                need_update = True
+                for container in containers:
+                    if container['Names'] == f"{service}-{index}" and container['Image'] == service_config['container-tag']:
+                        need_update = False
+                
+                if need_update:
+                    print('Deploying')
+                    logs.append(f"⚠️ Need to redeploy {machine.name} by tag: {tag}\n")
+                    deploy(
+                        executor=executor,
+                        image_tag=service_config['container-tag'],
+                        machine=machine,
+                        ports=service_config['ports'],
+                        container_name=f"{service}-{index}",
+                    )
+                else:
+                    logs.append(f"✅ Not need to redeploy {machine.name} by tag: {tag}\n")
+                    print('No need for redeploy')
+
+    Notificator().send_message('\n'.join(logs))
 
 
 if __name__ == '__main__':

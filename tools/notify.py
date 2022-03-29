@@ -14,3 +14,13 @@ class Notificator:
         url = 'https://api.telegram.org/bot' + self._bot_token + '/sendMessage?chat_id=' + chat_id + '&text=' + message
         response = requests.get(url)
         assert(response.status_code == 200)
+
+
+def with_exception_notificator(func):
+    def wrapper():
+        try:
+            func()
+        except Exception as exception:
+            Notificator().send_message(str(exception))
+            raise exception
+    return wrapper
