@@ -1,5 +1,6 @@
 import os
 import requests
+import sys
 
 class Notificator:
     def __init__(self):
@@ -21,6 +22,6 @@ def with_exception_notificator(func):
         try:
             func()
         except Exception as exception:
-            Notificator().send_message(f"❌ Exception in {__name__} occurred: {str(exception)}")
+            Notificator().send_message(f"❌ Exception in {sys.argv[0]} occurred: {str(exception)}")
             raise exception
     return wrapper
