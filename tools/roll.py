@@ -110,7 +110,7 @@ def main():
                 
                 if need_update:
                     print('Deploying')
-                    logs.append(f"⚠️ Need to redeploy {machine.name} by tag: {tag}\n")
+                    logs.append(f"⚠️ Need to redeploy on machine {machine.name} by tag: {tag}\n")
                     deploy(
                         executor=executor,
                         image_tag=service_config['container-tag'],
@@ -119,7 +119,7 @@ def main():
                         container_name=f"{service}-{index}",
                     )
                 else:
-                    logs.append(f"✅ Not need to redeploy {machine.name} by tag: {tag}\n")
+                    logs.append(f"✅ Not need to redeploy on machine {machine.name} by tag: {tag}\n")
                     print('No need for redeploy')
 
     Notificator().send_message('\n'.join(logs))

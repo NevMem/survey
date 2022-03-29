@@ -49,3 +49,8 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           NOTIFY_CHAT_IDS: ${{ secrets.NOTIFY_CHAT_IDS }}
+      - name: Launching metrics rolling
+        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll.py core,worker,metrics ./services.json ./ssh_key ${{ secrets.YC_TOKEN }}
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          NOTIFY_CHAT_IDS: ${{ secrets.NOTIFY_CHAT_IDS }}
