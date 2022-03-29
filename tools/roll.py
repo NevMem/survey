@@ -84,7 +84,7 @@ def main():
     logs = []
 
     for service in services:
-        assert service in service_config
+        assert service in services_config
 
     for service in services:
         service_config = services_config[service]
