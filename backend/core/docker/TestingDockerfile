@@ -46,6 +46,8 @@ ENV S3_URI=http://s3local:8000
 
 ENV WORKER_URI=http://worker
 
+ENV PUSH_URI=http://push
+
 ENV SELF_URI=http://localhost
 
 CMD ["./testing_runner.sh"]

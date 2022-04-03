@@ -4,7 +4,7 @@ import com.nevmem.survey.data.user.UserId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RegisterPushTokenRegisterRequest(
+data class RegisterPushTokenRequest(
     val uid: UserId,
     val token: String?,
 )

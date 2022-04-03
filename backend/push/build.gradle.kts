@@ -39,7 +39,7 @@ dependencies {
     implementation("com.google.firebase:firebase-admin:8.1.0")
     implementation(project(":backend:common"))
     implementation(project(":backend:converters"))
-    implementation(project(":backend:push:api"))
+    implementation(project(":backend:push:pushapi"))
     implementation(project(":backend:env"))
     implementation(project(":common:data"))
 }

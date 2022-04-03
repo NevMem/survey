@@ -10,6 +10,7 @@ import com.nevmem.survey.invites.InvitesService
 import com.nevmem.survey.invites.createInvitesService
 import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.survey.media.createMediaStorageService
+import com.nevmem.survey.push.client.createPushClient
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.role.createRoleSerializer
@@ -42,6 +43,7 @@ private val coreModule = module {
     single<SurveysMetadataAssembler> { createSurveyMetadataAssembler() }
     single<UsersService> { createUsersService() }
     single { createWorkerApi(EnvVars.Worker.uri!!) }
+    single { createPushClient(EnvVars.Push.uri!!) }
 }
 
 fun Application.di() {

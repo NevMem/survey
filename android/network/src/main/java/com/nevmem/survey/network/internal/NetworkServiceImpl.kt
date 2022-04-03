@@ -3,7 +3,7 @@ package com.nevmem.survey.network.internal
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
 import com.nevmem.survey.data.request.answer.PublishAnswerRequest
-import com.nevmem.survey.data.request.push.RegisterPushTokenRegisterRequest
+import com.nevmem.survey.data.request.push.RegisterPushTokenRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
 import com.nevmem.survey.data.response.answer.PublishAnswerResponse
 import com.nevmem.survey.data.response.push.RegisterPushTokenResponse
@@ -64,11 +64,11 @@ internal class NetworkServiceImpl(
     }
 
     override suspend fun sendToken(uid: UserId, token: String?) {
-        val request = RegisterPushTokenRegisterRequest(
+        val request = RegisterPushTokenRequest(
             uid = uid,
             token = token,
         )
-        post<RegisterPushTokenRegisterRequest, RegisterPushTokenResponse>(
+        post<RegisterPushTokenRequest, RegisterPushTokenResponse>(
             "${baseUrl()}/v1/push/register",
             request,
         )

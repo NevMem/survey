@@ -24,4 +24,10 @@ class PushDataServiceImpl : PushDataService {
             }
         }
     }
+
+    override suspend fun getAllTokens(): List<String> {
+        return transaction {
+            PushDataEntityDTO.all().mapNotNull { it.token }
+        }
+    }
 }
