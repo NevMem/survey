@@ -24,10 +24,10 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 private const val BACKGROUND_SCOPE = "background"
-private val BACKGROUND_SCOPE_QUALIFIER = named(BACKGROUND_SCOPE)
+internal val BACKGROUND_SCOPE_QUALIFIER = named(BACKGROUND_SCOPE)
 
 private const val UI_SCOPE = "ui"
-private val UI_SCOPE_QUALIFIER = named(UI_SCOPE)
+internal val UI_SCOPE_QUALIFIER = named(UI_SCOPE)
 
 fun createAppModule(context: Context) = module {
     single(BACKGROUND_SCOPE_QUALIFIER) { CoroutineScope(Dispatchers.Default) + SupervisorJob() }
@@ -51,11 +51,4 @@ fun createAppModule(context: Context) = module {
     single { createAchievementService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
     single { createSettingsService(get()) }
     single { createPushService(get(BACKGROUND_SCOPE_QUALIFIER), get(), get(), get()) }
-
-    viewModel { JoinScreenViewModel(get(), get()) }
-    viewModel { EthnoSplashScreenViewModel(get(), get(BACKGROUND_SCOPE_QUALIFIER)) }
-    viewModel { SurveyScreenViewModel(get(), get(BACKGROUND_SCOPE_QUALIFIER), get()) }
-    viewModel { HomeScreenViewModel(get(BACKGROUND_SCOPE_QUALIFIER), get(), get(), get()) }
-    viewModel { SettingsScreenViewModel(get(BACKGROUND_SCOPE_QUALIFIER), get(), get()) }
-    viewModel { DevSettingsScreenViewModel(get()) }
 }

@@ -2,6 +2,7 @@ package com.nevmem.survey
 
 import android.app.Application
 import com.nevmem.survey.di.createAppModule
+import com.nevmem.survey.di.createViewModelsModule
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.YandexMetricaConfig
 import org.koin.android.ext.koin.androidContext
@@ -15,7 +16,10 @@ class SurveyApplication : Application() {
 
         startKoin {
             androidContext(this@SurveyApplication)
-            modules(createAppModule(this@SurveyApplication))
+            modules(
+                createAppModule(this@SurveyApplication),
+                createViewModelsModule(),
+            )
         }
     }
 
