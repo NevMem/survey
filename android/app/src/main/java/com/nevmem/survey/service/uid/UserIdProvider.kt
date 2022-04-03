@@ -1,9 +1,9 @@
 package com.nevmem.survey.service.uid
 
 import com.nevmem.survey.data.user.UserId
+import com.nevmem.survey.preferences.PreferencesService
 import com.nevmem.survey.report.report
-import com.nevmem.survey.service.preferences.PreferencesService
-import com.nevmem.survey.service.settings.api.SettingsService
+import com.nevmem.survey.settings.api.SettingsService
 import java.util.UUID
 
 private const val USER_ID_PREFS_KEY = "user_id"

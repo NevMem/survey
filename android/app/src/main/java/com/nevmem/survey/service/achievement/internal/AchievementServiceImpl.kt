@@ -3,13 +3,12 @@ package com.nevmem.survey.service.achievement.internal
 import com.nevmem.survey.report.report
 import com.nevmem.survey.service.achievement.api.Achievement
 import com.nevmem.survey.service.achievement.api.AchievementService
-import com.nevmem.survey.service.preferences.PreferencesService
+import com.nevmem.survey.preferences.PreferencesService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull

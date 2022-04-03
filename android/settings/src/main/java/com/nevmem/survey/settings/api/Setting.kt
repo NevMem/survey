@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.settings.api
+package com.nevmem.survey.settings.api
 
 import kotlinx.coroutines.flow.Flow
 

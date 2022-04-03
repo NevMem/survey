@@ -4,8 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.BuildConfig
 import com.nevmem.survey.R
-import com.nevmem.survey.service.preferences.PreferencesService
-import com.nevmem.survey.service.settings.api.SettingsService
+import com.nevmem.survey.preferences.PreferencesService
+import com.nevmem.survey.settings.api.SettingsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.nevmem.survey.service.preferences
+package com.nevmem.survey.preferences
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences

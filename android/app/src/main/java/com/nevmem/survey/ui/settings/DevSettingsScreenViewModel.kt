@@ -3,7 +3,7 @@ package com.nevmem.survey.ui.settings
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.R
-import com.nevmem.survey.service.settings.api.SettingsService
+import com.nevmem.survey.settings.api.SettingsService
 
 class DevSettingsScreenViewModel(
     settingsService: SettingsService,

@@ -1,9 +1,9 @@
-package com.nevmem.survey.service.settings.internal
+package com.nevmem.survey.settings.internal
 
 import com.nevmem.survey.report.report
-import com.nevmem.survey.service.preferences.PreferencesService
-import com.nevmem.survey.service.settings.api.Setting
-import com.nevmem.survey.service.settings.api.SettingsService
+import com.nevmem.survey.preferences.PreferencesService
+import com.nevmem.survey.settings.api.Setting
+import com.nevmem.survey.settings.api.SettingsService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

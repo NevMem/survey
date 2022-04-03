@@ -3,9 +3,9 @@ package com.nevmem.survey.ui.home
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.data.survey.Survey
+import com.nevmem.survey.preferences.PreferencesService
 import com.nevmem.survey.service.achievement.api.Achievement
 import com.nevmem.survey.service.achievement.api.AchievementService
-import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.survey.SurveyService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -3,11 +3,11 @@ package com.nevmem.survey.di
 import android.content.Context
 import com.nevmem.survey.network.api.BackendBaseUrlProvider
 import com.nevmem.survey.network.api.createNetworkService
+import com.nevmem.survey.preferences.PreferencesService
 import com.nevmem.survey.service.achievement.api.createAchievementService
 import com.nevmem.survey.service.network.BackendBaseUrlProviderImpl
-import com.nevmem.survey.service.preferences.PreferencesService
 import com.nevmem.survey.service.push.api.createPushService
-import com.nevmem.survey.service.settings.api.createSettingsService
+import com.nevmem.survey.settings.api.createSettingsService
 import com.nevmem.survey.service.survey.SurveyService
 import com.nevmem.survey.service.uid.UserIdProvider
 import kotlinx.coroutines.CoroutineScope

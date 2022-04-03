@@ -1,7 +1,7 @@
 package com.nevmem.survey.service.network
 
 import com.nevmem.survey.network.api.BackendBaseUrlProvider
-import com.nevmem.survey.service.settings.api.SettingsService
+import com.nevmem.survey.settings.api.SettingsService
 
 class BackendBaseUrlProviderImpl(
     private val settingsService: SettingsService,

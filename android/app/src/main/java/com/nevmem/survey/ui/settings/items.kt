@@ -1,7 +1,7 @@
 package com.nevmem.survey.ui.settings
 
 import androidx.annotation.StringRes
-import com.nevmem.survey.service.settings.api.Setting
+import com.nevmem.survey.settings.api.Setting
 
 sealed class SettingsScreenItem
 
