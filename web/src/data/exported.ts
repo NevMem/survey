@@ -16,6 +16,15 @@ interface AllSurveysResponse {
 	surveys: Survey[];
 }
 
+interface BroadcastAllRequest {
+	title: string;
+	message: string;
+}
+
+interface BroadcastAllResponse {
+	sentMessages: number;
+}
+
 interface CommonQuestion {
 	id: string;
 }
@@ -312,6 +321,8 @@ export type {
 	Administrator,
 	AllRolesResponse,
 	AllSurveysResponse,
+	BroadcastAllRequest,
+	BroadcastAllResponse,
 	CommonQuestion,
 	CreateExportDataTaskRequest,
 	CreateInviteError,
