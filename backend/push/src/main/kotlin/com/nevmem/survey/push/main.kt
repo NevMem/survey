@@ -25,7 +25,7 @@ private val coreModule = module {
 }
 
 fun main() {
-    val serviceAccount = FileInputStream(System.getenv("FIREBASE_CREDENTIALS"))
+    val serviceAccount = FileInputStream("firebase_sdk_key.json")
 
     val options = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
