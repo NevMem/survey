@@ -180,7 +180,7 @@ const AdminPageImpl = () => {
     if (request instanceof RequestSuccess) {
         return (
             <Card>
-                <UsersTable users={request.result.users} />
+                <UsersTable users={request.result.administrators} />
             </Card>
         );
     }
