@@ -17,4 +17,6 @@ data class SwitchSettingsScreenItem(
 
 data class BlockSettingsScreenItem(
     val list: List<SettingsScreenItem>,
-) : SettingsScreenItem()
+) : SettingsScreenItem() {
+    constructor(vararg items: SettingsScreenItem) : this(items.toList())
+}

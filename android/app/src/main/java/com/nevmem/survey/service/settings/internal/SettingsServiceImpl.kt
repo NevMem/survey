@@ -50,6 +50,7 @@ internal class SettingsServiceImpl(
 ) : SettingsService {
     override val isPushNotificationsEnabled: Setting<Boolean> = boolSetting("push_notifications_enabled")
     override val isHttpBackendUrlEnabled: Setting<Boolean> = boolSetting("http_url_for_backend_enabled")
+    override val enableNotUniqueUserIds: Setting<Boolean> = boolSetting("enable_not_unique_user_ids")
 
     init {
         report("settings-service", "init")

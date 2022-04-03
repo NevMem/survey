@@ -11,10 +11,16 @@ class DevSettingsScreenViewModel(
     val uiState = mutableStateOf(
         listOf(
             HeaderSettingsScreenItem,
-            SwitchSettingsScreenItem(
-                R.string.http_url_setting_title,
-                settingsService.isHttpBackendUrlEnabled,
-            ),
+            BlockSettingsScreenItem(
+                SwitchSettingsScreenItem(
+                    R.string.http_url_setting_title,
+                    settingsService.isHttpBackendUrlEnabled,
+                ),
+                SwitchSettingsScreenItem(
+                    R.string.enable_not_unique_user_ids,
+                    settingsService.enableNotUniqueUserIds,
+                ),
+            )
         )
     )
 }

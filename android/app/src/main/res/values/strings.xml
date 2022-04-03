@@ -32,6 +32,7 @@
 
     <string name="notifications_enabled_setting_title">Уведомления</string>
     <string name="http_url_setting_title">HTTP url backend uri enabled</string>
+    <string name="enable_not_unique_user_ids">Enable not unique user ids</string>
 
     <string name="already_answered_survey_max_times">Вы уже прошли этот опрос максимальное количество раз</string>
 

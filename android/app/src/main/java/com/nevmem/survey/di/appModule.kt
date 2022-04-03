@@ -34,7 +34,7 @@ fun createAppModule(context: Context) = module {
     single { context.getSharedPreferences("storage", Context.MODE_PRIVATE) }
     single { PreferencesService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
     single { SurveyService(get(), get(), get()) }
-    single { UserIdProvider() }
+    single { UserIdProvider(get(), get()) }
     single { createAchievementService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
     single { createSettingsService(get()) }
     single { createPushService(get(BACKGROUND_SCOPE_QUALIFIER), get(), get(), get()) }
