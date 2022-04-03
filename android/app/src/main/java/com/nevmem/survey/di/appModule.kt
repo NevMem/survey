@@ -23,9 +23,15 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+private const val BACKGROUND_SCOPE = "background"
+private val BACKGROUND_SCOPE_QUALIFIER = named(BACKGROUND_SCOPE)
+
+private const val UI_SCOPE = "ui"
+private val UI_SCOPE_QUALIFIER = named(UI_SCOPE)
+
 fun createAppModule(context: Context) = module {
-    single(named("background")) { CoroutineScope(Dispatchers.Default) + SupervisorJob() }
-    single(named("ui")) { CoroutineScope(Dispatchers.Main) + SupervisorJob() }
+    single(BACKGROUND_SCOPE_QUALIFIER) { CoroutineScope(Dispatchers.Default) + SupervisorJob() }
+    single(UI_SCOPE_QUALIFIER) { CoroutineScope(Dispatchers.Main) + SupervisorJob() }
 
     single(named("backend_base_url")) {
         val settingService: SettingsService = get()
@@ -39,17 +45,17 @@ fun createAppModule(context: Context) = module {
     single { createNetworkService(get(named("backend_base_url"))) }
 
     single { context.getSharedPreferences("storage", Context.MODE_PRIVATE) }
-    single { PreferencesService(get(named("background")), get()) }
+    single { PreferencesService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
     single { SurveyService(get(), get(), get()) }
     single { UserIdProvider() }
-    single { createAchievementService(get(named("background")), get()) }
+    single { createAchievementService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
     single { createSettingsService(get()) }
-    single { createPushService(get(named("background")), get(), get(), get()) }
+    single { createPushService(get(BACKGROUND_SCOPE_QUALIFIER), get(), get(), get()) }
 
     viewModel { JoinScreenViewModel(get(), get()) }
-    viewModel { EthnoSplashScreenViewModel(get(), get(named("background"))) }
-    viewModel { SurveyScreenViewModel(get(), get(named("background")), get()) }
-    viewModel { HomeScreenViewModel(get(named("background")), get(), get(), get()) }
-    viewModel { SettingsScreenViewModel(get(named("background")), get(), get()) }
+    viewModel { EthnoSplashScreenViewModel(get(), get(BACKGROUND_SCOPE_QUALIFIER)) }
+    viewModel { SurveyScreenViewModel(get(), get(BACKGROUND_SCOPE_QUALIFIER), get()) }
+    viewModel { HomeScreenViewModel(get(BACKGROUND_SCOPE_QUALIFIER), get(), get(), get()) }
+    viewModel { SettingsScreenViewModel(get(BACKGROUND_SCOPE_QUALIFIER), get(), get()) }
     viewModel { DevSettingsScreenViewModel(get()) }
 }
