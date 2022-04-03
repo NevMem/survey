@@ -1,8 +1,8 @@
-package com.nevmem.survey.push.service
+package com.nevmem.survey.push.service.data
 
 import com.nevmem.survey.data.user.UserId
-import com.nevmem.survey.push.service.internal.PushDataEntityDTO
-import com.nevmem.survey.push.service.internal.PushDataTable
+import com.nevmem.survey.push.service.data.internal.PushDataEntityDTO
+import com.nevmem.survey.push.service.data.internal.PushDataTable
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class PushDataServiceImpl : PushDataService {

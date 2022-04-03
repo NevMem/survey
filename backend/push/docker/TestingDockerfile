@@ -17,7 +17,8 @@ RUN apt update && \
 COPY --from=BUILD_PHASE backend/push/build/distributions/push-0.0.1.zip /
 COPY ./backend/push/docker/testing_runner.sh .
 COPY ./backend/wait-for-it.sh .
-RUN unzip worker-0.0.1.zip
+COPY ./backend/push/docker/build/firebase_sdk_key.json .
+RUN unzip push-0.0.1.zip
 
 ENV DB_USERNAME=postgres_for_testing
 ENV DB_PASSWORD=postgres_for_testing

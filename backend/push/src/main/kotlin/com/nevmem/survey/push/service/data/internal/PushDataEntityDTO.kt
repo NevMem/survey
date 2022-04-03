@@ -1,4 +1,4 @@
-package com.nevmem.survey.push.service.internal
+package com.nevmem.survey.push.service.data.internal
 
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
