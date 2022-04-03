@@ -32,13 +32,13 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nevmem.survey.R
 import com.nevmem.survey.data.answer.QuestionAnswer
-import com.nevmem.survey.util.getText
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.viewModel
@@ -57,7 +57,7 @@ fun SurveyScreen(
         currentAnswer = answer
     }
 
-    val needAnswerMessage = getText(id = R.string.wait_for_answer)
+    val needAnswerMessage = stringResource(id = R.string.wait_for_answer)
     val moveNext: () -> Unit = {
         if (currentAnswer == null) {
             GlobalScope.launch {
@@ -143,28 +143,28 @@ private fun ActionsRow(
 @Composable
 private fun NextAction(moveNext: () -> Unit) {
     Button(onClick = { moveNext() }) {
-        Text(getText(id = R.string.next), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+        Text(stringResource(id = R.string.next), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
     }
 }
 
 @Composable
 private fun PrevAction(movePrev: () -> Unit) {
     OutlinedButton(onClick = { movePrev() }) {
-        Text(getText(id = R.string.previous), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+        Text(stringResource(id = R.string.previous), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
     }
 }
 
 @Composable
 private fun SendAction(send: () -> Unit) {
     Button(onClick = { send() }) {
-        Text(getText(id = R.string.send), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+        Text(stringResource(id = R.string.send), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
     }
 }
 
 @Composable
 private fun RetryAction(retry: () -> Unit) {
     Button(onClick = { retry() }) {
-        Text(getText(id = R.string.retry), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+        Text(stringResource(id = R.string.retry), modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
     }
 }
 
@@ -207,11 +207,11 @@ private fun SendingView(item: SurveyScreenItem) {
                 is SendingAnswers.Error -> {
                     Column {
                         Text(
-                            getText(id = R.string.sending_answers_failed),
+                            stringResource(id = R.string.sending_answers_failed),
                             style = MaterialTheme.typography.h4,
                         )
                         Text(
-                            getText(id = R.string.sending_answers_failed_description),
+                            stringResource(id = R.string.sending_answers_failed_description),
                             modifier = Modifier.padding(top = 12.dp),
                             style = MaterialTheme.typography.subtitle2,
                         )

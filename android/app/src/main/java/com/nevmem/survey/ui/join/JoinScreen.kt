@@ -21,10 +21,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.nevmem.survey.R
-import com.nevmem.survey.util.getText
 import org.koin.androidx.compose.viewModel
 
 @Composable
@@ -50,7 +50,7 @@ fun JoinScreen(
             ) {
                 ErrorCard(scaffoldState, viewModel.state.value)
                 Text(
-                    getText(id = R.string.enter_survey_id),
+                    stringResource(id = R.string.enter_survey_id),
                     modifier = Modifier.padding(8.dp),
                     style = MaterialTheme.typography.body1,
                 )
@@ -59,7 +59,7 @@ fun JoinScreen(
                     OutlinedTextField(
                         value = surveyId,
                         onValueChange = { surveyId = it },
-                        label = { Text(getText(R.string.survey_id_label)) }
+                        label = { Text(stringResource(R.string.survey_id_label)) }
                     )
                 }
                 Row(modifier = Modifier.padding(8.dp)) {

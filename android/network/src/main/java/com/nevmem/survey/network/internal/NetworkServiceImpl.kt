@@ -10,6 +10,7 @@ import com.nevmem.survey.data.response.push.RegisterPushTokenResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
 import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.data.user.UserId
+import com.nevmem.survey.network.api.BackendBaseUrlProvider
 import com.nevmem.survey.network.api.NetworkService
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
@@ -23,7 +24,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
 internal class NetworkServiceImpl(
-    private val baseUrl: String,
+    private val backendBaseUrlProvider: BackendBaseUrlProvider,
 ) : NetworkService {
 
     private val client = HttpClient {
@@ -37,7 +38,7 @@ internal class NetworkServiceImpl(
     }
 
     override suspend fun loadSurvey(surveyId: String): Survey {
-        return client.post<GetSurveyResponse>("$baseUrl/v1/survey/get") {
+        return client.post<GetSurveyResponse>("${baseUrl()}/v1/survey/get") {
             contentType(ContentType.Application.Json)
             body = GetSurveyRequest(surveyId)
         }.survey
@@ -57,7 +58,7 @@ internal class NetworkServiceImpl(
             ),
         )
         post<PublishAnswerRequest, PublishAnswerResponse>(
-            "$baseUrl/v1/answers/publish",
+            "${baseUrl()}/v1/answers/publish",
             request,
         )
     }
@@ -68,10 +69,12 @@ internal class NetworkServiceImpl(
             token = token,
         )
         post<RegisterPushTokenRegisterRequest, RegisterPushTokenResponse>(
-            "$baseUrl/v1/push/register",
+            "${baseUrl()}/v1/push/register",
             request,
         )
     }
+
+    private suspend fun baseUrl(): String = backendBaseUrlProvider.provideBaseUrl()
 
     private suspend inline fun <U : Any, reified T : Any> post(url: String, data: U): T {
         return client.post(url) {

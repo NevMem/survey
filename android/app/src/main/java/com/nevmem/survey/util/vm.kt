@@ -7,7 +7,9 @@ import org.koin.java.KoinJavaComponent
 
 fun ViewModel.injectBackgroundScope() = KoinJavaComponent.inject<CoroutineScope>(
     CoroutineScope::class.java,
-    qualifier = named("background")
+    qualifier = named("background"),
 )
-fun ViewModel.injectUiScope() =
-    KoinJavaComponent.inject<CoroutineScope>(CoroutineScope::class.java, qualifier = named("ui"))
+fun ViewModel.injectUiScope() = KoinJavaComponent.inject<CoroutineScope>(
+    CoroutineScope::class.java,
+    qualifier = named("ui"),
+)

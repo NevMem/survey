@@ -18,10 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nevmem.survey.R
 import com.nevmem.survey.service.achievement.api.Achievement
-import com.nevmem.survey.util.getText
 
 @Composable
 fun AchievementView(achievement: Achievement) {
@@ -68,7 +68,7 @@ fun SurveysCounterAchievement(achievement: Achievement.CounterAchievement) {
             title = { Text(achievement.title) },
             confirmButton = {
                 Button(onClick = { dialogOpen = false }, modifier = Modifier.padding(8.dp)) {
-                    Text(getText(id = R.string.ok))
+                    Text(stringResource(id = R.string.ok))
                 }
             },
         )
@@ -107,7 +107,7 @@ fun VeryFirstAchievement(achievement: Achievement.VeryFirstAchievement) {
             title = { Text(achievement.title) },
             confirmButton = {
                 Button(onClick = { dialogOpen = false }, modifier = Modifier.padding(8.dp)) {
-                    Text(getText(id = R.string.ok))
+                    Text(stringResource(id = R.string.ok))
                 }
             },
         )
