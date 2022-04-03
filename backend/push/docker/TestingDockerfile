@@ -1,0 +1,30 @@
+FROM openjdk:8-jdk-alpine AS BUILD_PHASE
+COPY backend backend
+
+FROM ubuntu:20.04
+
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
+    vim \
+    telnet \
+    lsof \
+    syslog-ng \
+    curl \
+    openjdk-8-jdk \
+    unzip
+
+COPY --from=BUILD_PHASE backend/push/build/distributions/push-0.0.1.zip /
+COPY ./backend/push/docker/testing_runner.sh .
+COPY ./backend/wait-for-it.sh .
+RUN unzip worker-0.0.1.zip
+
+ENV DB_USERNAME=postgres_for_testing
+ENV DB_PASSWORD=postgres_for_testing
+ENV DB_DBNAME=test_db
+ENV DB_SERVER=database
+ENV DB_PORT=5432
+
+CMD ["./testing_runner.sh"]
+
+EXPOSE 80 443
