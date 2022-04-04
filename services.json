@@ -23,7 +23,7 @@
     },
     "push": {
         "tag": "push",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-push:38196a9",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-push:5a277a4",
         "ports": [
             80
         ]
