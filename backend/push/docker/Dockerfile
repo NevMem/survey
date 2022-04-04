@@ -15,7 +15,7 @@ COPY /tmp/ /
 COPY /build/ .
 COPY runner.sh .
 COPY env.sh .
-RUN unzip worker-0.0.1.zip
+RUN unzip push-0.0.1.zip
 
 CMD ["./runner.sh"]
 

@@ -20,5 +20,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Create firebase messaging credentials file
+        run: echo $FIREBASE_SDK_KEY > backend/push/docker/build/firebase_sdk_key.json
+        env:
+          FIREBASE_SDK_KEY: ${{ secrets.FIREBASE_SDK_KEY }}
       - name: testing
         run: cd backend && ./full_suit.sh
