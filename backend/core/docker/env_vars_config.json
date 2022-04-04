@@ -15,7 +15,8 @@
         "S3_SECRET_ACCESS_KEY",
         "S3_URI",
         "SELF_URI",
-        "WORKER_URI"
+        "WORKER_URI",
+        "PUSH_URI"
     ],
     "other": [
         "ADMIN_PASSWORD"
