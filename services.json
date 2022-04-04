@@ -20,5 +20,12 @@
         "ports": [
             9090
         ]
+    },
+    "push": {
+        "tag": "push",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-push:38196a9",
+        "ports": [
+            80
+        ]
     }
 }
