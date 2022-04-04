@@ -4,7 +4,7 @@ mkdir tmp
 
 cd ../../../
 ./gradlew backend:push:build --no-daemon
-cd ./backend/worker/docker
+cd ./backend/push/docker
 
 mkdir build
 echo $FIREBASE_SDK_KEY > build/firebase_sdk_key.json
