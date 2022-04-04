@@ -1,0 +1,9 @@
+{
+    "required": [
+        "DB_USERNAME",
+        "DB_PASSWORD",
+        "DB_DBNAME",
+        "DB_SERVER",
+        "DB_PORT"
+    ]
+}
