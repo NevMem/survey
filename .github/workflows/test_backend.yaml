@@ -21,7 +21,9 @@ jobs:
         with:
           java-version: 11
       - name: Create firebase messaging credentials file
-        run: echo $FIREBASE_SDK_KEY > backend/push/docker/build/firebase_sdk_key.json
+        run: |
+          mkdir backend/push/docker/build/
+          echo $FIREBASE_SDK_KEY > backend/push/docker/build/firebase_sdk_key.json
         env:
           FIREBASE_SDK_KEY: ${{ secrets.FIREBASE_SDK_KEY }}
       - name: testing
