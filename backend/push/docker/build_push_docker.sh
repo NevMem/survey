@@ -7,7 +7,7 @@ cd ../../../
 cd ./backend/worker/docker
 
 mkdir build
-cat $FIREBASE_SDK_KEY > build/firebase_sdk_key.json
+echo $FIREBASE_SDK_KEY > build/firebase_sdk_key.json
 
 cp ../build/distributions/push-0.0.1.zip ./tmp/
 
