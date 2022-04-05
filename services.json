@@ -27,5 +27,12 @@
         "ports": [
             80
         ]
+    },
+    "grafana": {
+        "tag": "grafana",
+        "container-tag": "grafana/grafana-oss:8.2.6",
+        "ports": [
+            3000
+        ]
     }
 }
