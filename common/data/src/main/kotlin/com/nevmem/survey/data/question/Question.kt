@@ -28,4 +28,18 @@ sealed class Question {
         val title: String,
         val maxLength: Int,
     ) : Question()
+
+    @SerialName("radio")
+    @Serializable
+    data class RadioQuestion(
+        val title: String,
+        val variants: List<QuestionVariant>,
+    ) : Question()
 }
+
+@Exported
+@Serializable
+data class QuestionVariant(
+    val id: String,
+    val variant: String,
+)

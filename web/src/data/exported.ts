@@ -143,6 +143,16 @@ interface QuestionAnswer {
 	type: string;
 }
 
+interface QuestionVariant {
+	id: string;
+	variant: string;
+}
+
+interface RadioQuestion extends Question {
+	title: string;
+	variants: QuestionVariant[];
+}
+
 interface RatingQuestion extends Question {
 	title: string;
 	min: number;
@@ -274,6 +284,10 @@ export function instanceOfLoginSuccessful(object: LoginResponse): object is Logi
 	return object.type === "success";
 }
 
+export function instanceOfRadioQuestion(object: Question): object is RadioQuestion {
+	return object.type === "radio";
+}
+
 export function instanceOfRatingQuestion(object: Question): object is RatingQuestion {
 	return object.type === "rating";
 }
@@ -350,6 +364,8 @@ export type {
 	MediaGallery,
 	Question,
 	QuestionAnswer,
+	QuestionVariant,
+	RadioQuestion,
 	RatingQuestion,
 	RatingQuestionAnswer,
 	RegisterError,
