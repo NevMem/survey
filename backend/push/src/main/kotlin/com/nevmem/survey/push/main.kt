@@ -58,7 +58,6 @@ private fun createTables() = transaction {
     )
 }
 
-
 fun main() {
     setupDatabases()
 

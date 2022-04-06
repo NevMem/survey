@@ -1,6 +1,5 @@
 package com.nevmem.survey.data.answer
 
-import com.nevmem.survey.Exported
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

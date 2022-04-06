@@ -4,8 +4,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.report.report
 import com.nevmem.survey.service.push.api.PushService
-import com.nevmem.survey.settings.api.SettingsService
 import com.nevmem.survey.service.uid.UserIdProvider
+import com.nevmem.survey.settings.api.SettingsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
