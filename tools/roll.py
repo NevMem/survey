@@ -65,6 +65,7 @@ def deploy(executor: RemoteCommandExecutor, image_tag: str, machine: Machine, po
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("login")
     parser.add_argument("services")
     parser.add_argument("services_file")
     parser.add_argument("identity_file")
@@ -99,7 +100,7 @@ def main():
                 if tag != service:
                     continue
                 index += 1
-                executor = RemoteCommandExecutor('nevmem', machine.ip, args.identity_file)
+                executor = RemoteCommandExecutor(args.login, machine.ip, args.identity_file)
                 if not executor.is_docker_installer():
                     executor.install_docker(args.token)
                 containers = executor.get_containers()
