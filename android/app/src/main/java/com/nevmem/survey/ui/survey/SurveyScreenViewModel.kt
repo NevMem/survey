@@ -121,5 +121,9 @@ class SurveyScreenViewModel(
         is Question.RatingQuestion -> RatingQuestion(title, min, max)
         is Question.StarsQuestion -> StarsQuestion(title, stars)
         is Question.TextQuestion -> TextQuestion(title, maxLength)
+        is Question.RadioQuestion -> RadioQuestion(
+            title = title,
+            variants = variants.map { RadioQuestion.QuestionVariant(it.id, it.variant) },
+        )
     }
 }

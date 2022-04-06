@@ -192,6 +192,7 @@ private fun SurveyScreenItemImpl(
         is RatingQuestion -> { RatingQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is TextQuestion -> { TextQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is StarsQuestion -> { StarsQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
+        is RadioQuestion -> { RadioQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         else -> { SendingView(item = item) }
     }
 }
@@ -355,23 +356,6 @@ private fun TextQuestionImpl(
                     .fillMaxWidth(),
                 textAlign = TextAlign.End,
             )
-        }
-    }
-}
-
-@Composable
-private fun QuestionCard(content: @Composable () -> Unit) {
-    Card(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        elevation = 0.dp,
-        border = BorderStroke(1.dp, MaterialTheme.colors.primary)
-    ) {
-        Box(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            content()
         }
     }
 }
