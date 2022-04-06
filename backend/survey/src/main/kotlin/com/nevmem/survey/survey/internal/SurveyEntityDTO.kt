@@ -16,6 +16,7 @@ internal enum class QuestionEntityType {
     Stars,
     Text,
     Rating,
+    Radio,
 }
 
 internal object QuestionsTable : LongIdTable() {
@@ -24,6 +25,7 @@ internal object QuestionsTable : LongIdTable() {
     val min = integer("min").nullable()
     val max = integer("max").nullable()
     val stars = integer("stars").nullable()
+    val variants = text("variants", eagerLoading = true).nullable()
     val maxLength = integer("maxLength").nullable()
 
     val survey = reference("survey", SurveysTable, onDelete = ReferenceOption.CASCADE)
@@ -54,6 +56,7 @@ internal class QuestionEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     var max by QuestionsTable.max
     var stars by QuestionsTable.stars
     var maxLength by QuestionsTable.maxLength
+    var variants by QuestionsTable.variants
 
     var survey by QuestionsTable.survey
 }
