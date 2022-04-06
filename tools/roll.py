@@ -104,6 +104,7 @@ def main():
                     executor.install_docker(args.token)
                 containers = executor.get_containers()
                 need_update = True
+                Notificator().send_message(str(containers))
                 for container in containers:
                     if container['Names'] == f"{service}-{index}" and container['Image'] == service_config['container-tag']:
                         need_update = False
