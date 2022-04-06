@@ -45,6 +45,7 @@ class Exporter : KoinComponent {
                                 is QuestionEntity.StarsQuestionEntity -> it.title
                                 is QuestionEntity.TextQuestionEntity -> it.title
                                 is QuestionEntity.RatingQuestionEntity -> it.title
+                                is QuestionEntity.RadioQuestionEntity -> it.title
                             }
                         }
 
@@ -82,6 +83,9 @@ class Exporter : KoinComponent {
                 }
                 is QuestionAnswer.StarsQuestionAnswer -> {
                     answer.stars
+                }
+                is QuestionAnswer.RadioQuestionAnswer -> {
+                    answer.id
                 }
             }
         }
