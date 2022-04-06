@@ -198,13 +198,6 @@ interface Survey {
 	surveyCoolDown: number;
 }
 
-interface SurveyAnswer {
-	uid: UserId;
-	surveyId: string;
-	answers: QuestionAnswer[];
-	gallery: MediaGallery | undefined;
-}
-
 interface SurveyMetadata {
 	answersCount: number;
 	filesCount: number;
@@ -343,7 +336,6 @@ export type {
 	ServerError,
 	StarsQuestion,
 	Survey,
-	SurveyAnswer,
 	SurveyMetadata,
 	Task,
 	TaskLog,
