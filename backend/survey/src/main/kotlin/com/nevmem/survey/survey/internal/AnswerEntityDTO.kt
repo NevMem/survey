@@ -9,6 +9,7 @@ enum class SurveyAnswerType {
     Stars,
     Text,
     Rating,
+    Radio,
 }
 
 internal object SurveyAnswerTable : LongIdTable() {

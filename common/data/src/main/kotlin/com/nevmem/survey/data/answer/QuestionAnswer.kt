@@ -5,7 +5,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Exported
 sealed class QuestionAnswer {
     @Serializable
     @SerialName("rating")
@@ -18,4 +17,8 @@ sealed class QuestionAnswer {
     @Serializable
     @SerialName("stars")
     data class StarsQuestionAnswer(val stars: Int, val commonQuestionId: String? = null) : QuestionAnswer()
+
+    @Serializable
+    @SerialName("radio")
+    data class RadioQuestionAnswer(val id: String) : QuestionAnswer()
 }

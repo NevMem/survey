@@ -25,6 +25,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
         Text,
         Rating,
         Stars,
+        Radio,
     }
 
     private val surveysService by inject<SurveysService>()
@@ -76,6 +77,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
                     QuestionType.Rating -> SurveyAnswerType.Rating
                     QuestionType.Stars -> SurveyAnswerType.Stars
                     QuestionType.Text -> SurveyAnswerType.Text
+                    QuestionType.Radio -> SurveyAnswerType.Radio
                 }
 
                 QuestionAnswerDTO.new {
@@ -132,6 +134,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             is QuestionEntity.RatingQuestionEntity -> QuestionType.Rating
             is QuestionEntity.TextQuestionEntity -> QuestionType.Text
             is QuestionEntity.StarsQuestionEntity -> QuestionType.Stars
+            is QuestionEntity.RadioQuestionEntity -> QuestionType.Radio
         }
     }
 
@@ -140,6 +143,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             is QuestionAnswer.TextQuestionAnswer -> QuestionType.Text
             is QuestionAnswer.StarsQuestionAnswer -> QuestionType.Stars
             is QuestionAnswer.RatingQuestionAnswer -> QuestionType.Rating
+            is QuestionAnswer.RadioQuestionAnswer -> QuestionType.Radio
         }
     }
 

@@ -139,10 +139,6 @@ interface Question {
 	type: string;
 }
 
-interface QuestionAnswer {
-	type: string;
-}
-
 interface QuestionVariant {
 	id: string;
 	variant: string;
@@ -157,11 +153,6 @@ interface RatingQuestion extends Question {
 	title: string;
 	min: number;
 	max: number;
-}
-
-interface RatingQuestionAnswer extends QuestionAnswer {
-	number: number;
-	commonQuestionId: string | undefined;
 }
 
 interface RegisterError extends RegisterResponse {
@@ -196,11 +187,6 @@ interface ServerError {
 interface StarsQuestion extends Question {
 	title: string;
 	stars: number;
-}
-
-interface StarsQuestionAnswer extends QuestionAnswer {
-	stars: number;
-	commonQuestionId: string | undefined;
 }
 
 interface Survey {
@@ -239,11 +225,6 @@ interface TaskLog {
 interface TextQuestion extends Question {
 	title: string;
 	maxLength: number;
-}
-
-interface TextQuestionAnswer extends QuestionAnswer {
-	text: string;
-	commonQuestionId: string | undefined;
 }
 
 interface UpdateRolesRequest {
@@ -292,10 +273,6 @@ export function instanceOfRatingQuestion(object: Question): object is RatingQues
 	return object.type === "rating";
 }
 
-export function instanceOfRatingQuestionAnswer(object: QuestionAnswer): object is RatingQuestionAnswer {
-	return object.type === "rating";
-}
-
 export function instanceOfRegisterError(object: RegisterResponse): object is RegisterError {
 	return object.type === "error";
 }
@@ -308,15 +285,7 @@ export function instanceOfStarsQuestion(object: Question): object is StarsQuesti
 	return object.type === "stars";
 }
 
-export function instanceOfStarsQuestionAnswer(object: QuestionAnswer): object is StarsQuestionAnswer {
-	return object.type === "stars";
-}
-
 export function instanceOfTextQuestion(object: Question): object is TextQuestion {
-	return object.type === "text";
-}
-
-export function instanceOfTextQuestionAnswer(object: QuestionAnswer): object is TextQuestionAnswer {
 	return object.type === "text";
 }
 
@@ -363,11 +332,9 @@ export type {
 	Media,
 	MediaGallery,
 	Question,
-	QuestionAnswer,
 	QuestionVariant,
 	RadioQuestion,
 	RatingQuestion,
-	RatingQuestionAnswer,
 	RegisterError,
 	RegisterRequest,
 	RegisterResponse,
@@ -375,14 +342,12 @@ export type {
 	Role,
 	ServerError,
 	StarsQuestion,
-	StarsQuestionAnswer,
 	Survey,
 	SurveyAnswer,
 	SurveyMetadata,
 	Task,
 	TaskLog,
 	TextQuestion,
-	TextQuestionAnswer,
 	UpdateRolesRequest,
 	UpdateRolesResponse,
 	UserId,
