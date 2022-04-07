@@ -52,7 +52,6 @@ class Exporter : KoinComponent {
                 writer.write(headerLine.joinToString(",") + "\n")
                 answers.forEach {
                     writer.write(it.csvLine() + "\n")
-                    tasksService.appendLog(task, "Written line: " + it.csvLine())
                 }
                 writer.flush()
                 writer.close()
