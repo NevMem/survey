@@ -71,9 +71,9 @@ const TaskOutputsView = (props: { outputs: Media[] }) => {
 };
 
 
-const TaskView = (props: { task: Task }) => {
+const TaskView = (props: { task: Task, expandedDefault?: boolean }) => {
 
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(props.expandedDefault ?? false);
 
     const ExpandButton = (props: { expanded: boolean, setExpanded: (expanded: boolean) => void }) => {
         if (props.expanded) {

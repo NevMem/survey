@@ -207,7 +207,7 @@ const PollingTaskView = (props: {task: Task}) => {
     
     if (request instanceof PollingSuccess) {
         return (
-            <TaskView task={request.result} />
+            <TaskView task={request.result} expandedDefault={true} />
         );
     }
 

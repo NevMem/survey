@@ -99,7 +99,7 @@ const TasksBlock = () => {
 
     return (
         <SpacedColumn rowGap={16}>
-            <TaskView task={readyTask} />
+            <TaskView task={readyTask} expandedDefault={true} />
             <TaskView task={executingTask} />
             <TaskView task={errorTask} />
         </SpacedColumn>
