@@ -17,6 +17,7 @@ import backendApi from '../../api/backendApiServiceSingleton';
 import Badge from '../../components/badge/Badge';
 import usePollingRequest, { PollingError, PollingState, PollingSuccess } from '../../utils/usePollingRequest';
 import Row from '../../app/layout/Row';
+import TaskView from '../../app/task/TaskView';
 
 const SurveySelector = observer((props: {surveysService: SurveysService, selectSurvey: (survey: Survey | undefined) => void}) => {
     if (props.surveysService.surveysState instanceof SurveysLoading) {
@@ -152,35 +153,35 @@ const TaskOutputsView = (props: {task: Task}) => {
     );
 };
 
-const TaskView = (props: {task: Task}) => {
-    const { task } = props;
+// const TaskView = (props: {task: Task}) => {
+//     const { task } = props;
 
-    if (task.state === TaskState.Waiting) {
-        return (
-            <Row>
-                <Loader small/>
-                <Text>{task.state}</Text>
-            </Row>
-        );
-    }
+//     if (task.state === TaskState.Waiting) {
+//         return (
+//             <Row>
+//                 <Loader small/>
+//                 <Text>{task.state}</Text>
+//             </Row>
+//         );
+//     }
 
-    if (task.state === TaskState.Success) {
-        return (
-            <SpacedCenteredColumn rowGap={8}>
-                <Badge success>{task.state}</Badge>
-                <TaskLogsView task={task}/>
-                <TaskOutputsView task={task} />
-            </SpacedCenteredColumn>
-        );
-    }
+//     if (task.state === TaskState.Success) {
+//         return (
+//             <SpacedCenteredColumn rowGap={8}>
+//                 <Badge success>{task.state}</Badge>
+//                 <TaskLogsView task={task}/>
+//                 <TaskOutputsView task={task} />
+//             </SpacedCenteredColumn>
+//         );
+//     }
 
-    return (
-        <SpacedCenteredColumn rowGap={8}>
-            <Badge warning>{task.state}</Badge>
-            <TaskLogsView task={task}/>
-        </SpacedCenteredColumn>
-    );
-};
+//     return (
+//         <SpacedCenteredColumn rowGap={8}>
+//             <Badge warning>{task.state}</Badge>
+//             <TaskLogsView task={task}/>
+//         </SpacedCenteredColumn>
+//     );
+// };
 
 
 const PollingTaskView = (props: {task: Task}) => {
@@ -230,9 +231,7 @@ const ExportTaskBlock = (props: {survey: Survey}) => {
 
     if (request instanceof RequestSuccess) {
         return (
-            <Card>
-                <PollingTaskView task={request.result} />
-            </Card>
+            <PollingTaskView task={request.result} />
         );
     }
 
@@ -259,12 +258,12 @@ const SurveyDownloadDataBlock = (props: {survey?: Survey}) => {
     };
 
     return (
-        <Card>
+        <SpacedColumn rowGap={16}>
             <SpaceAroundRow>
                 <GeneralButton onClick={startDownloading}>Выгрузить</GeneralButton>
             </SpaceAroundRow>
             {download && <ExportTaskBlock survey={survey} key={requestIndex} />}
-        </Card>
+        </SpacedColumn>
     );
 };
 

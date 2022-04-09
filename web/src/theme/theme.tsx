@@ -15,6 +15,7 @@ interface PaletteTheme {
     error: string;
     warning: string;
     grey: string;
+    info: string;
 };
 
 export interface Theme extends PaletteTheme, SizesTheme {

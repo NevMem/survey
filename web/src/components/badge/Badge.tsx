@@ -13,6 +13,7 @@ const StyledBadge = styled.div<{badgeTextColor: string, badgeBackgroundColor: st
 interface BadgeProps {
     success?: boolean
     error?: boolean
+    info?: boolean
     warning?: boolean
     children: any
 }
@@ -27,6 +28,9 @@ const Badge = (props: BadgeProps) => {
     }
     if (props.warning) {
         return <StyledBadge badgeBackgroundColor={theme.withAlpha(60).warning} badgeTextColor={theme.warning}>{props.children}</StyledBadge>;
+    }
+    if (props.info) {
+        return <StyledBadge badgeBackgroundColor={theme.withAlpha(60).info} badgeTextColor={theme.info}>{props.children}</StyledBadge>;
     }
     return <StyledBadge
             badgeBackgroundColor={theme.withAlpha(60).grey}
