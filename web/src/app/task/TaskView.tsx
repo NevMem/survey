@@ -10,6 +10,9 @@ import Row from "../layout/Row";
 import styled from "styled-components";
 import Column from "../layout/Column";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import GeneralButton from "../../components/button/GeneralButton";
+import TextButton from "../../components/button/TextButton";
 
 
 const TaskViewBadge = (props: { taskState: TaskState }) => {
@@ -69,15 +72,26 @@ const TaskOutputsView = (props: { outputs: Media[] }) => {
 
 
 const TaskView = (props: { task: Task }) => {
+
+    const [expanded, setExpanded] = useState(false);
+
+    const ExpandButton = (props: { expanded: boolean, setExpanded: (expanded: boolean) => void }) => {
+        if (props.expanded) {
+            return <TextButton secondary onClick={() => { props.setExpanded(false) }}>Скрыть</TextButton>;
+        }
+        return <TextButton onClick={() => { props.setExpanded(true) }}>Раскрыть</TextButton>
+    };
+
     return (
         <OutlinedCard>
             <SpacedColumn rowGap={16}>
                 <SpaceBetweenRow>
                     <TaskViewBadge taskState={props.task.state} />
                     <Text>Task id: {props.task.id}</Text>
+                    <ExpandButton expanded={expanded} setExpanded={setExpanded} />
                 </SpaceBetweenRow>
 
-                <Card>
+                {expanded && <Card>
                     <SpacedColumn rowGap={2}>
                         {props.task.log.map((elem, index) => {
                             return (
@@ -85,9 +99,9 @@ const TaskView = (props: { task: Task }) => {
                             );
                         })}
                     </SpacedColumn>
-                </Card>
+                </Card>}
 
-                <TaskOutputsView outputs={props.task.outputs} />
+                {expanded && <TaskOutputsView outputs={props.task.outputs} />}
             </SpacedColumn>
         </OutlinedCard>
     );
