@@ -8,6 +8,8 @@ import SpaceBetweenRow from "../layout/SpaceBetweenRow";
 import Card from "../card/Card";
 import Row from "../layout/Row";
 import styled from "styled-components";
+import Column from "../layout/Column";
+import { useNavigate } from "react-router-dom";
 
 
 const TaskViewBadge = (props: { taskState: TaskState }) => {
@@ -36,8 +38,32 @@ const CardWithShadow = styled.div`
 `;
 
 const TaskOutputView = (props: { media: Media }) => {
+    const { media } = props;
+
+    const navigate = useNavigate();
+
+    const onClick = () => {
+        window.open(media.url, '_blank')?.focus();
+    };
+
     return (
-        <CardWithShadow style={{marginRight: '8px'}}>{props.media.filename}</CardWithShadow>
+        <CardWithShadow style={{marginRight: '8px'}} onClick={onClick}>{media.filename}</CardWithShadow>
+    );
+};
+
+
+const TaskOutputsView = (props: { outputs: Media[] }) => {
+    return (
+        <SpacedColumn rowGap={8}>
+            <Text>Outputs:</Text>
+            <Row>
+                {props.outputs.map((elem, index) => {
+                    return (
+                        <TaskOutputView media={elem} key={index} />
+                    )
+                })}
+            </Row>
+        </SpacedColumn>
     );
 };
 
@@ -61,13 +87,7 @@ const TaskView = (props: { task: Task }) => {
                     </SpacedColumn>
                 </Card>
 
-                <Row>
-                    {props.task.outputs.map((elem, index) => {
-                        return (
-                            <TaskOutputView media={elem} key={index} />
-                        )
-                    })}
-                </Row>
+                <TaskOutputsView outputs={props.task.outputs} />
             </SpacedColumn>
         </OutlinedCard>
     );

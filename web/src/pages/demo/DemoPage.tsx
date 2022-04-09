@@ -94,8 +94,6 @@ const TasksBlock = () => {
             { message: 'Exception: exception', timestamp: (new Date()).getSeconds() },
         ],
         outputs: [
-            { id: 0, filename: 'somefile.png', url: '', bucketName: '' },
-            { id: 1, filename: 'somefile2.png', url: '', bucketName: '' },
         ],
     };
 

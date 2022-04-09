@@ -131,27 +131,27 @@ const SurveyDownloadDataFilter = (props: {survey?: Survey}) => {
     )
 };
 
-const TaskLogsView = (props: {task: Task}) => {
-    return (
-        <SpacedColumn rowGap={4}>
-            {props.task.log.map((elem, index) => {
-                return <Text key={index}>{elem.timestamp}:{elem.message}</Text>;
-            })}
-        </SpacedColumn>
-    );
-};
+// const TaskLogsView = (props: {task: Task}) => {
+//     return (
+//         <SpacedColumn rowGap={4}>
+//             {props.task.log.map((elem, index) => {
+//                 return <Text key={index}>{elem.timestamp}:{elem.message}</Text>;
+//             })}
+//         </SpacedColumn>
+//     );
+// };
 
-const TaskOutputsView = (props: {task: Task}) => {
-    return (
-        <SpaceAroundRow>
-            {props.task.outputs.map((elem, index) => {
-                return (
-                    <a key={index} href={elem.url}>{elem.filename}</a>
-                );
-            })}
-        </SpaceAroundRow>
-    );
-};
+// const TaskOutputsView = (props: {task: Task}) => {
+//     return (
+//         <SpaceAroundRow>
+//             {props.task.outputs.map((elem, index) => {
+//                 return (
+//                     <a key={index} href={elem.url}>{elem.filename}</a>
+//                 );
+//             })}
+//         </SpaceAroundRow>
+//     );
+// };
 
 // const TaskView = (props: {task: Task}) => {
 //     const { task } = props;
