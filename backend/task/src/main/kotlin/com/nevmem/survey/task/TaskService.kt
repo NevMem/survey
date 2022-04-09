@@ -16,7 +16,7 @@ interface TaskService {
         toState: TaskStateEntity,
     ): ExportDataTaskEntity?
 
-    suspend fun getTask(id: Long): ExportDataTaskEntity?
+    suspend fun getExportTask(id: Long): ExportDataTaskEntity?
 
     suspend fun appendLog(task: ExportDataTaskEntity, message: String)
 

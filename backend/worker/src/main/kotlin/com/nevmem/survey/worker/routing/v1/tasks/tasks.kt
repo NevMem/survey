@@ -24,7 +24,7 @@ fun Route.tasks() {
 
     post("/task") {
         val request = call.receive<GetTaskRequest>()
-        val task = tasksService.getTask(request.taskId)
+        val task = tasksService.getExportTask(request.taskId)
         call.respond(
             GetTaskResponse(
                 task?.let { exportDataTaskConverter(it) }
