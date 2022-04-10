@@ -7,5 +7,6 @@ fun Route.v2Api() {
     route("/v2") {
         users()
         surveys()
+        projects()
     }
 }

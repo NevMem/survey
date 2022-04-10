@@ -92,6 +92,27 @@ class Client:
     def create_export_data_task(self, token, surveyId):
         return self._post('/v1/task/create_export_data_task', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
 
+    def register_v2(self, login: str, password: str, name: str, surname: str, email: str):
+        return self._post(
+            '/v2/register',
+            {
+                'login': login,
+                'password': password,
+                'name': name,
+                'surname': surname,
+                'email': email,
+            }
+        )
+
+    def login_v2(self, login: str, password: str):
+        return self._post('/v2/login', {'login': login, 'password': password})
+
+    def check_auth(self, token):
+        return self._get('/v2/check_auth', headers={'Authorization': 'Bearer ' + token})
+
+    def create_project(self, token, name):
+        return self._post('/v2/projects/create', body={'name': name}, headers={'Authorization': 'Bearer ' + token})
+
     @timed
     def upload_media(self, stream):
         return requests.post(self.base_url + '/v1/media/upload', files={'file': stream})
