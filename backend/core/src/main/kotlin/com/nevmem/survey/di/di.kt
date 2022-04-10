@@ -20,6 +20,7 @@ import com.nevmem.survey.survey.AnswersService
 import com.nevmem.survey.survey.SurveysMetadataAssembler
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.createAnswersService
+import com.nevmem.survey.survey.createProjectsService
 import com.nevmem.survey.survey.createSurveyMetadataAssembler
 import com.nevmem.survey.survey.createSurveysService
 import com.nevmem.survey.users.UsersService
@@ -44,6 +45,7 @@ private val coreModule = module {
     single<UsersService> { createUsersService() }
     single { createWorkerApi(EnvVars.Worker.uri!!) }
     single { createPushClient(EnvVars.Push.uri!!) }
+    single { createProjectsService(get(), get()) }
 }
 
 fun Application.di() {

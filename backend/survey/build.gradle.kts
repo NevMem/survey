@@ -18,5 +18,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation(project(":backend:common"))
     implementation(project(":backend:helpers"))
+    implementation(project(":backend:role"))
+    implementation(project(":backend:users"))
     implementation(project(":common:data"))
 }
