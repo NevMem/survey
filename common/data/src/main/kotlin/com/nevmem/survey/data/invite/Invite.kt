@@ -4,10 +4,19 @@ import com.nevmem.survey.Exported
 import com.nevmem.survey.data.user.Administrator
 import kotlinx.serialization.Serializable
 
+@Exported
+@Serializable
+enum class InviteStatus {
+    Accepted,
+    Expired,
+    Waiting,
+}
+
 @Serializable
 @Exported
 data class Invite(
-    val inviteId: String,
-    val acceptedBy: Administrator?,
-    val isExpired: Boolean,
+    val id: Long,
+    val projectId: Long,
+    val toUser: Administrator,
+    val status: InviteStatus,
 )

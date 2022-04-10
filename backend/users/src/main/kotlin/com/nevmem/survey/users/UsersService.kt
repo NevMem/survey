@@ -26,4 +26,6 @@ interface UsersService {
     suspend fun getUserWithCredentials(credentials: Credentials): UserEntity?
 
     suspend fun getUserById(id: Long): UserEntity?
+
+    suspend fun getUserByLogin(login: String): UserEntity?
 }

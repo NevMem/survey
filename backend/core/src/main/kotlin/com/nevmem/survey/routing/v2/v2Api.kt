@@ -8,5 +8,6 @@ fun Route.v2Api() {
         users()
         surveys()
         projects()
+        invites()
     }
 }

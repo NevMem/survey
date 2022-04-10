@@ -61,6 +61,14 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
         }
     }
 
+    override suspend fun getUserByLogin(login: String): UserEntity? {
+        return transaction {
+            UserEntityDTO.find {
+                UsersTable.login eq login
+            }.firstOrNull()?.toEntity()
+        }
+    }
+
     private fun UserEntityDTO.toEntity(): UserEntity {
         return UserEntity(
             id.value,

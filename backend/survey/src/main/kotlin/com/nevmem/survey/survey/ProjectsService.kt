@@ -13,4 +13,6 @@ interface ProjectsService {
     suspend fun getRolesInProject(project: ProjectEntity, user: UserEntity): List<RoleEntity>
 
     suspend fun isUserInvitedToProject(project: ProjectEntity, user: UserEntity): Boolean
+
+    suspend fun addUserToProject(project: ProjectEntity, user: UserEntity)
 }
