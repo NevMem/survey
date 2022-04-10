@@ -14,6 +14,7 @@ private const val VARIANTS_SEPARATOR = "=#="
 
 internal class SurveysServiceImpl : SurveysService, KoinComponent {
     override suspend fun createSurvey(
+        projectId: Long,
         name: String,
         questions: List<QuestionEntity>,
         commonQuestion: List<CommonQuestionEntity>,
@@ -22,6 +23,7 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         val dto = transaction {
             val survey = SurveyEntityDTO.new {
                 this.name = name
+                this.projectId = projectId
                 this.surveyId = RandomStringGenerator.randomString(5)
                 this.answerCoolDown = answerCoolDown
             }
@@ -77,10 +79,6 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         SurveyEntityDTO.findById(id)?.delete()
     }
 
-    override suspend fun allSurveys(): List<SurveyEntity> {
-        return transaction { SurveyEntityDTO.all().map { it.toEntity() } }
-    }
-
     override suspend fun survey(surveyId: String): SurveyEntity? = transaction {
         SurveyEntityDTO.find {
             SurveysTable.surveyId eq surveyId
@@ -93,9 +91,16 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         }.firstOrNull()?.toEntity()
     }
 
+    override suspend fun surveysInProject(projectId: Long): List<SurveyEntity> = transaction {
+        SurveyEntityDTO.find {
+            SurveysTable.projectId eq projectId
+        }.map { it.toEntity() }
+    }
+
     private fun SurveyEntityDTO.toEntity(): SurveyEntity {
         return SurveyEntity(
             id = id.value,
+            projectId = projectId,
             surveyId = surveyId,
             name = name,
             questions = questions.map { dto ->

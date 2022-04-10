@@ -11,7 +11,6 @@ internal object UsersTable : LongIdTable() {
     val name = varchar("name", 32)
     val surname = varchar("surname", 32)
     val email = varchar("email", 64)
-    val roles = text("roles")
 }
 
 internal class UserEntityDTO(id: EntityID<Long>) : LongEntity(id) {
@@ -22,5 +21,4 @@ internal class UserEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     var name by UsersTable.name
     var surname by UsersTable.surname
     var email by UsersTable.email
-    var roles by UsersTable.roles
 }

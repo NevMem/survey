@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
 
 internal object SurveysTable : LongIdTable() {
     val name = text("name")
+    val projectId = long("projectId")
     val surveyId = varchar("surveyId", 8)
     val answerCoolDown = long("answerCoolDown")
 }
@@ -41,6 +42,7 @@ internal class SurveyEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<SurveyEntityDTO>(SurveysTable)
 
     var name by SurveysTable.name
+    var projectId by SurveysTable.projectId
     var surveyId by SurveysTable.surveyId
     var answerCoolDown by SurveysTable.answerCoolDown
     val questions by QuestionEntityDTO referrersOn QuestionsTable.survey

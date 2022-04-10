@@ -1,12 +1,31 @@
-package com.nevmem.survey.routing.v1.surveys
+package com.nevmem.survey.routing.v2
 
+import com.nevmem.survey.commonQuestion.CommonQuestionEntity
+import com.nevmem.survey.data.question.Question
+import com.nevmem.survey.data.request.survey.CreateSurveyRequest
+import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
+import com.nevmem.survey.data.request.survey.GetSurveysRequest
+import com.nevmem.survey.data.request.survey.LoadSurveyMetadataRequest
+import com.nevmem.survey.data.response.survey.CreateSurveyResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
+import com.nevmem.survey.data.response.survey.GetSurveysResponse
+import com.nevmem.survey.data.response.survey.LoadSurveyMetadataResponse
+import com.nevmem.survey.exception.AccessDeniedException
 import com.nevmem.survey.exception.NotFoundException
+import com.nevmem.survey.question.QuestionEntity
+import com.nevmem.survey.question.QuestionVariantEntity
+import com.nevmem.survey.role.RoleModel
+import com.nevmem.survey.routing.toRoles
+import com.nevmem.survey.routing.userId
+import com.nevmem.survey.survey.ProjectsService
+import com.nevmem.survey.survey.SurveysMetadataAssembler
 import com.nevmem.survey.survey.SurveysService
+import com.nevmem.survey.users.UsersService
 import com.nevmem.surveys.converters.SurveysConverter
 import io.ktor.application.call
 import io.ktor.auth.authenticate
+import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -15,11 +34,12 @@ import io.ktor.routing.route
 import org.koin.ktor.ext.inject
 
 private fun Route.surveysImpl() {
-//    val usersService by inject<UsersService>()
-//    val roleModel by inject<RoleModel>()
+    val usersService by inject<UsersService>()
+    val roleModel by inject<RoleModel>()
     val surveysService by inject<SurveysService>()
     val surveysConverter by inject<SurveysConverter>()
-//    val surveysMetadataAssembler by inject<SurveysMetadataAssembler>()
+    val surveysMetadataAssembler by inject<SurveysMetadataAssembler>()
+    val projectsService by inject<ProjectsService>()
 
     post("/get") {
         val request = call.receive<GetSurveyRequest>()
@@ -34,17 +54,21 @@ private fun Route.surveysImpl() {
     }
 
     authenticate {
-        /*post("/create_survey") {
+        post("/create_survey") {
             try {
                 val user = usersService.getUserById(userId())!!
 
-                if (!roleModel.hasAccess(listOf(roleModel.roleById("survey.creator")), user.roles)) {
+                val request = call.receive<CreateSurveyRequest>()
+
+                val project = projectsService.get(request.projectId) ?: throw NotFoundException("Project with id ${request.projectId} not found")
+                val userRoles = projectsService.getRolesInProject(project, user)
+
+                if (!roleModel.hasAccess(listOf("survey.creator").toRoles(roleModel), userRoles)) {
                     throw IllegalStateException("Access to method denied (not enough roles)")
                 }
 
-                val request = call.receive<CreateSurveyRequest>()
-
                 val survey = surveysService.createSurvey(
+                    projectId = request.projectId,
                     name = request.name,
                     questions = request.questions.map {
                         when (it) {
@@ -84,25 +108,54 @@ private fun Route.surveysImpl() {
         }
 
         post("/delete_survey") {
-            checkRoles(roleModel, usersService, listOf("survey.manager"))
             val request = call.receive<DeleteSurveyRequest>()
+
+            val survey = surveysService.surveyById(request.surveyId) ?: throw NotFoundException("Survey with id ${request.surveyId} not found")
+            val project = projectsService.get(survey.projectId)!!
+
+            val user = usersService.getUserById(userId())!!
+            val userRoles = projectsService.getRolesInProject(project, user)
+
+            if (!roleModel.hasAccess(listOf("survey.creator").toRoles(roleModel), userRoles)) {
+                throw IllegalStateException("Access to method denied (not enough roles)")
+            }
+
             surveysService.deleteSurvey(request.surveyId)
             call.respond(HttpStatusCode.OK)
         }
 
-        get("/surveys") {
+        post("/surveys") {
+            val request = call.receive<GetSurveysRequest>()
+
+            val user = usersService.getUserById(userId())!!
+            val project = projectsService.get(request.projectId) ?: throw NotFoundException("Project with id ${request.projectId} not found")
+
+            if (!projectsService.isUserInvitedToProject(project, user)) {
+                throw AccessDeniedException()
+            }
+
             call.respond(
-                AllSurveysResponse(
-                    surveysService.allSurveys().map { surveysConverter.convertSurvey(it) }
+                GetSurveysResponse(
+                    projectId = request.projectId,
+                    surveys = surveysService.surveysInProject(request.projectId).map { surveysConverter.convertSurvey(it) }
                 )
             )
         }
 
         post("/metadata") {
-            checkRoles(roleModel, usersService, listOf("survey.observer"))
             val request = call.receive<LoadSurveyMetadataRequest>()
+
+            val survey = surveysService.surveyById(request.surveyId) ?: throw NotFoundException("Survey with id ${request.surveyId} not found")
+            val project = projectsService.get(survey.projectId) ?: throw NotFoundException("Project with id ${survey.projectId} not found")
+            val user = usersService.getUserById(userId())!!
+            val roles = projectsService.getRolesInProject(project, user)
+
+            if (!roleModel.hasAccess(listOf("survey.observer").toRoles(roleModel), roles)) {
+                throw AccessDeniedException()
+            }
+
             call.respond(LoadSurveyMetadataResponse(surveysMetadataAssembler.assembleMetadata(request.surveyId)))
-        }*/
+        }
     }
 }
 

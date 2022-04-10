@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Exported
 data class CreateSurveyRequest(
+    val projectId: Long,
     val name: String,
     val questions: List<Question>,
     val commonQuestions: List<CommonQuestion>,

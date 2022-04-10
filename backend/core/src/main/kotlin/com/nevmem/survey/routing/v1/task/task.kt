@@ -1,30 +1,17 @@
 package com.nevmem.survey.routing.v1.task
 
-import com.nevmem.survey.data.request.task.CreateExportDataTaskRequest
-import com.nevmem.survey.data.request.task.LoadTaskRequest
-import com.nevmem.survey.role.RoleModel
-import com.nevmem.survey.routing.userId
-import com.nevmem.survey.users.UsersService
-import com.nevmem.survey.worker.api.WorkerApi
-import com.nevmem.surveys.converters.UsersConverter
-import io.ktor.application.call
 import io.ktor.auth.authenticate
-import io.ktor.request.receive
-import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.post
 import io.ktor.routing.route
-import org.koin.ktor.ext.inject
 
 private fun Route.taskImpl() {
-    val usersService by inject<UsersService>()
-    val roleModel by inject<RoleModel>()
-    val userConverter by inject<UsersConverter>()
-    val workerApi by inject<WorkerApi>()
+//    val usersService by inject<UsersService>()
+//    val roleModel by inject<RoleModel>()
+//    val userConverter by inject<UsersConverter>()
+//    val workerApi by inject<WorkerApi>()
 
     authenticate {
-        get("/tasks") {
+        /* get("/tasks") {
             val user = usersService.getUserById(userId())!!
 
             if (!roleModel.hasAccess(listOf(roleModel.roleById("survey.manager")), user.roles)) {
@@ -59,7 +46,7 @@ private fun Route.taskImpl() {
 
             val request = call.receive<CreateExportDataTaskRequest>()
             call.respond(workerApi.createExportDataTask(userConverter(user), request.surveyId))
-        }
+        } */
     }
 }
 

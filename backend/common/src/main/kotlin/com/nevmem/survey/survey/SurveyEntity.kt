@@ -5,6 +5,7 @@ import com.nevmem.survey.question.QuestionEntity
 
 data class SurveyEntity(
     val id: Long,
+    val projectId: Long,
     val surveyId: String,
     val name: String,
     val questions: List<QuestionEntity>,

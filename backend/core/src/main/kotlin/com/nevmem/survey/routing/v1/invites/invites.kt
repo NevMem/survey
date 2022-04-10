@@ -1,29 +1,21 @@
 package com.nevmem.survey.routing.v1.invites
 
-import com.nevmem.survey.data.request.invite.CreateInviteRequest
-import com.nevmem.survey.data.response.invite.CreateInviteResponse
 import com.nevmem.survey.data.response.invite.GetInvitesResponse
 import com.nevmem.survey.invites.InvitesService
-import com.nevmem.survey.role.RoleModel
-import com.nevmem.survey.users.UsersService
 import com.nevmem.surveys.converters.InvitesConverter
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.principal
-import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
-import io.ktor.routing.post
 import io.ktor.routing.route
 import org.koin.ktor.ext.inject
 
 private fun Route.invitesImpl() {
     val invitesService by inject<InvitesService>()
     val invitesConverter by inject<InvitesConverter>()
-    val usersService by inject<UsersService>()
-    val roleModel by inject<RoleModel>()
 
     authenticate {
         get("/my_invites") {
@@ -39,7 +31,7 @@ private fun Route.invitesImpl() {
             )
         }
 
-        post("/create_invite") {
+        /* post("/create_invite") {
             try {
                 val principal = call.principal<JWTPrincipal>()!!
                 val userId = principal["user_id"]!!.toLong()
@@ -69,7 +61,7 @@ private fun Route.invitesImpl() {
                     )
                 )
             }
-        }
+        } */
     }
 }
 
