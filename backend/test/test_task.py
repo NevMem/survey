@@ -32,7 +32,7 @@ def test_simple_task(client: Client):
         response = client.publish_answer({
             'answer': {
                 'surveyId': surveyLiteral,
-                'publisherId': publisherId,
+                'uid': {'uuid': publisherId},
                 'answers': [
                     {
                         'type': 'stars',
@@ -50,9 +50,11 @@ def test_simple_task(client: Client):
     taskId = response.json()['id']
 
     response = client.tasks(token)
+    print(response.text)
     assert response.status_code == 200
 
     response = client.task(token, taskId)
+    print(response.text)
     assert response.status_code == 200
     assert response.json()['state'] == 'Executing' or response.json()['state'] == 'Waiting' or response.json()['state'] == 'Success'
 

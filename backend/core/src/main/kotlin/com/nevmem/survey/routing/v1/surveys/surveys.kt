@@ -12,6 +12,7 @@ import com.nevmem.survey.data.response.survey.GetSurveyResponse
 import com.nevmem.survey.data.response.survey.LoadSurveyMetadataResponse
 import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.question.QuestionEntity
+import com.nevmem.survey.question.QuestionVariantEntity
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.routing.checkRoles
 import com.nevmem.survey.routing.userId
@@ -80,11 +81,17 @@ private fun Route.surveysImpl() {
                                 min = it.min,
                                 max = it.max,
                             )
+                            is Question.RadioQuestion -> QuestionEntity.RadioQuestionEntity(
+                                id = 0,
+                                title = it.title,
+                                variants = it.variants.map { variant -> QuestionVariantEntity(variant.id, variant.variant) },
+                            )
                         }
                     },
                     commonQuestion = request.commonQuestions.map {
                         CommonQuestionEntity(it.id)
-                    }
+                    },
+                    answerCoolDown = request.answerCoolDown,
                 )
 
                 call.respond<CreateSurveyResponse>(CreateSurveyResponse.CreateSurveySuccess(surveysConverter.convertSurvey(survey)))

@@ -2,12 +2,12 @@ package com.nevmem.survey.task
 
 import com.nevmem.survey.media.MediaEntity
 
-interface TaskEntity
+open class TaskEntity(val id: Long, val log: List<TaskLogEntity>, val outputs: List<MediaEntity>)
 
-data class ExportDataTaskEntity(
-    val id: Long,
+class ExportDataTaskEntity(
+    id: Long,
     val state: TaskStateEntity,
     val surveyId: Long,
-    val log: List<TaskLogEntity>,
-    val outputs: List<MediaEntity>,
-) : TaskEntity
+    log: List<TaskLogEntity>,
+    outputs: List<MediaEntity>,
+) : TaskEntity(id, log, outputs)

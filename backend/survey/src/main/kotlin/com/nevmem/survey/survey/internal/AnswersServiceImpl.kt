@@ -3,6 +3,7 @@ package com.nevmem.survey.survey.internal
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
+import com.nevmem.survey.data.user.UserId
 import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.survey.AlreadyPublishedAnswerException
 import com.nevmem.survey.survey.AnswersService
@@ -24,6 +25,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
         Text,
         Rating,
         Stars,
+        Radio,
     }
 
     private val surveysService by inject<SurveysService>()
@@ -50,13 +52,13 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             }
         }
 
-        val count = transaction {
+        val maxTimestamp = transaction {
             SurveyAnswerDTO.find {
-                (SurveyAnswerTable.publisherId eq answer.publisherId) and
+                (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
                     (SurveyAnswerTable.surveyId eq answer.surveyId)
-            }.count()
+            }.maxByOrNull { SurveyAnswerTable.timestamp }?.timestamp
         }
-        if (count != 0L) {
+        if (maxTimestamp != null && maxTimestamp + survey.answerCoolDown >= System.currentTimeMillis()) {
             throw AlreadyPublishedAnswerException()
         }
 
@@ -64,9 +66,10 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
 
         transaction {
             val surveyAnswer = SurveyAnswerDTO.new {
-                this.publisherId = answer.publisherId
+                this.publisherId = answer.uid.uuid
                 this.surveyId = answer.surveyId
                 this.mediaGalleryId = answer.gallery?.id
+                this.timestamp = System.currentTimeMillis()
             }
 
             answer.answers.forEach { actualAnswer ->
@@ -74,6 +77,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
                     QuestionType.Rating -> SurveyAnswerType.Rating
                     QuestionType.Stars -> SurveyAnswerType.Stars
                     QuestionType.Text -> SurveyAnswerType.Text
+                    QuestionType.Radio -> SurveyAnswerType.Radio
                 }
 
                 QuestionAnswerDTO.new {
@@ -130,6 +134,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             is QuestionEntity.RatingQuestionEntity -> QuestionType.Rating
             is QuestionEntity.TextQuestionEntity -> QuestionType.Text
             is QuestionEntity.StarsQuestionEntity -> QuestionType.Stars
+            is QuestionEntity.RadioQuestionEntity -> QuestionType.Radio
         }
     }
 
@@ -138,6 +143,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             is QuestionAnswer.TextQuestionAnswer -> QuestionType.Text
             is QuestionAnswer.StarsQuestionAnswer -> QuestionType.Stars
             is QuestionAnswer.RatingQuestionAnswer -> QuestionType.Rating
+            is QuestionAnswer.RadioQuestionAnswer -> QuestionType.Radio
         }
     }
 
@@ -146,7 +152,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
             surveyId = this.surveyId,
             gallery = null,
             answers = this.answers.map { it.entity() },
-            publisherId = this.publisherId,
+            uid = UserId(this.publisherId),
         )
     }
 

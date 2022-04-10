@@ -18,4 +18,4 @@ RUN unzip worker-0.0.1.zip
 
 CMD ["./runner.sh"]
 
-EXPOSE 80 443
+EXPOSE 80

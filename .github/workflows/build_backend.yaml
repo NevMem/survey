@@ -72,6 +72,8 @@ jobs:
           S3_URI: https://storage.yandexcloud.net
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           SELF_URI: https://ethnosurvey.com
+          WORKER_URI: http://survey-worker.ru-central1.internal
+          PUSH_URI: http://survey-push.ru-central1.internal
       - name: Installing YC util
         run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
       - name: Authorizing YC util

@@ -11,9 +11,30 @@
     <string name="retry">Попробовать еще раз</string>
     <string name="send">Отправить</string>
     <string name="previous">Предыдущий</string>
+    <string name="ok">Ок</string>
+    <string name="cancel">Отмена</string>
 
     <string name="wait_for_answer">Пожалуйста ответьте на вопрос</string>
 
     <string name="sending_answers_failed">Произошла ошибка</string>
     <string name="sending_answers_failed_description">Мы уже работаем над её исправлением</string>
+
+    <string name="take_survey">Пройти</string>
+    <string name="take_survey_long">Пройти опрос</string>
+    <string name="leave_survey">Покинуть опрос</string>
+    <string name="join_survey">Присоединиться к опросу</string>
+    <string name="home_screen_joined_survey">Вы участвуете в опросе</string>
+    <string name="achievements_title">Достижения</string>
+
+    <string name="confirm_leave_survey">Вы уверены что хотите покинуть опрос?</string>
+
+    <string name="settings_title">Настройки</string>
+
+    <string name="notifications_enabled_setting_title">Уведомления</string>
+    <string name="http_url_setting_title">HTTP url backend uri enabled</string>
+    <string name="enable_not_unique_user_ids">Enable not unique user ids</string>
+
+    <string name="already_answered_survey_max_times">Вы уже прошли этот опрос максимальное количество раз</string>
+
+    <string name="can_answer_survey_in">Вы сможете пройти опрос через %d минут</string>
 </resources>

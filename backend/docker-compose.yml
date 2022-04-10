@@ -7,40 +7,31 @@ services:
       - POSTGRES_USER=postgres_for_testing
       - POSTGRES_PASSWORD=postgres_for_testing
       - POSTGRES_DB=test_db
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5432"]
-      interval: 3s
-      timeout: 10s
-      retries: 5
-      start_period: 2s
-  core:
-    build:
-      context: ../
-      dockerfile: backend/core/docker/TestingDockerfile
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
-      interval: 3s
-      timeout: 10s
-      retries: 5
-      start_period: 2s
-    depends_on:
-      database:
-        condition: service_started
-    ports:
-      - "80:80"
-  worker:
-    build:
-      context: ../
-      dockerfile: backend/worker/docker/TestingDockerfile
-  test:
-    build:
-      context: test/
-    depends_on:
-      core:
-        condition: service_healthy
   s3local:
     image: 'scality/s3server'
     ports:
       - "8000:8000"
     volumes:
       - "./config.json:/usr/src/app/config.json"
+  core:
+    build:
+      context: ../
+      dockerfile: backend/core/docker/TestingDockerfile
+    ports:
+      - "80:8080"
+  worker:
+    build:
+      context: ../
+      dockerfile: backend/worker/docker/TestingDockerfile
+    ports:
+      - "81:80"
+  push:
+    build:
+      context: ../
+      dockerfile: backend/push/docker/TestingDockerfile
+    ports:
+      - "82:80"
+  test:
+    build:
+      context: .
+      dockerfile: test/Dockerfile

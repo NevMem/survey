@@ -38,20 +38,20 @@ class Exporter : KoinComponent {
                 val writer = file.bufferedWriter()
 
                 val headerLine =
-                    listOf("publisherId") +
+                    listOf("uuid") +
                         survey.commonQuestions.map { it.id } +
                         survey.questions.map {
                             when (it) {
                                 is QuestionEntity.StarsQuestionEntity -> it.title
                                 is QuestionEntity.TextQuestionEntity -> it.title
                                 is QuestionEntity.RatingQuestionEntity -> it.title
+                                is QuestionEntity.RadioQuestionEntity -> it.title
                             }
                         }
 
                 writer.write(headerLine.joinToString(",") + "\n")
                 answers.forEach {
                     writer.write(it.csvLine() + "\n")
-                    tasksService.appendLog(task, "Written line: " + it.csvLine())
                 }
                 writer.flush()
                 writer.close()
@@ -83,9 +83,12 @@ class Exporter : KoinComponent {
                 is QuestionAnswer.StarsQuestionAnswer -> {
                     answer.stars
                 }
+                is QuestionAnswer.RadioQuestionAnswer -> {
+                    answer.id
+                }
             }
         }
 
-        return (listOf(publisherId) + answers).joinToString(",") { it.toString() }
+        return (listOf(uid.uuid) + answers).joinToString(",") { it.toString() }
     }
 }

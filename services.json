@@ -1,13 +1,14 @@
 {
     "worker": {
         "tag": "worker",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:a18b1af",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:7f39429",
         "ports": [
+            80
         ]
     },
     "core": {
         "tag": "core",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:292de6d",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:3411c58",
         "ports": [
             80,
             443
@@ -15,9 +16,23 @@
     },
     "metrics": {
         "tag": "metrics",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:1d7d7a5",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:38196a9",
         "ports": [
             9090
+        ]
+    },
+    "push": {
+        "tag": "push",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-push:5a277a4",
+        "ports": [
+            80
+        ]
+    },
+    "grafana": {
+        "tag": "grafana",
+        "container-tag": "grafana/grafana-oss:8.2.6",
+        "ports": [
+            3000
         ]
     }
 }

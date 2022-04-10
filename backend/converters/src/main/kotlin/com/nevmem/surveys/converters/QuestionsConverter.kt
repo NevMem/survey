@@ -1,10 +1,11 @@
 package com.nevmem.surveys.converters
 
 import com.nevmem.survey.data.question.Question
+import com.nevmem.survey.data.question.QuestionVariant
 import com.nevmem.survey.question.QuestionEntity
 
 class QuestionsConverter {
-    fun convertQuestion(question: QuestionEntity): Question {
+    private fun convertQuestion(question: QuestionEntity): Question {
         return when (question) {
             is QuestionEntity.RatingQuestionEntity -> Question.RatingQuestion(
                 title = question.title,
@@ -18,6 +19,10 @@ class QuestionsConverter {
             is QuestionEntity.TextQuestionEntity -> Question.TextQuestion(
                 title = question.title,
                 maxLength = question.maxLength,
+            )
+            is QuestionEntity.RadioQuestionEntity -> Question.RadioQuestion(
+                title = question.title,
+                variants = question.variants.map { QuestionVariant(it.id, it.variant) },
             )
         }
     }

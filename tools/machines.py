@@ -52,11 +52,28 @@ def filter_metrics_service_machines(machines: List[Machine]) -> List[Machine]:
     return result
 
 
+def filter_worker_service_machines(machines: List[Machine]) -> List[Machine]:
+    result = []
+    for machine in machines:
+        if 'worker' in machine.tags:
+            result.append(machine)
+    return result
+
+
+def filter_push_service_machines(machines: List[Machine]) -> List[Machine]:
+    def is_push_machine(machine: Machine):
+        return 'push' in machine.tags
+    return list(filter(is_push_machine, machines))
+
 def get_machines_for_service(service: str) -> List[Machine]:
     machines = get_machines_list()
     if service == 'core':
         return filter_core_service_machines(machines)
     if service == 'metrics':
         return filter_metrics_service_machines(machines)
+    if service == 'worker':
+        return filter_worker_service_machines(machines)
+    if service == 'push':
+        return filter_push_service_machines(machines)
     
     raise ValueError(f"Unknown service {service}")

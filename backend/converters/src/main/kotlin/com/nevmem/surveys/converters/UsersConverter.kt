@@ -1,6 +1,6 @@
 package com.nevmem.surveys.converters
 
-import com.nevmem.survey.data.user.User
+import com.nevmem.survey.data.user.Administrator
 import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.user.UserEntity
 import org.koin.core.component.KoinComponent
@@ -11,8 +11,8 @@ class UsersConverter : KoinComponent {
     private val rolesConverter by inject<RolesConverter>()
     private val roleModel by inject<RoleModel>()
 
-    fun convertUser(userEntity: UserEntity): User {
-        return User(
+    fun convertUser(userEntity: UserEntity): Administrator {
+        return Administrator(
             id = userEntity.id,
             login = userEntity.login,
             name = userEntity.name,

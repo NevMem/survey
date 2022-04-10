@@ -28,6 +28,7 @@ class AlphaTheme implements PaletteTheme {
     error: string;
     warning: string;
     grey: string;
+    info: string;
 
     constructor(palette: PaletteTheme, alpha: number) {
         this.primary = applyAlpha(palette.primary, alpha);
@@ -39,6 +40,7 @@ class AlphaTheme implements PaletteTheme {
         this.error = applyAlpha(palette.error, alpha);
         this.warning = applyAlpha(palette.warning, alpha);
         this.grey = applyAlpha(palette.grey, alpha);
+        this.info = applyAlpha(palette.info, alpha);
     }
 };
 
@@ -58,6 +60,7 @@ class ThemeImpl implements Theme {
     error: string;
     warning: string;
     grey: string;
+    info: string;
 
     constructor(name: string, palette: PaletteTheme, sizes: SizesTheme) {
         this.name = name;
@@ -77,6 +80,7 @@ class ThemeImpl implements Theme {
         this.error = palette.error;
         this.warning = palette.warning;
         this.grey = palette.grey;
+        this.info = palette.info;
 
         this.withAlpha = this.withAlpha.bind(this);
     }
@@ -95,10 +99,11 @@ const createDefaultTheme = (): Theme => {
             foreground: '#000000',
             background: '#FFFFFF',
             secondaryBackground: '#f5f5f5',
-            success: '#61E294',
+            success: '#31c034',
             warning: '#FFD25A',
             error: '#FF785A',
             grey: '#d0d0d0',
+            info: '#2030f0',
         }, {
             smallTextSize: '0.7em',
             mediumTextSize: '1em',
@@ -121,6 +126,7 @@ const createDebugTheme = (): Theme => {
             warning: '#FFD25A',
             error: '#FF785A',
             grey: '#e0e0e0',
+            info: '#2030d0',
         }, {
             smallTextSize: '0.7em',
             mediumTextSize: '1em',
@@ -143,6 +149,7 @@ const createNightTheme = (): Theme => {
             warning: '#FFD25A',
             error: '#FF785A',
             grey: '#d0d0d0',
+            info: '#2030d0',
         },
         {
             smallTextSize: '0.7em',

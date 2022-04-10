@@ -1,9 +1,28 @@
+interface Administrator {
+	id: number;
+	login: string;
+	name: string;
+	surname: string;
+	email: string;
+	roles: Role[];
+	allAvailableRoles: Role[];
+}
+
 interface AllRolesResponse {
 	roles: Role[];
 }
 
 interface AllSurveysResponse {
 	surveys: Survey[];
+}
+
+interface BroadcastAllRequest {
+	title: string;
+	message: string;
+}
+
+interface BroadcastAllResponse {
+	sentMessages: number;
 }
 
 interface CommonQuestion {
@@ -38,6 +57,7 @@ interface CreateSurveyRequest {
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
+	answerCoolDown: number;
 }
 
 interface CreateSurveyResponse {
@@ -66,7 +86,7 @@ interface GetSurveyResponse {
 
 interface Invite {
 	inviteId: string;
-	acceptedBy: User | undefined;
+	acceptedBy: Administrator | undefined;
 	isExpired: Boolean;
 }
 
@@ -100,7 +120,7 @@ interface LoginSuccessful extends LoginResponse {
 }
 
 interface ManagedUsersResponse {
-	users: User[];
+	administrators: Administrator[];
 }
 
 interface Media {
@@ -119,19 +139,20 @@ interface Question {
 	type: string;
 }
 
-interface QuestionAnswer {
-	type: string;
+interface QuestionVariant {
+	id: string;
+	variant: string;
+}
+
+interface RadioQuestion extends Question {
+	title: string;
+	variants: QuestionVariant[];
 }
 
 interface RatingQuestion extends Question {
 	title: string;
 	min: number;
 	max: number;
-}
-
-interface RatingQuestionAnswer extends QuestionAnswer {
-	number: number;
-	commonQuestionId: string | undefined;
 }
 
 interface RegisterError extends RegisterResponse {
@@ -168,24 +189,13 @@ interface StarsQuestion extends Question {
 	stars: number;
 }
 
-interface StarsQuestionAnswer extends QuestionAnswer {
-	stars: number;
-	commonQuestionId: string | undefined;
-}
-
 interface Survey {
 	id: number;
 	surveyId: string;
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
-}
-
-interface SurveyAnswer {
-	publisherId: string;
-	surveyId: string;
-	answers: QuestionAnswer[];
-	gallery: MediaGallery | undefined;
+	surveyCoolDown: number;
 }
 
 interface SurveyMetadata {
@@ -210,29 +220,18 @@ interface TextQuestion extends Question {
 	maxLength: number;
 }
 
-interface TextQuestionAnswer extends QuestionAnswer {
-	text: string;
-	commonQuestionId: string | undefined;
-}
-
 interface UpdateRolesRequest {
-	user: User;
+	administrator: Administrator;
 	roles: Role[];
 }
 
 interface UpdateRolesResponse {
-	user: User;
+	administrator: Administrator;
 	roles: Role[];
 }
 
-interface User {
-	id: number;
-	login: string;
-	name: string;
-	surname: string;
-	email: string;
-	roles: Role[];
-	allAvailableRoles: Role[];
+interface UserId {
+	uuid: string;
 }
 
 export function instanceOfCreateInviteError(object: CreateInviteResponse): object is CreateInviteError {
@@ -259,11 +258,11 @@ export function instanceOfLoginSuccessful(object: LoginResponse): object is Logi
 	return object.type === "success";
 }
 
-export function instanceOfRatingQuestion(object: Question): object is RatingQuestion {
-	return object.type === "rating";
+export function instanceOfRadioQuestion(object: Question): object is RadioQuestion {
+	return object.type === "radio";
 }
 
-export function instanceOfRatingQuestionAnswer(object: QuestionAnswer): object is RatingQuestionAnswer {
+export function instanceOfRatingQuestion(object: Question): object is RatingQuestion {
 	return object.type === "rating";
 }
 
@@ -279,15 +278,7 @@ export function instanceOfStarsQuestion(object: Question): object is StarsQuesti
 	return object.type === "stars";
 }
 
-export function instanceOfStarsQuestionAnswer(object: QuestionAnswer): object is StarsQuestionAnswer {
-	return object.type === "stars";
-}
-
 export function instanceOfTextQuestion(object: Question): object is TextQuestion {
-	return object.type === "text";
-}
-
-export function instanceOfTextQuestionAnswer(object: QuestionAnswer): object is TextQuestionAnswer {
 	return object.type === "text";
 }
 
@@ -303,8 +294,11 @@ export {
 }
 
 export type {
+	Administrator,
 	AllRolesResponse,
 	AllSurveysResponse,
+	BroadcastAllRequest,
+	BroadcastAllResponse,
 	CommonQuestion,
 	CreateExportDataTaskRequest,
 	CreateInviteError,
@@ -331,9 +325,9 @@ export type {
 	Media,
 	MediaGallery,
 	Question,
-	QuestionAnswer,
+	QuestionVariant,
+	RadioQuestion,
 	RatingQuestion,
-	RatingQuestionAnswer,
 	RegisterError,
 	RegisterRequest,
 	RegisterResponse,
@@ -341,15 +335,12 @@ export type {
 	Role,
 	ServerError,
 	StarsQuestion,
-	StarsQuestionAnswer,
 	Survey,
-	SurveyAnswer,
 	SurveyMetadata,
 	Task,
 	TaskLog,
 	TextQuestion,
-	TextQuestionAnswer,
 	UpdateRolesRequest,
 	UpdateRolesResponse,
-	User,
+	UserId,
 }

@@ -3,6 +3,7 @@ pluginManagement {
     val kotlinVersion: String by settings
     plugins {
         id("com.google.devtools.ksp") version kspVersion
+        id("org.jetbrains.kotlin.jvm") version "1.5.30"
     }
     repositories {
         gradlePluginPortal()
@@ -11,6 +12,12 @@ pluginManagement {
 
 rootProject.name = "com.nevmem.survey"
 
+include("android:app")
+include("android:network")
+include("android:preferences")
+include("android:report")
+include("android:settings")
+include("android")
 include("backend:auth")
 include("backend:common")
 include("backend:converters")
@@ -20,15 +27,15 @@ include("backend:fs")
 include("backend:helpers")
 include("backend:invites")
 include("backend:media")
+include("backend:push:client")
+include("backend:push:pushapi")
+include("backend:push")
 include("backend:role")
 include("backend:survey")
 include("backend:task")
 include("backend:users")
+include("backend:worker:api")
 include("backend:worker")
 include("common:data")
-include("util")
 include("util:exporter")
-
-include(":android")
-include(":android:app")
-include(":android:network")
+include("util")

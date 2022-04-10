@@ -17,7 +17,7 @@ class EthnoSplashScreenViewModel(
     background: CoroutineScope,
 ) : ViewModel() {
     enum class Destination {
-        Home,
+        Survey,
         Join,
     }
 
@@ -29,7 +29,7 @@ class EthnoSplashScreenViewModel(
             if (survey == null) {
                 destination.value = Destination.Join
             } else {
-                destination.value = Destination.Home
+                destination.value = Destination.Survey
             }
         }
     }

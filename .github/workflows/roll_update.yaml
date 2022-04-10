@@ -1,4 +1,4 @@
-name: Roll core update
+name: Rolling updates
 on:
   push:
     branches:
@@ -32,9 +32,10 @@ jobs:
           YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
       - name: List instances
         run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
-      - name: Launching core rolling
-        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll.py core ./services.json ./ssh_key ${{ secrets.YC_TOKEN }}
-      - name: Launching worker rolling
-        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll.py worker ./services.json ./ssh_key ${{ secrets.YC_TOKEN }}
+      - name: Install requirements
+        run: pip3 install -r tools/requirements.txt
       - name: Launching metrics rolling
-        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll.py metrics ./services.json ./ssh_key ${{ secrets.YC_TOKEN }}
+        run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll.py nevmem core,worker,metrics,push,grafana ./services.json ./ssh_key ${{ secrets.YC_TOKEN }}
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          NOTIFY_CHAT_IDS: ${{ secrets.NOTIFY_CHAT_IDS }}

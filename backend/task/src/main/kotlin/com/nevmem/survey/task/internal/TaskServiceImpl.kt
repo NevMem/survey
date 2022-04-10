@@ -84,7 +84,7 @@ internal class TaskServiceImpl : TaskService, KoinComponent {
         }
     }
 
-    override suspend fun getTask(id: Long): ExportDataTaskEntity? = taskWithId(id)
+    override suspend fun getExportTask(id: Long): ExportDataTaskEntity? = taskWithId(id)
 
     override suspend fun attachOutput(task: ExportDataTaskEntity, media: MediaEntity): ExportDataTaskEntity = transaction {
         ExportDataTaskDTO.find {

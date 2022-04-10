@@ -19,4 +19,15 @@ sealed class QuestionEntity {
         val title: String,
         val maxLength: Int,
     ) : QuestionEntity()
+
+    data class RadioQuestionEntity(
+        val id: Long,
+        val title: String,
+        val variants: List<QuestionVariantEntity>,
+    ) : QuestionEntity()
 }
+
+data class QuestionVariantEntity(
+    val id: String,
+    val variant: String,
+)

@@ -12,6 +12,8 @@ import Card from '../../app/card/Card';
 import CardError from '../../app/card/CardError';
 import CardSuccess from '../../app/card/CardSuccess';
 import SpacedColumn from '../../app/layout/SpacedColumn';
+import { Task, TaskState } from '../../data/exported';
+import TaskView from '../../app/task/TaskView';
 
 const NotificationsBlock = () => {
     const notificationUser = useNotification();
@@ -50,6 +52,60 @@ const NotificationsBlock = () => {
     );
 };
 
+const TasksBlock = () => {
+    const readyTask: Task = {
+        id: 33,
+        state: TaskState.Success,
+        log: [
+            { message: 'started', timestamp: (new Date()).getSeconds() },
+            { message: 'running 1', timestamp: (new Date()).getSeconds() },
+            { message: 'running 2', timestamp: (new Date()).getSeconds() },
+            { message: 'ended', timestamp: (new Date()).getSeconds() },
+        ],
+        outputs: [
+            { id: 0, filename: 'somefile.png', url: '', bucketName: '' },
+            { id: 1, filename: 'somefile2.png', url: '', bucketName: '' },
+            { id: 2, filename: 'somefile3.png', url: '', bucketName: '' },
+            { id: 3, filename: 'somefile4.png', url: '', bucketName: '' },
+        ],
+    };
+
+    const executingTask: Task = {
+        id: 33,
+        state: TaskState.Executing,
+        log: [
+            { message: 'started', timestamp: (new Date()).getSeconds() },
+            { message: 'running 1', timestamp: (new Date()).getSeconds() },
+            { message: 'running 2', timestamp: (new Date()).getSeconds() },
+        ],
+        outputs: [
+            { id: 0, filename: 'somefile.png', url: '', bucketName: '' },
+            { id: 1, filename: 'somefile2.png', url: '', bucketName: '' },
+        ],
+    };
+
+    const errorTask: Task = {
+        id: 33,
+        state: TaskState.Error,
+        log: [
+            { message: 'started', timestamp: (new Date()).getSeconds() },
+            { message: 'running 1', timestamp: (new Date()).getSeconds() },
+            { message: 'running 2', timestamp: (new Date()).getSeconds() },
+            { message: 'Exception: exception', timestamp: (new Date()).getSeconds() },
+        ],
+        outputs: [
+        ],
+    };
+
+    return (
+        <SpacedColumn rowGap={16}>
+            <TaskView task={readyTask} expandedDefault={true} />
+            <TaskView task={executingTask} />
+            <TaskView task={errorTask} />
+        </SpacedColumn>
+    )
+};
+
 export default function DemoPage() {
     return (
         <div>
@@ -83,6 +139,7 @@ export default function DemoPage() {
                                 <Badge warning>Warning</Badge>
                                 <Badge>Default</Badge>
                                 <Badge success>Success</Badge>
+                                <Badge info>Info</Badge>
                             </SpaceBetweenRow>
 
                             <Notification title='Нотификация' text='Просто какое-то уведомление' />
@@ -105,6 +162,8 @@ export default function DemoPage() {
                             </SpacedColumn>
 
                             <ThemePicker />
+
+                            <TasksBlock />
                         </ThemeProvider>
                     </section>
                 )

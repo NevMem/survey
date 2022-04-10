@@ -20,7 +20,7 @@ import {
     Survey,
     Task,
     UpdateRolesRequest,
-    User,
+    Administrator,
 } from "../data/exported";
 import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
@@ -45,6 +45,7 @@ class BackendApiServiceImpl implements BackendApiService {
             name: unsavedSurvey.name,
             questions: unsavedSurvey.questions,
             commonQuestions: unsavedSurvey.commonQuestions,
+            answerCoolDown: -1,
         };
 
         return this.post<CreateSurveyResponse, CreateSurveyRequest>('/v1/survey/create_survey', request)
@@ -98,8 +99,8 @@ class BackendApiServiceImpl implements BackendApiService {
             .then(data => data.data);
     }
 
-    me(): Promise<User> {
-        return this.get<User>('/v1/me')
+    me(): Promise<Administrator> {
+        return this.get<Administrator>('/v1/me')
             .then(data => data.data);
     }
 

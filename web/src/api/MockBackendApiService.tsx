@@ -12,7 +12,7 @@ import {
     SurveyMetadata,
     Task,
     TextQuestion,
-    User,
+    Administrator,
 } from '../data/exported';
 import { UnsavedSurvey } from '../data/Survey';
 import { networkFailuresFeature } from '../service/experiments/experiments';
@@ -48,6 +48,7 @@ class MockBackendApiService implements BackendApiService {
                 ],
                 name: 'Первый замоканный опрос',
                 commonQuestions: [],
+                surveyCoolDown: -1,
             },
             {
                 id: 2,
@@ -72,6 +73,7 @@ class MockBackendApiService implements BackendApiService {
                 ],
                 name: 'Второй замоканный опрос',
                 commonQuestions: [],
+                surveyCoolDown: -1,
             }
         ]
     }
@@ -111,7 +113,8 @@ class MockBackendApiService implements BackendApiService {
                     surveyId: 2 + this.surveys.length + "",
                     name: unsavedSurvey.name,
                     questions: unsavedSurvey.questions,
-                    commonQuestions: unsavedSurvey.commonQuestions
+                    commonQuestions: unsavedSurvey.commonQuestions,
+                    surveyCoolDown: -1,
                 };
                 this.surveys.push(survey);
                 return survey;
@@ -133,7 +136,7 @@ class MockBackendApiService implements BackendApiService {
             });
     }
 
-    me(): Promise<User> {
+    me(): Promise<Administrator> {
         throw new Error('Method not implemented.');
     }
 

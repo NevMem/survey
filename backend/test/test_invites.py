@@ -76,7 +76,7 @@ def test_role_changes(client: Client):
 
     response = client.managed_users(token)
     current_user = None
-    for user in response.json()['users']:
+    for user in response.json()['administrators']:
         if user['login'] == login:
             current_user = user
     assert current_user is not None
@@ -86,7 +86,7 @@ def test_role_changes(client: Client):
         {'id': 'invite.manager'},
     ]
 
-    response = client.update_roles(token, {'user': current_user, 'roles': roles})
+    response = client.update_roles(token, {'administrator': current_user, 'roles': roles})
     assert response.status_code == 200
 
     me = client.me(user_token)
@@ -118,7 +118,7 @@ def test_managed_users(client: Client):
 
     response = client.managed_users(admin_token)
     current_user = None
-    for user in response.json()['users']:
+    for user in response.json()['administrators']:
         if user['login'] == login:
             current_user = user
     assert current_user is not None
@@ -127,9 +127,9 @@ def test_managed_users(client: Client):
         {'id': 'invite.manager'},
     ]
 
-    response = client.update_roles(admin_token, {'user': current_user, 'roles': roles})
+    response = client.update_roles(admin_token, {'administrator': current_user, 'roles': roles})
 
-    managed_users = client.managed_users(user_token).json()['users']
+    managed_users = client.managed_users(user_token).json()['administrators']
     assert len(managed_users) == 0
 
     users = []
@@ -139,5 +139,5 @@ def test_managed_users(client: Client):
         invite = client.create_invite(user_token, 60 * 30).json()['invite']
         client.register(login, password, name, surname, email, invite['inviteId'])
 
-    managed_users = client.managed_users(user_token).json()['users']
+    managed_users = client.managed_users(user_token).json()['administrators']
     assert len(managed_users) == 20

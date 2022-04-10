@@ -3,21 +3,27 @@ package com.nevmem.survey.survey.internal
 import com.nevmem.survey.RandomStringGenerator
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.question.QuestionEntity
+import com.nevmem.survey.question.QuestionVariantEntity
 import com.nevmem.survey.survey.SurveyEntity
 import com.nevmem.survey.survey.SurveysService
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
+
+private const val VARIANTS_PAIR_SEPARATOR = "@@@"
+private const val VARIANTS_SEPARATOR = "=#="
 
 internal class SurveysServiceImpl : SurveysService, KoinComponent {
     override suspend fun createSurvey(
         name: String,
         questions: List<QuestionEntity>,
         commonQuestion: List<CommonQuestionEntity>,
+        answerCoolDown: Long,
     ): SurveyEntity {
         val dto = transaction {
             val survey = SurveyEntityDTO.new {
                 this.name = name
                 this.surveyId = RandomStringGenerator.randomString(5)
+                this.answerCoolDown = answerCoolDown
             }
 
             questions.forEach { question ->
@@ -40,6 +46,14 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
                             this.title = question.title
                             this.min = question.min
                             this.max = question.max
+                        }
+
+                        is QuestionEntity.RadioQuestionEntity -> {
+                            this.type = QuestionEntityType.Radio
+                            this.title = question.title
+                            this.variants = question.variants.joinToString(VARIANTS_SEPARATOR) {
+                                "${it.id}$VARIANTS_PAIR_SEPARATOR${it.variant}"
+                            }
                         }
                     }
                     this.survey = survey.id
@@ -102,11 +116,23 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
                         title = dto.title,
                         maxLength = dto.maxLength!!,
                     )
+                    QuestionEntityType.Radio -> QuestionEntity.RadioQuestionEntity(
+                        id = dto.id.value,
+                        title = dto.title,
+                        variants = dto.variants!!.split(VARIANTS_SEPARATOR).map {
+                            val values = it.split(VARIANTS_PAIR_SEPARATOR)
+                            QuestionVariantEntity(
+                                id = values[0],
+                                variant = values[1],
+                            )
+                        }
+                    )
                 }
             },
             commonQuestions = commonQuestions.map {
                 CommonQuestionEntity(it.commonQuestionId)
             },
+            answerCoolDown = answerCoolDown,
         )
     }
 }

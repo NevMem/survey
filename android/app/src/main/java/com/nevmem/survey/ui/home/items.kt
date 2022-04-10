@@ -1,13 +1,22 @@
 package com.nevmem.survey.ui.home
 
+import com.nevmem.survey.data.survey.Survey
+import com.nevmem.survey.service.achievement.api.Achievement
+
 sealed class HomeScreenItem
 
-data class TextQuestion(val title: String, val maxLength: Int) : HomeScreenItem()
-data class RatingQuestion(val title: String, val min: Int, val max: Int) : HomeScreenItem()
-data class StarsQuestion(val title: String, val stars: Int) : HomeScreenItem()
+object HomeScreenHeader : HomeScreenItem()
+data class HomeScreenFooter(val canStartSurvey: Boolean) : HomeScreenItem()
 
-sealed class SendingAnswers : HomeScreenItem() {
-    object Sending : SendingAnswers()
-    data class Error(val message: String) : SendingAnswers()
-    object Success : SendingAnswers()
+sealed class SurveyState : HomeScreenItem() {
+    object NoSurvey : SurveyState()
+    data class AlreadyAnsweredSurvey(
+        val survey: Survey,
+        val canAnswerInSeconds: Long?,
+    ) : SurveyState()
+    data class ReadySurvey(val survey: Survey) : SurveyState()
 }
+
+data class AchievementsState(
+    val achievements: List<Achievement>,
+) : HomeScreenItem()

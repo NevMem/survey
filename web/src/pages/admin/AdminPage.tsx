@@ -3,14 +3,14 @@ import backendApi from '../../api/backendApiServiceSingleton';
 import PageWrapper from "../../app/page/PageWrapper";
 import CardError from "../../app/card/CardError";
 import Card from '../../app/card/Card';
-import { AllRolesResponse, ManagedUsersResponse, Role, UpdateRolesRequest, User } from "../../data/exported";
+import { AllRolesResponse, ManagedUsersResponse, Role, UpdateRolesRequest, Administrator } from "../../data/exported";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import Text from '../../components/text/Text';
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import { Fragment, useState } from "react";
 import SpacedColumn from "../../app/layout/SpacedColumn";
-import Modal, { ModalBody, ModalState, ModalView, useModalState, ModalHeader, ModalActions } from "../../components/modal/Modal";
+import { ModalBody, ModalState, ModalView, useModalState, ModalHeader, ModalActions } from "../../components/modal/Modal";
 import GeneralButton from "../../components/button/GeneralButton";
 import CardSuccess from "../../app/card/CardSuccess";
 
@@ -19,7 +19,7 @@ interface RoleSelection {
     selected: boolean;
 };
 
-const RolesLoadedRow = (props: {user: User, allRoles: Role[], setNewRoles: (roles: Role[]) => void}) => {
+const RolesLoadedRow = (props: {user: Administrator, allRoles: Role[], setNewRoles: (roles: Role[]) => void}) => {
     const [checkedRoles, setCheckedRoles] = useState<RoleSelection[]>(
         props.allRoles.map(role => {
             return {
@@ -50,7 +50,7 @@ const RolesLoadedRow = (props: {user: User, allRoles: Role[], setNewRoles: (role
     );
 };
 
-const RolesRow = (props: {user: User, setNewRoles: (roles: Role[]) => void}) => {
+const RolesRow = (props: {user: Administrator, setNewRoles: (roles: Role[]) => void}) => {
     const response = useAsyncRequest<AllRolesResponse>((controller: AbortController) => backendApi.roles(controller));
     if (response instanceof RequestSuccess) {
         return <RolesLoadedRow user={props.user} allRoles={response.result.roles} setNewRoles={props.setNewRoles} />;
@@ -99,7 +99,7 @@ const PerformingRequestBlock = (props: {request: UpdateRolesRequest}) => {
     );
 };
 
-const UserRolesModal = (props: {user: User, modalState: ModalState}) => {
+const UserRolesModal = (props: {user: Administrator, modalState: ModalState}) => {
     const [newRoles, updateNewRoles] = useState<Role[] | undefined>();
     const [request, setRequest] = useState<UpdateRolesRequest | undefined>();
     const setNewRoles = (roles: Role[]) => {
@@ -108,7 +108,7 @@ const UserRolesModal = (props: {user: User, modalState: ModalState}) => {
 
     const saveRoles = () => {
         const request: UpdateRolesRequest = {
-            user: props.user,
+            administrator: props.user,
             roles: newRoles!!,
         };
         setRequest(request);
@@ -137,7 +137,7 @@ const UserRolesModal = (props: {user: User, modalState: ModalState}) => {
     );
 };
 
-const UserRow = (props: {user: User}) => {
+const UserRow = (props: {user: Administrator}) => {
     const modalState = useModalState();
     return (
         <Fragment>
@@ -152,7 +152,7 @@ const UserRow = (props: {user: User}) => {
     );
 };
 
-const UsersTable = (props: {users: User[]}) => {
+const UsersTable = (props: {users: Administrator[]}) => {
     return (
         <SpacedColumn rowGap={16}>
             {props.users.map(user => {
@@ -180,7 +180,7 @@ const AdminPageImpl = () => {
     if (request instanceof RequestSuccess) {
         return (
             <Card>
-                <UsersTable users={request.result.users} />
+                <UsersTable users={request.result.administrators} />
             </Card>
         );
     }
