@@ -4,8 +4,6 @@ interface Administrator {
 	name: string;
 	surname: string;
 	email: string;
-	roles: Role[];
-	allAvailableRoles: Role[];
 }
 
 interface AllRolesResponse {
@@ -49,11 +47,20 @@ interface CreateInviteSuccess extends CreateInviteResponse {
 	invite: Invite;
 }
 
+interface CreateProjectRequest {
+	name: string;
+}
+
+interface CreateProjectResponse {
+	project: Project;
+}
+
 interface CreateSurveyError extends CreateSurveyResponse {
 	message: string;
 }
 
 interface CreateSurveyRequest {
+	projectId: number;
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
@@ -76,12 +83,25 @@ interface GetInvitesResponse {
 	invites: Invite[];
 }
 
+interface GetProjectsResponse {
+	projects: Project[];
+}
+
 interface GetSurveyRequest {
 	surveyId: string;
 }
 
 interface GetSurveyResponse {
 	survey: Survey;
+}
+
+interface GetSurveysRequest {
+	projectId: number;
+}
+
+interface GetSurveysResponse {
+	projectId: number;
+	surveys: Survey[];
 }
 
 interface Invite {
@@ -135,6 +155,12 @@ interface MediaGallery {
 	gallery: Media[];
 }
 
+interface Project {
+	id: number;
+	name: string;
+	owner: Administrator;
+}
+
 interface Question {
 	type: string;
 }
@@ -160,6 +186,14 @@ interface RegisterError extends RegisterResponse {
 }
 
 interface RegisterRequest {
+	name: string;
+	surname: string;
+	login: string;
+	password: string;
+	email: string;
+}
+
+interface RegisterRequestV1 {
 	name: string;
 	surname: string;
 	login: string;
@@ -191,6 +225,7 @@ interface StarsQuestion extends Question {
 
 interface Survey {
 	id: number;
+	projectId: number;
 	surveyId: string;
 	name: string;
 	questions: Question[];
@@ -305,14 +340,19 @@ export type {
 	CreateInviteRequest,
 	CreateInviteResponse,
 	CreateInviteSuccess,
+	CreateProjectRequest,
+	CreateProjectResponse,
 	CreateSurveyError,
 	CreateSurveyRequest,
 	CreateSurveyResponse,
 	CreateSurveySuccess,
 	DeleteSurveyRequest,
 	GetInvitesResponse,
+	GetProjectsResponse,
 	GetSurveyRequest,
 	GetSurveyResponse,
+	GetSurveysRequest,
+	GetSurveysResponse,
 	Invite,
 	LoadSurveyMetadataRequest,
 	LoadSurveyMetadataResponse,
@@ -324,12 +364,14 @@ export type {
 	ManagedUsersResponse,
 	Media,
 	MediaGallery,
+	Project,
 	Question,
 	QuestionVariant,
 	RadioQuestion,
 	RatingQuestion,
 	RegisterError,
 	RegisterRequest,
+	RegisterRequestV1,
 	RegisterResponse,
 	RegisterSuccessful,
 	Role,
