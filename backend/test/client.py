@@ -113,6 +113,15 @@ class Client:
     def create_project(self, token, name):
         return self._post('/v2/projects/create', body={'name': name}, headers={'Authorization': 'Bearer ' + token})
 
+    def projects(self, token):
+        return self._get('/v2/projects/all', headers={'Authorization': 'Bearer ' + token})
+
+    def create_survey_v2(self, token: str, body):
+        return self._post('/v2/survey/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
+
+    def surveys_v2(self, token: str, projectId: int):
+        return self._post('/v2/survey/surveys', body={'projectId': projectId}, headers={'Authorization': 'Bearer ' + token})
+
     @timed
     def upload_media(self, stream):
         return requests.post(self.base_url + '/v1/media/upload', files={'file': stream})

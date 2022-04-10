@@ -20,10 +20,23 @@ internal class ProjectsServiceImpl(
     }?.toEntity()
 
     override suspend fun createProject(name: String, owner: UserEntity): ProjectEntity = transaction {
-        ProjectEntityDTO.new {
+        val dto = ProjectEntityDTO.new {
             this.name = name
             this.ownerId = owner.id
         }
+
+        UserProjectAssignDTO.new {
+            this.projectId = dto.id.value
+            this.userId = owner.id
+        }
+
+        UserProjectRoleDTO.new {
+            this.projectId = dto.id.value
+            this.userId = owner.id
+            this.roleId = roleModel.ownerRole.roleId
+        }
+
+        dto
     }.toEntity()
 
     override suspend fun projects(user: UserEntity): List<ProjectEntity> = transaction {
