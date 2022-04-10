@@ -1,6 +1,6 @@
 import pytest
 from client_fixture import client
-from v2.user_fixture import user, User
+from v2.user_fixture import *
 from client import Client
 
 @pytest.mark.v2

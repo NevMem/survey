@@ -2,7 +2,7 @@ import pytest
 from utils import random_string
 from client import Client
 from client_fixture import client
-from v2.user_fixture import user, User
+from v2.user_fixture import *
 
 @pytest.mark.v2
 def test_create_project(client: Client, user: User):
