@@ -20,6 +20,7 @@ internal class InvitesServiceImpl(
         val dto = transaction {
             InviteEntityDTO.new {
                 createdAt = System.currentTimeMillis()
+                projectId = project.id
                 expirationPeriod = expirationSeconds * 1000
                 accepted = false
                 fromUserId = fromUser.id
@@ -49,13 +50,13 @@ internal class InvitesServiceImpl(
     override suspend fun incomingInvites(user: UserEntity): List<InviteEntity> = transaction {
         InviteEntityDTO.find {
             InvitesTable.toUserId eq user.id
-        }
+        }.toList()
     }.map { it.toEntity() }
 
     override suspend fun outgoingInvites(user: UserEntity): List<InviteEntity> = transaction {
         InviteEntityDTO.find {
             InvitesTable.fromUserId eq user.id
-        }
+        }.toList()
     }.map { it.toEntity() }
 
     private val InviteEntityDTO.status: InviteEntityStatus

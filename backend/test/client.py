@@ -122,6 +122,26 @@ class Client:
     def surveys_v2(self, token: str, projectId: int):
         return self._post('/v2/survey/surveys', body={'projectId': projectId}, headers={'Authorization': 'Bearer ' + token})
 
+    def incoming_invites(self, token):
+        return self._post('/v2/invites/incoming', body={}, headers={'Authorization': 'Bearer ' + token})
+
+    def outgoing_invites(self, token):
+        return self._post('/v2/invites/outgoing', body={}, headers={'Authorization': 'Bearer ' + token})
+
+    def create_invite_v2(self, token, projectId: int, login: str, expirationSeconds: int):
+        return self._post(
+            '/v2/invites/create',
+            body={'projectId': projectId, 'userLogin': login, 'expirationTimeSeconds': expirationSeconds},
+            headers={'Authorization': 'Bearer ' + token}
+        )
+
+    def accept_invite(self, token, id: int):
+        return self._post(
+            '/v2/invites/accept',
+            body={'id': id},
+            headers={'Authorization': 'Bearer ' + token}
+        )
+
     @timed
     def upload_media(self, stream):
         return requests.post(self.base_url + '/v1/media/upload', files={'file': stream})
