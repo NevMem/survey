@@ -5,8 +5,6 @@ import com.nevmem.survey.data.request.auth.LoginRequest
 import com.nevmem.survey.data.request.auth.RegisterRequest
 import com.nevmem.survey.data.response.auth.LoginResponse
 import com.nevmem.survey.data.response.auth.RegisterResponse
-import com.nevmem.survey.invites.InvitesService
-import com.nevmem.survey.role.RoleModel
 import com.nevmem.survey.users.UsersService
 import com.nevmem.surveys.converters.UsersConverter
 import io.ktor.application.call

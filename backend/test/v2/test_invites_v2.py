@@ -59,4 +59,27 @@ def test_accept_invite(client: Client, user_factory, project_factory):
 
     projects_1 = assert_ok_and_get_json(client.projects(user_1.token))['projects']
     projects_2 = assert_ok_and_get_json(client.projects(user_2.token))['projects']
+    assert projects_1 == projects_2
     assert projects_1[0]['id'] == project.id
+
+
+@pytest.mark.v2
+def test_invites_and_project_infos(client: Client, user_factory, project_factory):
+    project_admin = user_factory()
+    users = [user_factory() for _ in range(10)]
+
+    project: Project = project_factory(project_admin)
+
+    for index, user in enumerate(users):
+        json = assert_ok_and_get_json(client.project_info(project_admin.token, project.id))
+        print(json)
+        assert len(json['projectInfo']['administratorsInfo']) == index + 1
+
+        invite = assert_ok_and_get_json(client.create_invite_v2(
+            token=project_admin.token,
+            projectId=project.id,
+            login=user.login,
+            expirationSeconds=10,
+        ))['invite']
+
+        assert_ok_and_get_json(client.accept_invite(user.token, invite['id']))

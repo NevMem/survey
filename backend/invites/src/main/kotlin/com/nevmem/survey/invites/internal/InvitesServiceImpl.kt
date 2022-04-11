@@ -13,7 +13,7 @@ import org.koin.core.component.inject
 
 internal class InvitesServiceImpl(
     private val projectsService: ProjectsService,
-): InvitesService, KoinComponent {
+) : InvitesService, KoinComponent {
     private val usersService by inject<UsersService>()
 
     override suspend fun createInvite(fromUser: UserEntity, toUser: UserEntity, project: ProjectEntity, expirationSeconds: Long): InviteEntity {

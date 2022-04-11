@@ -73,6 +73,26 @@ internal class ProjectsServiceImpl(
         }
     }
 
+    override suspend fun getUsersInfo(project: ProjectEntity): List<Pair<UserEntity, List<RoleEntity>>> {
+        return transaction {
+            UserProjectRoleDTO.find {
+                UserProjectRoleTable.projectId eq project.id
+            }.map {
+                it.userId to it.roleId
+            } + UserProjectAssignDTO.find {
+                UserProjectAssignTable.projectId eq project.id
+            }.map { it.userId to null }
+        }.map { (userId, roleId) ->
+            if (roleId != null) {
+                usersService.getUserById(userId)!! to roleModel.roleById(roleId)
+            } else {
+                usersService.getUserById(userId)!! to null
+            }
+        }.groupBy({
+            it.first
+        }) { it.second }.toList().map { it.first to it.second.filterNotNull() }
+    }
+
     private suspend fun ProjectEntityDTO.toEntity(): ProjectEntity {
         return ProjectEntity(
             id = this.id.value,

@@ -142,6 +142,13 @@ class Client:
             headers={'Authorization': 'Bearer ' + token}
         )
 
+    def project_info(self, token, projectId):
+        return self._post(
+            '/v2/projects/info',
+            body={'projectId': projectId},
+            headers={'Authorization': 'Bearer ' + token}
+        )
+
     @timed
     def upload_media(self, stream):
         return requests.post(self.base_url + '/v1/media/upload', files={'file': stream})
