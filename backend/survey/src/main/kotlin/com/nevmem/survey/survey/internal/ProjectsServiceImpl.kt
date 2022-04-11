@@ -64,6 +64,15 @@ internal class ProjectsServiceImpl(
         }.firstOrNull() != null
     }
 
+    override suspend fun addUserToProject(project: ProjectEntity, user: UserEntity) {
+        transaction {
+            UserProjectAssignDTO.new {
+                this.projectId = project.id
+                this.userId = user.id
+            }
+        }
+    }
+
     private suspend fun ProjectEntityDTO.toEntity(): ProjectEntity {
         return ProjectEntity(
             id = this.id.value,

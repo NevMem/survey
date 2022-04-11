@@ -1,5 +1,6 @@
 package com.nevmem.survey.invite
 
+import com.nevmem.survey.project.ProjectEntity
 import com.nevmem.survey.user.UserEntity
 
 enum class InviteEntityStatus {
@@ -10,7 +11,7 @@ enum class InviteEntityStatus {
 
 data class InviteEntity(
     val id: Long,
-    val projectId: Long,
+    val project: ProjectEntity,
     val createdAt: Long,
     val expirationPeriod: Long,
     val fromUser: UserEntity,

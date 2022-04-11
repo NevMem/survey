@@ -36,7 +36,7 @@ private val coreModule = module {
     single<RoleSerializer> { createRoleSerializer(get()) }
     single<TokenService> { createTokenService() }
     single<PasswordEncoder> { createPasswordEncoder() }
-    single<InvitesService> { createInvitesService() }
+    single<InvitesService> { createInvitesService(get()) }
     single<SurveysService> { createSurveysService() }
     single<FileSystemService> { createFileSystemService() }
     single<MediaStorageService> { createMediaStorageService() }

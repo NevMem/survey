@@ -16,5 +16,6 @@ dependencies {
     implementation("io.insert-koin:koin-core:3.1.4")
     implementation(project(":backend:common"))
     implementation(project(":backend:users"))
+    implementation(project(":backend:survey"))
     implementation(project(":common:data"))
 }

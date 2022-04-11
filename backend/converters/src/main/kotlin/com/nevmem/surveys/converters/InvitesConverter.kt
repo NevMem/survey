@@ -9,11 +9,12 @@ import org.koin.core.component.inject
 
 class InvitesConverter : KoinComponent {
     private val usersConverter by inject<UsersConverter>()
+    private val projectConverter by inject<ProjectConverter>()
 
     private fun convertInvite(invite: InviteEntity): Invite {
         return Invite(
             id = invite.id,
-            projectId = invite.projectId,
+            project = projectConverter(invite.project),
             toUser = usersConverter(invite.toUser),
             status = invite.status.common,
         )

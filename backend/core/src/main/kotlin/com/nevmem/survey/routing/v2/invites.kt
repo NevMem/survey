@@ -73,7 +73,6 @@ private fun Route.invitesImpl() {
             val request = call.receive<AcceptInviteRequest>()
             val user = usersService.getUserById(userId())!!
             val invite = invitesService.get(request.id) ?: throw NotFoundException("Invite with id ${request.id} not found")
-            val project = projectsService.get(invite.projectId)!!
 
             if (invite.status == InviteEntityStatus.Accepted) {
                 throw IllegalStateException("Cannot accept already accepted invite")
@@ -90,7 +89,7 @@ private fun Route.invitesImpl() {
                 throw AccessDeniedException()
             }
 
-            projectsService.addUserToProject(project, user)
+            projectsService.addUserToProject(invite.project, user)
 
             invitesService.accept(invite)
 
