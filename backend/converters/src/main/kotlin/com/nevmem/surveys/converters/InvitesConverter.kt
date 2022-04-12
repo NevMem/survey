@@ -16,6 +16,7 @@ class InvitesConverter : KoinComponent {
             id = invite.id,
             project = projectConverter(invite.project),
             toUser = usersConverter(invite.toUser),
+            fromUser = usersConverter(invite.fromUser),
             status = invite.status.common,
         )
     }

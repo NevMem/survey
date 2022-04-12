@@ -21,6 +21,13 @@ import {
     Task,
     UpdateRolesRequest,
     Administrator,
+    IncomingInvitesResponse,
+    OutgoingInvitesResponse,
+    Project,
+    ProjectInfo,
+    GetProjectsResponse,
+    GetProjectInfoRequest,
+    GetProjectInfoResponse,
 } from "../data/exported";
 import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
@@ -35,20 +42,38 @@ class BackendApiServiceImpl implements BackendApiService {
         this.baseUrl = baseUrl;
     }
 
-    fetchSurveys(): Promise<Survey[]> {
-        return this.get<AllSurveysResponse>('/v1/survey/surveys')
-            .then(data => data.data.surveys);
+    projects(abortController: AbortController): Promise<Project[]> {
+        return this.post<GetProjectsResponse, any>('/v2/projects/all', {}, abortController)
+            .then(data => data.data)
+            .then(data => data.projects);
+    }
+
+    projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo> {
+        return this.post<GetProjectInfoResponse, GetProjectInfoRequest>('/v2/projects/info', { projectId: projectId }, abortController)
+            .then(data => data.data)
+            .then(data => data.projectInfo);
+    }
+
+    incomingInvites(abortController: AbortController): Promise<IncomingInvitesResponse> {
+        return this.post<IncomingInvitesResponse, any>('/v2/invites/incoming', {}, abortController)
+            .then(data => data.data);
+    }
+
+    outgoingInvites(abortController: AbortController): Promise<OutgoingInvitesResponse> {
+        return this.post<OutgoingInvitesResponse, any>('/v2/invites/outgoing', {}, abortController)
+            .then(data => data.data);
     }
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey> {
         const request: CreateSurveyRequest = {
+            projectId: unsavedSurvey.projectId,
             name: unsavedSurvey.name,
             questions: unsavedSurvey.questions,
             commonQuestions: unsavedSurvey.commonQuestions,
             answerCoolDown: -1,
         };
 
-        return this.post<CreateSurveyResponse, CreateSurveyRequest>('/v1/survey/create_survey', request)
+        return this.post<CreateSurveyResponse, CreateSurveyRequest>('/v2/survey/create_survey', request)
             .then(data => data.data)
             .then(response => {
                 if (instanceOfCreateSurveySuccess(response)) {
@@ -72,7 +97,7 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     checkAuth(token: string): Promise<void> {
-        return this.get<void>('/v1/check_auth')
+        return this.get<void>('/v2/check_auth')
             .then(data => data.data);
     }
 
@@ -81,26 +106,25 @@ class BackendApiServiceImpl implements BackendApiService {
             login: login,
             password: password,
         };
-        return this.post<LoginResponse, LoginRequest>('/v1/login', request)
+        return this.post<LoginResponse, LoginRequest>('/v2/login', request)
             .then(data => data.data)
     }
 
-    register(name: string, surname: string, login: string, password: string, email: string, inviteId: string): Promise<RegisterResponse> {
+    register(name: string, surname: string, login: string, password: string, email: string): Promise<RegisterResponse> {
         const request: RegisterRequest = {
             name: name,
             surname: surname,
             login: login,
             password: password,
             email: email,
-            inviteId: inviteId,
         };
 
-        return this.post<RegisterResponse, RegisterRequest>('/v1/register', request)
+        return this.post<RegisterResponse, RegisterRequest>('/v2/register', request)
             .then(data => data.data);
     }
 
     me(): Promise<Administrator> {
-        return this.get<Administrator>('/v1/me')
+        return this.get<Administrator>('/v2/me')
             .then(data => data.data);
     }
 
@@ -132,7 +156,7 @@ class BackendApiServiceImpl implements BackendApiService {
         return this.post<Task, LoadTaskRequest>('/v1/task/task', request, abortController).then(data => data.data);
     }
 
-    private post<T, U>(path: string, body: U, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {
+    private post<T, U>(path: string, body?: U, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {
         if (abortController) {
             return axios.post<T>(this.baseUrl + path, body, { signal: abortController.signal });
         }

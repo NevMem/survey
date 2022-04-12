@@ -3,6 +3,7 @@ import { Question } from "./exported";
 
 
 interface UnsavedSurvey {
+    projectId: number;
     name: string;
     questions: Question[];
     commonQuestions: CommonQuestion[];

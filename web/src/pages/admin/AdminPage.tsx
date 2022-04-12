@@ -24,7 +24,8 @@ const RolesLoadedRow = (props: {user: Administrator, allRoles: Role[], setNewRol
         props.allRoles.map(role => {
             return {
                 role: role,
-                selected: props.user.roles.map(role => role.id).includes(role.id),
+                // selected: props.user.roles.map(role => role.id).includes(role.id),
+                selected: false,
             }; 
         })
     );
@@ -165,25 +166,25 @@ const UsersTable = (props: {users: Administrator[]}) => {
 };
 
 const AdminPageImpl = () => {
-    const request = useAsyncRequest<ManagedUsersResponse>((controller: AbortController) => {
-        return backendApi.managedUsers(controller);
-    });
+    // const request = useAsyncRequest<ManagedUsersResponse>((controller: AbortController) => {
+    //     return backendApi.managedUsers(controller);
+    // });
 
-    if (request instanceof RequestError) {
-        return (
-            <CardError>
-                {request.message}
-            </CardError>
-        );
-    }
+    // if (request instanceof RequestError) {
+    //     return (
+    //         <CardError>
+    //             {request.message}
+    //         </CardError>
+    //     );
+    // }
 
-    if (request instanceof RequestSuccess) {
-        return (
-            <Card>
-                <UsersTable users={request.result.administrators} />
-            </Card>
-        );
-    }
+    // if (request instanceof RequestSuccess) {
+    //     return (
+    //         <Card>
+    //             <UsersTable users={request.result.administrators} />
+    //         </Card>
+    //     );
+    // }
 
     return (
         <SpaceAroundRow>

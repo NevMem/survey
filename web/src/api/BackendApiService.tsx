@@ -4,7 +4,6 @@ import {
     CreateExportDataTaskRequest,
     CreateInviteRequest,
     CreateInviteResponse,
-    GetInvitesResponse,
     LoadTaskRequest,
     LoginResponse,
     ManagedUsersResponse,
@@ -14,10 +13,17 @@ import {
     Task,
     UpdateRolesRequest,
     Administrator,
+    Project,
+    ProjectInfo,
+    IncomingInvitesResponse,
+    OutgoingInvitesResponse,
 } from "../data/exported";
 
 interface BackendApiService {
-    fetchSurveys(): Promise<Survey[]>
+    projects(abortController: AbortController): Promise<Project[]>
+
+    projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo>
+
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey>
     fetchMetadata(surveyId: number): Promise<SurveyMetadata>
 
@@ -29,14 +35,13 @@ interface BackendApiService {
         login: string,
         password: string,
         email: string,
-        inviteId: string,
         abortController: AbortController,
     ): Promise<RegisterResponse>
     me(): Promise<Administrator>
 
-    invites(abortController: AbortController): Promise<GetInvitesResponse>
+    incomingInvites(abortController: AbortController): Promise<IncomingInvitesResponse>
+    outgoingInvites(abortController: AbortController): Promise<OutgoingInvitesResponse>
     createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse>
-    managedUsers(abortController: AbortController): Promise<ManagedUsersResponse>
 
     roles(abortController: AbortController): Promise<AllRolesResponse>
     updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void>

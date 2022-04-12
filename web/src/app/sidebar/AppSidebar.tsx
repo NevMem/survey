@@ -105,11 +105,11 @@ const SidebarWrapper = () => {
                     return true;
                 }
                 var result = true;
-                needRoles.forEach(needRole => {
-                    if (!userContext.user.allAvailableRoles.map(role => role.id).includes(needRole.id)) {
-                        result = false;
-                    }
-                })
+                // needRoles.forEach(needRole => {
+                //     if (!userContext.user.allAvailableRoles.map(role => role.id).includes(needRole.id)) {
+                //         result = false;
+                //     }
+                // })
                 return result;
             });
 

@@ -79,15 +79,15 @@ class SurveysService {
 
     fetchSurveys() {
         this._setSurveysState(new SurveysLoading());
-        apiService.fetchSurveys()
-            .then(surveys => {
-                this._setSurveysState(new SurveysLoaded(surveys));
-            })
-            .catch(error => {
-                this.notificationUser?.('Ошибка загрузки опросов', error + "", 'error', [{message: 'Еще раз', action: () => { this.fetchSurveys() } }]);
+        // apiService.fetchSurveys()
+        //     .then(surveys => {
+        //         this._setSurveysState(new SurveysLoaded(surveys));
+        //     })
+        //     .catch(error => {
+        //         this.notificationUser?.('Ошибка загрузки опросов', error + "", 'error', [{message: 'Еще раз', action: () => { this.fetchSurveys() } }]);
 
-                this._setSurveysState(new SurveysError(error + ""));
-            });
+        //         this._setSurveysState(new SurveysError(error + ""));
+        //     });
     }
 
     _setAddingSurvey(isAdding: boolean) {

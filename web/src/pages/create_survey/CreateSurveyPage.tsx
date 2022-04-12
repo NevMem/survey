@@ -245,6 +245,7 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
 
     const createSurvey = () => {
         const unsavedSurvey: UnsavedSurvey = {
+            projectId: 0, // FIXME: ACTUAL PROJECT ID
             name: props.createSurveyService.name,
             questions: props.createSurveyService.questions,
             commonQuestions: selectedCommonQuestions,

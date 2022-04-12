@@ -33,7 +33,6 @@ const RegisterProcessingBlock = (props: {request: RegisterRequest}) => {
             props.request.login,
             props.request.password,
             props.request.email,
-            props.request.inviteId,
             controller,
         );
     });
@@ -66,7 +65,6 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
     const name = useTextInput();
     const surname = useTextInput();
     const email = useTextInput();
-    const inviteId = useTextInput();
 
     const fields = [
         {label: 'Логин', state: login},
@@ -74,7 +72,6 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
         {label: 'Имя', state: name},
         {label: 'Фамилия', state: surname},
         {label: 'Почта', state: email},
-        {label: 'Инвайт', state: inviteId},
     ];
 
     const [request, setRequest] = useState<RegisterRequest | undefined>();
@@ -86,7 +83,6 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
             login: login.value,
             password: password.value,
             email: email.value,
-            inviteId: inviteId.value,
         };
         setRequest(req);
     };

@@ -3,7 +3,7 @@ import PageWrapper from "../../app/page/PageWrapper";
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";
 import Text from '../../components/text/Text';
-import { CreateInviteRequest, CreateInviteResponse, GetInvitesResponse, instanceOfCreateInviteError, instanceOfCreateInviteSuccess, Invite } from "../../data/exported";
+import { CreateInviteRequest, CreateInviteResponse, GetInvitesResponse, Invite, InviteStatus } from "../../data/exported";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import Card from "../../app/card/Card";
@@ -14,18 +14,50 @@ import { ModalActions, ModalBody, ModalHeader, ModalView, useModalState, ModalSt
 import { Option, Select } from "../../components/select/Selector";
 import Badge from "../../components/badge/Badge";
 import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
+import OutlinedCard from "../../app/card/OutlinedCard";
 
-const InviteView = (props: {invite: Invite}) => {
+const InviteView = (props: {invite: Invite, incoming?: boolean}) => {
+    const { invite, incoming } = props;
+    if (incoming == true) {
+        return (
+            <OutlinedCard>
+                <SpacedColumn rowGap={16}>
+                    <Text>{invite.fromUser.name} {invite.fromUser.surname} приглашает вас в проект {invite.project.name}</Text>
+                    <GeneralButton>Принять</GeneralButton>
+                </SpacedColumn>
+            </OutlinedCard>
+        );
+    }
+
+    const InviteBadgeView = (props: { status: InviteStatus }) => {
+        const { status } = props;
+        if (status === InviteStatus.Accepted) {
+            return <Badge success>Принят</Badge>
+        } else if (status === InviteStatus.Expired) {
+            return <Badge error>Просрочен</Badge>
+        } else {
+            return <Badge info>Ждет подтверждения</Badge>
+        }
+    };
+
     return (
-        <SpaceBetweenRow>
-            <Text>{props.invite.inviteId}</Text>
-            {props.invite.acceptedBy ? <Badge success>{props.invite.acceptedBy.login}</Badge> : <Badge error>not accepted</Badge>}
-            {props.invite.isExpired ? <Badge error>просрочился</Badge> : <Badge success>активен</Badge>}
-        </SpaceBetweenRow>
+        <OutlinedCard>
+            <SpacedColumn rowGap={16}>
+                <Text>Вы пригласили {invite.fromUser.name} {invite.fromUser.surname} в проект {invite.project.name}</Text>
+                <InviteBadgeView status={invite.status} />
+            </SpacedColumn>
+        </OutlinedCard>
     );
+    // return (
+    //     <SpaceBetweenRow>
+    //         <Text>{props.invite.inviteId}</Text>
+    //         {props.invite.acceptedBy ? <Badge success>{props.invite.acceptedBy.login}</Badge> : <Badge error>not accepted</Badge>}
+    //         {props.invite.isExpired ? <Badge error>просрочился</Badge> : <Badge success>активен</Badge>}
+    //     </SpaceBetweenRow>
+    // );
 };
 
-const InvitesTable = (props: { invites: Invite[] }) => {
+const InvitesTable = (props: { invites: Invite[], incoming?: boolean }) => {
     if (props.invites.length === 0) {
         return (
             <SpaceAroundRow>
@@ -38,7 +70,7 @@ const InvitesTable = (props: { invites: Invite[] }) => {
         <Fragment>
             <SpacedColumn rowGap={16}>
                 {props.invites.map((invite, index) => {
-                    return <InviteView invite={invite} key={index} />;
+                    return <InviteView invite={invite} key={index} incoming={props.incoming} />;
                 })}
             </SpacedColumn>
         </Fragment>
@@ -54,16 +86,11 @@ const InviteCreationRequestBlock = (props: { requestBuilder: (abortController: A
 
     if (result instanceof RequestSuccess) {
         const actual = result.result;
-        if (instanceOfCreateInviteError(actual)) {
-            return <CardError><Text>{actual.message}</Text></CardError>;
-        }
-        if (instanceOfCreateInviteSuccess(actual)) {
-            return (
-                <Card>
-                    Создали инвайт: {actual.invite.inviteId}
-                </Card>
-            );
-        }
+        return (
+            <Card>
+                Создали инвайт: {actual.invite.inviteId}
+            </Card>
+        );
     }
 
     return <SpaceAroundRow><Loader large /></SpaceAroundRow>;
@@ -97,10 +124,10 @@ const CreateInviteModal = (props: { state: ModalState }) => {
     const [request, setRequest] = useState<CreateInviteRequest | undefined>(undefined);
 
     const createInvite = () => {
-        const request: CreateInviteRequest = {
-            expirationTimeSeconds: option.seconds,
-        };
-        setRequest(request);
+        // const request: CreateInviteRequest = {
+        //     expirationTimeSeconds: option.seconds,
+        // };
+        // setRequest(request);
     };
 
     const changeSelection = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -130,7 +157,7 @@ const CreateInviteModal = (props: { state: ModalState }) => {
     );
 }
 
-const ActualPage = (props: { invites: Invite[] }) => {
+const OutgoingActualPage = (props: { invites: Invite[] }) => {
     const modalState = useModalState();
 
     const openCreateInviteView = () => {
@@ -140,41 +167,79 @@ const ActualPage = (props: { invites: Invite[] }) => {
     return (
         <Fragment>
             <CreateInviteModal state={modalState} />
-            <PageWrapper>
-                <SpacedColumn rowGap={16}>
-                    <SpaceBetweenRow>
-                        <Text header>Инвайты</Text>
-                        <GeneralButton onClick={openCreateInviteView}>Создать инвайт</GeneralButton>
-                    </SpaceBetweenRow>
-                    <Card>
-                        <InvitesTable invites={props.invites} />
-                    </Card>
-                </SpacedColumn>
-            </PageWrapper>
+            <SpacedColumn rowGap={16}>
+                <SpaceBetweenRow>
+                    <Text header>Инвайты</Text>
+                    <GeneralButton onClick={openCreateInviteView}>Создать инвайт</GeneralButton>
+                </SpaceBetweenRow>
+                <Card>
+                    <InvitesTable invites={props.invites} />
+                </Card>
+            </SpacedColumn>
         </Fragment>
     );
 };
 
-const InvitePage = () => {
-    const result = useAsyncRequest<GetInvitesResponse>((controller: AbortController) => backendApi.invites(controller));
+const IncomingActualPage = (props: { invites: Invite[] }) => {
+    return (
+        <SpacedColumn rowGap={16}>
+            <SpaceBetweenRow>
+                <Text header>Входящие инвайты</Text>
+            </SpaceBetweenRow>
+            <Card>
+                <InvitesTable invites={props.invites} incoming />
+            </Card>
+        </SpacedColumn>
+    );
+};
+
+const IncomingInvitesBlock = () => {
+    const result = useAsyncRequest<GetInvitesResponse>((controller: AbortController) => backendApi.incomingInvites(controller));
 
     if (result instanceof RequestError) {
         return (
-            <PageWrapper>
-                <CardError>
-                    <Text large>{result.message}</Text>
-                </CardError>
-            </PageWrapper>
+            <CardError>
+                <Text large>{result.message}</Text>
+            </CardError>
         );
     }
 
     if (result instanceof RequestSuccess) {
-        return <ActualPage invites={result.result.invites} />;
+        return <IncomingActualPage invites={result.result.invites} />;
     }
 
     return (
+        <Loader large />
+    );
+};
+
+const OutgoingInvitesBlock = () => {
+    const result = useAsyncRequest<GetInvitesResponse>((controller: AbortController) => backendApi.outgoingInvites(controller));
+
+    if (result instanceof RequestError) {
+        return (
+            <CardError>
+                <Text large>{result.message}</Text>
+            </CardError>
+        );
+    }
+
+    if (result instanceof RequestSuccess) {
+        return <OutgoingActualPage invites={result.result.invites} />;
+    }
+
+    return (
+        <Loader large />
+    );
+};
+
+const InvitePage = () => {
+    return (
         <PageWrapper>
-            <Loader large />
+            <SpacedColumn rowGap={32}>
+                <IncomingInvitesBlock />
+                <OutgoingInvitesBlock />
+            </SpacedColumn>
         </PageWrapper>
     );
 };

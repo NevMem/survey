@@ -19,5 +19,6 @@ data class Invite(
     val id: Long,
     val project: Project,
     val toUser: Administrator,
+    val fromUser: Administrator,
     val status: InviteStatus,
 )

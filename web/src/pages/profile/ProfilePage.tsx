@@ -44,19 +44,6 @@ const ProfileWrapper = (props: {user: Administrator | undefined, error: string |
                     <Text large>Фамилия: {user.surname}</Text>
                     <Text large>Никнейм: {user.login}</Text>
                     <Text large>Почта: {user.email}</Text>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '16px'}}>
-                        <Text>Роли:</Text>
-                        {user.roles.map((role, index) => {
-                            return <Badge success key={index}>{role.id}</Badge>;
-                        })}
-                    </div>
-
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '16px', flexWrap: 'wrap', rowGap: '10px'}}>
-                        <Text>Доступные роли:</Text>
-                        {user.allAvailableRoles.map((role, index) => {
-                            return <Badge success key={index}>{role.id}</Badge>;
-                        })}
-                    </div>
                 </SpacedColumn>
                 <SpaceBetweenReversedRow>
                     <GeneralButton secondary onClick={logout}>Выйти</GeneralButton>
