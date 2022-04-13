@@ -26,7 +26,7 @@ const HeaderText = styled.p`
 `;
 
 const Text = (props: {
-    children: any | undefined,
+    children?: any,
     large?: boolean,
     small?: boolean,
     header?: boolean,

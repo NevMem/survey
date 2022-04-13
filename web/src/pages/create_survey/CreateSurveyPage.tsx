@@ -5,7 +5,7 @@ import Text from '../../components/text/Text';
 import createSurveyService, { CreateSurveyService } from '../../service/create_survey/CreateSurveyService';
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
-import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion, Project } from '../../data/exported';
+import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion, Project, RadioQuestion, instanceOfRadioQuestion } from '../../data/exported';
 import PageWrapper from '../../app/page/PageWrapper';
 import { UnsavedSurvey } from '../../data/Survey';
 import surveysService, { SurveysService } from '../../service/survey/SurveysService';
@@ -21,6 +21,8 @@ import TextButton from '../../components/button/TextButton';
 import useAsyncRequest, { RequestError, RequestSuccess } from '../../utils/useAsyncUtils';
 import backendApi from '../../api/backendApiServiceSingleton';
 import { Option, Select } from '../../components/select/Selector';
+import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
+import deleteIcon from '../../images/base/delete.svg';
 
 const Selector = styled.select`
     outline: none;
@@ -112,6 +114,64 @@ const StarsQuestionBuilderBlock = (props: {setQuestion: (question: Question | un
     );
 }
 
+const RadioQuestionBuilderBlock = (props: { setQuestion: (question: Question | undefined) => void }) => {
+    const [variants, setVariants] = useState<string[]>([]);
+
+    const [variant, setVariant] = useState('');
+
+    const [title, setTitle] = useState('');
+
+    const deleteVariant = (index: number) => {
+        const newVarinats = [...variants];
+        newVarinats.splice(index, 1)
+        setVariants(newVarinats);
+    };
+    
+    const addVariant = () => {
+        if (variant.length !== 0) {
+            const newVarinats = [...variants, variant];
+            setVariants(newVarinats);
+            setVariant('');
+        }
+    };
+
+    useEffect(() => {
+        if (variants.length === 0) {
+            props.setQuestion(undefined);
+        } else {
+            const question: RadioQuestion = {
+                type: 'radio',
+                title: title,
+                variants: variants.map((variant, index) => {return { id: index + '', variant: variant }}),
+            };
+            props.setQuestion(question);
+        }
+    }, [variants]);
+
+    return (
+        <SpacedColumn rowGap={12}>
+            <SpacedColumn rowGap={4}>
+                <Text>Название:</Text>
+                <Input value={title} onChange={event => setTitle(event.target.value)} />
+            </SpacedColumn>
+
+            <Text>Варианты ответа:</Text>
+            {variants.map((elem, index) => {
+                return (
+                    <SpaceBetweenRow key={index}>
+                        <Text>{elem}</Text>
+                        <img onClick={() => deleteVariant(index)} src={deleteIcon} alt='delete' width='24px' style={{cursor: 'pointer'}} />
+                    </SpaceBetweenRow>
+                );
+            })}
+            <SpaceBetweenRow>
+                <Input value={variant} onChange={event => setVariant(event.target.value)} />
+                <img onClick={addVariant} src={plusIcon} alt='plus' width='24px' style={{cursor: 'pointer'}} />
+            </SpaceBetweenRow>
+        </SpacedColumn>
+    );
+};
+
 const QuestionCreationBlock = (props: {type: string, setQuestion: (question: Question | undefined) => void}) => {
     switch (props.type) {
         case 'rating':
@@ -120,6 +180,8 @@ const QuestionCreationBlock = (props: {type: string, setQuestion: (question: Que
             return <TextQuestionBlock setQuestion={props.setQuestion} />;
         case 'stars':
             return <StarsQuestionBuilderBlock setQuestion={props.setQuestion} />;
+        case 'radio':
+            return <RadioQuestionBuilderBlock setQuestion={props.setQuestion} />;
     }
     return null;
 }
@@ -134,7 +196,11 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
     }
 
     const options = [
-        '-', 'rating', 'stars', 'text',
+        '-',
+        'rating',
+        'stars',
+        'text',
+        'radio',
     ]
     const [selectedOption, setSelectedOption] = useState(options[0]);
 
@@ -150,6 +216,12 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
             props.createSurveyService.addQuestion(currentQuestion);
         }
     }
+
+    const [canSave, setCanSave] = useState(false);
+
+    useEffect(() => {
+        setCanSave(currentQuestion !== undefined);
+    });
 
     return (
         <Fragment>
@@ -169,15 +241,17 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
                         <div>&times;</div>
                     </ModalHeader>
                     <ModalBody>
-                        <Selector value={selectedOption} onChange={selectorChanged}>
-                            {options.map((value) => {
-                                return <option key={value}>{value}</option>;                                
-                            })}
-                        </Selector>
-                        <QuestionCreationBlock type={selectedOption} setQuestion={setCurrentQuestion} />
+                        <SpacedColumn rowGap={16}>
+                            <Selector value={selectedOption} onChange={selectorChanged}>
+                                {options.map((value) => {
+                                    return <option key={value}>{value}</option>;                                
+                                })}
+                            </Selector>
+                            <QuestionCreationBlock type={selectedOption} setQuestion={setCurrentQuestion} />
+                        </SpacedColumn>
                     </ModalBody>
                     <ModalActions>
-                        <GeneralButton onClick={saveQuestionIfPossible}>Добавить</GeneralButton>
+                        <GeneralButton onClick={saveQuestionIfPossible} disabled={!canSave}>Добавить</GeneralButton>
                         <GeneralButton secondary onClick={closeNewQuestionModal}>Отмена</GeneralButton>
                     </ModalActions>
                 </Modal>
@@ -190,35 +264,52 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
 };
 
 const QuestionBlock = (props: {question: Question}) => {
-    if (instanceOfRatingQuestion(props.question)) {
+    const { question } = props;
+    if (instanceOfRatingQuestion(question)) {
         return (
             <OutlinedCard>
                 <SpacedColumn rowGap={8}>
                     <Text large>Вопрос с рейтингом:</Text>
-                    <Text>{props.question.title}</Text>
-                    <Text large>Значения от {props.question.min} до {props.question.max}</Text>
+                    <Text>{question.title}</Text>
+                    <Text large>Значения от {question.min} до {question.max}</Text>
                 </SpacedColumn>
             </OutlinedCard>
         );
     }
-    if (instanceOfStarsQuestion(props.question)) {
+    if (instanceOfStarsQuestion(question)) {
         return (
             <OutlinedCard>
                 <SpacedColumn rowGap={8}>
                     <Text large>Вопрос с рейтингом в виде звезд:</Text>
-                    <Text>{props.question.title}</Text>
-                    <Text large>Количество звезд: {props.question.stars}</Text>
+                    <Text>{question.title}</Text>
+                    <Text large>Количество звезд: {question.stars}</Text>
                 </SpacedColumn>
             </OutlinedCard>
         );
     }
-    if (instanceOfTextQuestion(props.question)) {
+    if (instanceOfTextQuestion(question)) {
         return (
             <OutlinedCard>
                 <SpacedColumn rowGap={8}>
                     <Text large>Текстовый вопрос:</Text>
-                    <Text>{props.question.title}</Text>
-                    <Text large>Максимальная длина ответа: {props.question.maxLength}</Text>
+                    <Text>{question.title}</Text>
+                    <Text large>Максимальная длина ответа: {question.maxLength}</Text>
+                </SpacedColumn>
+            </OutlinedCard>
+        );
+    }
+    if (instanceOfRadioQuestion(question)) {
+        return (
+            <OutlinedCard>
+                <SpacedColumn rowGap={8}>
+                    <Text large>Вопрос с единственным выбором:</Text>
+                    <Text>{question.title}</Text>
+                    <Text>Варианты:</Text>
+                    {question.variants.map((elem, index) => {
+                        return (
+                            <Text key={index}>{elem.variant}</Text>
+                        );
+                    })}
                 </SpacedColumn>
             </OutlinedCard>
         );
