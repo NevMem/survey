@@ -10,18 +10,29 @@ import Loader from "../../components/loader/Loader";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import SpacedCenteredRow from "../../app/layout/SpacedCenteredRow";
 import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
+import GeneralButton from "../../components/button/GeneralButton";
+import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
+import TextButton from "../../components/button/TextButton";
+import { Fragment, useState } from "react";
+import { ModalActions, ModalBody, ModalHeader, ModalState, ModalView, useModalState } from "../../components/modal/Modal";
+import Input from "../../components/input/Input";
 
 const ProjectInfoView = (props: { projectInfo: ProjectInfo }) => {
     return (
-        <SpacedColumn rowGap={4}>
-            {props.projectInfo.administratorsInfo.map((info, index) => {
-                return (
-                    <SpacedCenteredRow columnGap={16}>
-                        <Text large>{info.administrator.name} {info.administrator.surname}</Text>
-                        <Text>@{info.administrator.login}</Text>
-                    </SpacedCenteredRow>
-                );
-            })}
+        <SpacedColumn rowGap={8}>
+            <Text>Администраторы</Text>
+            <OutlinedCard>
+                <SpacedColumn rowGap={4}>
+                    {props.projectInfo.administratorsInfo.map((info, index) => {
+                        return (
+                            <SpacedCenteredRow columnGap={16}>
+                                <Text large>{info.administrator.name} {info.administrator.surname}</Text>
+                                <Text>@{info.administrator.login}</Text>
+                            </SpacedCenteredRow>
+                        );
+                    })}
+                </SpacedColumn>
+            </OutlinedCard>
         </SpacedColumn>
     );
 };
@@ -47,9 +58,12 @@ const ProjectSurveysView = (props: { surveys: Survey[] }) => {
 
     if (surveys.length === 0) {
         return (
-            <SpacedCenteredColumn rowGap={8}>
-                <Text>В данном проекте пока нет опросов</Text>
-            </SpacedCenteredColumn>
+            <OutlinedCard>
+                <SpacedCenteredColumn rowGap={16}>
+                    <Text>В данном проекте пока нет опросов</Text>
+                    <GeneralButton>Создать опрос</GeneralButton>
+                </SpacedCenteredColumn>
+            </OutlinedCard>
         );
     }
 
@@ -92,7 +106,7 @@ const ProjectCard = (props: { project: Project }) => {
     );
 };
 
-const ProjectPageImpl = () => {
+const ProjectPageContent = () => {
     const request = useAsyncRequest(controller => backendApi.projects(controller));
 
     if (request instanceof RequestError) {
@@ -117,12 +131,47 @@ const ProjectPageImpl = () => {
     );
 };
 
+const CreateProjectModalContent = (props: { state: ModalState }) => {
+    const [name, setName] = useState('');
+
+    return (
+        <Fragment>
+            <ModalHeader>
+                <Text large>Создать проект</Text>
+            </ModalHeader>
+            <ModalBody>
+                <Input value={name} onChange={ev => setName(ev.target.value)} placeholder='Имя проекта' />
+            </ModalBody>
+            <ModalActions>
+                <GeneralButton>Создать</GeneralButton>
+                <TextButton onClick={() => props.state.close()}>Отмена</TextButton>
+            </ModalActions>
+        </Fragment>
+    );
+};
+
+const ProjectPageHeader = () => {
+    const modalState = useModalState();
+
+    return (
+        <Fragment>
+            <ModalView state={modalState}>
+                <CreateProjectModalContent state={modalState} />
+            </ModalView>
+            <SpaceBetweenRow>
+                <Text header>Проекты</Text>
+                <TextButton onClick={() => modalState.open()}>Создать проект</TextButton>
+            </SpaceBetweenRow>
+        </Fragment>
+    );
+};
+
 const ProjectPage = () => {
     return (
         <PageWrapper>
             <SpacedColumn rowGap={24}>
-                <Text header>Проекты</Text>
-                <ProjectPageImpl />
+                <ProjectPageHeader />
+                <ProjectPageContent />
             </SpacedColumn>
         </PageWrapper>
     );
