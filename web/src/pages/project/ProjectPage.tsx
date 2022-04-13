@@ -69,11 +69,21 @@ const ProjectSurveysView = (props: { surveys: Survey[] }) => {
     }
 
     return (
-        <SpacedColumn rowGap={8}>
-            {surveys.map((survey, index) => {
-                <Text key={index}>{survey.name}</Text>
-            })}
-        </SpacedColumn>
+        <OutlinedCard>
+            <SpacedColumn rowGap={16}>
+                <Text>Опросы проекта:</Text>
+                <SpacedColumn rowGap={8}>
+                    {surveys.map((survey, index) => {
+                        return (
+                            <SpaceBetweenRow key={index}>
+                                <Text>{survey.name}</Text>
+                                <Text>id: {survey.id}</Text>
+                            </SpaceBetweenRow>
+                        );
+                    })}
+                </SpacedColumn>
+            </SpacedColumn>
+        </OutlinedCard>
     );
 };
 
