@@ -15,14 +15,9 @@ import { commonQuestions, commonQuestionTitle } from '../../data/commonQuestions
 import { CommonQuestion } from '../../data/CommonQuestion';
 import Input from '../../components/input/Input';
 import Modal, { ModalHeader, ModalBody, ModalActions } from '../../components/modal/Modal';
-
-const WrappedRow = styled.div`
-    padding: 20px;
-    background-color: ${props => props.theme.secondaryBackground};
-    border-radius: 8px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-`;
+import OutlinedCard from '../../app/card/OutlinedCard';
+import SpacedColumn from '../../app/layout/SpacedColumn';
+import TextButton from '../../components/button/TextButton';
 
 const Selector = styled.select`
     outline: none;
@@ -194,38 +189,35 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
 const QuestionBlock = (props: {question: Question}) => {
     if (instanceOfRatingQuestion(props.question)) {
         return (
-            <WrappedRow>
-                <Text large>Вопрос с рейтингом:</Text>
-                <Text>{props.question.title}</Text>
-                <br/>
-                <Text large>Минимальное значение</Text>
-                <Text>{props.question.min}</Text>
-                <br/>
-                <Text large>Максимальное значение</Text>
-                <Text>{props.question.max}</Text>
-            </WrappedRow>
+            <OutlinedCard>
+                <SpacedColumn rowGap={8}>
+                    <Text large>Вопрос с рейтингом:</Text>
+                    <Text>{props.question.title}</Text>
+                    <Text large>Значения от {props.question.min} до {props.question.max}</Text>
+                </SpacedColumn>
+            </OutlinedCard>
         );
     }
     if (instanceOfStarsQuestion(props.question)) {
         return (
-            <WrappedRow>
-                <Text large>Вопрос с рейтингом в виде звездочек:</Text>
-                <Text>{props.question.title}</Text>
-                <br/>
-                <Text large>Количество звездочек</Text>
-                <Text>{props.question.stars}</Text>
-            </WrappedRow>
+            <OutlinedCard>
+                <SpacedColumn rowGap={8}>
+                    <Text large>Вопрос с рейтингом в виде звезд:</Text>
+                    <Text>{props.question.title}</Text>
+                    <Text large>Количество звезд: {props.question.stars}</Text>
+                </SpacedColumn>
+            </OutlinedCard>
         );
     }
     if (instanceOfTextQuestion(props.question)) {
         return (
-            <WrappedRow>
-                <Text large>Текстовый вопрос:</Text>
-                <Text>{props.question.title}</Text>
-                <br/>
-                <Text large>Максимальная длина ответа</Text>
-                <Text>{props.question.maxLength}</Text>
-            </WrappedRow>
+            <OutlinedCard>
+                <SpacedColumn rowGap={8}>
+                    <Text large>Текстовый вопрос:</Text>
+                    <Text>{props.question.title}</Text>
+                    <Text large>Максимальная длина ответа: {props.question.maxLength}</Text>
+                </SpacedColumn>
+            </OutlinedCard>
         );
     }
     
@@ -276,38 +268,44 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
 
     return (
         <Fragment>
-            <WrappedRow>
-                <Text>Название опроса:</Text>
-                <br/>
-                <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
-            </WrappedRow>
-            <WrappedRow>
-                <Text large>Общие вопросы:</Text>
-                {commonQuestions.map(question => {
+            <SpacedColumn rowGap={16}>
+                <OutlinedCard>
+                    <Text>Название опроса:</Text>
+                    <br/>
+                    <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
+                </OutlinedCard>
+                <OutlinedCard>
+                    <SpacedColumn rowGap={8}>
+                        <Text large>Общие вопросы:</Text>
+                        <SpacedColumn rowGap={4}>
+                            {commonQuestions.map(question => {
+                                return (
+                                    <div key={question.id}>
+                                        <label htmlFor={'question-' + question.id}>{commonQuestionTitle(question)}</label>
+                                        <input
+                                            type='checkbox'
+                                            id={'question-' + question.id}
+                                            checked={selectedCommonQuestions.find(q => q === question) !== undefined}
+                                            onChange={() => {toggleSelectedCommonQuestion(question)}}
+                                            />
+                                    </div>
+                                );
+                            })}
+                        </SpacedColumn>
+                    </SpacedColumn>
+                </OutlinedCard>
+
+                {props.createSurveyService.questions.map((question, index) => {
                     return (
-                        <div key={question.id}>
-                            <label htmlFor={'question-' + question.id}>{commonQuestionTitle(question)}</label>
-                            <input
-                                type='checkbox'
-                                id={'question-' + question.id}
-                                checked={selectedCommonQuestions.find(q => q === question) !== undefined}
-                                onChange={() => {toggleSelectedCommonQuestion(question)}}
-                                />
-                        </div>
+                        <QuestionBlock question={question} key={index} />
                     );
                 })}
-            </WrappedRow>
-
-            {props.createSurveyService.questions.map((question, index) => {
-                return (
-                    <QuestionBlock question={question} key={index} />
-                );
-            })}
-            <AddQuestionSection createSurveyService={props.createSurveyService} />
-            <WrappedRow style={{display: 'flex', flexDirection: 'row-reverse', columnGap: '10px'}}>
-                <GeneralButton onClick={createSurvey}>Создать опрос</GeneralButton> 
-                <GeneralButton onClick={resetAll} secondary>Сбросить все</GeneralButton>
-            </WrappedRow>
+                <AddQuestionSection createSurveyService={props.createSurveyService} />
+                <OutlinedCard style={{display: 'flex', flexDirection: 'row-reverse', columnGap: '10px'}}>
+                    <GeneralButton onClick={createSurvey}>Создать опрос</GeneralButton> 
+                    <TextButton onClick={resetAll} secondary>Сбросить все</TextButton>
+                </OutlinedCard>
+            </SpacedColumn>
         </Fragment>
     );
 })
@@ -315,8 +313,10 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
 const CreateSurveyPage = () => {
     return (
         <PageWrapper>
-            <Text large>Создаем опрос</Text>
-            <NewSurveyBlock createSurveyService={createSurveyService} surveysService={surveysService} />
+            <SpacedColumn rowGap={24}>
+                <Text header>Создать опрос</Text>
+                <NewSurveyBlock createSurveyService={createSurveyService} surveysService={surveysService} />
+            </SpacedColumn>
         </PageWrapper>
     );
 };
