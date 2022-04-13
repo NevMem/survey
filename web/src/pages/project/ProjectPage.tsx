@@ -96,12 +96,17 @@ const ProjectSurveysWrapper = (props: { project: Project }) => {
 const ProjectCard = (props: { project: Project }) => {
     const { project } = props;
 
+    const [expanded, setExpanded] = useState(false);
+
     return (
         <OutlinedCard>
             <SpacedColumn rowGap={16}>
-                <Text large>{project.name}</Text>
-                <ProjectSurveysWrapper project={project} />
-                <ProjectInfoWrapper project={project} />
+                <SpaceBetweenRow>
+                    <Text large>{project.name}</Text>
+                    <TextButton onClick={() => setExpanded(!expanded)}>{expanded ? 'Свернуть' : 'Развернуть'}</TextButton>
+                </SpaceBetweenRow>
+                {expanded && <ProjectSurveysWrapper project={project} />}
+                {expanded && <ProjectInfoWrapper project={project} />}
             </SpacedColumn>
         </OutlinedCard>
     );
