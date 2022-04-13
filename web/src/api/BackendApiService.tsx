@@ -17,6 +17,7 @@ import {
     ProjectInfo,
     IncomingInvitesResponse,
     OutgoingInvitesResponse,
+    CreateProjectRequest,
 } from "../data/exported";
 
 interface BackendApiService {
@@ -24,6 +25,8 @@ interface BackendApiService {
 
     projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo>
     surveys(abortController: AbortController, projectId: number): Promise<Survey[]>
+
+    createProject(abortController: AbortController, request: CreateProjectRequest): Promise<Project>
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey>
     fetchMetadata(surveyId: number): Promise<SurveyMetadata>

@@ -3,7 +3,7 @@ import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAs
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";
 import OutlinedCard from "../../app/card/OutlinedCard";
-import { Project, ProjectInfo, Survey } from "../../data/exported";
+import { CreateProjectRequest, Project, ProjectInfo, Survey } from "../../data/exported";
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import Text from "../../components/text/Text";
 import Loader from "../../components/loader/Loader";
@@ -13,9 +13,10 @@ import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import GeneralButton from "../../components/button/GeneralButton";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import TextButton from "../../components/button/TextButton";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ModalActions, ModalBody, ModalHeader, ModalState, ModalView, useModalState } from "../../components/modal/Modal";
 import Input from "../../components/input/Input";
+import CardSuccess from "../../app/card/CardSuccess";
 
 const ProjectInfoView = (props: { projectInfo: ProjectInfo }) => {
     return (
@@ -131,8 +132,41 @@ const ProjectPageContent = () => {
     );
 };
 
+const CreateProjectRequestView = (props: { request: CreateProjectRequest }) => {
+    const response = useAsyncRequest(controller => backendApi.createProject(controller, props.request));
+
+    if (response instanceof RequestError) {
+        return (
+            <CardError>
+                {response.message}
+            </CardError>
+        );
+    } else if (response instanceof RequestSuccess) {
+        return (
+            <CardSuccess>Создали проект. Перезагрузите страницу чтобы увидеть изменения</CardSuccess>
+        );
+    }
+
+    return (
+        <SpaceAroundRow>
+            <Loader large />
+        </SpaceAroundRow>
+    );
+};
+
 const CreateProjectModalContent = (props: { state: ModalState }) => {
     const [name, setName] = useState('');
+    const [canCreate, setCanCreate] = useState(false);
+
+    const [request, setRequest] = useState<CreateProjectRequest | undefined>();
+
+    useEffect(() => {
+        setCanCreate(name.length !== 0);
+    }, [name]);
+
+    const create = () => {
+        setRequest({ name: name });
+    };
 
     return (
         <Fragment>
@@ -140,10 +174,13 @@ const CreateProjectModalContent = (props: { state: ModalState }) => {
                 <Text large>Создать проект</Text>
             </ModalHeader>
             <ModalBody>
-                <Input value={name} onChange={ev => setName(ev.target.value)} placeholder='Имя проекта' />
+                <SpacedColumn rowGap={8}>
+                    <Input value={name} onChange={ev => setName(ev.target.value)} placeholder='Имя проекта' />
+                    {request !== undefined && <CreateProjectRequestView request={request} />}
+                </SpacedColumn>
             </ModalBody>
             <ModalActions>
-                <GeneralButton>Создать</GeneralButton>
+                <GeneralButton onClick={create} disabled={!canCreate}>Создать</GeneralButton>
                 <TextButton onClick={() => props.state.close()}>Отмена</TextButton>
             </ModalActions>
         </Fragment>
