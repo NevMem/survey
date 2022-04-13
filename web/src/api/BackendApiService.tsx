@@ -23,6 +23,7 @@ interface BackendApiService {
     projects(abortController: AbortController): Promise<Project[]>
 
     projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo>
+    surveys(abortController: AbortController, projectId: number): Promise<Survey[]>
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey>
     fetchMetadata(surveyId: number): Promise<SurveyMetadata>

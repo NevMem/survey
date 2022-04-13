@@ -11,6 +11,7 @@ import SpacedColumn from '../../app/layout/SpacedColumn';
 import Badge from '../../components/badge/Badge';
 import SpaceBetweenReversedRow from '../../app/layout/SpaceBetweenReversedRow';
 import GeneralButton from '../../components/button/GeneralButton';
+import OutlinedCard from '../../app/card/OutlinedCard';
 
 const ProfileWrapper = (props: {user: Administrator | undefined, error: string | undefined, loading?: boolean}) => {
     if (props.loading) {
@@ -37,7 +38,7 @@ const ProfileWrapper = (props: {user: Administrator | undefined, error: string |
         };
 
         return (
-            <Card>
+            <OutlinedCard>
                 <SpacedColumn rowGap={16}>
                     <Text header>Профиль</Text>
                     <Text large>Имя: {user.name}</Text>
@@ -48,7 +49,7 @@ const ProfileWrapper = (props: {user: Administrator | undefined, error: string |
                 <SpaceBetweenReversedRow>
                     <GeneralButton secondary onClick={logout}>Выйти</GeneralButton>
                 </SpaceBetweenReversedRow>
-            </Card>
+            </OutlinedCard>
         );
     }
 
