@@ -124,12 +124,16 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
                     QuestionEntityType.Radio -> QuestionEntity.RadioQuestionEntity(
                         id = dto.id.value,
                         title = dto.title,
-                        variants = dto.variants!!.split(VARIANTS_SEPARATOR).map {
+                        variants = dto.variants!!.split(VARIANTS_SEPARATOR).mapNotNull {
                             val values = it.split(VARIANTS_PAIR_SEPARATOR)
-                            QuestionVariantEntity(
-                                id = values[0],
-                                variant = values[1],
-                            )
+                            if (values.size == 2) {
+                                QuestionVariantEntity(
+                                    id = values[0],
+                                    variant = values[1],
+                                )
+                            } else {
+                                null
+                            }
                         }
                     )
                 }
