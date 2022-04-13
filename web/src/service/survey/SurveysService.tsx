@@ -68,6 +68,7 @@ class SurveysService {
         this.addingSurvey = true;
         apiService.addSurvey(unsavedSurvey)
             .then(survey => {
+                this.notificationUser?.("Опрос добавился", "", 'success');
                 this._setAddingSurvey(false);
                 this.fetchSurveys();
             })
