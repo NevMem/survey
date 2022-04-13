@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite';
-import { Fragment, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Text from '../../components/text/Text';
 import createSurveyService, { CreateSurveyService } from '../../service/create_survey/CreateSurveyService';
 import plusIcon from '../../images/base/plus.svg';
 import GeneralButton from '../../components/button/GeneralButton';
-import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion } from '../../data/exported';
+import { instanceOfRatingQuestion, instanceOfStarsQuestion, instanceOfTextQuestion, Question, TextQuestion, StarsQuestion, RatingQuestion, Project } from '../../data/exported';
 import PageWrapper from '../../app/page/PageWrapper';
 import { UnsavedSurvey } from '../../data/Survey';
 import surveysService, { SurveysService } from '../../service/survey/SurveysService';
@@ -18,6 +18,9 @@ import Modal, { ModalHeader, ModalBody, ModalActions } from '../../components/mo
 import OutlinedCard from '../../app/card/OutlinedCard';
 import SpacedColumn from '../../app/layout/SpacedColumn';
 import TextButton from '../../components/button/TextButton';
+import useAsyncRequest, { RequestError, RequestSuccess } from '../../utils/useAsyncUtils';
+import backendApi from '../../api/backendApiServiceSingleton';
+import { Option, Select } from '../../components/select/Selector';
 
 const Selector = styled.select`
     outline: none;
@@ -224,6 +227,59 @@ const QuestionBlock = (props: {question: Question}) => {
     return null;
 };
 
+const SelectProjectBlockImpl = (props: { projects: Project[], setSelectedProject: (project?: Project) => void }) => {
+    const { projects, setSelectedProject } = props;
+    const [selectedValue, setSelectedValue] = useState('-');
+
+    const selectorChanged = (event: ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+
+        const selectedProject = projects.find(project => project.name === value);
+
+        setSelectedProject(selectedProject);
+
+        setSelectedValue(value);
+    };
+
+    return (
+        <OutlinedCard>
+            <SpacedColumn rowGap={16}>
+                <Text large>Выберите проект в котором нужно создать опрос:</Text>
+                <Select onChange={selectorChanged} value={selectedValue}>
+                    <Option>-</Option>
+                    {projects.map((elem: Project, index: number) => {
+                        return (
+                            <Option key={index}>{elem.name}</Option>
+                        );
+                    })}
+                </Select>
+            </SpacedColumn>
+        </OutlinedCard>
+    );
+};
+
+const SelectProjectBlock = (props: { setSelectedProject: (project?: Project) => void }) => {
+    const response = useAsyncRequest(controller => backendApi.projects(controller));
+
+    if (response instanceof RequestError) {
+        return (
+            <OutlinedCard>{response.message}</OutlinedCard>
+        );
+    } else if (response instanceof RequestSuccess) {
+        return (
+            <SelectProjectBlockImpl projects={response.result} setSelectedProject={props.setSelectedProject} />
+        );
+    }
+
+    return (
+        <OutlinedCard>
+            <SpaceAroundRow>
+                <Loader large />
+            </SpaceAroundRow>
+        </OutlinedCard>
+    );
+};
+
 const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyService, surveysService: SurveysService }) => {
     const nameChanged = (event: any) => {
         props.createSurveyService.setName(event.target.value)
@@ -235,9 +291,17 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
 
     const [selectedCommonQuestions, setSelectedCommonQuestions] = useState(commonQuestions);
 
+    const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
+
+    const [canCreate, setCanCreate] = useState(false);
+
+    useEffect(() => {
+        setCanCreate(selectedProject !== undefined);
+    }, [selectedProject]);
+
     const createSurvey = () => {
         const unsavedSurvey: UnsavedSurvey = {
-            projectId: 0, // FIXME: ACTUAL PROJECT ID
+            projectId: selectedProject!.id,
             name: props.createSurveyService.name,
             questions: props.createSurveyService.questions,
             commonQuestions: selectedCommonQuestions,
@@ -269,8 +333,9 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
     return (
         <Fragment>
             <SpacedColumn rowGap={16}>
+                <SelectProjectBlock setSelectedProject={(project) => setSelectedProject(project)} />
                 <OutlinedCard>
-                    <Text>Название опроса:</Text>
+                    <Text large>Название опроса:</Text>
                     <br/>
                     <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
                 </OutlinedCard>
@@ -302,7 +367,7 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
                 })}
                 <AddQuestionSection createSurveyService={props.createSurveyService} />
                 <OutlinedCard style={{display: 'flex', flexDirection: 'row-reverse', columnGap: '10px'}}>
-                    <GeneralButton onClick={createSurvey}>Создать опрос</GeneralButton> 
+                    <GeneralButton onClick={createSurvey} disabled={!canCreate}>Создать опрос</GeneralButton> 
                     <TextButton onClick={resetAll} secondary>Сбросить все</TextButton>
                 </OutlinedCard>
             </SpacedColumn>
