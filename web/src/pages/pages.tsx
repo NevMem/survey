@@ -9,6 +9,7 @@ import ProfilePage from './profile/ProfilePage';
 import { Role } from '../data/exported';
 import InvitePage from './invite/InvitePage';
 import AdminPage from './admin/AdminPage';
+import ProjectsPage from './project/ProjectsPage';
 import ProjectPage from './project/ProjectPage';
 
 interface PageInfo {
@@ -30,9 +31,16 @@ const pages: PageInfo[] = [
     },
     {
         name: 'Проекты',
-        component: <ProjectPage />,
-        path: '/project',
+        component: <ProjectsPage />,
+        path: '/projects',
         useInSidebar: true,
+        needAuthorization: true,
+    },
+    {
+        name: 'Project',
+        component: <ProjectPage />,
+        path: '/project/:id',
+        useInSidebar: false,
         needAuthorization: true,
     },
     {
