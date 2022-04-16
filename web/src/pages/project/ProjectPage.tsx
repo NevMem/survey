@@ -11,9 +11,8 @@ import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 
 const ProjectPageContent = () => {
-    const request = useAsyncRequest(controller => backendApi.projects(controller));
-
     const { id } = useParams();
+    const request = useAsyncRequest(controller => backendApi.project(controller, parseInt(id!!)));
 
     if (request instanceof RequestError) {
         return (
@@ -22,16 +21,10 @@ const ProjectPageContent = () => {
             </CardError>
         );
     } else if (request instanceof RequestSuccess) {
-        const project = request.result.find((project: Project) => project.id + '' === id);
-        if (project === undefined) {
-            return (
-                <CardError>Проект не найден</CardError>
-            );
-        } else {
-            return (
-                <ProjectCard project={project} richCard />
-            );
-        }
+        const project: Project = request.result;
+        return (
+            <ProjectCard project={project} richCard />
+        );
     }
 
     return (

@@ -4,7 +4,9 @@ import com.nevmem.survey.data.project.ProjectAdministratorInfo
 import com.nevmem.survey.data.project.ProjectInfo
 import com.nevmem.survey.data.request.project.CreateProjectRequest
 import com.nevmem.survey.data.request.project.GetProjectInfoRequest
+import com.nevmem.survey.data.request.project.GetProjectRequest
 import com.nevmem.survey.data.response.project.GetProjectInfoResponse
+import com.nevmem.survey.data.response.project.GetProjectResponse
 import com.nevmem.survey.data.response.project.GetProjectsResponse
 import com.nevmem.survey.exception.AccessDeniedException
 import com.nevmem.survey.exception.NotFoundException
@@ -38,6 +40,17 @@ private fun Route.projectsImpl() {
             val user = usersService.getUserById(userId())!!
             val project = projectsService.createProject(request.name, user)
             call.respond(projectConverter(project))
+        }
+
+        post("/get") {
+            val request = call.receive<GetProjectRequest>()
+            val user = usersService.getUserById(userId())!!
+            val project = projectsService.get(request.id)
+                ?: throw NotFoundException("Project with id ${request.id} not found")
+            if (projectsService.isUserInvitedToProject(project, user)) {
+                call.respond(GetProjectResponse(projectConverter(project)))
+            }
+            throw AccessDeniedException()
         }
 
         get("/all") {

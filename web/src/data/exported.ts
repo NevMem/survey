@@ -93,6 +93,14 @@ interface GetProjectInfoResponse {
 	projectInfo: ProjectInfo;
 }
 
+interface GetProjectRequest {
+	id: number;
+}
+
+interface GetProjectResponse {
+	project: Project;
+}
+
 interface GetProjectsResponse {
 	projects: Project[];
 }
@@ -375,6 +383,8 @@ export type {
 	GetInvitesResponse,
 	GetProjectInfoRequest,
 	GetProjectInfoResponse,
+	GetProjectRequest,
+	GetProjectResponse,
 	GetProjectsResponse,
 	GetSurveyRequest,
 	GetSurveyResponse,

@@ -23,6 +23,8 @@ import {
 interface BackendApiService {
     projects(abortController: AbortController): Promise<Project[]>
 
+    project(abortController: AbortController, id: number): Promise<Project>
+
     projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo>
     surveys(abortController: AbortController, projectId: number): Promise<Survey[]>
 
