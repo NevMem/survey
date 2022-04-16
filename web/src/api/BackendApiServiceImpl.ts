@@ -173,11 +173,11 @@ class BackendApiServiceImpl implements BackendApiService {
     }
 
     createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task> {
-        return this.post<Task, CreateExportDataTaskRequest>('/v1/task/create_export_data_task', request, abortController).then(data => data.data);
+        return this.post<Task, CreateExportDataTaskRequest>('/v2/tasks/create_export_data_task', request, abortController).then(data => data.data);
     }
 
     loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task> {
-        return this.post<Task, LoadTaskRequest>('/v1/task/task', request, abortController).then(data => data.data);
+        return this.post<Task, LoadTaskRequest>('/v2/tasks/get', request, abortController).then(data => data.data);
     }
 
     private post<T, U>(path: string, body?: U, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {
