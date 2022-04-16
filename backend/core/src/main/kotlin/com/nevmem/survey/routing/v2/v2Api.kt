@@ -9,5 +9,6 @@ fun Route.v2Api() {
         surveys()
         projects()
         invites()
+        tasks()
     }
 }

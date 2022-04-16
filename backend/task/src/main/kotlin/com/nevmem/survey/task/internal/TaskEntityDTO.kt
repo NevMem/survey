@@ -16,6 +16,7 @@ internal object ExportDataTaskTable : LongIdTable() {
     val state = enumeration("state", TaskStateDTO::class)
     val surveyId = long("surveyId")
     val medias = text("medias")
+    val projectId = long("projectId")
 }
 
 internal object TaskLogTable : LongIdTable() {
@@ -30,6 +31,7 @@ internal class ExportDataTaskDTO(id: EntityID<Long>) : LongEntity(id) {
     var state by ExportDataTaskTable.state
     var surveyId by ExportDataTaskTable.surveyId
     var medias by ExportDataTaskTable.medias
+    var projectId by ExportDataTaskTable.projectId
 }
 
 internal class TaskLogDTO(id: EntityID<Long>) : LongEntity(id) {

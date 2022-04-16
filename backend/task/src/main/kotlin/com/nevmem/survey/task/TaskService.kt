@@ -3,7 +3,7 @@ package com.nevmem.survey.task
 import com.nevmem.survey.media.MediaEntity
 
 interface TaskService {
-    suspend fun createExportTask(surveyId: Long): ExportDataTaskEntity
+    suspend fun createExportTask(projectId: Long, surveyId: Long): ExportDataTaskEntity
 
     suspend fun exportTasks(): List<ExportDataTaskEntity>
 

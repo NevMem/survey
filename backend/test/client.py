@@ -87,10 +87,10 @@ class Client:
         return self._post('/v1/survey/get', {'surveyId': survey_id})
 
     def task(self, token, id):
-        return self._post('/v1/task/task', {'id': id}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v2/tasks/get', {'id': id}, headers={'Authorization': 'Bearer ' + token})
 
     def create_export_data_task(self, token, surveyId):
-        return self._post('/v1/task/create_export_data_task', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v2/tasks/create_export_data_task', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
 
     def register_v2(self, login: str, password: str, name: str, surname: str, email: str):
         return self._post(

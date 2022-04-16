@@ -1,5 +1,6 @@
 package com.nevmem.survey.worker.routing.v1.tasks
 
+import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.task.TaskService
 import com.nevmem.survey.worker.api.request.CreateExportDataTaskRequest
 import com.nevmem.survey.worker.api.request.GetTaskRequest
@@ -16,6 +17,7 @@ import org.koin.ktor.ext.inject
 fun Route.tasks() {
     val tasksService by inject<TaskService>()
     val exportDataTaskConverter by inject<ExportDataTaskConverter>()
+    val surveysService by inject<SurveysService>()
 
     post("/tasks") {
         val tasks = tasksService.exportTasks()
@@ -35,7 +37,8 @@ fun Route.tasks() {
     post("/create_export_data_task") {
         val request = call.receive<CreateExportDataTaskRequest>()
         try {
-            val task = tasksService.createExportTask(request.surveyId)
+            val survey = surveysService.surveyById(request.surveyId)
+            val task = tasksService.createExportTask(survey!!.projectId, request.surveyId)
             call.respond<CreateExportDataTaskResponse>(
                 CreateExportDataTaskResponse.Success(
                     exportDataTaskConverter(task),
