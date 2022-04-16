@@ -14,11 +14,11 @@ import { Theme } from './theme/theme';
 const WithSideBar = (props: { children: any }) => {
   return (
     <div style={{display: 'flex', flexDirection: 'row'}}>
-      <div style={{width: '30vw'}}>
+      <div style={{width: '20vw'}}>
         <AppSidebar />
       </div>
 
-      <div style={{width: '70vw'}}>
+      <div style={{width: '80vw'}}>
         {props.children}
       </div>
     </div>

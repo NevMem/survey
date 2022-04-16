@@ -35,6 +35,7 @@ const ProjectSurveysView = (props: { surveys: Survey[] }) => {
                         return (
                             <SpaceBetweenRow key={index}>
                                 <Text>{survey.name}</Text>
+                                <Text>{survey.surveyId}</Text>
                                 <Text>id: {survey.id}</Text>
                             </SpaceBetweenRow>
                         );
