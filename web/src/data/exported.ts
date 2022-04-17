@@ -268,6 +268,7 @@ interface SurveyMetadata {
 
 interface Task {
 	id: number;
+	projectId: number;
 	state: TaskState;
 	log: TaskLog[];
 	outputs: Media[];
