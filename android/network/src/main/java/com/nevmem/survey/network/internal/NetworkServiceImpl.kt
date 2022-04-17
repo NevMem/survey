@@ -38,7 +38,7 @@ internal class NetworkServiceImpl(
     }
 
     override suspend fun loadSurvey(surveyId: String): Survey {
-        return client.post<GetSurveyResponse>("${baseUrl()}/v1/survey/get") {
+        return client.post<GetSurveyResponse>("${baseUrl()}/v2/survey/get") {
             contentType(ContentType.Application.Json)
             body = GetSurveyRequest(surveyId)
         }.survey

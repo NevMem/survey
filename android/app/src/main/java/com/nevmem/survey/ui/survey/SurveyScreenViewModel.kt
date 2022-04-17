@@ -1,13 +1,18 @@
 package com.nevmem.survey.ui.survey
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.question.Question
+import com.nevmem.survey.report.report
 import com.nevmem.survey.service.achievement.api.AchievementService
+import com.nevmem.survey.service.camera.CameraDataListener
 import com.nevmem.survey.service.survey.SurveyService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,7 +25,11 @@ sealed class ProgressState {
 }
 
 enum class SurveyScreenActionType {
-    Next, Previous, Send, Retry,
+    Next,
+    Previous,
+    Send,
+    Retry,
+    TakePicture,
 }
 
 sealed class SurveyScreenAction {
@@ -40,19 +49,41 @@ class SurveyScreenViewModel(
     private val surveyService: SurveyService,
     private val background: CoroutineScope,
     private val achievementService: AchievementService,
+    private val cameraDataListener: CameraDataListener,
 ) : ViewModel() {
     val survey = mutableStateOf(surveyService.survey)
 
     private var questionIndex = 0
     private val answers: MutableList<QuestionAnswer?> = survey.value.questions.map { null }.toMutableList()
 
+    private val medias: MutableList<Uri> = mutableListOf()
+
+    private var job: Job? = null
+
     val uiState = mutableStateOf(
         SurveyScreenUiState(
             currentItem = survey.value.questions[questionIndex].buildItem(),
             progress = ProgressState.ActualProgress(1, survey.value.questions.size),
-            actions = listOf(SurveyScreenActionType.Next),
+            actions = listOf(
+                SurveyScreenActionType.TakePicture,
+                SurveyScreenActionType.Next,
+            ),
         )
     )
+
+    init {
+        job = background.launch {
+            cameraDataListener.uris.collect {
+                medias.add(it)
+                report("cur_deb", "new media")
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        job?.cancel()
+    }
 
     private fun next(answer: QuestionAnswer) {
         answers[questionIndex] = answer
@@ -66,6 +97,7 @@ class SurveyScreenViewModel(
                 progress = ProgressState.ActualProgress(questionIndex + 1, survey.value.questions.size),
                 actions = listOf(
                     SurveyScreenActionType.Previous,
+                    SurveyScreenActionType.TakePicture,
                     if (questionIndex + 1 in survey.value.questions.indices)
                         SurveyScreenActionType.Next
                     else

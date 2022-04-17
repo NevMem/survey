@@ -55,6 +55,7 @@ const NotificationsBlock = () => {
 const TasksBlock = () => {
     const readyTask: Task = {
         id: 33,
+        projectId: 0,
         state: TaskState.Success,
         log: [
             { message: 'started', timestamp: (new Date()).getSeconds() },
@@ -72,6 +73,7 @@ const TasksBlock = () => {
 
     const executingTask: Task = {
         id: 33,
+        projectId: 0,
         state: TaskState.Executing,
         log: [
             { message: 'started', timestamp: (new Date()).getSeconds() },
@@ -86,6 +88,7 @@ const TasksBlock = () => {
 
     const errorTask: Task = {
         id: 33,
+        projectId: 0,
         state: TaskState.Error,
         log: [
             { message: 'started', timestamp: (new Date()).getSeconds() },

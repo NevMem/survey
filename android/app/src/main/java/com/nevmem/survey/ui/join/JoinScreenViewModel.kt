@@ -36,7 +36,7 @@ class JoinScreenViewModel(
             }
 
             try {
-                val survey = networkService.loadSurvey(surveyId + "VULDC")
+                val survey = networkService.loadSurvey(surveyId + "PHVCK")
                 withContext(Dispatchers.Main) {
                     state.value = UiState.Success
                     surveyService.saveSurvey(survey)

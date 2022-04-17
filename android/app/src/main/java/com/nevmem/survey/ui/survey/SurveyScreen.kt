@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.nevmem.survey.R
 import com.nevmem.survey.data.answer.QuestionAnswer
 import kotlinx.coroutines.GlobalScope
@@ -44,6 +45,7 @@ import org.koin.androidx.compose.viewModel
 @ExperimentalComposeUiApi
 @Composable
 fun SurveyScreen(
+    navController: NavController,
     scaffoldState: ScaffoldState,
 ) {
     val viewModel: SurveyScreenViewModel by viewModel()
@@ -104,6 +106,7 @@ fun SurveyScreen(
         }
 
         ActionsRow(
+            navController = navController,
             actions = viewModel.uiState.value.actions,
             moveNext = moveNext,
             movePrev = { viewModel.dispatch(SurveyScreenAction.Previous) },
@@ -114,7 +117,15 @@ fun SurveyScreen(
 }
 
 @Composable
+private fun TakePictureAction(navController: NavController) {
+    Button(onClick = { navController.navigate("camera") }) {
+        Text("SNAP")
+    }
+}
+
+@Composable
 private fun ActionsRow(
+    navController: NavController,
     actions: List<SurveyScreenActionType>,
     moveNext: () -> Unit,
     movePrev: () -> Unit,
@@ -133,6 +144,7 @@ private fun ActionsRow(
                 SurveyScreenActionType.Send -> SendAction(send = send)
                 SurveyScreenActionType.Previous -> PrevAction(movePrev = movePrev)
                 SurveyScreenActionType.Retry -> RetryAction(retry = retry)
+                SurveyScreenActionType.TakePicture -> TakePictureAction(navController = navController)
             }
         }
     }
