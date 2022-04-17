@@ -3,29 +3,68 @@ import PageWrapper from "../../app/page/PageWrapper";
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";
 import Text from '../../components/text/Text';
-import { CreateInviteRequest, CreateInviteResponse, GetInvitesResponse, Invite, InviteStatus } from "../../data/exported";
+import { AcceptInviteRequest, CreateInviteRequest, CreateInviteResponse, GetInvitesResponse, Invite, InviteStatus } from "../../data/exported";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
-import Card from "../../app/card/Card";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import GeneralButton from "../../components/button/GeneralButton";
 import SpacedColumn from "../../app/layout/SpacedColumn";
-import { ModalActions, ModalBody, ModalHeader, ModalView, useModalState, ModalState } from "../../components/modal/Modal";
-import { Option, Select } from "../../components/select/Selector";
+import { useModalState, } from "../../components/modal/Modal";
 import Badge from "../../components/badge/Badge";
 import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
 import OutlinedCard from "../../app/card/OutlinedCard";
+import CreateInviteModal from "./CreateInviteModal";
+import Row from "../../app/layout/Row";
+import CardSuccess from "../../app/card/CardSuccess";
+
+const AcceptInviteProcessView = (props: { request: AcceptInviteRequest }) => {
+    const request = useAsyncRequest(controller => backendApi.accept(controller, props.request));
+
+    if (request instanceof RequestError) {
+        return (
+            <CardError>{request.message}</CardError>
+        );
+    } else if (request instanceof RequestSuccess) {
+        return (
+            <CardSuccess>Статус: {request.result.status}</CardSuccess>
+        );
+    }
+
+    return (
+        <SpaceAroundRow>
+            <Loader />
+        </SpaceAroundRow>
+    );
+};
+
+const IncomingInviteView = (props: { invite: Invite }) => {
+    const { invite } = props;
+
+    const [request, setRequest] = useState<AcceptInviteRequest | undefined>();
+
+    const accept = () => {
+        setRequest({ id: invite.id });
+    };
+
+    return (
+        <OutlinedCard>
+            <SpacedColumn rowGap={16}>
+                <Text large>{invite.fromUser.name} {invite.fromUser.surname} приглашает вас в проект {invite.project.name}</Text>
+                <SpaceAroundRow>
+                    <GeneralButton onClick={accept} disabled={invite.status !== InviteStatus.Waiting}>Принять</GeneralButton>
+                </SpaceAroundRow>
+                { request && <AcceptInviteProcessView request={request} /> }
+            </SpacedColumn>
+        </OutlinedCard>
+    );
+};
 
 const InviteView = (props: {invite: Invite, incoming?: boolean}) => {
     const { invite, incoming } = props;
+
     if (incoming == true) {
         return (
-            <OutlinedCard>
-                <SpacedColumn rowGap={16}>
-                    <Text>{invite.fromUser.name} {invite.fromUser.surname} приглашает вас в проект {invite.project.name}</Text>
-                    <GeneralButton>Принять</GeneralButton>
-                </SpacedColumn>
-            </OutlinedCard>
+            <IncomingInviteView invite={invite} />
         );
     }
 
@@ -43,26 +82,23 @@ const InviteView = (props: {invite: Invite, incoming?: boolean}) => {
     return (
         <OutlinedCard>
             <SpacedColumn rowGap={16}>
-                <Text>Вы пригласили {invite.fromUser.name} {invite.fromUser.surname} в проект {invite.project.name}</Text>
-                <InviteBadgeView status={invite.status} />
+                <Text large>Вы пригласили {invite.toUser.name} {invite.toUser.surname} в проект {invite.project.name}</Text>
+                <Row>
+                    <InviteBadgeView status={invite.status} />
+                </Row>
             </SpacedColumn>
         </OutlinedCard>
     );
-    // return (
-    //     <SpaceBetweenRow>
-    //         <Text>{props.invite.inviteId}</Text>
-    //         {props.invite.acceptedBy ? <Badge success>{props.invite.acceptedBy.login}</Badge> : <Badge error>not accepted</Badge>}
-    //         {props.invite.isExpired ? <Badge error>просрочился</Badge> : <Badge success>активен</Badge>}
-    //     </SpaceBetweenRow>
-    // );
 };
 
 const InvitesTable = (props: { invites: Invite[], incoming?: boolean }) => {
     if (props.invites.length === 0) {
         return (
-            <SpaceAroundRow>
-                <Text>Нет инвайтов</Text>
-            </SpaceAroundRow>
+            <OutlinedCard>
+                <SpaceAroundRow>
+                    <Text>Нет инвайтов</Text>
+                </SpaceAroundRow>
+            </OutlinedCard>
         );
     }
 
@@ -76,86 +112,6 @@ const InvitesTable = (props: { invites: Invite[], incoming?: boolean }) => {
         </Fragment>
     );
 };
-
-const InviteCreationRequestBlock = (props: { requestBuilder: (abortController: AbortController) => Promise<CreateInviteResponse> }) => {
-    const result = useAsyncRequest(props.requestBuilder);
-
-    if (result instanceof RequestError) {
-        return <CardError><Text>{result.message}</Text></CardError>;
-    }
-
-    if (result instanceof RequestSuccess) {
-        const actual = result.result;
-        return (
-            <Card>
-                Создали инвайт: {actual.invite.inviteId}
-            </Card>
-        );
-    }
-
-    return <SpaceAroundRow><Loader large /></SpaceAroundRow>;
-};
-
-const CreateInviteModal = (props: { state: ModalState }) => {
-    const availableExpirationTimes = [
-        {
-            caption: '1 минута',
-            seconds: 60,
-        },
-        {
-            caption: '10 минут',
-            seconds: 60 * 10,
-        },
-        {
-            caption: '1 час',
-            seconds: 60 * 60,
-        },
-        {
-            caption: '6 часов',
-            seconds: 60 * 60 * 6,
-        },
-        {
-            caption: '1 сутки',
-            seconds: 60 * 60 * 24,
-        },
-    ];
-
-    const [option, setOption] = useState(availableExpirationTimes[0]);
-    const [request, setRequest] = useState<CreateInviteRequest | undefined>(undefined);
-
-    const createInvite = () => {
-        // const request: CreateInviteRequest = {
-        //     expirationTimeSeconds: option.seconds,
-        // };
-        // setRequest(request);
-    };
-
-    const changeSelection = (event: ChangeEvent<HTMLSelectElement>) => {
-        setOption(availableExpirationTimes.find(time => time.caption === event.target.value)!!)
-    };
-
-    return (
-        <ModalView state={props.state}>
-            <ModalHeader>
-                <Text large>Создать инвайт</Text>
-            </ModalHeader>
-            <ModalBody>
-                <SpacedColumn rowGap={16}>
-                    {request && <InviteCreationRequestBlock requestBuilder={(controller: AbortController) => backendApi.createInvite(request, controller)} />}
-                    <Select onChange={changeSelection}>
-                        {availableExpirationTimes.map(elem => {
-                            return <Option key={elem.seconds}>{elem.caption}</Option>;
-                        })}
-                    </Select>
-                </SpacedColumn>
-            </ModalBody>
-            <ModalActions>
-                <GeneralButton onClick={createInvite}>Создать</GeneralButton>
-                <GeneralButton secondary onClick={() => props.state.close()}>Отмена</GeneralButton>
-            </ModalActions>
-        </ModalView>
-    );
-}
 
 const OutgoingActualPage = (props: { invites: Invite[] }) => {
     const modalState = useModalState();
@@ -172,10 +128,8 @@ const OutgoingActualPage = (props: { invites: Invite[] }) => {
                     <Text header>Инвайты</Text>
                     <GeneralButton onClick={openCreateInviteView}>Создать инвайт</GeneralButton>
                 </SpaceBetweenRow>
-                <Card>
-                    <InvitesTable invites={props.invites} />
-                </Card>
-            </SpacedColumn>
+                <InvitesTable invites={props.invites} />
+                </SpacedColumn>
         </Fragment>
     );
 };
@@ -186,9 +140,7 @@ const IncomingActualPage = (props: { invites: Invite[] }) => {
             <SpaceBetweenRow>
                 <Text header>Входящие инвайты</Text>
             </SpaceBetweenRow>
-            <Card>
-                <InvitesTable invites={props.invites} incoming />
-            </Card>
+            <InvitesTable invites={props.invites} incoming />
         </SpacedColumn>
     );
 };

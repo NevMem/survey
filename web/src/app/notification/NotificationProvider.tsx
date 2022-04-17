@@ -26,6 +26,7 @@ const NotificationsTray = styled.div`
     bottom: 0px;
     display: flex;
     flex-direction: column;
+    z-index: 1000;
 `;
 
 const NotificationContext = createContext<Dispatch<NotificationsStateAction>>(() => {});

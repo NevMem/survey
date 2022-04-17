@@ -32,7 +32,7 @@ const ModalActions = styled.div`
 
 const ModalFade = styled.div<{ open: boolean }>`
     position: fixed;
-    zIndex: 1;
+    z-index: 1;
     left: 0;
     top: 0;
     right: 0;

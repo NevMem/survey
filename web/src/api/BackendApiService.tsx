@@ -18,6 +18,9 @@ import {
     IncomingInvitesResponse,
     OutgoingInvitesResponse,
     CreateProjectRequest,
+    Invite,
+    AcceptInviteResponse,
+    AcceptInviteRequest,
 } from "../data/exported";
 
 interface BackendApiService {
@@ -48,6 +51,7 @@ interface BackendApiService {
     incomingInvites(abortController: AbortController): Promise<IncomingInvitesResponse>
     outgoingInvites(abortController: AbortController): Promise<OutgoingInvitesResponse>
     createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse>
+    accept(abortController: AbortController, request: AcceptInviteRequest): Promise<AcceptInviteResponse>
 
     roles(abortController: AbortController): Promise<AllRolesResponse>
     updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void>

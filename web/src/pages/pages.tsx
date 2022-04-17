@@ -54,7 +54,7 @@ const pages: PageInfo[] = [
         name: 'Опросы',
         component: <SurveysPage />,
         path : '/surveys',
-        useInSidebar: true,
+        useInSidebar: false,
         needAuthorization: true,
         needRoles: [
             {id: 'survey.observer'},
@@ -104,7 +104,7 @@ const pages: PageInfo[] = [
         name: "Администрирование",
         component: <AdminPage />,
         path: '/admin',
-        useInSidebar: true,
+        useInSidebar: false,
         needAuthorization: true,
         needRoles: [
             {id: 'role.manager'},

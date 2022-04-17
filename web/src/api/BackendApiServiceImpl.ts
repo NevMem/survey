@@ -34,6 +34,9 @@ import {
     CreateProjectResponse,
     GetProjectResponse,
     GetProjectRequest,
+    AcceptInviteResponse,
+    Invite,
+    AcceptInviteRequest,
 } from "../data/exported";
 import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
@@ -152,12 +155,13 @@ class BackendApiServiceImpl implements BackendApiService {
             .then(data => data.data);
     }
 
-    invites(): Promise<GetInvitesResponse> {
-        return this.get<GetInvitesResponse>('/v1/invite/my_invites').then(data => data.data);
+    createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse> {
+        return this.post<CreateInviteResponse, CreateInviteRequest>('/v2/invites/create', request, abortController).then(data => data.data);
     }
 
-    createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse> {
-        return this.post<CreateInviteResponse, CreateInviteRequest>('/v1/invite/create_invite', request, abortController).then(data => data.data);
+    accept(abortController: AbortController, request: AcceptInviteRequest): Promise<AcceptInviteResponse> {
+        return this.post<AcceptInviteResponse, AcceptInviteRequest>('/v2/invites/accept', request, abortController)
+            .then(data => data.data);
     }
 
     managedUsers(abortController: AbortController): Promise<ManagedUsersResponse> {
