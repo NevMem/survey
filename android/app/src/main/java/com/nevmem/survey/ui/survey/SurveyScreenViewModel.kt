@@ -75,7 +75,6 @@ class SurveyScreenViewModel(
         job = background.launch {
             cameraDataListener.uris.collect {
                 medias.add(it)
-                report("cur_deb", "new media")
             }
         }
     }
