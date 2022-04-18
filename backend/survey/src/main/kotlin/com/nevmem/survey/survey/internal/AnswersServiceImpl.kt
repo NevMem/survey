@@ -125,6 +125,9 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
     private fun typeOfCommonQuestion(question: CommonQuestionEntity): QuestionType {
         return when (question.id) {
             "age" -> QuestionType.Rating
+            "school_name" -> QuestionType.Text
+            "region" -> QuestionType.Text
+            "grade" -> QuestionType.Rating
             else -> throw UnknownCommonQuestionException(question.id)
         }
     }

@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.data.answer.QuestionAnswer
+import com.nevmem.survey.data.question.CommonQuestion
 import com.nevmem.survey.data.question.Question
 import com.nevmem.survey.service.achievement.api.AchievementService
 import com.nevmem.survey.service.camera.CameraDataListener
@@ -52,8 +53,13 @@ class SurveyScreenViewModel(
 ) : ViewModel() {
     val survey = mutableStateOf(surveyService.survey)
 
+    private val questionsCount
+        get() = survey.value.commonQuestions.size + survey.value.questions.size
+
     private var questionIndex = 0
-    private val answers: MutableList<QuestionAnswer?> = survey.value.questions.map { null }.toMutableList()
+    private val answers: MutableList<QuestionAnswer?> = (0 until questionsCount)
+        .map { null }
+        .toMutableList()
 
     private val medias: MutableList<Uri> = mutableListOf()
 
@@ -61,8 +67,8 @@ class SurveyScreenViewModel(
 
     val uiState = mutableStateOf(
         SurveyScreenUiState(
-            currentItem = survey.value.questions[questionIndex].buildItem(),
-            progress = ProgressState.ActualProgress(1, survey.value.questions.size),
+            currentItem = buildCurrentQuestionItem(),
+            progress = ProgressState.ActualProgress(1, questionsCount),
             actions = listOf(
                 SurveyScreenActionType.TakePicture,
                 SurveyScreenActionType.Next,
@@ -83,16 +89,21 @@ class SurveyScreenViewModel(
         job?.cancel()
     }
 
+    private fun buildCurrentQuestionItem(): SurveyScreenItem {
+        if (questionIndex in survey.value.commonQuestions.indices) {
+            return survey.value.commonQuestions[questionIndex].buildItem()
+        }
+        return survey.value.questions[questionIndex - survey.value.commonQuestions.size].buildItem()
+    }
+
     private fun next(answer: QuestionAnswer) {
         answers[questionIndex] = answer
         questionIndex += 1
 
-        assert(questionIndex in survey.value.questions.indices)
-
-        if (questionIndex in survey.value.questions.indices) {
+        if (questionIndex < questionsCount) {
             uiState.value = SurveyScreenUiState(
-                currentItem = survey.value.questions[questionIndex].buildItem(),
-                progress = ProgressState.ActualProgress(questionIndex + 1, survey.value.questions.size),
+                currentItem = buildCurrentQuestionItem(),
+                progress = ProgressState.ActualProgress(questionIndex + 1, questionsCount),
                 actions = listOf(
                     SurveyScreenActionType.Previous,
                     SurveyScreenActionType.TakePicture,
@@ -155,5 +166,16 @@ class SurveyScreenViewModel(
             title = title,
             variants = variants.map { RadioQuestion.QuestionVariant(it.id, it.variant) },
         )
+    }
+
+    private fun CommonQuestion.buildItem(): SurveyScreenItem {
+        val question: Question = when (id) {
+            "school_name" -> Question.TextQuestion("Введите наименование вашего учебного заведения", 512)
+            "age" -> Question.RatingQuestion("Введите ваш возраст", 6, 18)
+            "region" -> Question.TextQuestion("Из какого вы региона?", 32)
+            "grade" -> Question.RatingQuestion("В каком вы классе?", 1, 11)
+            else -> throw IllegalStateException("Unsupported Common Question type")
+        }
+        return question.buildItem()
     }
 }
