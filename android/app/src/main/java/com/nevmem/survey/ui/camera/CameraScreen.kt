@@ -40,10 +40,8 @@ import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import com.nevmem.survey.R
 import com.nevmem.survey.report.report
-import com.nevmem.survey.ui.survey.SurveyScreenViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.inject
-import org.koin.androidx.compose.viewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -139,14 +137,14 @@ fun ImageCapture.takePicture(
                     arrayOf(savedUri.toFile().absolutePath),
                     arrayOf(mimeType)
                 ) { _, uri ->
-
                 }
                 onImageCaptured(savedUri)
             }
             override fun onError(exception: ImageCaptureException) {
                 onError(exception)
             }
-        })
+        }
+    )
 }
 
 fun getOutputFileOptions(
@@ -165,10 +163,10 @@ fun getOutputFileOptions(
 
 fun createFile(baseFolder: File, format: String, extension: String) =
     File(
-        baseFolder, SimpleDateFormat(format, Locale.US)
+        baseFolder,
+        SimpleDateFormat(format, Locale.US)
             .format(System.currentTimeMillis()) + extension
     )
-
 
 fun Context.getOutputDirectory(): File {
     val mediaDir = this.externalMediaDirs.firstOrNull()?.let {
@@ -207,7 +205,6 @@ private fun CameraPreviewView(
 
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize()) {
-
         }
         Column(
             modifier = Modifier.align(Alignment.BottomCenter),
@@ -217,15 +214,17 @@ private fun CameraPreviewView(
                 Text("Capture")
             }
         }
-
     }
 }
 
 suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutine { continuation ->
     ProcessCameraProvider.getInstance(this).also { cameraProvider ->
-        cameraProvider.addListener({
-            continuation.resume(cameraProvider.get())
-        }, ContextCompat.getMainExecutor(this))
+        cameraProvider.addListener(
+            {
+                continuation.resume(cameraProvider.get())
+            },
+            ContextCompat.getMainExecutor(this)
+        )
     }
 }
 

@@ -31,7 +31,6 @@ import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.http.content.PartData
 import io.ktor.http.contentType
 import io.ktor.util.InternalAPI
 import io.ktor.utils.io.core.buildPacket
@@ -105,7 +104,7 @@ internal class NetworkServiceImpl(
                     appendInput(
                         "file",
                         headers = Headers.build {
-                            append(HttpHeaders.ContentDisposition,"filename=${file.name}")
+                            append(HttpHeaders.ContentDisposition, "filename=${file.name}")
                         },
                         size = file.length(),
                     ) {

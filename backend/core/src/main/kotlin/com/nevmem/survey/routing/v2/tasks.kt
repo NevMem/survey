@@ -27,8 +27,8 @@ private fun Route.tasksImpl() {
     val projectsService by inject<ProjectsService>()
     val roleModel by inject<RoleModel>()
     val usersConverter by inject<UsersConverter>()
-    
-    authenticate { 
+
+    authenticate {
         post("/create_export_data_task") {
             val request = call.receive<CreateExportDataTaskRequest>()
 

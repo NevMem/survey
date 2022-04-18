@@ -5,8 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.question.Question
-import com.nevmem.survey.network.api.NetworkService
-import com.nevmem.survey.report.report
 import com.nevmem.survey.service.achievement.api.AchievementService
 import com.nevmem.survey.service.camera.CameraDataListener
 import com.nevmem.survey.service.survey.SurveyService

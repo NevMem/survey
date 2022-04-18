@@ -47,7 +47,7 @@ fun Route.mediaImpl() {
         val media = mediaService.mediaById(mediaId) ?: throw NotFoundException()
         val fileType: FileSystemService.FileType = FileSystemService.FileType
             .values().associateBy { it.ext }[media.filename.split(".").last()]
-                ?: throw IllegalStateException("unknown file type")
+            ?: throw IllegalStateException("unknown file type")
         val file = fsService.createFile(fileType)
         mediaService.downloadToFile(file, media)
         call.respondFile(file)
