@@ -1,11 +1,17 @@
 package com.nevmem.survey.network.internal
 
+import android.net.Uri
+import androidx.core.net.toFile
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
+import com.nevmem.survey.data.media.Media
+import com.nevmem.survey.data.media.MediaGallery
 import com.nevmem.survey.data.request.answer.PublishAnswerRequest
+import com.nevmem.survey.data.request.media.CreateGalleryRequest
 import com.nevmem.survey.data.request.push.RegisterPushTokenRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
 import com.nevmem.survey.data.response.answer.PublishAnswerResponse
+import com.nevmem.survey.data.response.media.CreateGalleryResponse
 import com.nevmem.survey.data.response.push.RegisterPushTokenResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
 import com.nevmem.survey.data.survey.Survey
@@ -19,9 +25,17 @@ import io.ktor.client.features.logging.DEFAULT
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
+import io.ktor.http.content.PartData
 import io.ktor.http.contentType
+import io.ktor.util.InternalAPI
+import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.writeFully
 
 internal class NetworkServiceImpl(
     private val backendBaseUrlProvider: BackendBaseUrlProvider,
@@ -47,14 +61,15 @@ internal class NetworkServiceImpl(
     override suspend fun sendSurvey(
         surveyId: String,
         uid: UserId,
-        answers: List<QuestionAnswer>
+        answers: List<QuestionAnswer>,
+        mediaGallery: MediaGallery?,
     ) {
         val request = PublishAnswerRequest(
             answer = SurveyAnswer(
                 uid = uid,
                 surveyId = surveyId,
                 answers = answers,
-                gallery = null,
+                gallery = mediaGallery,
             ),
         )
         post<PublishAnswerRequest, PublishAnswerResponse>(
@@ -72,6 +87,35 @@ internal class NetworkServiceImpl(
             "${baseUrl()}/v1/push/register",
             request,
         )
+    }
+
+    override suspend fun createGallery(medias: List<Media>): MediaGallery {
+        return this.post<CreateGalleryRequest, CreateGalleryResponse>(
+            "${baseUrl()}/v1/media/create_gallery",
+            CreateGalleryRequest(medias),
+        ).gallery
+    }
+
+    @OptIn(InternalAPI::class)
+    override suspend fun sendMedia(media: Uri): Media {
+        val file = media.toFile()
+        return client.post<Media>("${baseUrl()}/v1/media/upload") {
+            body = MultiPartFormDataContent(
+                formData {
+                    appendInput(
+                        "file",
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentDisposition,"filename=${file.name}")
+                        },
+                        size = file.length(),
+                    ) {
+                        buildPacket {
+                            writeFully(file.readBytes())
+                        }
+                    }
+                }
+            )
+        }
     }
 
     private suspend fun baseUrl(): String = backendBaseUrlProvider.provideBaseUrl()

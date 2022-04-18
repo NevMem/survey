@@ -1,5 +1,6 @@
 package com.nevmem.survey.service.survey
 
+import android.net.Uri
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.network.api.NetworkService
@@ -50,7 +51,16 @@ class SurveyService(
         preferencesService.put("currentSurvey", Json.encodeToString(Survey.serializer(), survey))
     }
 
-    suspend fun sendAnswer(answers: List<QuestionAnswer>) {
-        networkService.sendSurvey(survey.surveyId, userIdProvider.provide(), answers)
+    suspend fun sendAnswer(answers: List<QuestionAnswer>, medias: List<Uri>) {
+        val savedMedias = medias.map {
+            networkService.sendMedia(it)
+        }
+        val gallery = savedMedias.takeIf { it.isNotEmpty() }?.let { networkService.createGallery(it) }
+        networkService.sendSurvey(
+            survey.surveyId,
+            userIdProvider.provide(),
+            answers,
+            gallery,
+        )
     }
 }

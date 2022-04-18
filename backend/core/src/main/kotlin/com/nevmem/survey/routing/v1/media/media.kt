@@ -45,12 +45,9 @@ fun Route.mediaImpl() {
     get("/get/{mediaId}") {
         val mediaId = call.parameters["mediaId"]?.toLong() ?: throw IllegalStateException("Media id not present in path")
         val media = mediaService.mediaById(mediaId) ?: throw NotFoundException()
-        val ext = media.filename.split(".").last()
-        val fileType = when (ext) {
-            "txt" -> FileSystemService.FileType.TXT
-            "csv" -> FileSystemService.FileType.CSV
-            else -> throw IllegalStateException("unknown file type")
-        }
+        val fileType: FileSystemService.FileType = FileSystemService.FileType
+            .values().associateBy { it.ext }[media.filename.split(".").last()]
+                ?: throw IllegalStateException("unknown file type")
         val file = fsService.createFile(fileType)
         mediaService.downloadToFile(file, media)
         call.respondFile(file)

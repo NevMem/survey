@@ -5,9 +5,11 @@ import java.io.File
 
 interface FileSystemService {
 
-    enum class FileType {
-        CSV,
-        TXT,
+    enum class FileType(val ext: String) {
+        CSV("csv"),
+        TXT("txt"),
+        JPG("jpg"),
+        PNG("png"),
     }
 
     suspend fun saveFromMultiPart(data: MultiPartData): File
