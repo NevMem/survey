@@ -31,6 +31,10 @@ function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) =
     return state;
 };
 
+export function isOk<T>(state: RequestState<T>): state is RequestSuccess<T> {
+    return state instanceof RequestSuccess;
+}
+
 export default useAsyncRequest;
 export {
     RequestState,
