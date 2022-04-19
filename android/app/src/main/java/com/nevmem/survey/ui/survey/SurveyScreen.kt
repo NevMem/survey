@@ -13,6 +13,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -20,6 +22,11 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.rounded.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -105,7 +112,7 @@ fun SurveyScreen(
             )
         }
 
-        ActionsRow(
+        ActionsRowWrapper(
             navController = navController,
             actions = viewModel.uiState.value.actions,
             moveNext = moveNext,
@@ -118,8 +125,22 @@ fun SurveyScreen(
 
 @Composable
 private fun TakePictureAction(navController: NavController) {
-    Button(onClick = { navController.navigate("camera") }) {
-        Text("SNAP")
+    IconButton(onClick = { navController.navigate("camera") }) {
+        Icon(imageVector = Icons.Filled.PhotoCamera, contentDescription = "camera")
+    }
+}
+
+@Composable
+private fun ActionsRowWrapper(
+    navController: NavController,
+    actions: List<SurveyScreenActionType>,
+    moveNext: () -> Unit,
+    movePrev: () -> Unit,
+    send: () -> Unit,
+    retry: () -> Unit,
+) {
+    Box(modifier = Modifier.padding(top = 28.dp, bottom = 28.dp)) {
+        ActionsRow(navController, actions, moveNext, movePrev, send, retry)
     }
 }
 
@@ -132,19 +153,43 @@ private fun ActionsRow(
     send: () -> Unit,
     retry: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp),
-        horizontalArrangement = if (actions.size >= 2) Arrangement.SpaceBetween else Arrangement.SpaceAround,
-    ) {
-        actions.forEach {
-            when (it) {
-                SurveyScreenActionType.Next -> NextAction(moveNext = moveNext)
-                SurveyScreenActionType.Send -> SendAction(send = send)
-                SurveyScreenActionType.Previous -> PrevAction(movePrev = movePrev)
-                SurveyScreenActionType.Retry -> RetryAction(retry = retry)
-                SurveyScreenActionType.TakePicture -> TakePictureAction(navController = navController)
+    if (actions.size >= 3) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            ActionsRow(
+                navController = navController,
+                actions = actions.subList(1, actions.size - 1),
+                moveNext = moveNext,
+                movePrev = movePrev,
+                send = send,
+                retry = retry,
+            )
+            ActionsRow(
+                navController = navController,
+                actions = listOf(actions.first(), actions.last()),
+                moveNext = moveNext,
+                movePrev = movePrev,
+                send = send,
+                retry = retry,
+            )
+        }
+    } else {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
+            horizontalArrangement = if (actions.size >= 2) Arrangement.SpaceBetween else Arrangement.SpaceAround,
+        ) {
+            actions.forEach {
+                when (it) {
+                    SurveyScreenActionType.Next -> NextAction(moveNext = moveNext)
+                    SurveyScreenActionType.Send -> SendAction(send = send)
+                    SurveyScreenActionType.Previous -> PrevAction(movePrev = movePrev)
+                    SurveyScreenActionType.Retry -> RetryAction(retry = retry)
+                    SurveyScreenActionType.TakePicture -> TakePictureAction(navController = navController)
+                }
             }
         }
     }
