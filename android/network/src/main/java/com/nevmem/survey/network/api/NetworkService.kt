@@ -8,7 +8,7 @@ import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.data.user.UserId
 
 interface NetworkService {
-    suspend fun loadSurvey(surveyId: String): Survey
+    suspend fun loadSurvey(uid: UserId, surveyId: String): Survey
 
     suspend fun sendSurvey(
         surveyId: String,

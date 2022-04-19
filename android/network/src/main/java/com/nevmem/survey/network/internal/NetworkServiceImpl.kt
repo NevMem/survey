@@ -50,10 +50,10 @@ internal class NetworkServiceImpl(
         }
     }
 
-    override suspend fun loadSurvey(surveyId: String): Survey {
-        return client.post<JoinSurveyResponse>("${baseUrl()}/v2/survey/get") {
+    override suspend fun loadSurvey(uid: UserId, surveyId: String): Survey {
+        return client.post<JoinSurveyResponse>("${baseUrl()}/v2/survey/join") {
             contentType(ContentType.Application.Json)
-            body = JoinSurveyRequest(surveyId)
+            body = JoinSurveyRequest(surveyId, uid)
         }.survey
     }
 

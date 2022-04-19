@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.service.survey.SurveyService
+import com.nevmem.survey.service.uid.UserIdProvider
 import com.nevmem.survey.util.injectBackgroundScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 class JoinScreenViewModel(
     private val networkService: NetworkService,
     private val surveyService: SurveyService,
+    private val userIdProvider: UserIdProvider,
 ) : ViewModel() {
 
     private val background by injectBackgroundScope()
@@ -36,7 +38,10 @@ class JoinScreenViewModel(
             }
 
             try {
-                val survey = networkService.loadSurvey(surveyId + "PHVCK")
+                val survey = networkService.loadSurvey(
+                    userIdProvider.provide(),
+                    surveyId,
+                )
                 withContext(Dispatchers.Main) {
                     state.value = UiState.Success
                     surveyService.saveSurvey(survey)
