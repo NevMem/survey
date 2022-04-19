@@ -107,7 +107,7 @@ class SurveyScreenViewModel(
                 actions = listOf(
                     SurveyScreenActionType.Previous,
                     SurveyScreenActionType.TakePicture,
-                    if (questionIndex + 1 in survey.value.questions.indices)
+                    if (questionIndex + 1 != questionsCount)
                         SurveyScreenActionType.Next
                     else
                         SurveyScreenActionType.Send,
