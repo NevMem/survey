@@ -13,6 +13,42 @@ import backendApi from '../../api/backendApiServiceSingleton';
 import SpacedCenteredRow from "../../app/layout/SpacedCenteredRow";
 import { useNavigate } from "react-router-dom";
 import TextButton from "../../components/button/TextButton";
+import styled from "styled-components";
+import SpacedRow from "../../app/layout/SpacedRow";
+import useNavigator from "../navigation";
+
+const SurveyCard = styled.div`
+    border-radius: 8px;
+    background-color: ${props => props.theme.background};
+    padding: 16px 24px;
+    box-shadow: 0px 3px 8px ${props => props.theme.withAlpha(10).foreground};
+    border: 2px solid ${props => props.theme.withAlpha(30).foreground};
+    transition: all ease-in 0.1s;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 0px 3px 8px ${props => props.theme.withAlpha(60).foreground};
+    }
+`;
+
+const SurveyView = (props: { survey: Survey }) => {
+    const { survey } = props;
+
+    const navigator = useNavigator();
+
+    const gotoMoreInfo = () => {
+        navigator.navigateToSurveyInfoPage(survey.id);
+    };
+
+    return (
+        <SurveyCard onClick={gotoMoreInfo}>
+            <SpacedColumn rowGap={12}>
+                <Text>{survey.name}</Text>
+                <Text>{survey.surveyId}</Text>
+            </SpacedColumn>
+        </SurveyCard>
+    );
+};
 
 const ProjectSurveysView = (props: { surveys: Survey[] }) => {
     const { surveys } = props;
@@ -25,35 +61,31 @@ const ProjectSurveysView = (props: { surveys: Survey[] }) => {
 
     if (surveys.length === 0) {
         return (
-            <OutlinedCard>
+            // <OutlinedCard>
                 <SpacedCenteredColumn rowGap={16}>
                     <Text>В данном проекте пока нет опросов</Text>
                     <GeneralButton onClick={gotoCreateSurvey}>Создать опрос</GeneralButton>
                 </SpacedCenteredColumn>
-            </OutlinedCard>
+            // </OutlinedCard>
         );
     }
 
     return (
-        <OutlinedCard>
+        // <OutlinedCard>
             <SpacedColumn rowGap={24}>
                 <Text>Опросы в проекте:</Text>
-                <SpacedColumn rowGap={8}>
+                <SpacedRow columnGap={16}>
                     {surveys.map((survey, index) => {
                         return (
-                            <SpaceBetweenRow key={index}>
-                                <Text>{survey.name}</Text>
-                                <Text>{survey.surveyId}</Text>
-                                <Text>id: {survey.id}</Text>
-                            </SpaceBetweenRow>
+                            <SurveyView key={index} survey={survey} />
                         );
                     })}
-                </SpacedColumn>
+                </SpacedRow>
                 <SpaceAroundRow>
                     <TextButton onClick={gotoCreateSurvey}>Добавить опрос</TextButton>
                 </SpaceAroundRow>
             </SpacedColumn>
-        </OutlinedCard>
+        // </OutlinedCard>
     );
 };
 
