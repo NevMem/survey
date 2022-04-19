@@ -30,6 +30,7 @@ interface BackendApiService {
 
     projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo>
     surveys(abortController: AbortController, projectId: number): Promise<Survey[]>
+    survey(abortController: AbortController, id: number): Promise<Survey>
 
     createProject(abortController: AbortController, request: CreateProjectRequest): Promise<Project>
 

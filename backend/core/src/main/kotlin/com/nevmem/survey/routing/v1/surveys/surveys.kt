@@ -1,7 +1,7 @@
 package com.nevmem.survey.routing.v1.surveys
 
-import com.nevmem.survey.data.request.survey.GetSurveyRequest
-import com.nevmem.survey.data.response.survey.GetSurveyResponse
+import com.nevmem.survey.data.request.survey.JoinSurveyRequest
+import com.nevmem.survey.data.response.survey.JoinSurveyResponse
 import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.surveys.converters.SurveysConverter
@@ -22,10 +22,10 @@ private fun Route.surveysImpl() {
 //    val surveysMetadataAssembler by inject<SurveysMetadataAssembler>()
 
     post("/get") {
-        val request = call.receive<GetSurveyRequest>()
+        val request = call.receive<JoinSurveyRequest>()
         val survey = surveysService.survey(request.surveyId) ?: throw NotFoundException()
         call.respond(
-            GetSurveyResponse(
+            JoinSurveyResponse(
                 surveysConverter.convertSurvey(
                     survey
                 )

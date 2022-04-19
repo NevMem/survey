@@ -9,6 +9,7 @@ import { Role } from '../data/exported';
 import InvitePage from './invite/InvitePage';
 import ProjectsPage from './project/ProjectsPage';
 import ProjectPage from './project/ProjectPage';
+import SurveyPage from './survey/SurveyPage';
 
 interface PageInfo {
     name: string;
@@ -102,6 +103,13 @@ const pages: PageInfo[] = [
         useInSidebar: false,
         needAuthorization: false,
     },
+    {
+        name: 'survey',
+        component: <SurveyPage />,
+        path: '/survey/:id',
+        useInSidebar: false,
+        needAuthorization: true,
+    }
 ]
 
 export default pages;

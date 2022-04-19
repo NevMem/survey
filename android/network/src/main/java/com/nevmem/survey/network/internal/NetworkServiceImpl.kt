@@ -9,11 +9,11 @@ import com.nevmem.survey.data.media.MediaGallery
 import com.nevmem.survey.data.request.answer.PublishAnswerRequest
 import com.nevmem.survey.data.request.media.CreateGalleryRequest
 import com.nevmem.survey.data.request.push.RegisterPushTokenRequest
-import com.nevmem.survey.data.request.survey.GetSurveyRequest
+import com.nevmem.survey.data.request.survey.JoinSurveyRequest
 import com.nevmem.survey.data.response.answer.PublishAnswerResponse
 import com.nevmem.survey.data.response.media.CreateGalleryResponse
 import com.nevmem.survey.data.response.push.RegisterPushTokenResponse
-import com.nevmem.survey.data.response.survey.GetSurveyResponse
+import com.nevmem.survey.data.response.survey.JoinSurveyResponse
 import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.data.user.UserId
 import com.nevmem.survey.network.api.BackendBaseUrlProvider
@@ -51,9 +51,9 @@ internal class NetworkServiceImpl(
     }
 
     override suspend fun loadSurvey(surveyId: String): Survey {
-        return client.post<GetSurveyResponse>("${baseUrl()}/v2/survey/get") {
+        return client.post<JoinSurveyResponse>("${baseUrl()}/v2/survey/get") {
             contentType(ContentType.Application.Json)
-            body = GetSurveyRequest(surveyId)
+            body = JoinSurveyRequest(surveyId)
         }.survey
     }
 

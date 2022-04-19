@@ -106,7 +106,7 @@ interface GetProjectsResponse {
 }
 
 interface GetSurveyRequest {
-	surveyId: string;
+	id: number;
 }
 
 interface GetSurveyResponse {

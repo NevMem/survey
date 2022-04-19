@@ -34,6 +34,8 @@ import {
     GetProjectRequest,
     AcceptInviteResponse,
     AcceptInviteRequest,
+    GetSurveyResponse,
+    GetSurveyRequest,
 } from "../data/exported";
 import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
@@ -64,6 +66,12 @@ class BackendApiServiceImpl implements BackendApiService {
         return this.post<GetSurveysResponse, GetSurveysRequest>('/v2/survey/surveys', { projectId: projectId }, abortController)
             .then(data => data.data)
             .then(data => data.surveys);
+    }
+
+    survey(abortController: AbortController, id: number): Promise<Survey> {
+        return this.post<GetSurveyResponse, GetSurveyRequest>('/v2/survey/get', { id: id }, abortController)
+            .then(data => data.data)
+            .then(data => data.survey);
     }
 
     projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo> {

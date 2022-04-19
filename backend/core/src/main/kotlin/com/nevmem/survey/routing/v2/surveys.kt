@@ -5,10 +5,12 @@ import com.nevmem.survey.data.question.Question
 import com.nevmem.survey.data.request.survey.CreateSurveyRequest
 import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
+import com.nevmem.survey.data.request.survey.JoinSurveyRequest
 import com.nevmem.survey.data.request.survey.GetSurveysRequest
 import com.nevmem.survey.data.request.survey.LoadSurveyMetadataRequest
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
+import com.nevmem.survey.data.response.survey.JoinSurveyResponse
 import com.nevmem.survey.data.response.survey.GetSurveysResponse
 import com.nevmem.survey.data.response.survey.LoadSurveyMetadataResponse
 import com.nevmem.survey.exception.AccessDeniedException
@@ -41,11 +43,11 @@ private fun Route.surveysImpl() {
     val surveysMetadataAssembler by inject<SurveysMetadataAssembler>()
     val projectsService by inject<ProjectsService>()
 
-    post("/get") {
-        val request = call.receive<GetSurveyRequest>()
+    post("/join") {
+        val request = call.receive<JoinSurveyRequest>()
         val survey = surveysService.survey(request.surveyId) ?: throw NotFoundException()
         call.respond(
-            GetSurveyResponse(
+            JoinSurveyResponse(
                 surveysConverter.convertSurvey(
                     survey
                 )
@@ -54,6 +56,16 @@ private fun Route.surveysImpl() {
     }
 
     authenticate {
+        post("/get") {
+            val request = call.receive<GetSurveyRequest>()
+            val survey = surveysService.surveyById(request.id) ?: throw NotFoundException()
+            call.respond(
+                GetSurveyResponse(
+                    surveysConverter(survey)
+                )
+            )
+        }
+
         post("/create_survey") {
             try {
                 val user = usersService.getUserById(userId())!!

@@ -19,4 +19,6 @@ class SurveysConverter : KoinComponent {
             commonQuestions = survey.commonQuestions.map { commonQuestionsConverter(it) },
         )
     }
+
+    operator fun invoke(survey: SurveyEntity): Survey = convertSurvey(survey)
 }
