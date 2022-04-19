@@ -38,7 +38,6 @@ const ProfileWrapper = (props: {user: Administrator | undefined, error: string |
         return (
             <OutlinedCard>
                 <SpacedColumn rowGap={16}>
-                    <Text header>Профиль</Text>
                     <Text large>Имя: {user.name}</Text>
                     <Text large>Фамилия: {user.surname}</Text>
                     <Text large>Никнейм: {user.login}</Text>
@@ -73,7 +72,10 @@ const ProfilePage = () => {
 
     return (
         <PageWrapper>
-            <ProfileWrapper user={user} error={error} loading={loading} />
+            <SpacedColumn rowGap={24}>
+                <Text header>Профиль</Text>
+                <ProfileWrapper user={user} error={error} loading={loading} />
+            </SpacedColumn>
         </PageWrapper>
     );
 };
