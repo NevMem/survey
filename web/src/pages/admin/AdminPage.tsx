@@ -3,7 +3,7 @@ import backendApi from '../../api/backendApiServiceSingleton';
 import PageWrapper from "../../app/page/PageWrapper";
 import CardError from "../../app/card/CardError";
 import Card from '../../app/card/Card';
-import { AllRolesResponse, ManagedUsersResponse, Role, UpdateRolesRequest, Administrator } from "../../data/exported";
+import { AllRolesResponse, Role, UpdateRolesRequest, Administrator } from "../../data/exported";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import Text from '../../components/text/Text';
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";

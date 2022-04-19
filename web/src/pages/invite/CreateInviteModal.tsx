@@ -7,7 +7,7 @@ import GeneralButton from "../../components/button/GeneralButton";
 import Loader from "../../components/loader/Loader";
 import { ModalState, ModalView, ModalHeader, ModalBody, ModalActions } from "../../components/modal/Modal";
 import { Select, Option } from "../../components/select/Selector";
-import { CreateInviteRequest, CreateInviteResponse, Invite, Project } from "../../data/exported";
+import { CreateInviteRequest, CreateInviteResponse, Project } from "../../data/exported";
 import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
 import Text from '../../components/text/Text';
 import backendApi from '../../api/backendApiServiceSingleton';

@@ -1,27 +1,23 @@
 import { Media, Task, TaskState } from "../../data/exported";
 import SpacedColumn from "../layout/SpacedColumn";
 import Text from "../../components/text/Text";
-import SpaceAroundRow from "../layout/SpaceAroundRow";
 import Badge from "../../components/badge/Badge";
 import OutlinedCard from "../card/OutlinedCard";
 import SpaceBetweenRow from "../layout/SpaceBetweenRow";
 import Card from "../card/Card";
 import Row from "../layout/Row";
 import styled from "styled-components";
-import Column from "../layout/Column";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import GeneralButton from "../../components/button/GeneralButton";
 import TextButton from "../../components/button/TextButton";
 
 
 const TaskViewBadge = (props: { taskState: TaskState }) => {
     const { taskState } = props;
 
-    if (taskState == TaskState.Success) {
+    if (taskState === TaskState.Success) {
         return <Badge success>{taskState}</Badge>;
     }
-    if (taskState == TaskState.Error) {
+    if (taskState === TaskState.Error) {
         return <Badge error>{taskState}</Badge>;
     }
     return <Badge info>{taskState}</Badge>;
@@ -42,8 +38,6 @@ const CardWithShadow = styled.div`
 
 const TaskOutputView = (props: { media: Media }) => {
     const { media } = props;
-
-    const navigate = useNavigate();
 
     const onClick = () => {
         window.open(media.url, '_blank')?.focus();

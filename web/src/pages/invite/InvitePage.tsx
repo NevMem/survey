@@ -1,9 +1,9 @@
-import { ChangeEvent, Fragment, useState } from "react";
+import { Fragment, useState } from "react";
 import PageWrapper from "../../app/page/PageWrapper";
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";
 import Text from '../../components/text/Text';
-import { AcceptInviteRequest, CreateInviteRequest, CreateInviteResponse, GetInvitesResponse, Invite, InviteStatus } from "../../data/exported";
+import { AcceptInviteRequest, GetInvitesResponse, Invite, InviteStatus } from "../../data/exported";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
@@ -62,7 +62,7 @@ const IncomingInviteView = (props: { invite: Invite }) => {
 const InviteView = (props: {invite: Invite, incoming?: boolean}) => {
     const { invite, incoming } = props;
 
-    if (incoming == true) {
+    if (incoming === true) {
         return (
             <IncomingInviteView invite={invite} />
         );

@@ -2,7 +2,7 @@ import PageWrapper from "../../app/page/PageWrapper";
 import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
 import backendApi from '../../api/backendApiServiceSingleton';
 import CardError from "../../app/card/CardError";
-import { CreateProjectRequest, Project, ProjectInfo, Survey } from "../../data/exported";
+import { CreateProjectRequest, Project } from "../../data/exported";
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import Text from "../../components/text/Text";
 import Loader from "../../components/loader/Loader";
