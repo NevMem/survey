@@ -17,7 +17,7 @@ const PrimaryButton = styled.button`
 `;
 
 const PrimaryDisabledButton = styled.button`
-    color: ${props => props.theme.withAlpha(80).background};
+    color: ${props => props.theme.background};
     font-size: 1em;
     padding: 8px 18px;
     background-color: ${props => props.theme.withAlpha(80).primary};
