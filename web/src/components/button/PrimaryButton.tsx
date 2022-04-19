@@ -21,7 +21,7 @@ const PrimaryDisabledButton = styled.button`
     font-size: 1em;
     padding: 8px 18px;
     background-color: ${props => props.theme.withAlpha(40).primary};
-    border: 2px solid ${props => props.theme.withAlpha(40).primary};
+    border: 2px solid ${props => props.theme.withAlpha(0).primary};
     border-radius: 4px;
     cursor: pointer;
     transition: all ease-in 0.2s;

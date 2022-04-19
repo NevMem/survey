@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import CardError from "../../app/card/CardError";
 import OutlinedCard from "../../app/card/OutlinedCard";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
@@ -113,8 +113,13 @@ const CreateInviteModal = (props: { state: ModalState }) => {
     const [request, setRequest] = useState<CreateInviteRequest | undefined>(undefined);
     const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
     const [userLogin, setUserLogin] = useState('');
+    const [canCreate, setCanCreate] = useState(false);
 
     const notification = useNotification();
+
+    useEffect(() => {
+        setCanCreate(selectedProject !== undefined);
+    }, [selectedProject]);
 
     const createInvite = () => {
         if (selectedProject !== undefined) {
@@ -162,7 +167,7 @@ const CreateInviteModal = (props: { state: ModalState }) => {
                 </SpacedColumn>
             </ModalBody>
             <ModalActions>
-                <GeneralButton onClick={createInvite}>Создать</GeneralButton>
+                <GeneralButton disabled={!canCreate} onClick={createInvite}>Создать</GeneralButton>
                 <GeneralButton secondary onClick={() => props.state.close()}>Отмена</GeneralButton>
             </ModalActions>
         </ModalView>
