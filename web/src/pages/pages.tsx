@@ -8,7 +8,6 @@ import AuthorizationPage from './auth/AuthorizationPage';
 import ProfilePage from './profile/ProfilePage';
 import { Role } from '../data/exported';
 import InvitePage from './invite/InvitePage';
-import AdminPage from './admin/AdminPage';
 import ProjectsPage from './project/ProjectsPage';
 import ProjectPage from './project/ProjectPage';
 
@@ -98,16 +97,6 @@ const pages: PageInfo[] = [
         needAuthorization: true,
         needRoles: [
             {id: 'invite.manager'},
-        ],
-    },
-    {
-        name: "Администрирование",
-        component: <AdminPage />,
-        path: '/admin',
-        useInSidebar: false,
-        needAuthorization: true,
-        needRoles: [
-            {id: 'role.manager'},
         ],
     },
     {
