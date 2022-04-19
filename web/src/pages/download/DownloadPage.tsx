@@ -122,8 +122,6 @@ const SurveyDownloadDataBlock = (props: {survey?: Survey}) => {
 const DownloadPage = () => {
     const [selectedSurvey, setSelectedSurvey] = useState<Survey | undefined>(undefined);
 
-    surveysService.prefetchSurveysIfNeeded();
-
     return (
         <PageWrapper>
             <SpacedColumn rowGap={24}>
