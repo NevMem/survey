@@ -11,16 +11,24 @@ import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAs
 import Text from '../../components/text/Text';
 import backendApi from '../../api/backendApiServiceSingleton';
 import SpacedCenteredRow from "../../app/layout/SpacedCenteredRow";
+import { useNavigate } from "react-router-dom";
+import TextButton from "../../components/button/TextButton";
 
 const ProjectSurveysView = (props: { surveys: Survey[] }) => {
     const { surveys } = props;
+
+    const navigate = useNavigate();
+
+    const gotoCreateSurvey = () => {
+        navigate("/create_survey");
+    };
 
     if (surveys.length === 0) {
         return (
             <OutlinedCard>
                 <SpacedCenteredColumn rowGap={16}>
                     <Text>В данном проекте пока нет опросов</Text>
-                    <GeneralButton>Создать опрос</GeneralButton>
+                    <GeneralButton onClick={gotoCreateSurvey}>Создать опрос</GeneralButton>
                 </SpacedCenteredColumn>
             </OutlinedCard>
         );
@@ -28,8 +36,8 @@ const ProjectSurveysView = (props: { surveys: Survey[] }) => {
 
     return (
         <OutlinedCard>
-            <SpacedColumn rowGap={16}>
-                <Text>Опросы проекта:</Text>
+            <SpacedColumn rowGap={24}>
+                <Text>Опросы в проекте:</Text>
                 <SpacedColumn rowGap={8}>
                     {surveys.map((survey, index) => {
                         return (
@@ -41,6 +49,9 @@ const ProjectSurveysView = (props: { surveys: Survey[] }) => {
                         );
                     })}
                 </SpacedColumn>
+                <SpaceAroundRow>
+                    <TextButton onClick={gotoCreateSurvey}>Добавить опрос</TextButton>
+                </SpaceAroundRow>
             </SpacedColumn>
         </OutlinedCard>
     );

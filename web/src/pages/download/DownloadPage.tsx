@@ -18,55 +18,6 @@ import usePollingRequest, { PollingError, PollingState, PollingSuccess } from '.
 import TaskView from '../../app/task/TaskView';
 import SurveySelector from './SurveySelector';
 
-/* const SurveySelector = observer((props: {surveysService: SurveysService, selectSurvey: (survey: Survey | undefined) => void}) => {
-    if (props.surveysService.surveysState instanceof SurveysLoading) {
-        return (
-            <Card>
-                <SpaceAroundRow>
-                    <Loader large />
-                </SpaceAroundRow>
-            </Card>
-        );
-    }
-
-    if (props.surveysService.surveysState instanceof SurveysError) {
-        return (
-            <CardError style={{marginTop: '16px'}}>
-                <SpaceAroundRow>
-                    <SpacedCenteredColumn rowGap={16}>
-                        <Text large>Ошибка загрузки опросов, ошибка:</Text>
-                        <Text>{props.surveysService.surveysState.error}</Text>
-                        <GeneralButton onClick={() => {surveysService.fetchSurveys()}}>Попробовать еще раз</GeneralButton>
-                    </SpacedCenteredColumn>
-                </SpaceAroundRow>
-            </CardError>
-        );
-    }
-
-    const loadedSurveys = surveysService.surveysState as SurveysLoaded;
-
-    const selectorChanged = (event: ChangeEvent<HTMLSelectElement>) => {
-        const survey = loadedSurveys.surveys.find(survey => survey.name === event.target.value);
-        props.selectSurvey(survey);
-    };
-
-    return (
-        <Card>
-            <SpacedColumn rowGap={16}>
-                <Text large>Выберите опрос:</Text>
-                <Select onChange={selectorChanged}>
-                    <Option key='null-opt'>-</Option>
-                    {loadedSurveys.surveys.map(survey => {
-                        return (
-                            <Option key={survey.id}>{survey.name}</Option>
-                        );
-                    })}
-                </Select>
-            </SpacedColumn>
-        </Card>
-    );
-}); */
-
 const SurveyDownloadDataFilter = (props: {survey?: Survey}) => {
     if (!props.survey) {
         return (

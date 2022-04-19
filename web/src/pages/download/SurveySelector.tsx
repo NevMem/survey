@@ -26,6 +26,7 @@ const SelectSurveyImpl = (props: { surveys: Survey[], selectSurvey: (survey: Sur
     return (
         <OutlinedCard>
             <SpacedColumn rowGap={16}>
+                <Text large>Выберите опрос:</Text>
                 <Select value={selectedSurvey?.name ?? notSelectedPlaceholder} onChange={handleChange}>
                     <Option>{notSelectedPlaceholder}</Option>
                     {surveys.map((survey, index) => {
