@@ -1,5 +1,4 @@
 import HomePage from './home/HomePage';
-import SurveysPage from './surveys/SurveysPage';
 import CreateSurveyPage from './create_survey/CreateSurveyPage';
 import DemoPage from './demo/DemoPage';
 import DownloadPage from './download/DownloadPage';
@@ -48,16 +47,6 @@ const pages: PageInfo[] = [
         path : '/',
         useInSidebar: false,
         needAuthorization: true,
-    },
-    {
-        name: 'Опросы',
-        component: <SurveysPage />,
-        path : '/surveys',
-        useInSidebar: false,
-        needAuthorization: true,
-        needRoles: [
-            {id: 'survey.observer'},
-        ],
     },
     {
         name: 'Создать опрос',
