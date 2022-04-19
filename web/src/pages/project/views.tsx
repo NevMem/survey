@@ -37,7 +37,7 @@ const SurveyView = (props: { survey: Survey }) => {
     const navigator = useNavigator();
 
     const gotoMoreInfo = () => {
-        navigator.navigateToSurveyInfoPage(survey.id);
+        navigator.surveyInfoPage(survey.id);
     };
 
     return (

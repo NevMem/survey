@@ -7,7 +7,11 @@ class Navigator {
         this.navigate = navigate;
     }
 
-    navigateToSurveyInfoPage(surveyId: number) {
+    home() {
+        this.navigate('/');
+    }
+
+    surveyInfoPage(surveyId: number) {
         this.navigate(`/survey/${surveyId}`);
     }
 }
