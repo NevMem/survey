@@ -263,7 +263,7 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
     );
 };
 
-const QuestionBlock = (props: {question: Question}) => {
+const QuestionBlock = (props: {question: Question, onDelete: () => void}) => {
     const { question } = props;
     if (instanceOfRatingQuestion(question)) {
         return (
@@ -302,7 +302,10 @@ const QuestionBlock = (props: {question: Question}) => {
         return (
             <OutlinedCard>
                 <SpacedColumn rowGap={8}>
-                    <Text large>Вопрос с единственным выбором:</Text>
+                    <SpaceBetweenRow>
+                        <Text large>Вопрос с единственным выбором:</Text>
+                        <TextButton onClick={props.onDelete}>Удалить</TextButton>
+                    </SpaceBetweenRow>
                     <Text>{question.title}</Text>
                     <Text>Варианты:</Text>
                     {question.variants.map((elem, index) => {
@@ -453,7 +456,7 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
 
                 {props.createSurveyService.questions.map((question, index) => {
                     return (
-                        <QuestionBlock question={question} key={index} />
+                        <QuestionBlock question={question} key={index} onDelete={() => props.createSurveyService.deleteQuestion(question)} />
                     );
                 })}
                 <AddQuestionSection createSurveyService={props.createSurveyService} />

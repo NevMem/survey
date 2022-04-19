@@ -42,6 +42,11 @@ class CreateSurveyService {
         this.localStorageAdapter.set('questions', JSON.stringify(this.questions));
     }
 
+    deleteQuestion(question: Question) {
+        this.questions = this.questions.filter(q => q !== question);
+        this.localStorageAdapter.set('questions', JSON.stringify(this.questions));
+    }
+
     reset() {
         this.setName('');
         this.questions = [];
