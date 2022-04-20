@@ -30,6 +30,9 @@ import androidx.compose.material.icons.rounded.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,7 +62,7 @@ fun SurveyScreen(
 
     val survey = viewModel.survey.value
 
-    var currentAnswer: QuestionAnswer? by rememberSaveable { mutableStateOf(null) }
+    var currentAnswer: QuestionAnswer? by remember { mutableStateOf(null) }
     val setCurrentAnswer = { answer: QuestionAnswer ->
         currentAnswer = answer
     }
@@ -291,7 +294,7 @@ private fun RatingQuestionImpl(
     item: RatingQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
-    var sliderValue by rememberSaveable { mutableStateOf(item.min.toFloat()) }
+    var sliderValue by rememberSaveable(item) { mutableStateOf(item.min.toFloat()) }
     QuestionCard {
         Column {
             Text(
@@ -334,7 +337,7 @@ private fun StarsQuestionImpl(
     item: StarsQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
-    var sliderValue by rememberSaveable { mutableStateOf((item.stars / 2 + 1).toFloat()) }
+    var sliderValue by rememberSaveable(item) { mutableStateOf((item.stars / 2 + 1).toFloat()) }
     QuestionCard {
         Column {
             Text(
@@ -378,7 +381,7 @@ private fun TextQuestionImpl(
     item: TextQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
-    var text by rememberSaveable { mutableStateOf("") }
+    var text by rememberSaveable(item) { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 

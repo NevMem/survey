@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +27,7 @@ internal fun RadioQuestionImpl(
     item: RadioQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
-    var selectedId: String? by remember { mutableStateOf(null) }
+    var selectedId: String? by rememberSaveable(item) { mutableStateOf(null) }
 
     QuestionCard {
         Column {
