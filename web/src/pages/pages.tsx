@@ -10,6 +10,7 @@ import InvitePage from './invite/InvitePage';
 import ProjectsPage from './project/ProjectsPage';
 import ProjectPage from './project/ProjectPage';
 import SurveyPage from './survey/SurveyPage';
+import GalleryPage from './gallery/GalleryPage';
 
 interface PageInfo {
     name: string;
@@ -107,6 +108,13 @@ const pages: PageInfo[] = [
         name: 'survey',
         component: <SurveyPage />,
         path: '/survey/:id',
+        useInSidebar: false,
+        needAuthorization: true,
+    },
+    {
+        name: 'gallery',
+        component: <GalleryPage />,
+        path: '/gallery/:id',
         useInSidebar: false,
         needAuthorization: true,
     }

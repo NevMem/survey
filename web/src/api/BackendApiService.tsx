@@ -21,6 +21,7 @@ import {
     Invite,
     AcceptInviteResponse,
     AcceptInviteRequest,
+    MediaGallery,
 } from "../data/exported";
 
 interface BackendApiService {
@@ -59,6 +60,8 @@ interface BackendApiService {
 
     createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task>
     loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task>
+
+    gallery(abortController: AbortController, id: number): Promise<MediaGallery>
 }
 
 export type {

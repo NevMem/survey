@@ -81,6 +81,14 @@ interface DeleteSurveyRequest {
 	surveyId: number;
 }
 
+interface GetGalleryRequest {
+	id: number;
+}
+
+interface GetGalleryResponse {
+	gallery: MediaGallery;
+}
+
 interface GetInvitesResponse {
 	invites: Invite[];
 }
@@ -381,6 +389,8 @@ export type {
 	CreateSurveyResponse,
 	CreateSurveySuccess,
 	DeleteSurveyRequest,
+	GetGalleryRequest,
+	GetGalleryResponse,
 	GetInvitesResponse,
 	GetProjectInfoRequest,
 	GetProjectInfoResponse,

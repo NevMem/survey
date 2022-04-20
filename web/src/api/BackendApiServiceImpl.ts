@@ -36,6 +36,9 @@ import {
     AcceptInviteRequest,
     GetSurveyResponse,
     GetSurveyRequest,
+    MediaGallery,
+    GetGalleryResponse,
+    GetGalleryRequest,
 } from "../data/exported";
 import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
@@ -187,6 +190,12 @@ class BackendApiServiceImpl implements BackendApiService {
 
     loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task> {
         return this.post<Task, LoadTaskRequest>('/v2/tasks/get', request, abortController).then(data => data.data);
+    }
+
+    gallery(abortController: AbortController, id: number): Promise<MediaGallery> {
+        return this.post<GetGalleryResponse, GetGalleryRequest>('/v1/media/gallery/get', { id: id }, abortController)
+            .then(data => data.data)
+            .then(data => data.gallery);
     }
 
     private post<T, U>(path: string, body?: U, abortController: AbortController | undefined = undefined): Promise<AxiosResponse<T>> {
