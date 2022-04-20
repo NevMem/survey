@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
@@ -23,16 +22,11 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material.icons.rounded.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -251,41 +245,7 @@ private fun SurveyScreenItemImpl(
         is TextQuestion -> { TextQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is StarsQuestion -> { StarsQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is RadioQuestion -> { RadioQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
-        else -> { SendingView(item = item) }
-    }
-}
-
-@Composable
-private fun SendingView(item: SurveyScreenItem) {
-    QuestionCard {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            when (item) {
-                SendingAnswers.Sending -> {
-                    CircularProgressIndicator()
-                }
-                is SendingAnswers.Error -> {
-                    Column {
-                        Text(
-                            stringResource(id = R.string.sending_answers_failed),
-                            style = MaterialTheme.typography.h4,
-                        )
-                        Text(
-                            stringResource(id = R.string.sending_answers_failed_description),
-                            modifier = Modifier.padding(top = 12.dp),
-                            style = MaterialTheme.typography.subtitle2,
-                        )
-                        Text(
-                            item.message,
-                            modifier = Modifier.padding(top = 8.dp),
-                        )
-                    }
-                }
-                SendingAnswers.Success -> {
-                    Text("Success")
-                }
-                else -> throw IllegalStateException()
-            }
-        }
+        else -> { SendingAnswersView(item = item) }
     }
 }
 

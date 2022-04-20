@@ -10,7 +10,10 @@ data class RadioQuestion(val title: String, val variants: List<QuestionVariant>)
 }
 
 sealed class SendingAnswers : SurveyScreenItem() {
-    object Sending : SendingAnswers()
+    data class Sending(
+        val progress: Float?,
+        val message: String = "",
+    ) : SendingAnswers()
     data class Error(val message: String) : SendingAnswers()
     object Success : SendingAnswers()
 }

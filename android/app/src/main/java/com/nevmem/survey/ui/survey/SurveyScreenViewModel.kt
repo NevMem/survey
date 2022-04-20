@@ -123,13 +123,19 @@ class SurveyScreenViewModel(
 
     private fun sendImpl() {
         uiState.value = SurveyScreenUiState(
-            currentItem = SendingAnswers.Sending,
+            currentItem = SendingAnswers.Sending(null),
             progress = ProgressState.None,
             actions = emptyList(),
         )
         background.launch {
             try {
-                surveyService.sendAnswer(answers.map { it!! }, medias)
+                surveyService.sendAnswer(answers.map { it!! }, medias).collect {
+                    uiState.value = SurveyScreenUiState(
+                        currentItem = SendingAnswers.Sending(it.progress),
+                        progress = ProgressState.None,
+                        actions = emptyList(),
+                    )
+                }
                 achievementService.reportSurveyCompleted()
                 withContext(Dispatchers.Main) {
                     uiState.value = SurveyScreenUiState(
