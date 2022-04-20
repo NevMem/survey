@@ -35,7 +35,7 @@ interface BackendApiService {
     createProject(abortController: AbortController, request: CreateProjectRequest): Promise<Project>
 
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey>
-    fetchMetadata(surveyId: number): Promise<SurveyMetadata>
+    fetchMetadata(abortController: AbortController, surveyId: number): Promise<SurveyMetadata>
 
     checkAuth(token: string): Promise<void>
     login(login: string, password: string): Promise<LoginResponse>

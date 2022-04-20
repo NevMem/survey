@@ -4,6 +4,7 @@ import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
 import com.nevmem.survey.data.user.UserId
+import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.survey.AlreadyPublishedAnswerException
 import com.nevmem.survey.survey.AnswersService
@@ -11,6 +12,8 @@ import com.nevmem.survey.survey.SurveyAnswerInconsistencyException
 import com.nevmem.survey.survey.SurveyNotFoundException
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.UnknownCommonQuestionException
+import com.nevmem.surveys.converters.MediaGalleryConverter
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -19,7 +22,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal class AnswersServiceImpl : AnswersService, KoinComponent {
+internal class AnswersServiceImpl(
+    private val mediaStorageService: MediaStorageService,
+) : AnswersService, KoinComponent {
 
     private enum class QuestionType {
         Text,
@@ -29,6 +34,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
     }
 
     private val surveysService by inject<SurveysService>()
+    private val mediaGalleryConverter by inject<MediaGalleryConverter>()
 
     override suspend fun publishAnswer(answer: SurveyAnswer) {
         val survey = surveysService.survey(answer.surveyId) ?: throw SurveyNotFoundException()
@@ -90,8 +96,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
     }
 
     override suspend fun answers(surveyId: String): List<SurveyAnswer> = transaction {
-        val dtos = SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }
-        dtos.map { it.entity() }
+        SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }.map { it.entity() }
     }
 
     override suspend fun getAnswers(surveyId: String): String = transaction {
@@ -153,7 +158,7 @@ internal class AnswersServiceImpl : AnswersService, KoinComponent {
     private fun SurveyAnswerDTO.entity(): SurveyAnswer {
         return SurveyAnswer(
             surveyId = this.surveyId,
-            gallery = null,
+            gallery = this.mediaGalleryId ?.let { runBlocking { mediaGalleryConverter(mediaStorageService.mediaGallery(it)!!) } },
             answers = this.answers.map { it.entity() },
             uid = UserId(this.publisherId),
         )

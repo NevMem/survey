@@ -47,7 +47,7 @@ class Exporter : KoinComponent {
                                 is QuestionEntity.RatingQuestionEntity -> it.title
                                 is QuestionEntity.RadioQuestionEntity -> it.title
                             }
-                        }
+                        } + listOf("mediaGalleryId")
 
                 writer.write(headerLine.joinToString(",") + "\n")
                 answers.forEach {
@@ -67,6 +67,9 @@ class Exporter : KoinComponent {
             tasksService.atomicallyTransferToState(task, TaskStateEntity.Executing, TaskStateEntity.Success)
         } catch (exception: Exception) {
             tasksService.appendLog(task, "Exception occurred ${exception.message}")
+            exception.stackTrace.forEach {
+                tasksService.appendLog(task, it.toString())
+            }
             tasksService.atomicallyTransferToState(task, TaskStateEntity.Executing, TaskStateEntity.Error)
         }
     }
@@ -89,6 +92,6 @@ class Exporter : KoinComponent {
             }
         }
 
-        return (listOf(uid.uuid) + answers).joinToString(",") { it.toString() }
+        return (listOf(uid.uuid) + answers + (gallery?.id ?: "")).joinToString(",") { it.toString() }
     }
 }

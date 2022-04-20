@@ -20,7 +20,7 @@ internal object SurveyAnswerTable : LongIdTable() {
 }
 
 internal object QuestionAnswerTable : LongIdTable() {
-    val jsonAnswer = text("jsonAnswer")
+    val jsonAnswer = text("jsonAnswer", eagerLoading = true)
     val type = enumeration("type", SurveyAnswerType::class)
 
     val surveyAnswer = reference("surveyAnswer", SurveyAnswerTable)

@@ -135,6 +135,24 @@ internal class MediaStorageServiceImpl : MediaStorageService {
         }.firstOrNull()?.entity
     }
 
+    override suspend fun mediaGallery(id: Long): MediaGalleryEntity? = transaction {
+        val dto = MediaGalleryDTO.find {
+            MediaGalleryTable.id eq id
+        }.firstOrNull() ?: return@transaction null
+
+        MediaGalleryEntity(
+            id = dto.id.value,
+            medias = dto.medias.split(",")
+                .map { it.toLong() }
+                .mapNotNull { id ->
+                    MediaEntityDTO.find {
+                        MediaTable.id eq id
+                    }.firstOrNull()
+                }
+                .map { it.entity },
+        )
+    }
+
     private val MediaEntityDTO.entity: MediaEntity
         get() = MediaEntity(
             this.id.value,

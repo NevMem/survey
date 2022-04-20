@@ -40,7 +40,7 @@ private val coreModule = module {
     single<SurveysService> { createSurveysService() }
     single<FileSystemService> { createFileSystemService() }
     single<MediaStorageService> { createMediaStorageService() }
-    single<AnswersService> { createAnswersService() }
+    single<AnswersService> { createAnswersService(get()) }
     single<SurveysMetadataAssembler> { createSurveyMetadataAssembler() }
     single<UsersService> { createUsersService() }
     single { createWorkerApi(EnvVars.Worker.uri!!) }

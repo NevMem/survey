@@ -1,7 +1,9 @@
 package com.nevmem.survey.routing.v1.media
 
 import com.nevmem.survey.data.request.media.CreateGalleryRequest
+import com.nevmem.survey.data.request.media.GetGalleryRequest
 import com.nevmem.survey.data.response.media.CreateGalleryResponse
+import com.nevmem.survey.data.response.media.GetGalleryResponse
 import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.fs.FileSystemService
 import com.nevmem.survey.media.MediaEntity
@@ -9,6 +11,7 @@ import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.surveys.converters.MediaConverter
 import com.nevmem.surveys.converters.MediaGalleryConverter
 import io.ktor.application.call
+import io.ktor.auth.authenticate
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
@@ -51,6 +54,18 @@ fun Route.mediaImpl() {
         val file = fsService.createFile(fileType)
         mediaService.downloadToFile(file, media)
         call.respondFile(file)
+    }
+
+    authenticate {
+        post("/gallery/get") {
+            val request = call.receive<GetGalleryRequest>()
+            val gallery = mediaService.mediaGallery(request.id) ?: throw NotFoundException()
+            call.respond(
+                GetGalleryResponse(
+                    gallery = mediaGalleryConverter(gallery),
+                )
+            )
+        }
     }
 }
 

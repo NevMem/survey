@@ -20,5 +20,7 @@ dependencies {
     implementation(project(":backend:helpers"))
     implementation(project(":backend:role"))
     implementation(project(":backend:users"))
+    implementation(project(":backend:media"))
+    implementation(project(":backend:converters"))
     implementation(project(":common:data"))
 }

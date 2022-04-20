@@ -118,12 +118,12 @@ class BackendApiServiceImpl implements BackendApiService {
             });
     }
 
-    fetchMetadata(surveyId: number): Promise<SurveyMetadata> {
+    fetchMetadata(abortController: AbortController, surveyId: number): Promise<SurveyMetadata> {
         let request: LoadSurveyMetadataRequest = {
             surveyId: surveyId,
         };
 
-        return this.post<LoadSurveyMetadataResponse, LoadSurveyMetadataRequest>('/v1/survey/metadata', request)
+        return this.post<LoadSurveyMetadataResponse, LoadSurveyMetadataRequest>('/v2/survey/metadata', request, abortController)
             .then(data => data.data)
             .then(data => data.surveyMetadata);
     }

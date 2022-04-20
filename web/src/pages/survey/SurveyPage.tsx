@@ -9,6 +9,49 @@ import { Survey } from "../../data/exported";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import CardError from "../../app/card/CardError";
+import { useState } from "react";
+import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
+import TextButton from "../../components/button/TextButton";
+
+const SurveyQuestionsBlock = (props: { survey: Survey }) => {
+    const { survey } = props;
+
+    const [expanded, setExpanded] = useState(false);
+
+    return (
+        <SpacedColumn rowGap={4}>
+            <SpaceBetweenRow>
+                <Text>Количество вопросов: {survey.commonQuestions.length + survey.questions.length}</Text>
+                <TextButton onClick={() => setExpanded(!expanded)}>Просмотреть</TextButton>
+            </SpaceBetweenRow>
+        </SpacedColumn>
+    );
+};
+
+const SurveyMetadataView = (props: { survey: Survey }) => {
+    const { survey } = props;
+    const request = useAsyncRequest(controller => backendApi.fetchMetadata(controller, survey.id));
+
+    if (isOk(request)) {
+        return (
+            <OutlinedCard>
+                <SpacedColumn rowGap={4}>
+                    <Text>Количество ответов: {request.result.answersCount}</Text>
+                </SpacedColumn>
+            </OutlinedCard>
+        );
+    } else if (request instanceof RequestError) {
+        return (
+            <CardError>{request.message}</CardError>
+        );
+    }
+
+    return (
+        <SpaceAroundRow>
+            <Loader />
+        </SpaceAroundRow>
+    );
+};
 
 const SurveyPageImpl = (props: { survey: Survey }) => {
     const { survey } = props;
@@ -16,6 +59,8 @@ const SurveyPageImpl = (props: { survey: Survey }) => {
         <OutlinedCard>
             <SpacedColumn rowGap={8}>
                 <Text large>{survey.name}</Text>
+                <SurveyQuestionsBlock survey={survey} />
+                <SurveyMetadataView survey={survey} />
             </SpacedColumn>
         </OutlinedCard>
     );
