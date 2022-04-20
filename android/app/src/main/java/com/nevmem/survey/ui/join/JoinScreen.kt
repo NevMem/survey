@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.nevmem.survey.R
+import com.nevmem.survey.ui.survey.FancyCardView
 import org.koin.androidx.compose.viewModel
 
 @Composable
@@ -42,9 +43,8 @@ fun JoinScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Card(elevation = 4.dp, modifier = Modifier.padding(16.dp)) {
+        FancyCardView {
             Column(
-                modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {

@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nevmem.survey.R
 import com.nevmem.survey.service.achievement.api.Achievement
+import com.nevmem.survey.ui.survey.FancyCardView
 import org.koin.androidx.compose.viewModel
 
 @Composable
@@ -151,22 +152,14 @@ private fun HeaderItem() {
 
 @Composable
 private fun AchievementsView(achievements: List<Achievement>) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        elevation = 8.dp,
-        shape = RoundedCornerShape(8.dp),
-    ) {
+    FancyCardView {
         Column {
             Text(
                 stringResource(id = R.string.achievements_title),
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
                 style = MaterialTheme.typography.subtitle1,
             )
             Row(
                 modifier = Modifier
-                    .padding(8.dp)
                     .fillMaxSize()
                     .horizontalScroll(rememberScrollState()),
             ) {
@@ -184,17 +177,10 @@ private fun SurveyView(
     item: SurveyState,
     leaveSurvey: () -> Unit,
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        elevation = 8.dp,
-        shape = RoundedCornerShape(8.dp),
-    ) {
+    FancyCardView {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
         ) {
             when (item) {
                 is SurveyState.AlreadyAnsweredSurvey -> {
