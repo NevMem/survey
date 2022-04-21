@@ -78,7 +78,7 @@ class Client:
         return self._post('/v1/role/update_roles', body, headers={'Authorization': 'Bearer ' + token})
 
     def survey_metadata(self, token, surveyId):
-        return self._post('/v1/survey/metadata', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v2/survey/metadata', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
 
     def tasks(self, token):
         return self._get('/v1/task/tasks', headers={'Authorization': 'Bearer ' + token})

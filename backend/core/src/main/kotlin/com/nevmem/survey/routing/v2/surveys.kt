@@ -7,6 +7,7 @@ import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
 import com.nevmem.survey.data.request.survey.JoinSurveyRequest
 import com.nevmem.survey.data.request.survey.GetSurveysRequest
+import com.nevmem.survey.data.request.survey.LeaveSurveyRequest
 import com.nevmem.survey.data.request.survey.LoadSurveyMetadataRequest
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
@@ -53,6 +54,12 @@ private fun Route.surveysImpl() {
                 )
             )
         )
+    }
+
+    post("/leave") {
+        val request = call.receive<LeaveSurveyRequest>()
+        val survey = surveysService.survey(request.surveyId) ?: throw NotFoundException()
+        call.respond(surveysConverter(survey))
     }
 
     authenticate {
