@@ -28,7 +28,7 @@ const ProjectPageContent = () => {
         return (
             <SpacedColumn rowGap={16}>
                 {projects.map((elem, index) => {
-                    return <ProjectCard project={elem} key={index} />
+                    return <ProjectCard project={elem} key={index} defaultExpanded={index === 0} />
                 })}
             </SpacedColumn>
         );

@@ -12,12 +12,13 @@ import { ProjectSurveysWrapper, ProjectInfoWrapper } from "./views";
 interface ProjectCardProps {
     project: Project,
     richCard?: boolean,
+    defaultExpanded?: boolean,
 };
 
 const ProjectCard = (props: ProjectCardProps) => {
     const { project, richCard } = props;
 
-    const [expanded, setExpanded] = useState(props.richCard);
+    const [expanded, setExpanded] = useState(props.richCard || props.defaultExpanded);
 
     const MoreInfoView = () => {
         const navigate = useNavigate();
