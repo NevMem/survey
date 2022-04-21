@@ -38,12 +38,6 @@ class Client:
             }
         )
 
-    def surveys(self, token: str):
-        return self._get('/v1/survey/surveys', headers={'Authorization': 'Bearer ' + token})
-
-    def create_survey(self, token: str, body):
-        return self._post('/v1/survey/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
-
     def delete_survey(self, token: str, survey_id: int):
         return self._post('/v1/survey/delete_survey', {'surveyId': survey_id}, headers={'Authorization': 'Bearer ' + token})
 
@@ -83,8 +77,8 @@ class Client:
     def tasks(self, token):
         return self._get('/v1/task/tasks', headers={'Authorization': 'Bearer ' + token})
 
-    def get_survey(self, survey_id):
-        return self._post('/v1/survey/get', {'surveyId': survey_id})
+    def join_survey(self, survey_id, user_id: str):
+        return self._post('/v2/survey/join', {'surveyId': survey_id, 'userId': {'uuid': user_id}})
 
     def task(self, token, id):
         return self._post('/v2/tasks/get', {'id': id}, headers={'Authorization': 'Bearer ' + token})

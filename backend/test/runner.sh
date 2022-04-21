@@ -4,4 +4,4 @@ set -eu
 
 ./wait-for-it.sh core:8080 -t 240
 
-pytest -vs -k test_answers
+pytest -vs -m "v2"
