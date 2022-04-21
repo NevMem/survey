@@ -1,7 +1,7 @@
 import pytest
 from client import Client
 from client_fixture import client
-from user_fixture import User
+from v2.user_fixture import User
 from utils import random_string
 
 class Project:
