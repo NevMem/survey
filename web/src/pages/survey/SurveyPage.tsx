@@ -5,13 +5,46 @@ import Text from "../../components/text/Text";
 import useAsyncRequest, { isOk, RequestError, RequestState, RequestSuccess } from "../../utils/useAsyncUtils";
 import backendApi from '../../api/backendApiServiceSingleton';
 import OutlinedCard from "../../app/card/OutlinedCard";
-import { Survey } from "../../data/exported";
+import { CommonQuestion, Question, Survey } from "../../data/exported";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
 import Loader from "../../components/loader/Loader";
 import CardError from "../../app/card/CardError";
 import { useState } from "react";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import TextButton from "../../components/button/TextButton";
+
+const CommonQuestionCard = (props: { commonQuestion: CommonQuestion }) => {
+    return (
+        <OutlinedCard>
+            <Text>Общий вопрос с идентификатором {props.commonQuestion.id}</Text>
+        </OutlinedCard>
+    );
+};
+
+const QuestionCard = (props: { question: Question }) => {
+    return (
+        <OutlinedCard>
+            <Text>Вопрос с типом {props.question.type}</Text>
+        </OutlinedCard>
+    );
+};
+
+const SurveysQuestionsDescribeBlock = (props: { survey: Survey }) => {
+    const { questions, commonQuestions } = props.survey;
+    
+    return (
+        <SpacedColumn rowGap={8}>
+            {commonQuestions.map((question, index) => {
+                return (
+                    <CommonQuestionCard key={index} commonQuestion={question} />
+                );
+            })}
+            {questions.map((question, index) => {
+                return <QuestionCard key={index} question={question} />;
+            })}
+        </SpacedColumn>
+    );
+};
 
 const SurveyQuestionsBlock = (props: { survey: Survey }) => {
     const { survey } = props;
@@ -24,6 +57,8 @@ const SurveyQuestionsBlock = (props: { survey: Survey }) => {
                 <Text>Количество вопросов: {survey.commonQuestions.length + survey.questions.length}</Text>
                 <TextButton onClick={() => setExpanded(!expanded)}>Просмотреть</TextButton>
             </SpaceBetweenRow>
+
+            {expanded && <SurveysQuestionsDescribeBlock survey={survey} />}
         </SpacedColumn>
     );
 };
@@ -34,11 +69,11 @@ const SurveyMetadataView = (props: { survey: Survey }) => {
 
     if (isOk(request)) {
         return (
-            <OutlinedCard>
+            // <OutlinedCard>
                 <SpacedColumn rowGap={4}>
-                    <Text>Количество ответов: {request.result.answersCount}</Text>
+                    <Text>Получено {request.result.answersCount} ответов</Text>
                 </SpacedColumn>
-            </OutlinedCard>
+            // </OutlinedCard>
         );
     } else if (request instanceof RequestError) {
         return (
@@ -57,7 +92,7 @@ const SurveyPageImpl = (props: { survey: Survey }) => {
     const { survey } = props;
     return (
         <OutlinedCard>
-            <SpacedColumn rowGap={8}>
+            <SpacedColumn rowGap={24}>
                 <Text large>{survey.name}</Text>
                 <SurveyQuestionsBlock survey={survey} />
                 <SurveyMetadataView survey={survey} />
