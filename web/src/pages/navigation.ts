@@ -14,6 +14,10 @@ class Navigator {
     surveyInfoPage(surveyId: number) {
         this.navigate(`/survey/${surveyId}`);
     }
+
+    gallery(id: number) {
+        this.navigate(`/gallery/${id}`);
+    }
 }
 
 const useNavigator = () => {

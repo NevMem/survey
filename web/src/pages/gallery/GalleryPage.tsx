@@ -11,6 +11,13 @@ import Loader from "../../components/loader/Loader";
 import CardError from "../../app/card/CardError";
 import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import TextButton from "../../components/button/TextButton";
+import Input from "../../components/input/Input";
+import { useState } from "react";
+import Row from "../../app/layout/Row";
+import GeneralButton from "../../components/button/GeneralButton";
+import SpacedRow from "../../app/layout/SpacedRow";
+import { useNotification } from "../../app/notification/NotificationProvider";
+import useNavigator from "../navigation";
 
 const GalleryGrid = (props: { gallery: MediaGallery }) => {
     const { gallery } = props;
@@ -35,10 +42,37 @@ const GalleryGrid = (props: { gallery: MediaGallery }) => {
     );
 };
 
-const GalleryPageContent = () => {
-    const { id } = useParams();
+const GoToGalleryContent = () => {
+    const [galleryId, setGalleryId] = useState('');
 
-    const request = useAsyncRequest(controller => backendApi.gallery(controller, parseInt(id ?? "0")));
+    const notification = useNotification();
+    const navigator = useNavigator();
+
+    const gotoGallery = () => {
+        const id = parseInt(galleryId);
+
+        if (isNaN(id)) {
+            notification('Неправильный идентификатор', 'Идентификатором галереи должно быть число', 'error');
+        } else {
+            navigator.gallery(id);
+        }
+    };
+
+    return (
+        <OutlinedCard>
+            <SpacedColumn rowGap={16}>
+                <Text large>Выберите идентификатор галереи</Text>
+                <SpacedRow columnGap={12}>
+                    <Input value={galleryId} onChange={event => setGalleryId(parseInt(event.target.value) + "")} />
+                    <GeneralButton onClick={() => gotoGallery()}>Поиск</GeneralButton>
+                </SpacedRow>
+            </SpacedColumn>
+        </OutlinedCard>
+    );
+};
+
+const LoadGalleryPageContent = (props: { id: number }) => {
+    const request = useAsyncRequest(controller => backendApi.gallery(controller, props.id));
 
     if (isOk(request)) {
         return (
@@ -59,6 +93,20 @@ const GalleryPageContent = () => {
             </SpaceAroundRow>
         </OutlinedCard>
     );
+};
+
+const GalleryPageContent = () => {
+    const { id } = useParams();
+
+    if (id === undefined) {
+        return (
+            <GoToGalleryContent />
+        );
+    } else {
+        return (
+            <LoadGalleryPageContent id={parseInt(id)} />
+        );
+    }
 };
 
 const GalleryPage = () => {

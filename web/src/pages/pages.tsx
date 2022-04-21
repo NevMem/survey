@@ -117,6 +117,13 @@ const pages: PageInfo[] = [
         path: '/gallery/:id',
         useInSidebar: false,
         needAuthorization: true,
+    },
+    {
+        name: 'select-gallery',
+        component: <GalleryPage />,
+        path: '/gallery',
+        useInSidebar: false,
+        needAuthorization: true,
     }
 ]
 
