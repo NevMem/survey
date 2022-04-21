@@ -9,14 +9,15 @@ const appearAnimation = keyframes`
     100% { transform: translateX(0%); }
 `;
 
-const NotificationWrapper = styled.div<{color: string}>`
+const NotificationWrapper = styled.div<{backgroundColor: string, borderColor: string}>`
     width: 250px;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 16px;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     row-gap: 16px;
-    background-color: ${props => props.color};
+    background-color: ${props => props.backgroundColor};
+    border: 4px solid ${props => props.borderColor};
     margin: 8px;
     animation: 0.25s ease-out 0s 1 ${appearAnimation};
 `;
@@ -44,9 +45,9 @@ const ActionsBlock = (props: {buttonsColor: string, actions?: string[], onAction
     )
 };
 
-const Notification = (props: {title: string, text: string, type?: string, actions?: string[], onAction?: (action: string) => void}) => {
+const Notification = (props: {title: string, text: string, type?: string, actions?: string[], onAction?: (action: string) => void, onClose?: () => void}) => {
     const backgroundTheme = useContext(ThemeContext).withAlpha(150);
-    const buttonsTheme = useContext(ThemeContext).withAlpha(200);
+    const buttonsTheme = useContext(ThemeContext).withAlpha(150);
     var color = backgroundTheme.secondaryBackground;
     var buttonsColor = buttonsTheme.secondaryBackground;
     if (props.type) {
@@ -65,11 +66,15 @@ const Notification = (props: {title: string, text: string, type?: string, action
         }
     }
 
+    const launchCloseAction = () => {
+        props.onClose?.();
+    };
+
     return (
-        <NotificationWrapper color={color}>
-            <SpaceBetweenRow>
+        <NotificationWrapper backgroundColor={useContext(ThemeContext).background} borderColor={color}>
+            <SpaceBetweenRow style={{alignItems: 'baseline'}}>
                 <Text large>{props.title}</Text>
-                <Text large>&times;</Text>
+                <Text large style={{cursor: 'pointer'}} onClick={() => launchCloseAction()}>&times;</Text>
             </SpaceBetweenRow>
             <Text>{props.text}</Text>
             <ActionsBlock actions={props.actions} onAction={props.onAction} buttonsColor={buttonsColor} />
@@ -78,3 +83,4 @@ const Notification = (props: {title: string, text: string, type?: string, action
 };
 
 export default Notification;
+

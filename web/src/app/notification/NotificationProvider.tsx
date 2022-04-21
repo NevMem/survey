@@ -57,6 +57,13 @@ const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationsStat
         props.data.actions?.find(propsAction => propsAction.message === action)?.action(props.data.id)
     }
 
+    const onClose = () => {
+        props.dispatcher({
+            type: REMOVE_NOTIFICATION_ACTION,
+            data: props.data,
+        });
+    };
+
     return (
         <Notification
             title={props.data.title}
@@ -64,6 +71,7 @@ const TimedNotificationWrapper = (props: {dispatcher: Dispatch<NotificationsStat
             type={props.data.type}
             actions={props.data.actions?.map(action => action.message)}
             onAction={onAction}
+            onClose={() => onClose()}
             />
     );
 };
