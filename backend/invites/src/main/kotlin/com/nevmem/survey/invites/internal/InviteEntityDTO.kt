@@ -1,11 +1,12 @@
 package com.nevmem.survey.invites.internal
 
+import com.nevmem.survey.TableNames
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 
-internal object InvitesTable : LongIdTable() {
+internal object InvitesTable : LongIdTable(TableNames.invitesTableName) {
     val projectId = long("projectId")
     val fromUserId = long("fromUserId")
     val toUserId = long("toUserId")

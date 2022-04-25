@@ -1,5 +1,6 @@
 package com.nevmem.survey.survey.internal
 
+import com.nevmem.survey.TableNames
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -12,14 +13,14 @@ enum class SurveyAnswerType {
     Radio,
 }
 
-internal object SurveyAnswerTable : LongIdTable() {
+internal object SurveyAnswerTable : LongIdTable(TableNames.surveyAnswerTableName) {
     val surveyId = varchar("surveyId", 64)
     val publisherId = varchar("publisherId", 256)
     val mediaGalleryId = long("mediaGalleryId").nullable()
     val timestamp = long("timestamp")
 }
 
-internal object QuestionAnswerTable : LongIdTable() {
+internal object QuestionAnswerTable : LongIdTable(TableNames.questionAnswerTableName) {
     val jsonAnswer = text("jsonAnswer", eagerLoading = true)
     val type = enumeration("type", SurveyAnswerType::class)
 
