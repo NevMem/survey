@@ -15,6 +15,8 @@ import CardError from "../../app/card/CardError";
 import CardSuccess from "../../app/card/CardSuccess";
 import OutlinedCard from "../../app/card/OutlinedCard";
 import TextButton from "../../components/button/TextButton";
+import Row from "../../app/layout/Row";
+import SpacedRow from "../../app/layout/SpacedRow";
 
 const useTextInput = () => {
     const [value, setValue] = useState('');
@@ -76,6 +78,12 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
         {label: 'Почта', state: email},
     ];
 
+    const rows = [
+        [ fields[0], fields[1] ],
+        [ fields[2], fields[3] ],
+        [ fields[4], ],
+    ];
+
     const [request, setRequest] = useState<RegisterRequest | undefined>();
 
     const register = () => {
@@ -95,7 +103,7 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
                 <Text header>Регистрация</Text>
                 <OutlinedCard>
                     <SpacedCenteredColumn rowGap={24}>
-                        <SpacedCenteredColumn rowGap={8}>
+                        {/* <SpacedCenteredColumn rowGap={8}>
                             {fields.map(elem => {
                                 return (
                                     <SpacedColumn key={elem.label} rowGap={4}>
@@ -104,7 +112,29 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
                                     </SpacedColumn>
                                 );
                             })}
+                        </SpacedCenteredColumn> */}
+
+                        <SpacedCenteredColumn rowGap={12}>
+
+                            {rows.map((row, index) => {
+
+                                return (
+                                    <SpacedRow columnGap={24} key={index}>
+                                        {row.map(field => {
+                                            return (
+                                                <SpacedColumn key={field.label} rowGap={4}>
+                                                    <Text>{field.label}</Text>
+                                                    <Input value={field.state.value} onChange={field.state.changeHandler} />
+                                                </SpacedColumn>
+                                            );
+                                        })}
+                                    </SpacedRow>
+                                );
+
+                            })}
+
                         </SpacedCenteredColumn>
+
                         {request && <RegisterProcessingBlock request={request} />}
                         <SpacedCenteredColumn rowGap={16}>
                             <SpaceAroundRow>

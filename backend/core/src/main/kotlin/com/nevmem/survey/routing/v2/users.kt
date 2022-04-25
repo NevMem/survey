@@ -72,6 +72,11 @@ fun Route.users() {
             return@post
         }
 
+        if (request.login.isBlank() || request.email.isBlank() || request.name.isBlank() || request.password.isBlank() || request.surname.isBlank()) {
+            call.respond(RegisterResponse.RegisterError("One of fields in request is blank"))
+            return@post
+        }
+
         val user = usersService.createUser(
             UsersService.Credentials(
                 request.login,

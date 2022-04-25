@@ -2,7 +2,6 @@ package com.nevmem.survey.users.internal
 
 import com.nevmem.survey.auth.PasswordEncoder
 import com.nevmem.survey.role.RoleEntity
-import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.user.UserEntity
 import com.nevmem.survey.users.UsersService
 import org.jetbrains.exposed.sql.and
@@ -11,7 +10,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 internal class UsersServiceImpl : UsersService, KoinComponent {
-    private val roleConverter: RoleSerializer by inject()
     private val passwordEncoder: PasswordEncoder by inject()
 
     override suspend fun createUser(
