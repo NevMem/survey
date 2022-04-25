@@ -161,7 +161,9 @@ const IncomingInvitesBlock = () => {
     }
 
     return (
-        <Loader large />
+        <SpaceAroundRow>
+            <Loader large />
+        </SpaceAroundRow>
     );
 };
 
@@ -181,7 +183,9 @@ const OutgoingInvitesBlock = () => {
     }
 
     return (
-        <Loader large />
+        <SpaceAroundRow>
+            <Loader large />
+        </SpaceAroundRow>
     );
 };
 
