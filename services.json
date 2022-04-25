@@ -1,14 +1,14 @@
 {
     "worker": {
         "tag": "worker",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:ed7a3c5",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:91a3d25",
         "ports": [
             80
         ]
     },
     "core": {
         "tag": "core",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:ed7a3c5",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:91a3d25",
         "ports": [
             80,
             443
@@ -23,7 +23,7 @@
     },
     "push": {
         "tag": "push",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-push:ed7a3c5",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-push:91a3d25",
         "ports": [
             80
         ]
