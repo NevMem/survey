@@ -13,6 +13,8 @@ import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAs
 import Loader from "../../components/loader/Loader";
 import CardError from "../../app/card/CardError";
 import CardSuccess from "../../app/card/CardSuccess";
+import OutlinedCard from "../../app/card/OutlinedCard";
+import TextButton from "../../components/button/TextButton";
 
 const useTextInput = () => {
     const [value, setValue] = useState('');
@@ -89,25 +91,32 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
 
     return (
         <PageWrapper>
-            <Card>
-                <SpacedCenteredColumn rowGap={24}>
-                    <SpacedCenteredColumn rowGap={8}>
-                        {fields.map(elem => {
-                            return (
-                                <SpacedColumn key={elem.label} rowGap={4}>
-                                    <Text>{elem.label}</Text>
-                                    <Input value={elem.state.value} onChange={elem.state.changeHandler} />
-                                </SpacedColumn>
-                            );
-                        })}
+            <SpacedColumn rowGap={24}>
+                <Text header>Регистрация</Text>
+                <OutlinedCard>
+                    <SpacedCenteredColumn rowGap={24}>
+                        <SpacedCenteredColumn rowGap={8}>
+                            {fields.map(elem => {
+                                return (
+                                    <SpacedColumn key={elem.label} rowGap={4}>
+                                        <Text>{elem.label}</Text>
+                                        <Input value={elem.state.value} onChange={elem.state.changeHandler} />
+                                    </SpacedColumn>
+                                );
+                            })}
+                        </SpacedCenteredColumn>
+                        {request && <RegisterProcessingBlock request={request} />}
+                        <SpacedCenteredColumn rowGap={16}>
+                            <SpaceAroundRow>
+                                <GeneralButton onClick={register}>Зарегистрироваться</GeneralButton>
+                            </SpaceAroundRow>
+                            <SpaceAroundRow>
+                                <TextButton secondary onClick={props.switchToLogin}>Войти</TextButton>
+                            </SpaceAroundRow>
+                        </SpacedCenteredColumn>
                     </SpacedCenteredColumn>
-                    {request && <RegisterProcessingBlock request={request} />}
-                    <SpacedCenteredColumn rowGap={16}>
-                        <SpaceAroundRow><GeneralButton onClick={register}>Зарегистрироваться</GeneralButton></SpaceAroundRow>
-                        <SpaceAroundRow><GeneralButton secondary onClick={props.switchToLogin}>Войти</GeneralButton></SpaceAroundRow>
-                    </SpacedCenteredColumn>
-                </SpacedCenteredColumn>
-            </Card>
+                </OutlinedCard>
+            </SpacedColumn>
         </PageWrapper>
     );
 };

@@ -10,6 +10,8 @@ import authService, { LoginError, LoginSuccess } from "../../service/authorizati
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import Input from "../../components/input/Input";
 import CardSuccess from "../../app/card/CardSuccess";
+import OutlinedCard from "../../app/card/OutlinedCard";
+import TextButton from "../../components/button/TextButton";
 
 
 const LoginBlock = (props: {switchToRegister: () => void}) => {
@@ -32,30 +34,37 @@ const LoginBlock = (props: {switchToRegister: () => void}) => {
 
     return (
         <PageWrapper>
-            <Card>
-                <SpacedCenteredColumn rowGap={32}>
-                    <SpacedCenteredColumn rowGap={16}>
-                        <Text large>Пожалуйста войдите</Text>
-                        
-                        <SpacedColumn rowGap={4}>
-                            <Text>Логин</Text>
-                            <Input onChange={ev => setLogin(ev.target.value)} value={login} />
+            <SpacedColumn rowGap={24}>
+                <Text header>Вход</Text>
+                <OutlinedCard>
+                    <SpacedCenteredColumn rowGap={32}>
+                        <SpacedCenteredColumn rowGap={16}>
+                            <Text large>Пожалуйста войдите</Text>
+                            
+                            <SpacedColumn rowGap={4} style={{width: '340px'}}>
+                                <Text>Логин</Text>
+                                <Input onChange={ev => setLogin(ev.target.value)} value={login} />
 
-                            <Text>Пароль</Text>
-                            <Input onChange={ev => setPassword(ev.target.value)} value={password} type='password' />
-                        </SpacedColumn>
+                                <Text>Пароль</Text>
+                                <Input onChange={ev => setPassword(ev.target.value)} value={password} type='password' />
+                            </SpacedColumn>
+                        </SpacedCenteredColumn>
+
+                        {error && <CardError><Text>{error}</Text></CardError>}
+
+                        {success && <CardSuccess><Text>Залогинились</Text></CardSuccess>}
+
+                        <SpacedCenteredColumn rowGap={16}>
+                            <SpaceAroundRow>
+                                <GeneralButton onClick={performLogin}>Войти</GeneralButton>
+                            </SpaceAroundRow>
+                            <SpaceAroundRow>
+                                <TextButton secondary onClick={props.switchToRegister}>Зарегистрироваться</TextButton>
+                            </SpaceAroundRow>
+                        </SpacedCenteredColumn>
                     </SpacedCenteredColumn>
-
-                    {error && <CardError><Text>{error}</Text></CardError>}
-
-                    {success && <CardSuccess><Text>Залогинились</Text></CardSuccess>}
-
-                    <SpacedCenteredColumn rowGap={16}>
-                        <SpaceAroundRow><GeneralButton onClick={performLogin}>Войти</GeneralButton></SpaceAroundRow>
-                        <SpaceAroundRow><GeneralButton secondary onClick={props.switchToRegister}>Зарегистрироваться</GeneralButton></SpaceAroundRow>
-                    </SpacedCenteredColumn>
-                </SpacedCenteredColumn>
-            </Card>
+                </OutlinedCard>
+            </SpacedColumn>
         </PageWrapper>
     );
 };
