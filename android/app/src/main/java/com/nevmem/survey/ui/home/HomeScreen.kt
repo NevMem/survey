@@ -177,22 +177,26 @@ private fun SurveyView(
     item: SurveyState,
     leaveSurvey: () -> Unit,
 ) {
-    FancyCardView {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            when (item) {
-                is SurveyState.AlreadyAnsweredSurvey -> {
-                    AlreadyAnsweredSurveyView(item)
-                }
-                SurveyState.NoSurvey -> { NoSurveyView(navController = navController) }
-                is SurveyState.ReadySurvey -> {
-                    ReadySurveyView(
-                        navController = navController,
-                        item = item,
-                        leaveSurvey = leaveSurvey,
-                    )
+    if (item is SurveyState.NoSurvey) {
+        NoSurveyView(navController = navController)
+    } else {
+        FancyCardView {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                when (item) {
+                    is SurveyState.AlreadyAnsweredSurvey -> {
+                        AlreadyAnsweredSurveyView(item)
+                    }
+                    is SurveyState.ReadySurvey -> {
+                        ReadySurveyView(
+                            navController = navController,
+                            item = item,
+                            leaveSurvey = leaveSurvey,
+                        )
+                    }
+                    else -> throw IllegalStateException()
                 }
             }
         }
@@ -203,7 +207,7 @@ private fun SurveyView(
 private fun NoSurveyView(
     navController: NavController,
 ) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+    Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.Center) {
         Button(onClick = { navController.navigate("join") }) {
             Text(stringResource(id = R.string.join_survey))
         }
