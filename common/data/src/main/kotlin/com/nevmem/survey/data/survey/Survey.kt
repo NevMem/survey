@@ -18,5 +18,6 @@ data class Survey(
 ) {
     companion object {
         const val SURVEY_COOL_DOWN_ONLY_ONCE = -1L
+        const val IGNORE_COOL_DOWN = -2L
     }
 }

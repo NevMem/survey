@@ -60,28 +60,30 @@ internal class AnswersServiceImpl(
             }
         }
 
-        if (survey.answerCoolDown == Survey.SURVEY_COOL_DOWN_ONLY_ONCE) {
-            val hasAnswer = transaction {
-                SurveyAnswerDTO.find {
-                    (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
-                            (SurveyAnswerTable.surveyId eq answer.surveyId)
-                }.firstOrNull() != null
-            }
-            if (hasAnswer) {
-                throw AlreadyPublishedAnswerException()
-            }
-        } else {
-            val answeredCount = transaction {
-                SurveyAnswerDTO.count(
-                    Op.build {
+        if (survey.answerCoolDown != Survey.IGNORE_COOL_DOWN) {
+            if (survey.answerCoolDown == Survey.SURVEY_COOL_DOWN_ONLY_ONCE) {
+                val hasAnswer = transaction {
+                    SurveyAnswerDTO.find {
                         (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
-                                (SurveyAnswerTable.surveyId eq answer.surveyId) and
-                                (SurveyAnswerTable.timestamp greater System.currentTimeMillis() - survey.answerCoolDown)
-                    }
-                )
-            }
-            if (answeredCount > 0) {
-                throw AlreadyPublishedAnswerException()
+                                (SurveyAnswerTable.surveyId eq answer.surveyId)
+                    }.firstOrNull() != null
+                }
+                if (hasAnswer) {
+                    throw AlreadyPublishedAnswerException()
+                }
+            } else {
+                val answeredCount = transaction {
+                    SurveyAnswerDTO.count(
+                        Op.build {
+                            (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
+                                    (SurveyAnswerTable.surveyId eq answer.surveyId) and
+                                    (SurveyAnswerTable.timestamp greater System.currentTimeMillis() - survey.answerCoolDown)
+                        }
+                    )
+                }
+                if (answeredCount > 0) {
+                    throw AlreadyPublishedAnswerException()
+                }
             }
         }
 
