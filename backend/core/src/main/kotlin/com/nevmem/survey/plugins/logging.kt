@@ -7,6 +7,6 @@ import org.slf4j.event.Level
 
 fun Application.logging() {
     install(CallLogging) {
-        level = Level.INFO
+        level = Level.DEBUG
     }
 }

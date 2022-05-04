@@ -125,6 +125,7 @@ def test_answers(client: Client, user_factory, project_factory):
                 }
             }
         )
+        assert response.status_code == 200
 
     response = assert_ok_and_get_json(client.survey_metadata(admin.token, survey['id']))
     assert response['surveyMetadata']['answersCount'] == answers_count

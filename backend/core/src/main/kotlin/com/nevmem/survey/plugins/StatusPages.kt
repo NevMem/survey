@@ -5,11 +5,13 @@ import com.nevmem.survey.exception.AccessDeniedException
 import com.nevmem.survey.exception.ForbiddenException
 import com.nevmem.survey.exception.NotFoundException
 import io.ktor.application.Application
+import io.ktor.application.application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
+import io.ktor.util.error
 
 fun Application.statusPages() {
     install(StatusPages) {
@@ -18,6 +20,7 @@ fun Application.statusPages() {
                 HttpStatusCode.Forbidden,
                 ServerError(it.message ?: "Unknown error"),
             )
+            application.environment.log.error(it)
         }
 
         exception<ForbiddenException> {
@@ -25,6 +28,7 @@ fun Application.statusPages() {
                 HttpStatusCode.Forbidden,
                 ServerError(it.message ?: "Unknown error"),
             )
+            application.environment.log.error(it)
         }
 
         exception<NotFoundException> {
@@ -32,6 +36,7 @@ fun Application.statusPages() {
                 HttpStatusCode.NotFound,
                 ServerError("Resource not found")
             )
+            application.environment.log.error(it)
         }
 
         exception<Throwable> {
@@ -39,6 +44,7 @@ fun Application.statusPages() {
                 HttpStatusCode.InternalServerError,
                 ServerError(it.message ?: "Unknown error"),
             )
+            application.environment.log.error(it)
         }
     }
 }
