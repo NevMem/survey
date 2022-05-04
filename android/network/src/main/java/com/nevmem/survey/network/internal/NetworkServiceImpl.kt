@@ -66,6 +66,7 @@ internal class NetworkServiceImpl(
         val request = PublishAnswerRequest(
             answer = SurveyAnswer(
                 uid = uid,
+                timestamp = System.currentTimeMillis(),
                 surveyId = surveyId,
                 answers = answers,
                 gallery = mediaGallery,
