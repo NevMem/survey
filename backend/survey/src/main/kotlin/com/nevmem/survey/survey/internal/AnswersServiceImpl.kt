@@ -18,6 +18,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
@@ -70,14 +71,16 @@ internal class AnswersServiceImpl(
                 throw AlreadyPublishedAnswerException()
             }
         } else {
-            val maxTimestamp = transaction {
-                SurveyAnswerDTO.find {
-                    (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
-                            (SurveyAnswerTable.surveyId eq answer.surveyId) and
-                            (SurveyAnswerTable.timestamp greater System.currentTimeMillis() - survey.answerCoolDown)
-                }.maxByOrNull { SurveyAnswerTable.timestamp }?.timestamp
+            val answeredCount = transaction {
+                SurveyAnswerDTO.count(
+                    Op.build {
+                        (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
+                                (SurveyAnswerTable.surveyId eq answer.surveyId) and
+                                (SurveyAnswerTable.timestamp greater System.currentTimeMillis() - survey.answerCoolDown)
+                    }
+                )
             }
-            if (maxTimestamp != null && maxTimestamp + survey.answerCoolDown >= System.currentTimeMillis()) {
+            if (answeredCount > 0) {
                 throw AlreadyPublishedAnswerException()
             }
         }
