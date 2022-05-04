@@ -59,7 +59,7 @@ const UserProvider = observer((props: { children: any, authService: Authorizatio
                     setError(error + "");
                 });
         }
-    }, [props.authService.authorized]);
+    }, [props.authService, props.authService.authorized]);
 
     if (!props.authService.authorized) {
         return (

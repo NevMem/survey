@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import PageWrapper from "../../app/page/PageWrapper";
 import Text from "../../components/text/Text";
-import useAsyncRequest, { isOk, RequestError, RequestState, RequestSuccess } from "../../utils/useAsyncUtils";
+import useAsyncRequest, { isOk, RequestError } from "../../utils/useAsyncUtils";
 import backendApi from '../../api/backendApiServiceSingleton';
 import OutlinedCard from "../../app/card/OutlinedCard";
 import { CommonQuestion, Question, Survey } from "../../data/exported";

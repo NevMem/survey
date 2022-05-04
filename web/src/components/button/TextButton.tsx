@@ -24,7 +24,7 @@ const PrimaryTextButton = styled.button`
 `;
 
 const TextButton = (props: TextButtonProps) => {
-    const { secondary, children, onClick } = props;
+    const { children, onClick } = props;
     
     return <PrimaryTextButton onClick={onClick}>{children}</PrimaryTextButton>
 };

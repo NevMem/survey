@@ -221,7 +221,7 @@ const AddQuestionSection = (props: { createSurveyService: CreateSurveyService })
 
     useEffect(() => {
         setCanSave(currentQuestion !== undefined);
-    });
+    }, [currentQuestion]);
 
     return (
         <Fragment>

@@ -1,6 +1,5 @@
 import PageWrapper from "../../app/page/PageWrapper";
 import CardError from "../../app/card/CardError";
-import Card from "../../app/card/Card";
 import Text from "../../components/text/Text";
 import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";

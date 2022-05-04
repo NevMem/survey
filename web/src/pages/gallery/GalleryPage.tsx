@@ -13,7 +13,6 @@ import SpaceBetweenRow from "../../app/layout/SpaceBetweenRow";
 import TextButton from "../../components/button/TextButton";
 import Input from "../../components/input/Input";
 import { useState } from "react";
-import Row from "../../app/layout/Row";
 import GeneralButton from "../../components/button/GeneralButton";
 import SpacedRow from "../../app/layout/SpacedRow";
 import { useNotification } from "../../app/notification/NotificationProvider";

@@ -1,5 +1,4 @@
 import PageWrapper from "../../app/page/PageWrapper";
-import Card from "../../app/card/Card";
 import Text from "../../components/text/Text";
 import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
@@ -15,7 +14,6 @@ import CardError from "../../app/card/CardError";
 import CardSuccess from "../../app/card/CardSuccess";
 import OutlinedCard from "../../app/card/OutlinedCard";
 import TextButton from "../../components/button/TextButton";
-import Row from "../../app/layout/Row";
 import SpacedRow from "../../app/layout/SpacedRow";
 
 const useTextInput = () => {

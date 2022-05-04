@@ -1,6 +1,5 @@
 import SpaceAroundRow from '../../app/layout/SpaceAroundRow';
 import PageWrapper from '../../app/page/PageWrapper';
-import surveysService from '../../service/survey/SurveysService';
 import Loader from '../../components/loader/Loader';
 import Card from '../../app/card/Card';
 import Text from '../../components/text/Text';
