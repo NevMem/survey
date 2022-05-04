@@ -63,13 +63,19 @@ class Exporter : KoinComponent {
 
             val folderHelper = fs.createFolder()
             tasksService.appendLog(task, "Downloading media files")
-            answers.forEach { answer ->
-                val entities = answer.gallery?.gallery?.mapNotNull { mediaStorageService.mediaById(it.id) } ?: return@forEach
+            answers.groupBy { it.uid }.forEach { (uid, answers) ->
+                val uidFolder = folderHelper.createOrGetFolder(uid.uuid)
+                tasksService.appendLog(task, "Working with answers from user with uid: ${uid.uuid}")
+                answers.forEach { answer ->
+                    val entities =
+                        answer.gallery?.gallery?.mapNotNull { mediaStorageService.mediaById(it.id) }
+                            ?: return@forEach
 
-                val folder = folderHelper.createOrGetFolder("${answer.uid.uuid}-${answer.timestamp}")
-                entities.forEach { entity ->
-                    val mediaFile = folder.createFile(entity.filename)
-                    mediaStorageService.downloadToFile(mediaFile, entity)
+                    val folder = uidFolder.createOrGetFolder("${answer.timestamp}")
+                    entities.forEach { entity ->
+                        val mediaFile = folder.createFile(entity.filename)
+                        mediaStorageService.downloadToFile(mediaFile, entity)
+                    }
                 }
             }
             tasksService.appendLog(task, "Downloaded media files")
