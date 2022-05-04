@@ -66,7 +66,7 @@ class Exporter : KoinComponent {
             answers.forEach { answer ->
                 val entities = answer.gallery?.gallery?.mapNotNull { mediaStorageService.mediaById(it.id) } ?: return@forEach
 
-                val folder = folderHelper.createOrGetFolder("${answer.timestamp}-${answer.timestamp}")
+                val folder = folderHelper.createOrGetFolder("${answer.uid.uuid}-${answer.timestamp}")
                 entities.forEach { entity ->
                     val mediaFile = folder.createFile(entity.filename)
                     mediaStorageService.downloadToFile(mediaFile, entity)

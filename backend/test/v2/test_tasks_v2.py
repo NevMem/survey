@@ -9,7 +9,7 @@ import time
 @pytest.mark.v2
 @pytest.mark.task
 def test_simple_task(client: Client, user: User, project_factory):
-    # user = User('nevmem', 'password', client.login('nevmem', 'password').json()['token']) /// just for testing purposes
+    # user = User('nevmem', 'password', client.login('nevmem', 'password').json()['token']) ## just for testing purposes
 
     project: Project = project_factory(user)
     response = client.create_survey_v2(

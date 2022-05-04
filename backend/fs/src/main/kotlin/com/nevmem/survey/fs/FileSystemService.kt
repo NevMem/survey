@@ -10,6 +10,7 @@ interface FileSystemService {
         TXT("txt"),
         JPG("jpg"),
         PNG("png"),
+        ZIP("zip"),
     }
 
     suspend fun saveFromMultiPart(data: MultiPartData): File
