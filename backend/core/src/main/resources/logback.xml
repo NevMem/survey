@@ -4,9 +4,21 @@
             <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="trace">
+    <root level="error">
         <appender-ref ref="STDOUT"/>
     </root>
-    <logger name="org.eclipse.jetty" level="INFO"/>
-    <logger name="io.netty" level="INFO"/>
+    <logger name="org.eclipse.jetty" level="ERROR"/>
+    <logger name="io.netty" level="ERROR"/>
+    <logger name="com.zaxxer.hikari.pool.PoolBase" level="ERROR"/>
+    <logger name="com.zaxxer.hikari.pool.HikariPool" level="ERROR"/>
+    <logger name="com.zaxxer.hikari.HikariDataSource" level="ERROR"/>
+    <logger name="Exposed" level="warn" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.apache.zookeeper" level="OFF"/>
+    <logger name="org.apache.kafka" level="OFF"/>
+    <logger name="ch.qos.logback" level="OFF"/>
+
+    <logger name="org.apache" level="ERROR" />
+    <logger name="httpclient" level="ERROR" />
 </configuration>
