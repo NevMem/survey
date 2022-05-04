@@ -1,4 +1,4 @@
-from utils import assert_ok_and_get_json
+from utils import assert_ok_and_get_json, random_string
 from v2.project_factory_fixture import project_factory, Project
 from v2.user_fixture import User, user_factory
 from client import Client
@@ -83,7 +83,7 @@ def test_answers(client: Client, user_factory, project_factory):
         response = client.publish_answer(
             {
                 'answer': {
-                    'uid': {'uuid': '1'},
+                    'uid': {'uuid': random_string(12)},
                     'timestamp': int(time.time()),
                     'surveyId': survey['surveyId'],
                     'answers': [
