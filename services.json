@@ -1,14 +1,14 @@
 {
     "worker": {
         "tag": "worker",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:9d05372",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:4d4d7c1",
         "ports": [
             80
         ]
     },
     "core": {
         "tag": "core",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:9d05372",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-core:4d4d7c1",
         "ports": [
             80,
             443
