@@ -1,5 +1,5 @@
 phantom:
-  address: ethnosurvey.com
+  address: 51.250.72.136
   ammofile: ammo.txt
   load_profile:
     load_type: rps

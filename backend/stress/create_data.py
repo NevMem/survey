@@ -3,9 +3,9 @@ import time
 
 data = {
     "answer": {
-        "uid": {"uuid": "1"},
+        "uid": {"uuid": "182728748"},
         "timestamp": 1651681987,
-        "surveyId": "OMLCA",
+        "surveyId": "EQTIC",
         "answers": [{"type": "rating", "number": 7}, {"type": "text", "text": "Some school name"}, {"type": "text", "text": "Some region"}, {"type": "rating", "number": 10}],
         "gallery": None
     }
