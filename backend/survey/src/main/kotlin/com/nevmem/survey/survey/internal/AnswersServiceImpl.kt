@@ -3,6 +3,7 @@ package com.nevmem.survey.survey.internal
 import com.nevmem.survey.commonQuestion.CommonQuestionEntity
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.answer.SurveyAnswer
+import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.data.user.UserId
 import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.survey.question.QuestionEntity
@@ -58,14 +59,27 @@ internal class AnswersServiceImpl(
             }
         }
 
-        val maxTimestamp = transaction {
-            SurveyAnswerDTO.find {
-                (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
-                    (SurveyAnswerTable.surveyId eq answer.surveyId)
-            }.maxByOrNull { SurveyAnswerTable.timestamp }?.timestamp
-        }
-        if (maxTimestamp != null && maxTimestamp + survey.answerCoolDown >= System.currentTimeMillis()) {
-            throw AlreadyPublishedAnswerException()
+        if (survey.answerCoolDown == Survey.SURVEY_COOL_DOWN_ONLY_ONCE) {
+            val hasAnswer = transaction {
+                SurveyAnswerDTO.find {
+                    (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
+                            (SurveyAnswerTable.surveyId eq answer.surveyId)
+                }.firstOrNull() != null
+            }
+            if (hasAnswer) {
+                throw AlreadyPublishedAnswerException()
+            }
+        } else {
+            val maxTimestamp = transaction {
+                SurveyAnswerDTO.find {
+                    (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
+                            (SurveyAnswerTable.surveyId eq answer.surveyId) and
+                            (SurveyAnswerTable.timestamp greater System.currentTimeMillis() - survey.answerCoolDown)
+                }.maxByOrNull { SurveyAnswerTable.timestamp }?.timestamp
+            }
+            if (maxTimestamp != null && maxTimestamp + survey.answerCoolDown >= System.currentTimeMillis()) {
+                throw AlreadyPublishedAnswerException()
+            }
         }
 
         // Ok. Simple validation passed. Storing answer to storage
