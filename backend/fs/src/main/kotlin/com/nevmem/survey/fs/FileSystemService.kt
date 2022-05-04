@@ -15,4 +15,15 @@ interface FileSystemService {
     suspend fun saveFromMultiPart(data: MultiPartData): File
 
     suspend fun createFile(type: FileType): File
+
+    suspend fun createFolder(): FolderHelper
+
+    suspend fun zipIt(folder: File): File
+}
+
+interface FolderHelper {
+    val file: File
+
+    fun createOrGetFolder(name: String): FolderHelper
+    fun createFile(name: String): File
 }

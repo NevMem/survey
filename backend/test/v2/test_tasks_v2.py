@@ -9,6 +9,8 @@ import time
 @pytest.mark.v2
 @pytest.mark.task
 def test_simple_task(client: Client, user: User, project_factory):
+    # user = User('nevmem', 'password', client.login('nevmem', 'password').json()['token']) /// just for testing purposes
+
     project: Project = project_factory(user)
     response = client.create_survey_v2(
         user.token,
@@ -31,9 +33,22 @@ def test_simple_task(client: Client, user: User, project_factory):
 
     for _ in range(10):
         publisherId = random_string(12)
+
+        responses = []
+        for _ in range(12):
+            with open('tmp.txt', 'w') as out:
+                for _ in range(16):
+                    out.write(random_string(15) + '\n')
+            responses.append(
+                client.upload_media(open('tmp.txt', 'rb')).json()
+            )
+
+        response = client.create_gallery(responses)
+
         response = client.publish_answer({
             'answer': {
                 'surveyId': surveyLiteral,
+                'timestamp': int(time.time()),
                 'uid': {'uuid': publisherId},
                 'answers': [
                     {
@@ -41,7 +56,7 @@ def test_simple_task(client: Client, user: User, project_factory):
                         'stars': 4,
                     }
                 ],
-                'gallery': None,
+                'gallery': response.json()['gallery'],
             }
         })
         assert response.status_code == 200

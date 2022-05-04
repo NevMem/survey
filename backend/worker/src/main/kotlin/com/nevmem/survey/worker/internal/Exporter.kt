@@ -38,7 +38,7 @@ class Exporter : KoinComponent {
                 val writer = file.bufferedWriter()
 
                 val headerLine =
-                    listOf("uuid") +
+                    listOf("uuid", "timestamp") +
                         survey.commonQuestions.map { it.id } +
                         survey.questions.map {
                             when (it) {
@@ -61,7 +61,29 @@ class Exporter : KoinComponent {
             val media = mediaStorageService.uploadFileToMediaStorage(file)
             tasksService.appendLog(task, "Media file has been successfully uploaded")
 
+            val folderHelper = fs.createFolder()
+            tasksService.appendLog(task, "Downloading media files")
+            answers.forEach { answer ->
+                val entities = answer.gallery?.gallery?.mapNotNull { mediaStorageService.mediaById(it.id) } ?: return@forEach
+
+                val folder = folderHelper.createOrGetFolder("${answer.timestamp}-${answer.timestamp}")
+                entities.forEach { entity ->
+                    val mediaFile = folder.createFile(entity.filename)
+                    mediaStorageService.downloadToFile(mediaFile, entity)
+                }
+            }
+            tasksService.appendLog(task, "Downloaded media files")
+
+            tasksService.appendLog(task, "Zipping folder")
+            val zipFile = fs.zipIt(folderHelper.file)
+            tasksService.appendLog(task, "Folder successfully zipped")
+
+            tasksService.appendLog(task, "Uploading zip to storage")
+            val zipFileMedia = mediaStorageService.uploadFileToMediaStorage(zipFile)
+            tasksService.appendLog(task, "Uploaded zip to storage")
+
             tasksService.attachOutput(task, media)
+            tasksService.attachOutput(task, zipFileMedia)
 
             tasksService.appendLog(task, "Done")
             tasksService.atomicallyTransferToState(task, TaskStateEntity.Executing, TaskStateEntity.Success)
@@ -92,6 +114,6 @@ class Exporter : KoinComponent {
             }
         }
 
-        return (listOf(uid.uuid) + answers + (gallery?.id ?: "")).joinToString(",") { it.toString() }
+        return (listOf(uid.uuid, timestamp) + answers + (gallery?.id ?: "")).joinToString(",") { it.toString() }
     }
 }

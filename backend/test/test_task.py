@@ -36,6 +36,7 @@ def test_simple_task(client: Client, user_factory, project_factory):
         response = client.publish_answer({
             'answer': {
                 'surveyId': surveyLiteral,
+                'timestamp': int(time.time()),
                 'uid': {'uuid': publisherId},
                 'answers': [
                     {

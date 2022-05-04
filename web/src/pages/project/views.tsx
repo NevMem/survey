@@ -113,7 +113,7 @@ const ProjectInfoView = (props: { projectInfo: ProjectInfo }) => {
                 <SpacedColumn rowGap={4}>
                     {props.projectInfo.administratorsInfo.map((info, index) => {
                         return (
-                            <SpacedCenteredRow columnGap={16}>
+                            <SpacedCenteredRow columnGap={16} key={index}>
                                 <Text large>{info.administrator.name} {info.administrator.surname}</Text>
                                 <Text>@{info.administrator.login}</Text>
                             </SpacedCenteredRow>

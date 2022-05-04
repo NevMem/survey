@@ -158,6 +158,7 @@ internal class AnswersServiceImpl(
     private fun SurveyAnswerDTO.entity(): SurveyAnswer {
         return SurveyAnswer(
             surveyId = this.surveyId,
+            timestamp = this.timestamp,
             gallery = this.mediaGalleryId ?.let { runBlocking { mediaGalleryConverter(mediaStorageService.mediaGallery(it)!!) } },
             answers = this.answers.map { it.entity() },
             uid = UserId(this.publisherId),

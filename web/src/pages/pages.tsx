@@ -91,6 +91,13 @@ const pages: PageInfo[] = [
         ],
     },
     {
+        name: 'Галерея',
+        component: <GalleryPage />,
+        path: '/gallery',
+        useInSidebar: true,
+        needAuthorization: true,
+    },
+    {
         name: '[dev] Demo page',
         component: <DemoPage />,
         path: '/demo',
@@ -118,13 +125,6 @@ const pages: PageInfo[] = [
         useInSidebar: false,
         needAuthorization: true,
     },
-    {
-        name: 'select-gallery',
-        component: <GalleryPage />,
-        path: '/gallery',
-        useInSidebar: false,
-        needAuthorization: true,
-    }
 ]
 
 export default pages;

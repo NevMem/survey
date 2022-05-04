@@ -3,6 +3,7 @@ from v2.project_factory_fixture import project_factory, Project
 from v2.user_fixture import User, user_factory
 from client import Client
 from client_fixture import client
+import time
 
 def test_answers(client: Client, user_factory, project_factory):
     admin = user_factory()
@@ -83,6 +84,7 @@ def test_answers(client: Client, user_factory, project_factory):
             {
                 'answer': {
                     'uid': {'uuid': '1'},
+                    'timestamp': int(time.time()),
                     'surveyId': survey['surveyId'],
                     'answers': [
                         {
