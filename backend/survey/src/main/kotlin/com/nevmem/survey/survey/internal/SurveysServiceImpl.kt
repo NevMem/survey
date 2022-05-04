@@ -12,7 +12,34 @@ import org.koin.core.component.KoinComponent
 private const val VARIANTS_PAIR_SEPARATOR = "@@@"
 private const val VARIANTS_SEPARATOR = "=#="
 
+private class Cache<K : Any, T : Any> {
+    private val cache = mutableMapOf<K, T?>()
+
+    fun has(key: K): Boolean {
+        return cache.containsKey(key)
+    }
+
+    fun getOrNull(key: K): T? {
+        return cache[key]
+    }
+
+    fun store(key: K, value: T?) {
+        cache[key] = value
+    }
+}
+
+private fun <K : Any, T : Any>withCache(cache: Cache<K, T>, key: K, getter: () -> T?): T? {
+    if (cache.has(key)) {
+        return cache.getOrNull(key)
+    }
+    val value = getter()
+    cache.store(key, value)
+    return value
+}
+
 internal class SurveysServiceImpl : SurveysService, KoinComponent {
+    private val surveysCache = Cache<String, SurveyEntity>()
+
     override suspend fun createSurvey(
         projectId: Long,
         name: String,
@@ -79,10 +106,18 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         SurveyEntityDTO.findById(id)?.delete()
     }
 
-    override suspend fun survey(surveyId: String): SurveyEntity? = transaction {
-        SurveyEntityDTO.find {
-            SurveysTable.surveyId eq surveyId
-        }.firstOrNull()?.toEntity()
+//    override suspend fun survey(surveyId: String): SurveyEntity? = transaction {
+//        SurveyEntityDTO.find {
+//            SurveysTable.surveyId eq surveyId
+//        }.firstOrNull()?.toEntity()
+//    }
+
+    override suspend fun survey(surveyId: String): SurveyEntity? = withCache(surveysCache, surveyId) {
+        transaction {
+            SurveyEntityDTO.find {
+                SurveysTable.surveyId eq surveyId
+            }.firstOrNull()?.toEntity()
+        }
     }
 
     override suspend fun surveyById(surveyId: Long): SurveyEntity? = transaction {
