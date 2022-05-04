@@ -63,6 +63,14 @@ def deploy(executor: RemoteCommandExecutor, image_tag: str, machine: Machine, po
     executor.launch_command(['sudo', 'docker', 'run', '-d', *ports_arguments, '--name', container_name, image_tag])
 
 
+def create_network(executor: RemoteCommandExecutor, name: str):
+    executor.launch_command(['sudo', 'docker', 'network', 'create', name])
+
+
+def attach_to_network(executor: RemoteCommandExecutor, network_name: str, container_name: str):
+    executor.launch_command(['sudo', 'docker', 'network', 'connect', network_name, container_name])
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("login")
@@ -120,6 +128,10 @@ def main():
                         ports=service_config['ports'],
                         container_name=f"{service}-{index}",
                     )
+
+                    if 'network' in service_config:
+                        create_network(executor=executor, name=service_config['network'])
+                        attach_to_network(executor=executor, network_name=service_config['network'], container_name=f"{service}-{index}")
                 else:
                     logs.append(f"✅ Not need to redeploy on machine {machine.name} ip: {machine.ip}")
                     print('No need for redeploy')

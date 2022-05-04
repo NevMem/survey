@@ -19,7 +19,8 @@
         "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-metrics:02a422e",
         "ports": [
             9090
-        ]
+        ],
+        "network": "metrics"
     },
     "push": {
         "tag": "push",
@@ -33,6 +34,7 @@
         "container-tag": "grafana/grafana-oss:8.2.6",
         "ports": [
             3000
-        ]
+        ],
+        "network": "metrics"
     }
 }
