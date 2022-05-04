@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Modal = styled.div`
     margin: 15% auto;
-    width: 400px;
+    width: 600px;
     background-color: ${props => props.theme.background};
     border-radius: 8px;
     padding: 16px;
@@ -32,7 +32,7 @@ const ModalActions = styled.div`
 
 const ModalFade = styled.div<{ open: boolean }>`
     position: fixed;
-    zIndex: 1;
+    z-index: 1;
     left: 0;
     top: 0;
     right: 0;

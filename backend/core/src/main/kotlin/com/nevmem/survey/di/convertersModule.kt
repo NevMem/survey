@@ -5,6 +5,7 @@ import com.nevmem.surveys.converters.ExportDataTaskConverter
 import com.nevmem.surveys.converters.InvitesConverter
 import com.nevmem.surveys.converters.MediaConverter
 import com.nevmem.surveys.converters.MediaGalleryConverter
+import com.nevmem.surveys.converters.ProjectConverter
 import com.nevmem.surveys.converters.QuestionsConverter
 import com.nevmem.surveys.converters.RolesConverter
 import com.nevmem.surveys.converters.SurveysConverter
@@ -23,4 +24,5 @@ val convertersModule = module {
     single { MediaGalleryConverter() }
     single { TaskLogConverter() }
     single { ExportDataTaskConverter() }
+    single { ProjectConverter() }
 }

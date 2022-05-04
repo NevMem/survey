@@ -2,7 +2,6 @@ package com.nevmem.survey.users.internal
 
 import com.nevmem.survey.auth.PasswordEncoder
 import com.nevmem.survey.role.RoleEntity
-import com.nevmem.survey.role.RoleSerializer
 import com.nevmem.survey.user.UserEntity
 import com.nevmem.survey.users.UsersService
 import org.jetbrains.exposed.sql.and
@@ -11,7 +10,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 internal class UsersServiceImpl : UsersService, KoinComponent {
-    private val roleConverter: RoleSerializer by inject()
     private val passwordEncoder: PasswordEncoder by inject()
 
     override suspend fun createUser(
@@ -27,7 +25,6 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
                 name = personal.name
                 surname = personal.surname
                 email = personal.email
-                this.roles = roleConverter.rolesToString(roles)
             }
         }
         return UserEntity(
@@ -36,7 +33,6 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
             dto.name,
             dto.surname,
             dto.email,
-            roleConverter.stringToRoles(dto.roles),
         )
     }
 
@@ -63,11 +59,11 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
         }
     }
 
-    override suspend fun updateUserRoles(user: UserEntity, newRoles: List<RoleEntity>) {
-        transaction {
+    override suspend fun getUserByLogin(login: String): UserEntity? {
+        return transaction {
             UserEntityDTO.find {
-                UsersTable.id eq user.id
-            }.firstOrNull()?.roles = roleConverter.rolesToString(newRoles)
+                UsersTable.login eq login
+            }.firstOrNull()?.toEntity()
         }
     }
 
@@ -78,7 +74,6 @@ internal class UsersServiceImpl : UsersService, KoinComponent {
             name,
             surname,
             email,
-            roleConverter.stringToRoles(roles),
         )
     }
 }

@@ -5,7 +5,6 @@ import themes from '../../theme/themes';
 import Text from '../../components/text/Text';
 import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
 import Badge from '../../components/badge/Badge';
-import Notification from '../../components/notification/Notification';
 import { useNotification } from '../../app/notification/NotificationProvider';
 import ThemePicker from '../../components/theme/ThemePicker';
 import Card from '../../app/card/Card';
@@ -14,8 +13,9 @@ import CardSuccess from '../../app/card/CardSuccess';
 import SpacedColumn from '../../app/layout/SpacedColumn';
 import { Task, TaskState } from '../../data/exported';
 import TaskView from '../../app/task/TaskView';
+import NotificationsBlock from './NotificationsBlock';
 
-const NotificationsBlock = () => {
+const NotificationsButtonsBlock = () => {
     const notificationUser = useNotification();
     const notification = (type: string) => {
         notificationUser('Notification', 'Notification body', type);
@@ -55,6 +55,7 @@ const NotificationsBlock = () => {
 const TasksBlock = () => {
     const readyTask: Task = {
         id: 33,
+        projectId: 0,
         state: TaskState.Success,
         log: [
             { message: 'started', timestamp: (new Date()).getSeconds() },
@@ -72,6 +73,7 @@ const TasksBlock = () => {
 
     const executingTask: Task = {
         id: 33,
+        projectId: 0,
         state: TaskState.Executing,
         log: [
             { message: 'started', timestamp: (new Date()).getSeconds() },
@@ -86,6 +88,7 @@ const TasksBlock = () => {
 
     const errorTask: Task = {
         id: 33,
+        projectId: 0,
         state: TaskState.Error,
         log: [
             { message: 'started', timestamp: (new Date()).getSeconds() },
@@ -142,10 +145,7 @@ export default function DemoPage() {
                                 <Badge info>Info</Badge>
                             </SpaceBetweenRow>
 
-                            <Notification title='Нотификация' text='Просто какое-то уведомление' />
-                            <Notification title='Нотификация' text='Просто какое-то уведомление' type='success' />
-                            <Notification title='Нотификация' text='Просто какое-то уведомление' type='error' />
-                            <Notification title='Нотификация' text='Просто какое-то уведомление' type='warning' />
+                            <NotificationsBlock />
 
                             <SpacedColumn rowGap={16}>
                                 <Card>
@@ -169,7 +169,7 @@ export default function DemoPage() {
                 )
             })}
 
-            <NotificationsBlock />
+            <NotificationsButtonsBlock />
         </div>
     )
 };

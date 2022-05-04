@@ -1,13 +1,15 @@
 package com.nevmem.survey.survey.internal
 
+import com.nevmem.survey.TableNames
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
-internal object SurveysTable : LongIdTable() {
+internal object SurveysTable : LongIdTable(TableNames.surveyTableName) {
     val name = text("name")
+    val projectId = long("projectId")
     val surveyId = varchar("surveyId", 8)
     val answerCoolDown = long("answerCoolDown")
 }
@@ -19,7 +21,7 @@ internal enum class QuestionEntityType {
     Radio,
 }
 
-internal object QuestionsTable : LongIdTable() {
+internal object QuestionsTable : LongIdTable(TableNames.questionTableName) {
     val title = varchar("title", 256)
     val type = enumeration("type", QuestionEntityType::class)
     val min = integer("min").nullable()
@@ -31,7 +33,7 @@ internal object QuestionsTable : LongIdTable() {
     val survey = reference("survey", SurveysTable, onDelete = ReferenceOption.CASCADE)
 }
 
-internal object CommonQuestionsTable : LongIdTable() {
+internal object CommonQuestionsTable : LongIdTable(TableNames.commonQuestionTableName) {
     val commonQuestionId = varchar("commonQuestionId", 16)
 
     val survey = reference("survey", SurveysTable, onDelete = ReferenceOption.CASCADE)
@@ -41,6 +43,7 @@ internal class SurveyEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<SurveyEntityDTO>(SurveysTable)
 
     var name by SurveysTable.name
+    var projectId by SurveysTable.projectId
     var surveyId by SurveysTable.surveyId
     var answerCoolDown by SurveysTable.answerCoolDown
     val questions by QuestionEntityDTO referrersOn QuestionsTable.survey

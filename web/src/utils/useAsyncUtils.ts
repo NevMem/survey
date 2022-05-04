@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
 
-interface RequestState {};
-class RequestProcessing implements RequestState {};
-class RequestError implements RequestState {
+class RequestState<T> {};
+class RequestProcessing<T> implements RequestState<T> {};
+class RequestError<T> implements RequestState<T> {
     message: string;
     constructor(message: string) {
         this.message = message;
     }
 };
-class RequestSuccess<T> implements RequestState {
+class RequestSuccess<T> implements RequestState<T> {
     result: T;
     constructor(result: T) {
         this.result = result;
     }
 };
 
-function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) => Promise<T>): RequestState {
+function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) => Promise<T>): RequestState<T> {
     const [state, setState] = useState(new RequestProcessing());
 
     useEffect(() => {
@@ -31,12 +31,14 @@ function useAsyncRequest<T>(requestBuilder: (abortController: AbortController) =
     return state;
 };
 
+export function isOk<T>(state: RequestState<T>): state is RequestSuccess<T> {
+    return state instanceof RequestSuccess;
+}
+
 export default useAsyncRequest;
 export {
+    RequestState,
     RequestProcessing,
     RequestError,
     RequestSuccess,
-};
-export type {
-    RequestState,
 };

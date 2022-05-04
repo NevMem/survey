@@ -7,4 +7,6 @@ interface MediaStorageService {
     suspend fun createMediaGallery(medias: List<MediaEntity>): MediaGalleryEntity
     suspend fun downloadToFile(file: File, entity: MediaEntity)
     fun mediaById(id: Long): MediaEntity?
+
+    suspend fun mediaGallery(id: Long): MediaGalleryEntity?
 }

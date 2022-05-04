@@ -17,6 +17,7 @@ enum class TaskState {
 @Serializable
 data class Task(
     val id: Long,
+    val projectId: Long,
     val state: TaskState,
     val log: List<TaskLog>,
     val outputs: List<Media>,

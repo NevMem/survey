@@ -1,6 +1,7 @@
 package com.nevmem.survey.plugins
 
 import com.nevmem.survey.data.response.error.ServerError
+import com.nevmem.survey.exception.AccessDeniedException
 import com.nevmem.survey.exception.ForbiddenException
 import com.nevmem.survey.exception.NotFoundException
 import io.ktor.application.Application
@@ -12,6 +13,13 @@ import io.ktor.response.respond
 
 fun Application.statusPages() {
     install(StatusPages) {
+        exception<AccessDeniedException> {
+            call.respond(
+                HttpStatusCode.Forbidden,
+                ServerError(it.message ?: "Unknown error"),
+            )
+        }
+
         exception<ForbiddenException> {
             call.respond(
                 HttpStatusCode.Forbidden,

@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.nevmem.survey.report.report
 import com.nevmem.survey.service.push.api.PushService
+import com.nevmem.survey.ui.camera.CameraScreen
 import com.nevmem.survey.ui.home.HomeScreen
 import com.nevmem.survey.ui.join.JoinScreen
 import com.nevmem.survey.ui.settings.DevSettingsScreen
@@ -42,10 +43,11 @@ class MainActivity : AppCompatActivity() {
                     NavHost(navController = navController, startDestination = "splash") {
                         composable("splash") { EthnoSplashScreen(navController) }
                         composable("join") { JoinScreen(navController, scaffoldState) }
-                        composable("survey") { SurveyScreen(scaffoldState) }
+                        composable("survey") { SurveyScreen(navController, scaffoldState) }
                         composable("home") { HomeScreen(navController) }
                         composable("settings") { SettingsScreen(navController) }
                         composable("developer-settings") { DevSettingsScreen(navController) }
+                        composable("camera") { CameraScreen(navController) }
                     }
                 }
             }

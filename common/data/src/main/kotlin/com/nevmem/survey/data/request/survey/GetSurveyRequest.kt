@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Exported
 @Serializable
 data class GetSurveyRequest(
-    val surveyId: String,
+    val id: Long,
 )

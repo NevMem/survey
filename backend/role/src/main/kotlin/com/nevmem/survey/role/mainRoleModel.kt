@@ -45,6 +45,8 @@ fun mainRoleModel(): RoleModel {
     }
 
     return object : RoleModel {
+        override val ownerRole: RoleEntity = allRoles.find { it.parentRole == null }!!
+
         override fun isAncestorRole(maybeAncestor: RoleEntity, role: RoleEntity): Boolean {
             var current: RoleEntity? = role
             while (current != null) {

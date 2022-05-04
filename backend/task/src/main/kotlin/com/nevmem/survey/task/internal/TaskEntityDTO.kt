@@ -1,5 +1,6 @@
 package com.nevmem.survey.task.internal
 
+import com.nevmem.survey.TableNames
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -12,13 +13,14 @@ internal enum class TaskStateDTO {
     Error,
 }
 
-internal object ExportDataTaskTable : LongIdTable() {
+internal object ExportDataTaskTable : LongIdTable(TableNames.exportDataTaskTableName) {
     val state = enumeration("state", TaskStateDTO::class)
     val surveyId = long("surveyId")
     val medias = text("medias")
+    val projectId = long("projectId")
 }
 
-internal object TaskLogTable : LongIdTable() {
+internal object TaskLogTable : LongIdTable(TableNames.taskLogTableName) {
     val taskId = long("taskId")
     val timestamp = long("timestamp")
     val message = text("message")
@@ -30,6 +32,7 @@ internal class ExportDataTaskDTO(id: EntityID<Long>) : LongEntity(id) {
     var state by ExportDataTaskTable.state
     var surveyId by ExportDataTaskTable.surveyId
     var medias by ExportDataTaskTable.medias
+    var projectId by ExportDataTaskTable.projectId
 }
 
 internal class TaskLogDTO(id: EntityID<Long>) : LongEntity(id) {

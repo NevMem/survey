@@ -59,7 +59,7 @@ const UserProvider = observer((props: { children: any, authService: Authorizatio
                     setError(error + "");
                 });
         }
-    }, [props.authService.authorized]);
+    }, [props.authService, props.authService.authorized]);
 
     if (!props.authService.authorized) {
         return (
@@ -105,11 +105,11 @@ const SidebarWrapper = () => {
                     return true;
                 }
                 var result = true;
-                needRoles.forEach(needRole => {
-                    if (!userContext.user.allAvailableRoles.map(role => role.id).includes(needRole.id)) {
-                        result = false;
-                    }
-                })
+                // needRoles.forEach(needRole => {
+                //     if (!userContext.user.allAvailableRoles.map(role => role.id).includes(needRole.id)) {
+                //         result = false;
+                //     }
+                // })
                 return result;
             });
 

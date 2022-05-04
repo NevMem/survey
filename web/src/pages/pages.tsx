@@ -1,5 +1,4 @@
 import HomePage from './home/HomePage';
-import SurveysPage from './surveys/SurveysPage';
 import CreateSurveyPage from './create_survey/CreateSurveyPage';
 import DemoPage from './demo/DemoPage';
 import DownloadPage from './download/DownloadPage';
@@ -8,7 +7,10 @@ import AuthorizationPage from './auth/AuthorizationPage';
 import ProfilePage from './profile/ProfilePage';
 import { Role } from '../data/exported';
 import InvitePage from './invite/InvitePage';
-import AdminPage from './admin/AdminPage';
+import ProjectsPage from './project/ProjectsPage';
+import ProjectPage from './project/ProjectPage';
+import SurveyPage from './survey/SurveyPage';
+import GalleryPage from './gallery/GalleryPage';
 
 interface PageInfo {
     name: string;
@@ -28,21 +30,25 @@ const pages: PageInfo[] = [
         needAuthorization: true,
     },
     {
+        name: 'Проекты',
+        component: <ProjectsPage />,
+        path: '/projects',
+        useInSidebar: true,
+        needAuthorization: true,
+    },
+    {
+        name: 'Project',
+        component: <ProjectPage />,
+        path: '/project/:id',
+        useInSidebar: false,
+        needAuthorization: true,
+    },
+    {
         name: 'Домашняя',
         component: <HomePage />,
         path : '/',
         useInSidebar: false,
         needAuthorization: true,
-    },
-    {
-        name: 'Опросы',
-        component: <SurveysPage />,
-        path : '/surveys',
-        useInSidebar: true,
-        needAuthorization: true,
-        needRoles: [
-            {id: 'survey.observer'},
-        ],
     },
     {
         name: 'Создать опрос',
@@ -85,14 +91,11 @@ const pages: PageInfo[] = [
         ],
     },
     {
-        name: "Администрирование",
-        component: <AdminPage />,
-        path: '/admin',
+        name: 'Галерея',
+        component: <GalleryPage />,
+        path: '/gallery',
         useInSidebar: true,
         needAuthorization: true,
-        needRoles: [
-            {id: 'role.manager'},
-        ],
     },
     {
         name: '[dev] Demo page',
@@ -107,6 +110,20 @@ const pages: PageInfo[] = [
         path: '/auth',
         useInSidebar: false,
         needAuthorization: false,
+    },
+    {
+        name: 'survey',
+        component: <SurveyPage />,
+        path: '/survey/:id',
+        useInSidebar: false,
+        needAuthorization: true,
+    },
+    {
+        name: 'gallery',
+        component: <GalleryPage />,
+        path: '/gallery/:id',
+        useInSidebar: false,
+        needAuthorization: true,
     },
 ]
 

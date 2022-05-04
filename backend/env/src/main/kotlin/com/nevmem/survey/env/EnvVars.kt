@@ -24,10 +24,6 @@ object EnvVars {
         val salt by lazy { env("SECURITY_SALT") }
     }
 
-    object Admin {
-        val password by lazy { maybeEnv("ADMIN_PASSWORD") }
-    }
-
     object S3 {
         val region by lazy { env("S3_REGION") }
         val accessKey by lazy { env("S3_ACCESS_KEY") }

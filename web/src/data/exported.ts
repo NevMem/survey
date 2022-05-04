@@ -1,11 +1,17 @@
+interface AcceptInviteRequest {
+	id: number;
+}
+
+interface AcceptInviteResponse {
+	status: AcceptInviteStatus;
+}
+
 interface Administrator {
 	id: number;
 	login: string;
 	name: string;
 	surname: string;
 	email: string;
-	roles: Role[];
-	allAvailableRoles: Role[];
 }
 
 interface AllRolesResponse {
@@ -33,20 +39,22 @@ interface CreateExportDataTaskRequest {
 	surveyId: number;
 }
 
-interface CreateInviteError extends CreateInviteResponse {
-	message: string;
-}
-
 interface CreateInviteRequest {
+	projectId: number;
+	userLogin: string;
 	expirationTimeSeconds: number;
 }
 
 interface CreateInviteResponse {
-	type: string;
+	invite: Invite;
 }
 
-interface CreateInviteSuccess extends CreateInviteResponse {
-	invite: Invite;
+interface CreateProjectRequest {
+	name: string;
+}
+
+interface CreateProjectResponse {
+	project: Project;
 }
 
 interface CreateSurveyError extends CreateSurveyResponse {
@@ -54,6 +62,7 @@ interface CreateSurveyError extends CreateSurveyResponse {
 }
 
 interface CreateSurveyRequest {
+	projectId: number;
 	name: string;
 	questions: Question[];
 	commonQuestions: CommonQuestion[];
@@ -72,22 +81,65 @@ interface DeleteSurveyRequest {
 	surveyId: number;
 }
 
+interface GetGalleryRequest {
+	id: number;
+}
+
+interface GetGalleryResponse {
+	gallery: MediaGallery;
+}
+
 interface GetInvitesResponse {
 	invites: Invite[];
 }
 
+interface GetProjectInfoRequest {
+	projectId: number;
+}
+
+interface GetProjectInfoResponse {
+	projectInfo: ProjectInfo;
+}
+
+interface GetProjectRequest {
+	id: number;
+}
+
+interface GetProjectResponse {
+	project: Project;
+}
+
+interface GetProjectsResponse {
+	projects: Project[];
+}
+
 interface GetSurveyRequest {
-	surveyId: string;
+	id: number;
 }
 
 interface GetSurveyResponse {
 	survey: Survey;
 }
 
+interface GetSurveysRequest {
+	projectId: number;
+}
+
+interface GetSurveysResponse {
+	projectId: number;
+	surveys: Survey[];
+}
+
+interface IncomingInvitesResponse {
+	invites: Invite[];
+}
+
 interface Invite {
-	inviteId: string;
-	acceptedBy: Administrator | undefined;
-	isExpired: Boolean;
+	id: number;
+	project: Project;
+	toUser: Administrator;
+	fromUser: Administrator;
+	status: InviteStatus;
 }
 
 interface LoadSurveyMetadataRequest {
@@ -135,6 +187,25 @@ interface MediaGallery {
 	gallery: Media[];
 }
 
+interface OutgoingInvitesResponse {
+	invites: Invite[];
+}
+
+interface Project {
+	id: number;
+	name: string;
+	owner: Administrator;
+}
+
+interface ProjectAdministratorInfo {
+	administrator: Administrator;
+	roles: Role[];
+}
+
+interface ProjectInfo {
+	administratorsInfo: ProjectAdministratorInfo[];
+}
+
 interface Question {
 	type: string;
 }
@@ -165,7 +236,6 @@ interface RegisterRequest {
 	login: string;
 	password: string;
 	email: string;
-	inviteId: string;
 }
 
 interface RegisterResponse {
@@ -191,6 +261,7 @@ interface StarsQuestion extends Question {
 
 interface Survey {
 	id: number;
+	projectId: number;
 	surveyId: string;
 	name: string;
 	questions: Question[];
@@ -205,6 +276,7 @@ interface SurveyMetadata {
 
 interface Task {
 	id: number;
+	projectId: number;
 	state: TaskState;
 	log: TaskLog[];
 	outputs: Media[];
@@ -232,14 +304,6 @@ interface UpdateRolesResponse {
 
 interface UserId {
 	uuid: string;
-}
-
-export function instanceOfCreateInviteError(object: CreateInviteResponse): object is CreateInviteError {
-	return object.type === "error";
-}
-
-export function instanceOfCreateInviteSuccess(object: CreateInviteResponse): object is CreateInviteSuccess {
-	return object.type === "success";
 }
 
 export function instanceOfCreateSurveyError(object: CreateSurveyResponse): object is CreateSurveyError {
@@ -282,6 +346,17 @@ export function instanceOfTextQuestion(object: Question): object is TextQuestion
 	return object.type === "text";
 }
 
+enum AcceptInviteStatus {
+    Ok = "Ok",
+    Expired = "Expired"
+}
+
+enum InviteStatus {
+    Accepted = "Accepted",
+    Expired = "Expired",
+    Waiting = "Waiting"
+}
+
 enum TaskState {
     Waiting = "Waiting",
     Executing = "Executing",
@@ -290,10 +365,14 @@ enum TaskState {
 }
 
 export {
+	AcceptInviteStatus,
+	InviteStatus,
 	TaskState,
 }
 
 export type {
+	AcceptInviteRequest,
+	AcceptInviteResponse,
 	Administrator,
 	AllRolesResponse,
 	AllSurveysResponse,
@@ -301,18 +380,28 @@ export type {
 	BroadcastAllResponse,
 	CommonQuestion,
 	CreateExportDataTaskRequest,
-	CreateInviteError,
 	CreateInviteRequest,
 	CreateInviteResponse,
-	CreateInviteSuccess,
+	CreateProjectRequest,
+	CreateProjectResponse,
 	CreateSurveyError,
 	CreateSurveyRequest,
 	CreateSurveyResponse,
 	CreateSurveySuccess,
 	DeleteSurveyRequest,
+	GetGalleryRequest,
+	GetGalleryResponse,
 	GetInvitesResponse,
+	GetProjectInfoRequest,
+	GetProjectInfoResponse,
+	GetProjectRequest,
+	GetProjectResponse,
+	GetProjectsResponse,
 	GetSurveyRequest,
 	GetSurveyResponse,
+	GetSurveysRequest,
+	GetSurveysResponse,
+	IncomingInvitesResponse,
 	Invite,
 	LoadSurveyMetadataRequest,
 	LoadSurveyMetadataResponse,
@@ -324,6 +413,10 @@ export type {
 	ManagedUsersResponse,
 	Media,
 	MediaGallery,
+	OutgoingInvitesResponse,
+	Project,
+	ProjectAdministratorInfo,
+	ProjectInfo,
 	Question,
 	QuestionVariant,
 	RadioQuestion,

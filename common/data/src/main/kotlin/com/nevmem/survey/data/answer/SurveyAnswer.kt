@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SurveyAnswer(
     val uid: UserId,
+    val timestamp: Long,
     val surveyId: String,
     val answers: List<QuestionAnswer>,
     val gallery: MediaGallery?,

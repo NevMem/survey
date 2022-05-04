@@ -16,11 +16,12 @@ internal class TaskServiceImpl : TaskService, KoinComponent {
 
     private val mediaService by inject<MediaStorageService>()
 
-    override suspend fun createExportTask(surveyId: Long): ExportDataTaskEntity = transaction {
+    override suspend fun createExportTask(projectId: Long, surveyId: Long): ExportDataTaskEntity = transaction {
         ExportDataTaskDTO.new {
             this.state = TaskStateDTO.Waiting
             this.surveyId = surveyId
             this.medias = ""
+            this.projectId = projectId
         }.entity(emptyList())
     }
 
@@ -110,6 +111,7 @@ internal class TaskServiceImpl : TaskService, KoinComponent {
     private fun ExportDataTaskDTO.entity(log: List<TaskLogDTO>): ExportDataTaskEntity {
         return ExportDataTaskEntity(
             id = this.id.value,
+            projectId = this.projectId,
             state = when (this.state) {
                 TaskStateDTO.Waiting -> TaskStateEntity.Waiting
                 TaskStateDTO.Executing -> TaskStateEntity.Executing

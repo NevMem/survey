@@ -1,20 +1,32 @@
 package com.nevmem.surveys.converters
 
 import com.nevmem.survey.data.invite.Invite
+import com.nevmem.survey.data.invite.InviteStatus
 import com.nevmem.survey.invite.InviteEntity
+import com.nevmem.survey.invite.InviteEntityStatus
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class InvitesConverter : KoinComponent {
     private val usersConverter by inject<UsersConverter>()
+    private val projectConverter by inject<ProjectConverter>()
 
-    fun convertInvite(invite: InviteEntity): Invite {
+    private fun convertInvite(invite: InviteEntity): Invite {
         return Invite(
-            inviteId = invite.inviteId,
-            acceptedBy = invite.acceptedBy?.let { usersConverter.convertUser(it) },
-            isExpired = invite.expired,
+            id = invite.id,
+            project = projectConverter(invite.project),
+            toUser = usersConverter(invite.toUser),
+            fromUser = usersConverter(invite.fromUser),
+            status = invite.status.common,
         )
     }
 
     operator fun invoke(invite: InviteEntity) = convertInvite(invite)
+
+    private val InviteEntityStatus.common: InviteStatus
+        get() = when (this) {
+            InviteEntityStatus.Accepted -> InviteStatus.Accepted
+            InviteEntityStatus.Waiting -> InviteStatus.Waiting
+            InviteEntityStatus.Expired -> InviteStatus.Expired
+        }
 }

@@ -2,16 +2,20 @@ import pytest
 from client import Client
 from client_fixture import *
 from utils import random_string
+from v2.project_factory_fixture import project_factory
+from v2.user_fixture import *
 import time
 
 
 @pytest.mark.task
-def test_simple_task(client: Client):
-    token = client.login('admin', 'password').json()['token']
+def test_simple_task(client: Client, user_factory, project_factory):
+    user = user_factory()
+    project = project_factory(user)
     
-    response = client.create_survey(
-        token,
+    response = client.create_survey_v2(
+        user.token,
         {
+            'projectId': project.id,
             'name': 'Some survey',
             'questions': [
                 {
@@ -32,6 +36,7 @@ def test_simple_task(client: Client):
         response = client.publish_answer({
             'answer': {
                 'surveyId': surveyLiteral,
+                'timestamp': int(time.time()),
                 'uid': {'uuid': publisherId},
                 'answers': [
                     {
@@ -44,23 +49,19 @@ def test_simple_task(client: Client):
         })
         assert response.status_code == 200
 
-    response = client.create_export_data_task(token, surveyId)
+    response = client.create_export_data_task(user.token, surveyId)
     print(response.json())
     assert response.status_code == 200
     taskId = response.json()['id']
 
-    response = client.tasks(token)
-    print(response.text)
-    assert response.status_code == 200
-
-    response = client.task(token, taskId)
+    response = client.task(user.token, taskId)
     print(response.text)
     assert response.status_code == 200
     assert response.json()['state'] == 'Executing' or response.json()['state'] == 'Waiting' or response.json()['state'] == 'Success'
 
     time.sleep(6)
 
-    response = client.task(token, taskId)
+    response = client.task(user.token, taskId)
     print(response.json())
     assert response.status_code == 200
     assert response.json()['state'] == 'Success'

@@ -12,8 +12,36 @@ import org.koin.core.component.KoinComponent
 private const val VARIANTS_PAIR_SEPARATOR = "@@@"
 private const val VARIANTS_SEPARATOR = "=#="
 
+private class Cache<K : Any, T : Any> {
+    private val cache = mutableMapOf<K, T?>()
+
+    fun has(key: K): Boolean {
+        return cache.containsKey(key)
+    }
+
+    fun getOrNull(key: K): T? {
+        return cache[key]
+    }
+
+    fun store(key: K, value: T?) {
+        cache[key] = value
+    }
+}
+
+private fun <K : Any, T : Any>withCache(cache: Cache<K, T>, key: K, getter: () -> T?): T? {
+    if (cache.has(key)) {
+        return cache.getOrNull(key)
+    }
+    val value = getter()
+    cache.store(key, value)
+    return value
+}
+
 internal class SurveysServiceImpl : SurveysService, KoinComponent {
+    private val surveysCache = Cache<String, SurveyEntity>()
+
     override suspend fun createSurvey(
+        projectId: Long,
         name: String,
         questions: List<QuestionEntity>,
         commonQuestion: List<CommonQuestionEntity>,
@@ -22,6 +50,7 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         val dto = transaction {
             val survey = SurveyEntityDTO.new {
                 this.name = name
+                this.projectId = projectId
                 this.surveyId = RandomStringGenerator.randomString(5)
                 this.answerCoolDown = answerCoolDown
             }
@@ -77,14 +106,18 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         SurveyEntityDTO.findById(id)?.delete()
     }
 
-    override suspend fun allSurveys(): List<SurveyEntity> {
-        return transaction { SurveyEntityDTO.all().map { it.toEntity() } }
-    }
+//    override suspend fun survey(surveyId: String): SurveyEntity? = transaction {
+//        SurveyEntityDTO.find {
+//            SurveysTable.surveyId eq surveyId
+//        }.firstOrNull()?.toEntity()
+//    }
 
-    override suspend fun survey(surveyId: String): SurveyEntity? = transaction {
-        SurveyEntityDTO.find {
-            SurveysTable.surveyId eq surveyId
-        }.firstOrNull()?.toEntity()
+    override suspend fun survey(surveyId: String): SurveyEntity? = withCache(surveysCache, surveyId) {
+        transaction {
+            SurveyEntityDTO.find {
+                SurveysTable.surveyId eq surveyId
+            }.firstOrNull()?.toEntity()
+        }
     }
 
     override suspend fun surveyById(surveyId: Long): SurveyEntity? = transaction {
@@ -93,9 +126,16 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         }.firstOrNull()?.toEntity()
     }
 
+    override suspend fun surveysInProject(projectId: Long): List<SurveyEntity> = transaction {
+        SurveyEntityDTO.find {
+            SurveysTable.projectId eq projectId
+        }.map { it.toEntity() }
+    }
+
     private fun SurveyEntityDTO.toEntity(): SurveyEntity {
         return SurveyEntity(
             id = id.value,
+            projectId = projectId,
             surveyId = surveyId,
             name = name,
             questions = questions.map { dto ->
@@ -119,12 +159,16 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
                     QuestionEntityType.Radio -> QuestionEntity.RadioQuestionEntity(
                         id = dto.id.value,
                         title = dto.title,
-                        variants = dto.variants!!.split(VARIANTS_SEPARATOR).map {
+                        variants = dto.variants!!.split(VARIANTS_SEPARATOR).mapNotNull {
                             val values = it.split(VARIANTS_PAIR_SEPARATOR)
-                            QuestionVariantEntity(
-                                id = values[0],
-                                variant = values[1],
-                            )
+                            if (values.size == 2) {
+                                QuestionVariantEntity(
+                                    id = values[0],
+                                    variant = values[1],
+                                )
+                            } else {
+                                null
+                            }
                         }
                     )
                 }

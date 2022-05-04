@@ -27,5 +27,5 @@ interface UsersService {
 
     suspend fun getUserById(id: Long): UserEntity?
 
-    suspend fun updateUserRoles(user: UserEntity, newRoles: List<RoleEntity>)
+    suspend fun getUserByLogin(login: String): UserEntity?
 }

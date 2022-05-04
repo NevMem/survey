@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 @Exported
 data class Survey(
     val id: Long,
+    val projectId: Long,
     val surveyId: String,
     val name: String,
     val questions: List<Question>,

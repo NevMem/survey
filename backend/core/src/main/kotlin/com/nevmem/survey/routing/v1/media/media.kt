@@ -1,7 +1,9 @@
 package com.nevmem.survey.routing.v1.media
 
 import com.nevmem.survey.data.request.media.CreateGalleryRequest
+import com.nevmem.survey.data.request.media.GetGalleryRequest
 import com.nevmem.survey.data.response.media.CreateGalleryResponse
+import com.nevmem.survey.data.response.media.GetGalleryResponse
 import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.fs.FileSystemService
 import com.nevmem.survey.media.MediaEntity
@@ -9,6 +11,7 @@ import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.surveys.converters.MediaConverter
 import com.nevmem.surveys.converters.MediaGalleryConverter
 import io.ktor.application.call
+import io.ktor.auth.authenticate
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
@@ -45,15 +48,24 @@ fun Route.mediaImpl() {
     get("/get/{mediaId}") {
         val mediaId = call.parameters["mediaId"]?.toLong() ?: throw IllegalStateException("Media id not present in path")
         val media = mediaService.mediaById(mediaId) ?: throw NotFoundException()
-        val ext = media.filename.split(".").last()
-        val fileType = when (ext) {
-            "txt" -> FileSystemService.FileType.TXT
-            "csv" -> FileSystemService.FileType.CSV
-            else -> throw IllegalStateException("unknown file type")
-        }
+        val fileType: FileSystemService.FileType = FileSystemService.FileType
+            .values().associateBy { it.ext }[media.filename.split(".").last()]
+            ?: throw IllegalStateException("unknown file type")
         val file = fsService.createFile(fileType)
         mediaService.downloadToFile(file, media)
         call.respondFile(file)
+    }
+
+    authenticate {
+        post("/gallery/get") {
+            val request = call.receive<GetGalleryRequest>()
+            val gallery = mediaService.mediaGallery(request.id) ?: throw NotFoundException()
+            call.respond(
+                GetGalleryResponse(
+                    gallery = mediaGalleryConverter(gallery),
+                )
+            )
+        }
     }
 }
 

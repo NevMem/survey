@@ -4,7 +4,6 @@ import {
     CreateExportDataTaskRequest,
     CreateInviteRequest,
     CreateInviteResponse,
-    GetInvitesResponse,
     LoadTaskRequest,
     LoginResponse,
     ManagedUsersResponse,
@@ -14,12 +13,30 @@ import {
     Task,
     UpdateRolesRequest,
     Administrator,
+    Project,
+    ProjectInfo,
+    IncomingInvitesResponse,
+    OutgoingInvitesResponse,
+    CreateProjectRequest,
+    Invite,
+    AcceptInviteResponse,
+    AcceptInviteRequest,
+    MediaGallery,
 } from "../data/exported";
 
 interface BackendApiService {
-    fetchSurveys(): Promise<Survey[]>
+    projects(abortController: AbortController): Promise<Project[]>
+
+    project(abortController: AbortController, id: number): Promise<Project>
+
+    projectInfo(abortController: AbortController, projectId: number): Promise<ProjectInfo>
+    surveys(abortController: AbortController, projectId: number): Promise<Survey[]>
+    survey(abortController: AbortController, id: number): Promise<Survey>
+
+    createProject(abortController: AbortController, request: CreateProjectRequest): Promise<Project>
+
     addSurvey(unsavedSurvey: UnsavedSurvey): Promise<Survey>
-    fetchMetadata(surveyId: number): Promise<SurveyMetadata>
+    fetchMetadata(abortController: AbortController, surveyId: number): Promise<SurveyMetadata>
 
     checkAuth(token: string): Promise<void>
     login(login: string, password: string): Promise<LoginResponse>
@@ -29,20 +46,22 @@ interface BackendApiService {
         login: string,
         password: string,
         email: string,
-        inviteId: string,
         abortController: AbortController,
     ): Promise<RegisterResponse>
     me(): Promise<Administrator>
 
-    invites(abortController: AbortController): Promise<GetInvitesResponse>
+    incomingInvites(abortController: AbortController): Promise<IncomingInvitesResponse>
+    outgoingInvites(abortController: AbortController): Promise<OutgoingInvitesResponse>
     createInvite(request: CreateInviteRequest, abortController: AbortController): Promise<CreateInviteResponse>
-    managedUsers(abortController: AbortController): Promise<ManagedUsersResponse>
+    accept(abortController: AbortController, request: AcceptInviteRequest): Promise<AcceptInviteResponse>
 
     roles(abortController: AbortController): Promise<AllRolesResponse>
     updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void>
 
     createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task>
     loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task>
+
+    gallery(abortController: AbortController, id: number): Promise<MediaGallery>
 }
 
 export type {

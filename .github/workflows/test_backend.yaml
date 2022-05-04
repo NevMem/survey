@@ -28,3 +28,10 @@ jobs:
           FIREBASE_SDK_KEY: ${{ secrets.FIREBASE_SDK_KEY }}
       - name: testing
         run: cd backend && ./full_suit.sh
+      - name: Upload tests report
+        uses: actions/upload-artifact@master
+        if: ${{ always() }}
+        with:
+          name: tests_report.html
+          path: backend/report/tests_report.html
+          retention-days: 20

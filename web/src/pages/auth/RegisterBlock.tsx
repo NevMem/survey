@@ -1,5 +1,4 @@
 import PageWrapper from "../../app/page/PageWrapper";
-import Card from "../../app/card/Card";
 import Text from "../../components/text/Text";
 import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import SpaceAroundRow from "../../app/layout/SpaceAroundRow";
@@ -13,6 +12,9 @@ import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAs
 import Loader from "../../components/loader/Loader";
 import CardError from "../../app/card/CardError";
 import CardSuccess from "../../app/card/CardSuccess";
+import OutlinedCard from "../../app/card/OutlinedCard";
+import TextButton from "../../components/button/TextButton";
+import SpacedRow from "../../app/layout/SpacedRow";
 
 const useTextInput = () => {
     const [value, setValue] = useState('');
@@ -33,7 +35,6 @@ const RegisterProcessingBlock = (props: {request: RegisterRequest}) => {
             props.request.login,
             props.request.password,
             props.request.email,
-            props.request.inviteId,
             controller,
         );
     });
@@ -66,7 +67,6 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
     const name = useTextInput();
     const surname = useTextInput();
     const email = useTextInput();
-    const inviteId = useTextInput();
 
     const fields = [
         {label: 'Логин', state: login},
@@ -74,7 +74,12 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
         {label: 'Имя', state: name},
         {label: 'Фамилия', state: surname},
         {label: 'Почта', state: email},
-        {label: 'Инвайт', state: inviteId},
+    ];
+
+    const rows = [
+        [ fields[0], fields[1] ],
+        [ fields[2], fields[3] ],
+        [ fields[4], ],
     ];
 
     const [request, setRequest] = useState<RegisterRequest | undefined>();
@@ -86,32 +91,60 @@ const RegisterBlock = (props: {switchToLogin: () => void}) => {
             login: login.value,
             password: password.value,
             email: email.value,
-            inviteId: inviteId.value,
         };
         setRequest(req);
     };
 
     return (
         <PageWrapper>
-            <Card>
-                <SpacedCenteredColumn rowGap={24}>
-                    <SpacedCenteredColumn rowGap={8}>
-                        {fields.map(elem => {
-                            return (
-                                <SpacedColumn key={elem.label} rowGap={4}>
-                                    <Text>{elem.label}</Text>
-                                    <Input value={elem.state.value} onChange={elem.state.changeHandler} />
-                                </SpacedColumn>
-                            );
-                        })}
+            <SpacedColumn rowGap={24}>
+                <Text header>Регистрация</Text>
+                <OutlinedCard>
+                    <SpacedCenteredColumn rowGap={24}>
+                        {/* <SpacedCenteredColumn rowGap={8}>
+                            {fields.map(elem => {
+                                return (
+                                    <SpacedColumn key={elem.label} rowGap={4}>
+                                        <Text>{elem.label}</Text>
+                                        <Input value={elem.state.value} onChange={elem.state.changeHandler} />
+                                    </SpacedColumn>
+                                );
+                            })}
+                        </SpacedCenteredColumn> */}
+
+                        <SpacedCenteredColumn rowGap={12}>
+
+                            {rows.map((row, index) => {
+
+                                return (
+                                    <SpacedRow columnGap={24} key={index}>
+                                        {row.map(field => {
+                                            return (
+                                                <SpacedColumn key={field.label} rowGap={4}>
+                                                    <Text>{field.label}</Text>
+                                                    <Input value={field.state.value} onChange={field.state.changeHandler} />
+                                                </SpacedColumn>
+                                            );
+                                        })}
+                                    </SpacedRow>
+                                );
+
+                            })}
+
+                        </SpacedCenteredColumn>
+
+                        {request && <RegisterProcessingBlock request={request} />}
+                        <SpacedCenteredColumn rowGap={16}>
+                            <SpaceAroundRow>
+                                <GeneralButton onClick={register}>Зарегистрироваться</GeneralButton>
+                            </SpaceAroundRow>
+                            <SpaceAroundRow>
+                                <TextButton secondary onClick={props.switchToLogin}>Войти</TextButton>
+                            </SpaceAroundRow>
+                        </SpacedCenteredColumn>
                     </SpacedCenteredColumn>
-                    {request && <RegisterProcessingBlock request={request} />}
-                    <SpacedCenteredColumn rowGap={16}>
-                        <SpaceAroundRow><GeneralButton onClick={register}>Зарегистрироваться</GeneralButton></SpaceAroundRow>
-                        <SpaceAroundRow><GeneralButton secondary onClick={props.switchToLogin}>Войти</GeneralButton></SpaceAroundRow>
-                    </SpacedCenteredColumn>
-                </SpacedCenteredColumn>
-            </Card>
+                </OutlinedCard>
+            </SpacedColumn>
         </PageWrapper>
     );
 };

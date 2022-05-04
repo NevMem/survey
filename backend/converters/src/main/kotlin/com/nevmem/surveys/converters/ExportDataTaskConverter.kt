@@ -13,6 +13,7 @@ class ExportDataTaskConverter : KoinComponent {
 
     operator fun invoke(entity: ExportDataTaskEntity): Task = Task(
         id = entity.id,
+        projectId = entity.projectId,
         state = when (entity.state) {
             TaskStateEntity.Waiting -> TaskState.Waiting
             TaskStateEntity.Executing -> TaskState.Executing

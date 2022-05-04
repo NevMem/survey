@@ -6,11 +6,10 @@ import Loader from '../../components/loader/Loader';
 import { Administrator } from '../../data/exported';
 import authService from '../../service/authorization/AuthorizationService';
 import Text from '../../components/text/Text';
-import Card from '../../app/card/Card';
 import SpacedColumn from '../../app/layout/SpacedColumn';
-import Badge from '../../components/badge/Badge';
 import SpaceBetweenReversedRow from '../../app/layout/SpaceBetweenReversedRow';
 import GeneralButton from '../../components/button/GeneralButton';
+import OutlinedCard from '../../app/card/OutlinedCard';
 
 const ProfileWrapper = (props: {user: Administrator | undefined, error: string | undefined, loading?: boolean}) => {
     if (props.loading) {
@@ -37,31 +36,17 @@ const ProfileWrapper = (props: {user: Administrator | undefined, error: string |
         };
 
         return (
-            <Card>
+            <OutlinedCard>
                 <SpacedColumn rowGap={16}>
-                    <Text header>Профиль</Text>
                     <Text large>Имя: {user.name}</Text>
                     <Text large>Фамилия: {user.surname}</Text>
                     <Text large>Никнейм: {user.login}</Text>
                     <Text large>Почта: {user.email}</Text>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '16px'}}>
-                        <Text>Роли:</Text>
-                        {user.roles.map((role, index) => {
-                            return <Badge success key={index}>{role.id}</Badge>;
-                        })}
-                    </div>
-
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', columnGap: '16px', flexWrap: 'wrap', rowGap: '10px'}}>
-                        <Text>Доступные роли:</Text>
-                        {user.allAvailableRoles.map((role, index) => {
-                            return <Badge success key={index}>{role.id}</Badge>;
-                        })}
-                    </div>
                 </SpacedColumn>
                 <SpaceBetweenReversedRow>
                     <GeneralButton secondary onClick={logout}>Выйти</GeneralButton>
                 </SpaceBetweenReversedRow>
-            </Card>
+            </OutlinedCard>
         );
     }
 
@@ -87,7 +72,10 @@ const ProfilePage = () => {
 
     return (
         <PageWrapper>
-            <ProfileWrapper user={user} error={error} loading={loading} />
+            <SpacedColumn rowGap={24}>
+                <Text header>Профиль</Text>
+                <ProfileWrapper user={user} error={error} loading={loading} />
+            </SpacedColumn>
         </PageWrapper>
     );
 };

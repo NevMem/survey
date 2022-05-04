@@ -1,3 +1,3 @@
 package com.nevmem.survey.exception
 
-class NotFoundException : Exception("Not found")
+class NotFoundException(message: String? = null) : Exception(message ?: "Not found")

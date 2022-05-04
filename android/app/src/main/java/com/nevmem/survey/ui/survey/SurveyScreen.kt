@@ -1,6 +1,5 @@
 package com.nevmem.survey.ui.survey
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +12,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -22,9 +21,12 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,6 +39,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.nevmem.survey.R
 import com.nevmem.survey.data.answer.QuestionAnswer
 import kotlinx.coroutines.GlobalScope
@@ -46,13 +49,14 @@ import org.koin.androidx.compose.viewModel
 @ExperimentalComposeUiApi
 @Composable
 fun SurveyScreen(
+    navController: NavController,
     scaffoldState: ScaffoldState,
 ) {
     val viewModel: SurveyScreenViewModel by viewModel()
 
     val survey = viewModel.survey.value
 
-    var currentAnswer: QuestionAnswer? by rememberSaveable { mutableStateOf(null) }
+    var currentAnswer: QuestionAnswer? by remember { mutableStateOf(null) }
     val setCurrentAnswer = { answer: QuestionAnswer ->
         currentAnswer = answer
     }
@@ -105,7 +109,8 @@ fun SurveyScreen(
             )
         }
 
-        ActionsRow(
+        ActionsRowWrapper(
+            navController = navController,
             actions = viewModel.uiState.value.actions,
             moveNext = moveNext,
             movePrev = { viewModel.dispatch(SurveyScreenAction.Previous) },
@@ -116,25 +121,72 @@ fun SurveyScreen(
 }
 
 @Composable
-private fun ActionsRow(
+private fun TakePictureAction(navController: NavController) {
+    IconButton(onClick = { navController.navigate("camera") }) {
+        Icon(imageVector = Icons.Filled.PhotoCamera, contentDescription = "camera")
+    }
+}
+
+@Composable
+private fun ActionsRowWrapper(
+    navController: NavController,
     actions: List<SurveyScreenActionType>,
     moveNext: () -> Unit,
     movePrev: () -> Unit,
     send: () -> Unit,
     retry: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp),
-        horizontalArrangement = if (actions.size >= 2) Arrangement.SpaceBetween else Arrangement.SpaceAround,
-    ) {
-        actions.forEach {
-            when (it) {
-                SurveyScreenActionType.Next -> NextAction(moveNext = moveNext)
-                SurveyScreenActionType.Send -> SendAction(send = send)
-                SurveyScreenActionType.Previous -> PrevAction(movePrev = movePrev)
-                SurveyScreenActionType.Retry -> RetryAction(retry = retry)
+    Box(modifier = Modifier.padding(top = 28.dp, bottom = 28.dp)) {
+        ActionsRow(navController, actions, moveNext, movePrev, send, retry)
+    }
+}
+
+@Composable
+private fun ActionsRow(
+    navController: NavController,
+    actions: List<SurveyScreenActionType>,
+    moveNext: () -> Unit,
+    movePrev: () -> Unit,
+    send: () -> Unit,
+    retry: () -> Unit,
+) {
+    if (actions.size >= 3) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            ActionsRow(
+                navController = navController,
+                actions = actions.subList(1, actions.size - 1),
+                moveNext = moveNext,
+                movePrev = movePrev,
+                send = send,
+                retry = retry,
+            )
+            ActionsRow(
+                navController = navController,
+                actions = listOf(actions.first(), actions.last()),
+                moveNext = moveNext,
+                movePrev = movePrev,
+                send = send,
+                retry = retry,
+            )
+        }
+    } else {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
+            horizontalArrangement = if (actions.size >= 2) Arrangement.SpaceBetween else Arrangement.SpaceAround,
+        ) {
+            actions.forEach {
+                when (it) {
+                    SurveyScreenActionType.Next -> NextAction(moveNext = moveNext)
+                    SurveyScreenActionType.Send -> SendAction(send = send)
+                    SurveyScreenActionType.Previous -> PrevAction(movePrev = movePrev)
+                    SurveyScreenActionType.Retry -> RetryAction(retry = retry)
+                    SurveyScreenActionType.TakePicture -> TakePictureAction(navController = navController)
+                }
             }
         }
     }
@@ -193,41 +245,7 @@ private fun SurveyScreenItemImpl(
         is TextQuestion -> { TextQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is StarsQuestion -> { StarsQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
         is RadioQuestion -> { RadioQuestionImpl(item = item, setCurrentAnswer = setCurrentAnswer) }
-        else -> { SendingView(item = item) }
-    }
-}
-
-@Composable
-private fun SendingView(item: SurveyScreenItem) {
-    QuestionCard {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            when (item) {
-                SendingAnswers.Sending -> {
-                    CircularProgressIndicator()
-                }
-                is SendingAnswers.Error -> {
-                    Column {
-                        Text(
-                            stringResource(id = R.string.sending_answers_failed),
-                            style = MaterialTheme.typography.h4,
-                        )
-                        Text(
-                            stringResource(id = R.string.sending_answers_failed_description),
-                            modifier = Modifier.padding(top = 12.dp),
-                            style = MaterialTheme.typography.subtitle2,
-                        )
-                        Text(
-                            item.message,
-                            modifier = Modifier.padding(top = 8.dp),
-                        )
-                    }
-                }
-                SendingAnswers.Success -> {
-                    Text("Success")
-                }
-                else -> throw IllegalStateException()
-            }
-        }
+        else -> { SendingAnswersView(item = item) }
     }
 }
 
@@ -236,7 +254,7 @@ private fun RatingQuestionImpl(
     item: RatingQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
-    var sliderValue by rememberSaveable { mutableStateOf(item.min.toFloat()) }
+    var sliderValue by rememberSaveable(item) { mutableStateOf(item.min.toFloat()) }
     QuestionCard {
         Column {
             Text(
@@ -279,7 +297,7 @@ private fun StarsQuestionImpl(
     item: StarsQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
-    var sliderValue by rememberSaveable { mutableStateOf((item.stars / 2 + 1).toFloat()) }
+    var sliderValue by rememberSaveable(item) { mutableStateOf((item.stars / 2 + 1).toFloat()) }
     QuestionCard {
         Column {
             Text(
@@ -323,7 +341,7 @@ private fun TextQuestionImpl(
     item: TextQuestion,
     setCurrentAnswer: (QuestionAnswer) -> Unit,
 ) {
-    var text by rememberSaveable { mutableStateOf("") }
+    var text by rememberSaveable(item) { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 

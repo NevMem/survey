@@ -1,0 +1,14 @@
+phantom:
+  address: ethnosurvey.com
+  ammofile: ammo.txt
+  load_profile:
+    load_type: rps
+    schedule: line(1, 1000, 5m)
+console:
+  enabled: true
+telegraf:
+  enabled: false
+overload:
+  enabled: true
+  package: yandextank.plugins.DataUploader
+  token_file: token.txt

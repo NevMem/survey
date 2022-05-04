@@ -38,20 +38,11 @@ class Client:
             }
         )
 
-    def surveys(self, token: str):
-        return self._get('/v1/survey/surveys', headers={'Authorization': 'Bearer ' + token})
-
-    def create_survey(self, token: str, body):
-        return self._post('/v1/survey/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
-
     def delete_survey(self, token: str, survey_id: int):
         return self._post('/v1/survey/delete_survey', {'surveyId': survey_id}, headers={'Authorization': 'Bearer ' + token})
 
     def me(self, token: str):
         return self._get('/v1/me', headers={'Authorization': 'Bearer ' + token})
-
-    def invites(self, token: str):
-        return self._get('/v1/invite/my_invites', headers={'Authorization': 'Bearer ' + token})
 
     def create_invite(self, token: str, expirationSeconds: int):
         return self._post('/v1/invite/create_invite', {'expirationTimeSeconds': expirationSeconds}, headers={'Authorization': 'Bearer ' + token})
@@ -78,19 +69,76 @@ class Client:
         return self._post('/v1/role/update_roles', body, headers={'Authorization': 'Bearer ' + token})
 
     def survey_metadata(self, token, surveyId):
-        return self._post('/v1/survey/metadata', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v2/survey/metadata', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
 
     def tasks(self, token):
         return self._get('/v1/task/tasks', headers={'Authorization': 'Bearer ' + token})
 
-    def get_survey(self, survey_id):
-        return self._post('/v1/survey/get', {'surveyId': survey_id})
+    def join_survey(self, survey_id, user_id: str):
+        return self._post('/v2/survey/join', {'surveyId': survey_id, 'userId': {'uuid': user_id}})
 
     def task(self, token, id):
-        return self._post('/v1/task/task', {'id': id}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v2/tasks/get', {'id': id}, headers={'Authorization': 'Bearer ' + token})
 
     def create_export_data_task(self, token, surveyId):
-        return self._post('/v1/task/create_export_data_task', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
+        return self._post('/v2/tasks/create_export_data_task', {'surveyId': surveyId}, headers={'Authorization': 'Bearer ' + token})
+
+    def register_v2(self, login: str, password: str, name: str, surname: str, email: str):
+        return self._post(
+            '/v2/register',
+            {
+                'login': login,
+                'password': password,
+                'name': name,
+                'surname': surname,
+                'email': email,
+            }
+        )
+
+    def login_v2(self, login: str, password: str):
+        return self._post('/v2/login', {'login': login, 'password': password})
+
+    def check_auth(self, token):
+        return self._get('/v2/check_auth', headers={'Authorization': 'Bearer ' + token})
+
+    def create_project(self, token, name):
+        return self._post('/v2/projects/create', body={'name': name}, headers={'Authorization': 'Bearer ' + token})
+
+    def projects(self, token):
+        return self._get('/v2/projects/all', headers={'Authorization': 'Bearer ' + token})
+
+    def create_survey_v2(self, token: str, body):
+        return self._post('/v2/survey/create_survey', body=body, headers={'Authorization': 'Bearer ' + token})
+
+    def surveys_v2(self, token: str, projectId: int):
+        return self._post('/v2/survey/surveys', body={'projectId': projectId}, headers={'Authorization': 'Bearer ' + token})
+
+    def incoming_invites(self, token):
+        return self._post('/v2/invites/incoming', body={}, headers={'Authorization': 'Bearer ' + token})
+
+    def outgoing_invites(self, token):
+        return self._post('/v2/invites/outgoing', body={}, headers={'Authorization': 'Bearer ' + token})
+
+    def create_invite_v2(self, token, projectId: int, login: str, expirationSeconds: int):
+        return self._post(
+            '/v2/invites/create',
+            body={'projectId': projectId, 'userLogin': login, 'expirationTimeSeconds': expirationSeconds},
+            headers={'Authorization': 'Bearer ' + token}
+        )
+
+    def accept_invite(self, token, id: int):
+        return self._post(
+            '/v2/invites/accept',
+            body={'id': id},
+            headers={'Authorization': 'Bearer ' + token}
+        )
+
+    def project_info(self, token, projectId):
+        return self._post(
+            '/v2/projects/info',
+            body={'projectId': projectId},
+            headers={'Authorization': 'Bearer ' + token}
+        )
 
     @timed
     def upload_media(self, stream):

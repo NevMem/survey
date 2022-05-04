@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nevmem.survey.R
 import com.nevmem.survey.service.achievement.api.Achievement
+import com.nevmem.survey.ui.survey.FancyCardView
 import org.koin.androidx.compose.viewModel
 
 @Composable
@@ -151,22 +152,14 @@ private fun HeaderItem() {
 
 @Composable
 private fun AchievementsView(achievements: List<Achievement>) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        elevation = 8.dp,
-        shape = RoundedCornerShape(8.dp),
-    ) {
+    FancyCardView {
         Column {
             Text(
                 stringResource(id = R.string.achievements_title),
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
                 style = MaterialTheme.typography.subtitle1,
             )
             Row(
                 modifier = Modifier
-                    .padding(8.dp)
                     .fillMaxSize()
                     .horizontalScroll(rememberScrollState()),
             ) {
@@ -184,29 +177,26 @@ private fun SurveyView(
     item: SurveyState,
     leaveSurvey: () -> Unit,
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        elevation = 8.dp,
-        shape = RoundedCornerShape(8.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-        ) {
-            when (item) {
-                is SurveyState.AlreadyAnsweredSurvey -> {
-                    AlreadyAnsweredSurveyView(item)
-                }
-                SurveyState.NoSurvey -> { NoSurveyView(navController = navController) }
-                is SurveyState.ReadySurvey -> {
-                    ReadySurveyView(
-                        navController = navController,
-                        item = item,
-                        leaveSurvey = leaveSurvey,
-                    )
+    if (item is SurveyState.NoSurvey) {
+        NoSurveyView(navController = navController)
+    } else {
+        FancyCardView {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                when (item) {
+                    is SurveyState.AlreadyAnsweredSurvey -> {
+                        AlreadyAnsweredSurveyView(item)
+                    }
+                    is SurveyState.ReadySurvey -> {
+                        ReadySurveyView(
+                            navController = navController,
+                            item = item,
+                            leaveSurvey = leaveSurvey,
+                        )
+                    }
+                    else -> throw IllegalStateException()
                 }
             }
         }
@@ -217,7 +207,7 @@ private fun SurveyView(
 private fun NoSurveyView(
     navController: NavController,
 ) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+    Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.Center) {
         Button(onClick = { navController.navigate("join") }) {
             Text(stringResource(id = R.string.join_survey))
         }

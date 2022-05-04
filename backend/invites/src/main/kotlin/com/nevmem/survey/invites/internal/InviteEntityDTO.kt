@@ -1,24 +1,27 @@
 package com.nevmem.survey.invites.internal
 
+import com.nevmem.survey.TableNames
 import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 
-internal object InvitesTable : LongIdTable() {
-    val inviteId = varchar("inviteId", 16)
+internal object InvitesTable : LongIdTable(TableNames.invitesTableName) {
+    val projectId = long("projectId")
+    val fromUserId = long("fromUserId")
+    val toUserId = long("toUserId")
     val createdAt = long("createdAt")
     val expirationPeriod = long("expirationPeriod")
-    val ownerId = long("ownerId")
-    val acceptedByUserId = long("acceptedByUserId").nullable()
+    val accepted = bool("accepted")
 }
 
 internal class InviteEntityDTO(id: EntityID<Long>) : LongEntity(id) {
     companion object : LongEntityClass<InviteEntityDTO>(InvitesTable)
 
-    var inviteId by InvitesTable.inviteId
+    var projectId by InvitesTable.projectId
+    var fromUserId by InvitesTable.fromUserId
+    var toUserId by InvitesTable.toUserId
     var createdAt by InvitesTable.createdAt
     var expirationPeriod by InvitesTable.expirationPeriod
-    var ownerId by InvitesTable.ownerId
-    var acceptedByUserId by InvitesTable.acceptedByUserId
+    var accepted by InvitesTable.accepted
 }
