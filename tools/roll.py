@@ -128,13 +128,13 @@ def main():
                         ports=service_config['ports'],
                         container_name=f"{service}-{index}",
                     )
-
-                    if 'network' in service_config:
-                        create_network(executor=executor, name=service_config['network'])
-                        attach_to_network(executor=executor, network_name=service_config['network'], container_name=f"{service}-{index}")
                 else:
                     logs.append(f"✅ Not need to redeploy on machine {machine.name} ip: {machine.ip}")
                     print('No need for redeploy')
+                
+                if 'network' in service_config:
+                    create_network(executor=executor, name=service_config['network'])
+                    attach_to_network(executor=executor, network_name=service_config['network'], container_name=f"{service}-{index}")
         logs.append("")
 
     Notificator().send_message('\n'.join(logs))
