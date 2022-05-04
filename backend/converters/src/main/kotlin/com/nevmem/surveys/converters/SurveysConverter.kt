@@ -17,6 +17,7 @@ class SurveysConverter : KoinComponent {
             name = survey.name,
             questions = survey.questions.map { questionsConverter(it) },
             commonQuestions = survey.commonQuestions.map { commonQuestionsConverter(it) },
+            surveyCoolDown = survey.answerCoolDown,
         )
     }
 
