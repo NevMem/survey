@@ -23,6 +23,9 @@ import io.ktor.routing.get
 import io.ktor.serialization.json
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
@@ -32,7 +35,7 @@ private val coreModule = module {
     single { createTaskService() }
     single { createFileSystemService() }
     single { createSurveysService() }
-    single { createAnswersService(get()) }
+    single { createAnswersService(get(), CoroutineScope(Dispatchers.Default + SupervisorJob())) }
     single { createMediaStorageService() }
 }
 
