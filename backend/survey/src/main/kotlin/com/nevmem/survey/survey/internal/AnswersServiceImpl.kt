@@ -15,8 +15,6 @@ import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.UnknownCommonQuestionException
 import com.nevmem.surveys.converters.MediaGalleryConverter
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.and
@@ -65,7 +63,7 @@ internal class AnswersServiceImpl(
                 val hasAnswer = transaction {
                     SurveyAnswerDTO.find {
                         (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
-                                (SurveyAnswerTable.surveyId eq answer.surveyId)
+                            (SurveyAnswerTable.surveyId eq answer.surveyId)
                     }.firstOrNull() != null
                 }
                 if (hasAnswer) {
@@ -76,8 +74,8 @@ internal class AnswersServiceImpl(
                     SurveyAnswerDTO.count(
                         Op.build {
                             (SurveyAnswerTable.publisherId eq answer.uid.uuid) and
-                                    (SurveyAnswerTable.surveyId eq answer.surveyId) and
-                                    (SurveyAnswerTable.timestamp greater System.currentTimeMillis() - survey.answerCoolDown)
+                                (SurveyAnswerTable.surveyId eq answer.surveyId) and
+                                (SurveyAnswerTable.timestamp greater System.currentTimeMillis() - survey.answerCoolDown)
                         }
                     )
                 }
@@ -116,26 +114,6 @@ internal class AnswersServiceImpl(
 
     override suspend fun answers(surveyId: String): List<SurveyAnswer> = transaction {
         SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }.map { it.entity() }
-    }
-
-    override suspend fun getAnswers(surveyId: String): String = transaction {
-        val dto = SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }
-
-        @Serializable
-        data class DebugQuestionAnswer(val type: SurveyAnswerType, val jsonAnswer: String)
-        @Serializable
-        data class DebugSurveyAnswer(val publisherId: String, val answers: List<DebugQuestionAnswer>)
-
-        val result = dto.map {
-            DebugSurveyAnswer(
-                publisherId = it.publisherId,
-                answers = it.answers.map { answerDto ->
-                    DebugQuestionAnswer(answerDto.type, answerDto.jsonAnswer)
-                }
-            )
-        }
-
-        Json.encodeToString(result)
     }
 
     override suspend fun getAnswersCount(surveyId: String): Long {

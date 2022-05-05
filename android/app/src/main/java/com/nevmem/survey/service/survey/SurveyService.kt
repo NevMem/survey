@@ -7,7 +7,6 @@ import com.nevmem.survey.network.api.NetworkService
 import com.nevmem.survey.preferences.PreferencesService
 import com.nevmem.survey.report.report
 import com.nevmem.survey.service.uid.UserIdProvider
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow

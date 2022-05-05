@@ -28,7 +28,7 @@ private class Cache<K : Any, T : Any> {
     }
 }
 
-private fun <K : Any, T : Any>withCache(cache: Cache<K, T>, key: K, getter: () -> T?): T? {
+private fun <K : Any, T : Any> withCache(cache: Cache<K, T>, key: K, getter: () -> T?): T? {
     if (cache.has(key)) {
         return cache.getOrNull(key)
     }

@@ -5,14 +5,14 @@ import com.nevmem.survey.data.question.Question
 import com.nevmem.survey.data.request.survey.CreateSurveyRequest
 import com.nevmem.survey.data.request.survey.DeleteSurveyRequest
 import com.nevmem.survey.data.request.survey.GetSurveyRequest
-import com.nevmem.survey.data.request.survey.JoinSurveyRequest
 import com.nevmem.survey.data.request.survey.GetSurveysRequest
+import com.nevmem.survey.data.request.survey.JoinSurveyRequest
 import com.nevmem.survey.data.request.survey.LeaveSurveyRequest
 import com.nevmem.survey.data.request.survey.LoadSurveyMetadataRequest
 import com.nevmem.survey.data.response.survey.CreateSurveyResponse
 import com.nevmem.survey.data.response.survey.GetSurveyResponse
-import com.nevmem.survey.data.response.survey.JoinSurveyResponse
 import com.nevmem.survey.data.response.survey.GetSurveysResponse
+import com.nevmem.survey.data.response.survey.JoinSurveyResponse
 import com.nevmem.survey.data.response.survey.LoadSurveyMetadataResponse
 import com.nevmem.survey.exception.AccessDeniedException
 import com.nevmem.survey.exception.NotFoundException
