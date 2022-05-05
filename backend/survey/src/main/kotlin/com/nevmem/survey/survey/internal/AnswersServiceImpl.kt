@@ -22,19 +22,55 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+private interface AnswerSaver {
+    fun save(answer: SurveyAnswer)
+}
+
+private class SimpleAnswerSaver : AnswerSaver {
+    override fun save(answer: SurveyAnswer) {
+        transaction {
+            val surveyAnswer = SurveyAnswerDTO.new {
+                this.publisherId = answer.uid.uuid
+                this.surveyId = answer.surveyId
+                this.mediaGalleryId = answer.gallery?.id
+                this.timestamp = System.currentTimeMillis()
+            }
+
+            answer.answers.forEach { actualAnswer ->
+                val type = when (typeOfQuestionForAnswer(actualAnswer)) {
+                    QuestionType.Rating -> SurveyAnswerType.Rating
+                    QuestionType.Stars -> SurveyAnswerType.Stars
+                    QuestionType.Text -> SurveyAnswerType.Text
+                    QuestionType.Radio -> SurveyAnswerType.Radio
+                }
+
+                QuestionAnswerDTO.new {
+                    this.surveyAnswer = surveyAnswer.id
+                    this.type = type
+                    this.jsonAnswer = Json.encodeToString(QuestionAnswer.serializer(), actualAnswer)
+                }
+            }
+        }
+    }
+}
+
+private enum class QuestionType {
+    Text,
+    Rating,
+    Stars,
+    Radio,
+}
+
 internal class AnswersServiceImpl(
     private val mediaStorageService: MediaStorageService,
 ) : AnswersService, KoinComponent {
 
-    private enum class QuestionType {
-        Text,
-        Rating,
-        Stars,
-        Radio,
-    }
-
     private val surveysService by inject<SurveysService>()
     private val mediaGalleryConverter by inject<MediaGalleryConverter>()
+
+    private val saver: AnswerSaver by lazy {
+        SimpleAnswerSaver()
+    }
 
     override suspend fun publishAnswer(answer: SurveyAnswer) {
         val survey = surveysService.survey(answer.surveyId) ?: throw SurveyNotFoundException()
@@ -87,7 +123,9 @@ internal class AnswersServiceImpl(
 
         // Ok. Simple validation passed. Storing answer to storage
 
-        transaction {
+        saver.save(answer)
+
+        /* transaction {
             val surveyAnswer = SurveyAnswerDTO.new {
                 this.publisherId = answer.uid.uuid
                 this.surveyId = answer.surveyId
@@ -109,7 +147,7 @@ internal class AnswersServiceImpl(
                     this.jsonAnswer = Json.encodeToString(QuestionAnswer.serializer(), actualAnswer)
                 }
             }
-        }
+        } */
     }
 
     override suspend fun answers(surveyId: String): List<SurveyAnswer> = transaction {
@@ -121,34 +159,6 @@ internal class AnswersServiceImpl(
             SurveyAnswerDTO.find {
                 SurveyAnswerTable.surveyId eq surveyId
             }.count()
-        }
-    }
-
-    private fun typeOfCommonQuestion(question: CommonQuestionEntity): QuestionType {
-        return when (question.id) {
-            "age" -> QuestionType.Rating
-            "school_name" -> QuestionType.Text
-            "region" -> QuestionType.Text
-            "grade" -> QuestionType.Rating
-            else -> throw UnknownCommonQuestionException(question.id)
-        }
-    }
-
-    private fun typeOfQuestion(question: QuestionEntity): QuestionType {
-        return when (question) {
-            is QuestionEntity.RatingQuestionEntity -> QuestionType.Rating
-            is QuestionEntity.TextQuestionEntity -> QuestionType.Text
-            is QuestionEntity.StarsQuestionEntity -> QuestionType.Stars
-            is QuestionEntity.RadioQuestionEntity -> QuestionType.Radio
-        }
-    }
-
-    private fun typeOfQuestionForAnswer(answer: QuestionAnswer): QuestionType {
-        return when (answer) {
-            is QuestionAnswer.TextQuestionAnswer -> QuestionType.Text
-            is QuestionAnswer.StarsQuestionAnswer -> QuestionType.Stars
-            is QuestionAnswer.RatingQuestionAnswer -> QuestionType.Rating
-            is QuestionAnswer.RadioQuestionAnswer -> QuestionType.Radio
         }
     }
 
@@ -164,5 +174,33 @@ internal class AnswersServiceImpl(
 
     private fun QuestionAnswerDTO.entity(): QuestionAnswer {
         return Json.decodeFromString(QuestionAnswer.serializer(), this.jsonAnswer)
+    }
+}
+
+private fun typeOfCommonQuestion(question: CommonQuestionEntity): QuestionType {
+    return when (question.id) {
+        "age" -> QuestionType.Rating
+        "school_name" -> QuestionType.Text
+        "region" -> QuestionType.Text
+        "grade" -> QuestionType.Rating
+        else -> throw UnknownCommonQuestionException(question.id)
+    }
+}
+
+private fun typeOfQuestion(question: QuestionEntity): QuestionType {
+    return when (question) {
+        is QuestionEntity.RatingQuestionEntity -> QuestionType.Rating
+        is QuestionEntity.TextQuestionEntity -> QuestionType.Text
+        is QuestionEntity.StarsQuestionEntity -> QuestionType.Stars
+        is QuestionEntity.RadioQuestionEntity -> QuestionType.Radio
+    }
+}
+
+private fun typeOfQuestionForAnswer(answer: QuestionAnswer): QuestionType {
+    return when (answer) {
+        is QuestionAnswer.TextQuestionAnswer -> QuestionType.Text
+        is QuestionAnswer.StarsQuestionAnswer -> QuestionType.Stars
+        is QuestionAnswer.RatingQuestionAnswer -> QuestionType.Rating
+        is QuestionAnswer.RadioQuestionAnswer -> QuestionType.Radio
     }
 }
