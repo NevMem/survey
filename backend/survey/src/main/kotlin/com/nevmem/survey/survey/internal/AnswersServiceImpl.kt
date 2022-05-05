@@ -69,12 +69,7 @@ private class BunchAnswerSaver(
         backgroundScope.launch {
             withContext(Dispatchers.Default) {
                 while (true) {
-                    delay(500L)
-                    if (queue.isEmpty()) {
-                        continue
-                    }
-
-                    val answersToSave = (0 until 128).mapNotNull { queue.removeFirstOrNull() }
+                    val answersToSave = (0 until 512).mapNotNull { queue.removeFirstOrNull() }
                     println(answersToSave.size)
 
                     try {
@@ -113,6 +108,9 @@ private class BunchAnswerSaver(
                         println(exception)
                         queue.addAll(answersToSave)
                         updateMetrics()
+                    }
+                    if (queue.isEmpty()) {
+                        delay(1000L)
                     }
                 }
             }
