@@ -99,7 +99,7 @@ private fun CameraView(
     val lensFacing by remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
     val imageCapture: ImageCapture = remember {
         ImageCapture.Builder()
-            .setTargetResolution(android.util.Size(720, 1280))
+//            .setTargetResolution(android.util.Size(720, 1280))
             .build()
     }
     CameraPreviewView(

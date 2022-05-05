@@ -8,3 +8,20 @@ Connection: keep-alive
 Content-Length: 272
 
 {"answer": {"uid": {"uuid": "182728748"}, "timestamp": 1651681987, "surveyId": "EQTIC", "answers": [{"type": "rating", "number": 7}, {"type": "text", "text": "Some school name"}, {"type": "text", "text": "Some region"}, {"type": "rating", "number": 10}], "gallery": null}}
+758 upload_media
+POST /v1/media/upload HTTP/1.1
+Host: hostname.com
+Content-Length: 605
+Content-Type: multipart/form-data; boundary=d2ec1045cf5a1a5dd414cc35e00987b0
+
+--d2ec1045cf5a1a5dd414cc35e00987b0
+Content-Disposition: form-data; name="file"; filename="text.txt"
+Content-Type: text/plain
+
+trybnldknadklnadlknadklnaklnalknalkdnalkdnlkanlkadnlkandlkandlkandlkand,,ehjrbuilsdjk asfjbsefbsjnfesbfjesbf
+trybnldknadklnadlknadklnaklnalknalkdnalkdnlkanlkadnlkandlkandlkandlkand,,ehjrbuilsdjk asfjbsefbsjnfesbfjesbf
+trybnldknadklnadlknadklnaklnalknalkdnalkdnlkanlkadnlkandlkandlkandlkand,,ehjrbuilsdjk asfjbsefbsjnfesbfjesbf
+trybnldknadklnadlknadklnaklnalknalkdnalkdnlkanlkadnlkandlkandlkandlkand,,ehjrbuilsdjk asfjbsefbsjnfesbfjesbf
+--d2ec1045cf5a1a5dd414cc35e00987b0--
+
+
