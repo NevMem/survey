@@ -28,6 +28,9 @@ import com.nevmem.survey.users.createUsersService
 import com.nevmem.survey.worker.api.createWorkerApi
 import io.ktor.application.Application
 import io.ktor.application.install
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
 
@@ -40,7 +43,7 @@ private val coreModule = module {
     single<SurveysService> { createSurveysService() }
     single<FileSystemService> { createFileSystemService() }
     single<MediaStorageService> { createMediaStorageService() }
-    single<AnswersService> { createAnswersService(get()) }
+    single<AnswersService> { createAnswersService(get(), CoroutineScope(Dispatchers.Default + SupervisorJob())) }
     single<SurveysMetadataAssembler> { createSurveyMetadataAssembler() }
     single<UsersService> { createUsersService() }
     single { createWorkerApi(EnvVars.Worker.uri!!) }

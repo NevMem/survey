@@ -9,12 +9,18 @@ import com.nevmem.survey.media.MediaStorageService
 import com.nevmem.survey.question.QuestionEntity
 import com.nevmem.survey.survey.AlreadyPublishedAnswerException
 import com.nevmem.survey.survey.AnswersService
+import com.nevmem.survey.survey.AnswersServiceMetrics
 import com.nevmem.survey.survey.SurveyAnswerInconsistencyException
 import com.nevmem.survey.survey.SurveyNotFoundException
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.UnknownCommonQuestionException
 import com.nevmem.surveys.converters.MediaGalleryConverter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.and
@@ -54,9 +60,72 @@ private class SimpleAnswerSaver : AnswerSaver {
     }
 }
 
-private class BunchAnswerSaver : AnswerSaver {
+private class BunchAnswerSaver(
+    backgroundScope: CoroutineScope,
+) : AnswerSaver {
+    private val queue = mutableListOf<SurveyAnswer>()
+
+    init {
+        backgroundScope.launch {
+            withContext(Dispatchers.Default) {
+                while (true) {
+                    delay(500L)
+                    if (queue.isEmpty()) {
+                        continue
+                    }
+
+                    val answersToSave = (0 until 128).mapNotNull { queue.removeFirstOrNull() }
+                    println(answersToSave.size)
+
+                    try {
+                        withContext(Dispatchers.IO) {
+                            transaction {
+                                answersToSave.forEach { answer ->
+                                    val surveyAnswer = SurveyAnswerDTO.new {
+                                        this.publisherId = answer.uid.uuid
+                                        this.surveyId = answer.surveyId
+                                        this.mediaGalleryId = answer.gallery?.id
+                                        this.timestamp = System.currentTimeMillis()
+                                    }
+
+                                    answer.answers.forEach { actualAnswer ->
+                                        val type = when (typeOfQuestionForAnswer(actualAnswer)) {
+                                            QuestionType.Rating -> SurveyAnswerType.Rating
+                                            QuestionType.Stars -> SurveyAnswerType.Stars
+                                            QuestionType.Text -> SurveyAnswerType.Text
+                                            QuestionType.Radio -> SurveyAnswerType.Radio
+                                        }
+
+                                        QuestionAnswerDTO.new {
+                                            this.surveyAnswer = surveyAnswer.id
+                                            this.type = type
+                                            this.jsonAnswer = Json.encodeToString(
+                                                QuestionAnswer.serializer(),
+                                                actualAnswer,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        updateMetrics()
+                    } catch (exception: Exception) {
+                        println(exception)
+                        queue.addAll(answersToSave)
+                        updateMetrics()
+                    }
+                }
+            }
+        }
+    }
+
     override fun save(answer: SurveyAnswer) {
-        TODO("Not yet implemented")
+        queue.add(answer)
+        updateMetrics()
+    }
+
+    private fun updateMetrics() {
+        AnswersServiceMetrics.answersQueueSizeObserver.updateValue(queue.size.toDouble())
     }
 }
 
@@ -69,13 +138,25 @@ private enum class QuestionType {
 
 internal class AnswersServiceImpl(
     private val mediaStorageService: MediaStorageService,
+    private val backgroundScope: CoroutineScope,
 ) : AnswersService, KoinComponent {
 
     private val surveysService by inject<SurveysService>()
     private val mediaGalleryConverter by inject<MediaGalleryConverter>()
 
+    enum class Mode {
+        Simple,
+        Bunch,
+    }
+
+    private val mode = Mode.Bunch
+
     private val saver: AnswerSaver by lazy {
-        SimpleAnswerSaver()
+        if (mode == Mode.Simple) {
+            SimpleAnswerSaver()
+        } else {
+            BunchAnswerSaver(backgroundScope)
+        }
     }
 
     override suspend fun publishAnswer(answer: SurveyAnswer) {

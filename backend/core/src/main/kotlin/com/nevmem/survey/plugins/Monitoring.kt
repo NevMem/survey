@@ -1,5 +1,6 @@
 package com.nevmem.survey.plugins
 
+import com.nevmem.survey.metrics.CustomMeterBinder
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -22,6 +23,7 @@ fun Application.configureMonitoring() {
             JvmMemoryMetrics(),
             JvmGcMetrics(),
             ProcessorMetrics(),
+            CustomMeterBinder(),
         )
     }
 
