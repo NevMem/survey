@@ -31,6 +31,12 @@ services:
       dockerfile: backend/push/docker/TestingDockerfile
     ports:
       - "82:80"
+  metrics:
+    build:
+      context: metrics/
+      dockerfile: TestingDockerfile
+    ports:
+      - "83:9090"
   test:
     build:
       context: .

@@ -54,6 +54,12 @@ private class SimpleAnswerSaver : AnswerSaver {
     }
 }
 
+private class BunchAnswerSaver : AnswerSaver {
+    override fun save(answer: SurveyAnswer) {
+        TODO("Not yet implemented")
+    }
+}
+
 private enum class QuestionType {
     Text,
     Rating,
@@ -124,30 +130,6 @@ internal class AnswersServiceImpl(
         // Ok. Simple validation passed. Storing answer to storage
 
         saver.save(answer)
-
-        /* transaction {
-            val surveyAnswer = SurveyAnswerDTO.new {
-                this.publisherId = answer.uid.uuid
-                this.surveyId = answer.surveyId
-                this.mediaGalleryId = answer.gallery?.id
-                this.timestamp = System.currentTimeMillis()
-            }
-
-            answer.answers.forEach { actualAnswer ->
-                val type = when (typeOfQuestionForAnswer(actualAnswer)) {
-                    QuestionType.Rating -> SurveyAnswerType.Rating
-                    QuestionType.Stars -> SurveyAnswerType.Stars
-                    QuestionType.Text -> SurveyAnswerType.Text
-                    QuestionType.Radio -> SurveyAnswerType.Radio
-                }
-
-                QuestionAnswerDTO.new {
-                    this.surveyAnswer = surveyAnswer.id
-                    this.type = type
-                    this.jsonAnswer = Json.encodeToString(QuestionAnswer.serializer(), actualAnswer)
-                }
-            }
-        } */
     }
 
     override suspend fun answers(surveyId: String): List<SurveyAnswer> = transaction {
