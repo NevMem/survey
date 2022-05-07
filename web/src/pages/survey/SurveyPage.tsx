@@ -69,11 +69,9 @@ const SurveyMetadataView = (props: { survey: Survey }) => {
 
     if (isOk(request)) {
         return (
-            // <OutlinedCard>
-                <SpacedColumn rowGap={4}>
-                    <Text>Получено {request.result.answersCount} ответов</Text>
-                </SpacedColumn>
-            // </OutlinedCard>
+            <SpacedColumn rowGap={4}>
+                <Text>Получено {request.result.answersCount} ответов</Text>
+            </SpacedColumn>
         );
     } else if (request instanceof RequestError) {
         return (
@@ -88,12 +86,37 @@ const SurveyMetadataView = (props: { survey: Survey }) => {
     );
 };
 
+const SurveyCoolDownInfoView = (props: { survey: Survey }) => {
+    const { surveyCoolDown } = props.survey;
+
+    const knownValues = [
+        {text: 'На данный вопрос можно отвечать сколько угодно раз', value: -2},
+        {text: 'На данный вопрос можно ответить только один раз', value: undefined},
+        {text: 'На данный вопрос можно отвечать раз в минуту', value: 60 * 1000},
+        {text: 'На данный вопрос можно отвечать раз в час', value: 60 * 60 * 1000},
+        {text: 'На данный вопрос можно отвечать раз в день', value: 24 * 60 * 60 * 1000},
+        {text: 'На данный вопрос можно отвечать раз в неделю', value: 7 * 24 * 60 * 60 * 1000},
+    ];
+    const value = knownValues.find(value => value.value === surveyCoolDown);
+    if (value !== undefined) {
+        return (
+            <Text small>{value.text}</Text>
+        );
+    }
+    return (
+        <Text small>Отвечать можно раз в {surveyCoolDown} ms</Text>
+    );
+};
+
 const SurveyPageImpl = (props: { survey: Survey }) => {
     const { survey } = props;
     return (
         <OutlinedCard>
             <SpacedColumn rowGap={24}>
-                <Text large>{survey.name}</Text>
+                <SpacedColumn rowGap={8}>
+                    <Text large>{survey.name}</Text>
+                    <SurveyCoolDownInfoView survey={survey} />
+                </SpacedColumn>
                 <SurveyQuestionsBlock survey={survey} />
                 <SurveyMetadataView survey={survey} />
             </SpacedColumn>
