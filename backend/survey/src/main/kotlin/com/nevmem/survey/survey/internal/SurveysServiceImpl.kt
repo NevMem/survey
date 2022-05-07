@@ -106,12 +106,6 @@ internal class SurveysServiceImpl : SurveysService, KoinComponent {
         SurveyEntityDTO.findById(id)?.delete()
     }
 
-//    override suspend fun survey(surveyId: String): SurveyEntity? = transaction {
-//        SurveyEntityDTO.find {
-//            SurveysTable.surveyId eq surveyId
-//        }.firstOrNull()?.toEntity()
-//    }
-
     override suspend fun survey(surveyId: String): SurveyEntity? = withCache(surveysCache, surveyId) {
         transaction {
             SurveyEntityDTO.find {
