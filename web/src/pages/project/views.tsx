@@ -15,6 +15,7 @@ import TextButton from "../../components/button/TextButton";
 import styled from "styled-components";
 import SpacedRow from "../../app/layout/SpacedRow";
 import useNavigator from "../navigation";
+import Badge from "../../components/badge/Badge";
 
 const SurveyCard = styled.div`
     border-radius: 8px;
@@ -30,6 +31,35 @@ const SurveyCard = styled.div`
     }
 `;
 
+const AnswerCoolDownBadge = (props: { survey: Survey }) => {
+    const { surveyCoolDown } = props.survey;
+    if (surveyCoolDown === undefined) {
+        return (
+            <Badge info>Единственный ответ</Badge>
+        );
+    }
+    if (surveyCoolDown === -2) {
+        return (
+            <Badge info>Любое число ответов</Badge>
+        );
+    }
+    const knownValues = [
+        {text: 'Раз в минуту', value: 60 * 1000},
+        {text: 'Раз в час', value: 60 * 60 * 1000},
+        {text: 'Раз в день', value: 24 * 60 * 60 * 1000},
+        {text: 'Раз в неделю', value: 7 * 24 * 60 * 60 * 1000},
+    ];
+    const value = knownValues.find(value => value.value === surveyCoolDown);
+    if (value !== undefined) {
+        return (
+            <Badge info>{value.text}</Badge>
+        );
+    }
+    return (
+        <Badge error>Один ответ в {surveyCoolDown} ms</Badge>
+    );
+};
+
 const SurveyView = (props: { survey: Survey }) => {
     const { survey } = props;
 
@@ -44,6 +74,7 @@ const SurveyView = (props: { survey: Survey }) => {
             <SpacedColumn rowGap={12}>
                 <Text>{survey.name}</Text>
                 <Text>{survey.surveyId}</Text>
+                <AnswerCoolDownBadge survey={survey} />
             </SpacedColumn>
         </SurveyCard>
     );
