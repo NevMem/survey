@@ -60,31 +60,29 @@ const ProjectSurveysView = (props: { surveys: Survey[] }) => {
 
     if (surveys.length === 0) {
         return (
-            // <OutlinedCard>
-                <SpacedCenteredColumn rowGap={16}>
-                    <Text>В данном проекте пока нет опросов</Text>
-                    <GeneralButton onClick={gotoCreateSurvey}>Создать опрос</GeneralButton>
-                </SpacedCenteredColumn>
-            // </OutlinedCard>
+            <SpacedCenteredColumn rowGap={16}>
+                <Text>В данном проекте пока нет опросов</Text>
+                <GeneralButton onClick={gotoCreateSurvey}>Создать опрос</GeneralButton>
+            </SpacedCenteredColumn>
         );
     }
 
     return (
-        // <OutlinedCard>
-            <SpacedColumn rowGap={24}>
+        <SpacedColumn rowGap={24}>
+            <SpacedColumn rowGap={8}>
                 <Text>Опросы в проекте:</Text>
-                <SpacedRow columnGap={16}>
+                <SpacedRow columnGap={16} style={{flexWrap: 'wrap', rowGap: '16px'}}>
                     {surveys.map((survey, index) => {
                         return (
                             <SurveyView key={index} survey={survey} />
                         );
                     })}
                 </SpacedRow>
-                <SpaceAroundRow>
-                    <TextButton onClick={gotoCreateSurvey}>Добавить опрос</TextButton>
-                </SpaceAroundRow>
             </SpacedColumn>
-        // </OutlinedCard>
+            <SpaceAroundRow>
+                <TextButton onClick={gotoCreateSurvey}>Добавить опрос</TextButton>
+            </SpaceAroundRow>
+        </SpacedColumn>
     );
 };
 
