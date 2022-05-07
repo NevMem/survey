@@ -105,7 +105,7 @@ class BackendApiServiceImpl implements BackendApiService {
             name: unsavedSurvey.name,
             questions: unsavedSurvey.questions,
             commonQuestions: unsavedSurvey.commonQuestions,
-            answerCoolDown: -1,
+            answerCoolDown: unsavedSurvey.answerCoolDown,
         };
 
         return this.post<CreateSurveyResponse, CreateSurveyRequest>('/v2/survey/create_survey', request)

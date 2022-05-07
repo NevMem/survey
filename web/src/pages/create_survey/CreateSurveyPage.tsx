@@ -23,6 +23,7 @@ import backendApi from '../../api/backendApiServiceSingleton';
 import { Option, Select } from '../../components/select/Selector';
 import SpaceBetweenRow from '../../app/layout/SpaceBetweenRow';
 import deleteIcon from '../../images/base/delete.svg';
+import Column from '../../app/layout/Column';
 
 const Selector = styled.select`
     outline: none;
@@ -374,6 +375,35 @@ const SelectProjectBlock = (props: { setSelectedProject: (project?: Project) => 
     );
 };
 
+const SelectAnswerCoolDownBlock = (props: { selectedCoolDown: number, setSelectedCoolDown: (selectedCoolDown: number) => void }) => {
+    const values = [
+        {text: 'Можно отвечать сколько угодно раз', value: -2},
+        {text: 'Единоразовый ответ', value: -1},
+        {text: 'Отвечать не чаще чем раз в минуту', value: 60 * 1000},
+        {text: 'Отвечать не чаще чем раз в час', value: 60 * 60 * 1000},
+        {text: 'Отвечать не чаще чем раз в день', value: 24 * 60 * 60 * 1000},
+        {text: 'Отвечать не чаще чем раз в неделю', value: 7 * 24 * 60 * 60 * 1000},
+    ];
+
+    return (
+        <OutlinedCard>
+            <SpacedColumn rowGap={16}>
+                <Text large>Пожалуйста выберите насколько часто можно отвечать на опрос:</Text>
+                <Select
+                    value={values.find(value => value.value === props.selectedCoolDown)?.text ?? '-'}
+                    onChange={event => props.setSelectedCoolDown(values.find(value => value.text === event.target.value)?.value ?? -1)}
+                >
+                    {values.map((value, index) => {
+                        return (
+                            <Option key={index}>{value.text}</Option>
+                        );
+                    })}
+                </Select>
+            </SpacedColumn>
+        </OutlinedCard>  
+    );
+};
+
 const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyService, surveysService: SurveysService }) => {
     const nameChanged = (event: any) => {
         props.createSurveyService.setName(event.target.value)
@@ -387,6 +417,8 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
 
     const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
 
+    const [answerCoolDown, setAnswerCoolDown] = useState(-1);
+
     const [canCreate, setCanCreate] = useState(false);
 
     useEffect(() => {
@@ -399,6 +431,7 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
             name: props.createSurveyService.name,
             questions: props.createSurveyService.questions,
             commonQuestions: selectedCommonQuestions,
+            answerCoolDown: answerCoolDown,
         };
         props.surveysService.addSurvey(unsavedSurvey);
     };
@@ -431,8 +464,11 @@ const NewSurveyBlock = observer((props: { createSurveyService: CreateSurveyServi
                 <OutlinedCard>
                     <Text large>Название опроса:</Text>
                     <br/>
-                    <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
+                    <Column>
+                        <Input value={props.createSurveyService.name} onChange={nameChanged}></Input>
+                    </Column>
                 </OutlinedCard>
+                <SelectAnswerCoolDownBlock selectedCoolDown={answerCoolDown} setSelectedCoolDown={value => setAnswerCoolDown(value)} />
                 <OutlinedCard>
                     <SpacedColumn rowGap={8}>
                         <Text large>Общие вопросы:</Text>

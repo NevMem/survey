@@ -7,6 +7,7 @@ interface UnsavedSurvey {
     name: string;
     questions: Question[];
     commonQuestions: CommonQuestion[];
+    answerCoolDown: number;
 };
 
 export type {
