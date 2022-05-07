@@ -185,7 +185,7 @@ private fun SurveyView(
             ) {
                 when (item) {
                     is SurveyState.AlreadyAnsweredSurvey -> {
-                        AlreadyAnsweredSurveyView(item)
+                        AlreadyAnsweredSurveyView(item, leaveSurvey)
                     }
                     is SurveyState.ReadySurvey -> {
                         ReadySurveyView(
@@ -205,7 +205,9 @@ private fun SurveyView(
 private fun NoSurveyView(
     navController: NavController,
 ) {
-    Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.Center) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp), horizontalArrangement = Arrangement.Center) {
         Button(onClick = { navController.navigate("join") }) {
             Text(stringResource(id = R.string.join_survey))
         }
@@ -215,7 +217,10 @@ private fun NoSurveyView(
 @Composable
 private fun AlreadyAnsweredSurveyView(
     item: SurveyState.AlreadyAnsweredSurvey,
+    leaveSurvey: () -> Unit,
 ) {
+    var dialogOpened by remember { mutableStateOf(false) }
+
     val canAnswerInSeconds = item.canAnswerInSeconds
     if (canAnswerInSeconds == null) {
         Text(
@@ -226,16 +231,35 @@ private fun AlreadyAnsweredSurveyView(
             stringResource(id = R.string.already_answered_survey_max_times),
             style = MaterialTheme.typography.body2,
         )
-        return
+        OutlinedButton(
+            onClick = { dialogOpened = true }
+        ) {
+            Text(stringResource(id = R.string.leave_survey))
+        }
+    } else {
+        Text(
+            item.survey.name,
+            style = MaterialTheme.typography.subtitle1,
+        )
+        Text(
+            stringResource(id = R.string.can_answer_survey_in, canAnswerInSeconds / 60),
+            style = MaterialTheme.typography.subtitle2,
+        )
+        OutlinedButton(
+            onClick = { dialogOpened = true }
+        ) {
+            Text(stringResource(id = R.string.leave_survey))
+        }
     }
-    Text(
-        item.survey.name,
-        style = MaterialTheme.typography.subtitle1,
-    )
-    Text(
-        stringResource(id = R.string.can_answer_survey_in, canAnswerInSeconds / 60),
-        style = MaterialTheme.typography.subtitle2,
-    )
+
+    if (dialogOpened) {
+        AlertDialog(
+            title = { Text(stringResource(id = R.string.confirm_leave_survey)) },
+            onDismissRequest = { dialogOpened = false },
+            confirmButton = { Button(onClick = { leaveSurvey(); dialogOpened = false }) { Text(stringResource(id = R.string.ok)) } },
+            dismissButton = { OutlinedButton(onClick = { dialogOpened = false }) { Text(stringResource(id = R.string.cancel)) } },
+        )
+    }
 }
 
 @Composable

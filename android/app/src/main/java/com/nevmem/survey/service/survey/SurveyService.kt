@@ -70,5 +70,7 @@ class SurveyService(
             answers,
             gallery,
         )
+
+        preferencesService.put("answered-survey-${survey.id}", System.currentTimeMillis().toString())
     }
 }

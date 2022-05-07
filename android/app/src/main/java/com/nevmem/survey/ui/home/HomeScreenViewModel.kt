@@ -66,7 +66,7 @@ class HomeScreenViewModel(
                 canAnswerInSeconds = if (surveyCoolDown == Survey.SURVEY_COOL_DOWN_ONLY_ONCE)
                     null
                 else
-                    (System.currentTimeMillis() - answeredCurrentSurveyAt) / 1000
+                    (surveyCoolDown - (System.currentTimeMillis() - answeredCurrentSurveyAt)) / 1000
             )
         }
         return SurveyState.ReadySurvey(this)
