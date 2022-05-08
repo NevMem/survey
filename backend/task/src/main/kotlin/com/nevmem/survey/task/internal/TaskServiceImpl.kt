@@ -25,9 +25,10 @@ internal class TaskServiceImpl : TaskService, KoinComponent {
         }.entity(emptyList())
     }
 
-    override suspend fun exportTasks(): List<ExportDataTaskEntity> = transaction {
-        ExportDataTaskDTO.all()
-            .map {
+    override suspend fun exportTasks(surveyId: Long): List<ExportDataTaskEntity> = transaction {
+        ExportDataTaskDTO.find {
+            ExportDataTaskTable.surveyId eq surveyId
+        }.map {
                 val log = TaskLogDTO.find {
                     TaskLogTable.taskId eq it.id.value
                 }

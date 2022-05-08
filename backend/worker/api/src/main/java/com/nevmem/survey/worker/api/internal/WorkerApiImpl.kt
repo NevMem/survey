@@ -6,6 +6,7 @@ import com.nevmem.survey.worker.api.ErrorCreateTask
 import com.nevmem.survey.worker.api.TaskNotFoundException
 import com.nevmem.survey.worker.api.WorkerApi
 import com.nevmem.survey.worker.api.request.CreateExportDataTaskRequest
+import com.nevmem.survey.worker.api.request.GetExportDataTasksBySurveyId
 import com.nevmem.survey.worker.api.request.GetTaskRequest
 import com.nevmem.survey.worker.api.response.CreateExportDataTaskResponse
 import com.nevmem.survey.worker.api.response.GetTaskResponse
@@ -34,8 +35,8 @@ internal class WorkerApiImpl(
         }
     }
 
-    override suspend fun tasks(): List<Task> {
-        return post("/v1/tasks", Unit)
+    override suspend fun tasks(surveyId: Long): List<Task> {
+        return post("/v1/export_data_tasks_by_survey_id", GetExportDataTasksBySurveyId(surveyId))
     }
 
     override suspend fun getTask(user: Administrator, taskId: Long): Task {

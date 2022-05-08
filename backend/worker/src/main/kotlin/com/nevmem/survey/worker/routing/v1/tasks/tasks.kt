@@ -3,6 +3,7 @@ package com.nevmem.survey.worker.routing.v1.tasks
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.task.TaskService
 import com.nevmem.survey.worker.api.request.CreateExportDataTaskRequest
+import com.nevmem.survey.worker.api.request.GetExportDataTasksBySurveyId
 import com.nevmem.survey.worker.api.request.GetTaskRequest
 import com.nevmem.survey.worker.api.response.CreateExportDataTaskResponse
 import com.nevmem.survey.worker.api.response.GetTaskResponse
@@ -19,11 +20,6 @@ fun Route.tasks() {
     val exportDataTaskConverter by inject<ExportDataTaskConverter>()
     val surveysService by inject<SurveysService>()
 
-    post("/tasks") {
-        val tasks = tasksService.exportTasks()
-        call.respond(tasks.map { exportDataTaskConverter(it) })
-    }
-
     post("/task") {
         val request = call.receive<GetTaskRequest>()
         val task = tasksService.getExportTask(request.taskId)
@@ -31,6 +27,14 @@ fun Route.tasks() {
             GetTaskResponse(
                 task?.let { exportDataTaskConverter(it) }
             )
+        )
+    }
+
+    post("/export_data_tasks_by_survey_id") {
+        val request = call.receive<GetExportDataTasksBySurveyId>()
+        val tasks = tasksService.exportTasks(request.surveyId)
+        call.respond(
+            tasks.map { exportDataTaskConverter(it) }
         )
     }
 
