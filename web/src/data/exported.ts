@@ -306,6 +306,12 @@ interface UpdateRolesResponse {
 	roles: Role[];
 }
 
+interface UpdateUserRoles {
+	projectId: number;
+	user: Administrator;
+	roles: Role[];
+}
+
 interface UserId {
 	uuid: string;
 }
@@ -440,5 +446,6 @@ export type {
 	TextQuestion,
 	UpdateRolesRequest,
 	UpdateRolesResponse,
+	UpdateUserRoles,
 	UserId,
 }
