@@ -287,6 +287,10 @@ interface TaskLog {
 	timestamp: number;
 }
 
+interface TasksInSurvey {
+	surveyId: number;
+}
+
 interface TextQuestion extends Question {
 	title: string;
 	maxLength: number;
@@ -432,6 +436,7 @@ export type {
 	SurveyMetadata,
 	Task,
 	TaskLog,
+	TasksInSurvey,
 	TextQuestion,
 	UpdateRolesRequest,
 	UpdateRolesResponse,
