@@ -105,6 +105,8 @@ private fun Route.projectsImpl() {
                 userToUpdate,
                 request.roles.map { roleModel.roleById(it.id) },
             )
+
+            call.respond(Unit)
         }
     }
 }
