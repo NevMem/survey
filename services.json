@@ -1,7 +1,7 @@
 {
     "worker": {
         "tag": "worker",
-        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:bc14431",
+        "container-tag": "cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:e352e6e",
         "ports": [
             80
         ]
