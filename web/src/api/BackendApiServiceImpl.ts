@@ -39,6 +39,7 @@ import {
     MediaGallery,
     GetGalleryResponse,
     GetGalleryRequest,
+    TasksInSurvey,
 } from "../data/exported";
 import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
@@ -190,6 +191,10 @@ class BackendApiServiceImpl implements BackendApiService {
 
     loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task> {
         return this.post<Task, LoadTaskRequest>('/v2/tasks/get', request, abortController).then(data => data.data);
+    }
+
+    tasksInSurvey(request: TasksInSurvey, abortController: AbortController): Promise<Task[]> {
+        return this.post<Task[], TasksInSurvey>('/v2/tasks/export_data_task_by_survey', request, abortController).then(data => data.data);
     }
 
     gallery(abortController: AbortController, id: number): Promise<MediaGallery> {

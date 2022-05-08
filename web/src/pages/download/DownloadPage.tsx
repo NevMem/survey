@@ -8,11 +8,12 @@ import CardError from '../../app/card/CardError';
 import GeneralButton from '../../components/button/GeneralButton';
 import { Survey, Task, TaskState } from '../../data/exported';
 import { useState } from 'react';
-import useAsyncRequest, { RequestError, RequestSuccess } from '../../utils/useAsyncUtils';
+import useAsyncRequest, { isOk, RequestError, RequestSuccess } from '../../utils/useAsyncUtils';
 import backendApi from '../../api/backendApiServiceSingleton';
 import usePollingRequest, { PollingError, PollingState, PollingSuccess } from '../../utils/usePollingRequest';
 import TaskView from '../../app/task/TaskView';
 import SurveySelector from './SurveySelector';
+import OutlinedCard from '../../app/card/OutlinedCard';
 
 const SurveyDownloadDataFilter = (props: {survey?: Survey}) => {
     if (!props.survey) {
@@ -118,6 +119,38 @@ const SurveyDownloadDataBlock = (props: {survey?: Survey}) => {
     );
 };
 
+const PreviousTasksBlock = (props: { surveyId: number }) => {
+    const request = useAsyncRequest(controller => backendApi.tasksInSurvey({surveyId: props.surveyId}, controller));
+
+    if (isOk(request)) {
+        if (request.result.length === 0) {
+            return null;
+        }
+        return (
+            <SpacedColumn rowGap={16}>
+                <Text>Уже завершенные задачи:</Text>
+                {request.result.map((task, index) => {
+                    return (
+                        <TaskView task={task} key={index} />
+                    );
+                })}
+            </SpacedColumn>
+        );
+    } else if (request instanceof RequestError) {
+        return (
+            <CardError>
+                {request.message}
+            </CardError>
+        );
+    }
+
+    return (
+        <SpaceAroundRow>
+            <Loader />
+        </SpaceAroundRow>
+    );
+};
+
 const DownloadPage = () => {
     const [selectedSurvey, setSelectedSurvey] = useState<Survey | undefined>(undefined);
 
@@ -129,6 +162,7 @@ const DownloadPage = () => {
 
                 <SurveyDownloadDataFilter survey={selectedSurvey} />
                 <SurveyDownloadDataBlock survey={selectedSurvey} />
+                {selectedSurvey !== undefined && <PreviousTasksBlock surveyId={selectedSurvey.id} key={selectedSurvey.id} />}
             </SpacedColumn>
         </PageWrapper>
     );

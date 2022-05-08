@@ -22,6 +22,7 @@ import {
     AcceptInviteResponse,
     AcceptInviteRequest,
     MediaGallery,
+    TasksInSurvey,
 } from "../data/exported";
 
 interface BackendApiService {
@@ -60,6 +61,7 @@ interface BackendApiService {
 
     createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task>
     loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task>
+    tasksInSurvey(request: TasksInSurvey, abortController: AbortController): Promise<Task[]>
 
     gallery(abortController: AbortController, id: number): Promise<MediaGallery>
 }
