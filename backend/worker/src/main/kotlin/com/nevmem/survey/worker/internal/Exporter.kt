@@ -26,7 +26,15 @@ class Exporter : KoinComponent {
         try {
             val survey = surveysService.surveyById(task.surveyId) ?: throw IllegalStateException()
             tasksService.appendLog(task, "Loading answers")
-            val answers = answersService.answers(survey.surveyId)
+            val answers = mutableListOf<SurveyAnswer>()
+            var loaded = 0
+            answersService.answersStreamer(survey.surveyId).collect { answer ->
+                answers.add(answer)
+                loaded += 1
+                if (loaded % 1000 == 0) {
+                    tasksService.appendLog(task, "Loaded $loaded answers")
+                }
+            }
             tasksService.appendLog(task, "Loaded ${answers.count()} answers")
 
             val file = fs.createFile(FileSystemService.FileType.CSV)

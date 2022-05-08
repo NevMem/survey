@@ -18,6 +18,8 @@ import com.nevmem.surveys.converters.MediaGalleryConverter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -212,6 +214,26 @@ internal class AnswersServiceImpl(
 
     override suspend fun answers(surveyId: String): List<SurveyAnswer> = transaction {
         SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }.map { it.entity() }
+    }
+
+    override suspend fun answersStreamer(surveyId: String): Flow<SurveyAnswer> = flow {
+        var index = 0L
+        val batchSize = 128
+
+        while (true) {
+            val currentValues = transaction {
+                SurveyAnswerDTO.find { SurveyAnswerTable.surveyId eq surveyId }
+                    .limit(batchSize, index)
+                    .map { it.entity() }
+            }
+            index += currentValues.size
+            currentValues.forEach {
+                emit(it)
+            }
+            if (currentValues.isEmpty()) {
+                break
+            }
+        }
     }
 
     override suspend fun getAnswersCount(surveyId: String): Long {
