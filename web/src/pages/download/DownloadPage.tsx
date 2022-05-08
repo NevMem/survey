@@ -129,7 +129,7 @@ const PreviousTasksBlock = (props: { surveyId: number }) => {
         return (
             <SpacedColumn rowGap={16}>
                 <Text>Уже завершенные задачи:</Text>
-                {request.result.map((task, index) => {
+                {request.result.reverse().map((task, index) => {
                     return (
                         <TaskView task={task} key={index} />
                     );
