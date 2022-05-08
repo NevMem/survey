@@ -5,8 +5,8 @@ import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import GeneralButton from "../../components/button/GeneralButton";
 import Loader from "../../components/loader/Loader";
-import { Survey, Project, ProjectInfo } from "../../data/exported";
-import useAsyncRequest, { RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
+import { Survey, Project, ProjectInfo, ProjectAdministratorInfo } from "../../data/exported";
+import useAsyncRequest, { isOk, RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
 import Text from '../../components/text/Text';
 import backendApi from '../../api/backendApiServiceSingleton';
 import SpacedCenteredRow from "../../app/layout/SpacedCenteredRow";
@@ -16,6 +16,9 @@ import styled from "styled-components";
 import SpacedRow from "../../app/layout/SpacedRow";
 import useNavigator from "../navigation";
 import Badge from "../../components/badge/Badge";
+import { ModalActions, ModalBody, ModalHeader, ModalView, useModalState } from "../../components/modal/Modal";
+import { Fragment, useState } from "react";
+import Row from "../../app/layout/Row";
 
 const SurveyCard = styled.div`
     border-radius: 8px;
@@ -133,17 +136,90 @@ const ProjectSurveysWrapper = (props: { project: Project }) => {
     return <SpaceAroundRow><Loader large/></SpaceAroundRow>
 };
 
-const ProjectInfoView = (props: { projectInfo: ProjectInfo }) => {
+const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project: Project }) => {
+    const { info } = props;
+
+    const modalState = useModalState();
+
+    const SelectRolesView = () => {
+        const [selectedRoles, setSelectedRoles] = useState<string[]>(info.roles.map(role => role.id));
+        const [counter, setCounter] = useState(0);
+
+        const request = useAsyncRequest(controller => backendApi.roles(controller));
+        if (isOk(request)) {
+            return (
+                <Fragment>
+                    {request.result.roles.map((role, index) => {
+                        return (
+                            <SpacedRow key={index + '-' + counter} columnGap={4}>
+                                <input
+                                    type='checkbox'
+                                    checked={selectedRoles.find(selected => selected === role.id) !== undefined}
+                                    onChange={
+                                        event => {
+                                            if (event.target.checked) {
+                                                setSelectedRoles([...selectedRoles, role.id]);
+                                            } else {
+                                                setSelectedRoles([...selectedRoles.filter(selected => selected !== role.id)]);
+                                            }
+                                            setCounter(counter + 1);
+                                        }
+                                    }
+                                    />
+                                <Text>{role.id}</Text>
+                            </SpacedRow>
+                        );
+                    })}
+                </Fragment>
+            );
+        } else if (request instanceof RequestError) {
+            return (
+                <CardError>{request.message}</CardError>
+            )
+        }
+        return (
+            <SpaceAroundRow>
+                <Loader />
+            </SpaceAroundRow>
+        );
+    };
+
+    return (
+        <SpacedRow columnGap={12}>
+            {info.roles.map((role, index) => {
+                return (
+                    <Badge success key={index}>{role.id}</Badge>
+                );
+            })}
+            <TextButton onClick={() => modalState.toggle()}>Изменить роли</TextButton>
+            <ModalView state={modalState}>
+                <ModalHeader>
+                    <Text large>Изменить роли {info.administrator.name} {info.administrator.surname} в проекте {props.project.name}</Text>
+                </ModalHeader>
+                <ModalBody>
+                    <SelectRolesView />
+                </ModalBody>
+                <ModalActions>
+                    <GeneralButton>Обновить</GeneralButton>
+                    <TextButton>Отмена</TextButton>
+                </ModalActions>
+            </ModalView>
+        </SpacedRow>
+    );
+};
+
+const ProjectInfoView = (props: { projectInfo: ProjectInfo, project: Project }) => {
     return (
         <SpacedColumn rowGap={8}>
-            <Text>Администраторы</Text>
+            <Text>Администраторы:</Text>
             <OutlinedCard>
-                <SpacedColumn rowGap={4}>
+                <SpacedColumn rowGap={8}>
                     {props.projectInfo.administratorsInfo.map((info, index) => {
                         return (
                             <SpacedCenteredRow columnGap={16} key={index}>
                                 <Text large>{info.administrator.name} {info.administrator.surname}</Text>
                                 <Text>@{info.administrator.login}</Text>
+                                <AdministratorRolesView info={info} project={props.project} />
                             </SpacedCenteredRow>
                         );
                     })}
@@ -164,7 +240,7 @@ const ProjectInfoWrapper = (props: { project: Project }) => {
             </CardError>
         );
     } else if (request instanceof RequestSuccess) {
-        return <ProjectInfoView projectInfo={request.result} />
+        return <ProjectInfoView projectInfo={request.result} project={project} />
     }
     return <SpaceAroundRow><Loader large/></SpaceAroundRow>
 };

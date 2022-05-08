@@ -45,6 +45,7 @@ const ModalFade = styled.div<{ open: boolean }>`
 interface ModalState {
     open: () => void;
     close: () => void;
+    toggle: () => void;
     opened: boolean;
 };
 
@@ -54,6 +55,7 @@ const useModalState = (): ModalState => {
     return {
         open: () => { setOpen(true) },
         close: () => { setOpen(false) },
+        toggle: () => { setOpen(!open) },
         opened: open,
     };
 };
