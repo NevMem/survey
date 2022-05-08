@@ -5,11 +5,14 @@ import com.nevmem.survey.data.project.ProjectInfo
 import com.nevmem.survey.data.request.project.CreateProjectRequest
 import com.nevmem.survey.data.request.project.GetProjectInfoRequest
 import com.nevmem.survey.data.request.project.GetProjectRequest
+import com.nevmem.survey.data.request.project.UpdateUserRoles
 import com.nevmem.survey.data.response.project.GetProjectInfoResponse
 import com.nevmem.survey.data.response.project.GetProjectResponse
 import com.nevmem.survey.data.response.project.GetProjectsResponse
 import com.nevmem.survey.exception.AccessDeniedException
 import com.nevmem.survey.exception.NotFoundException
+import com.nevmem.survey.role.RoleModel
+import com.nevmem.survey.routing.toRoles
 import com.nevmem.survey.routing.userId
 import com.nevmem.survey.survey.ProjectsService
 import com.nevmem.survey.users.UsersService
@@ -30,6 +33,7 @@ private fun Route.projectsImpl() {
     val projectsService by inject<ProjectsService>()
     val usersService by inject<UsersService>()
     val projectConverter by inject<ProjectConverter>()
+    val roleModel by inject<RoleModel>()
 
     val usersConverter by inject<UsersConverter>()
     val rolesConverter by inject<RolesConverter>()
@@ -79,6 +83,27 @@ private fun Route.projectsImpl() {
                         }
                     )
                 )
+            )
+        }
+
+        post("/update_user_roles") {
+            val request = call.receive<UpdateUserRoles>()
+
+            val user = usersService.getUserById(userId())!!
+            val project = projectsService.get(request.projectId)
+                ?: throw NotFoundException("Project with id ${request.projectId} not found")
+            val userRoles = projectsService.getRolesInProject(project, user)
+
+            if (!roleModel.hasAccess(listOf("survey.creator").toRoles(roleModel), userRoles)) {
+                throw IllegalStateException("Access to method denied (not enough roles)")
+            }
+
+            val userToUpdate = usersService.getUserById(request.user.id) ?: throw NotFoundException("User not found")
+
+            projectsService.updateUserRoles(
+                project,
+                userToUpdate,
+                request.roles.map { roleModel.roleById(it.id) },
             )
         }
     }

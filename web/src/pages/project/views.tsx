@@ -208,7 +208,7 @@ const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project
                 </ModalBody>
                 <ModalActions>
                     <GeneralButton>Обновить</GeneralButton>
-                    <TextButton>Отмена</TextButton>
+                    <TextButton onClick={() => modalState.toggle()}>Отмена</TextButton>
                 </ModalActions>
             </ModalView>
         </SpacedRow>

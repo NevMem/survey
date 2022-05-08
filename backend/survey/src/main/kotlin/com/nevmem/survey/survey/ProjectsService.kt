@@ -17,4 +17,6 @@ interface ProjectsService {
     suspend fun addUserToProject(project: ProjectEntity, user: UserEntity)
 
     suspend fun getUsersInfo(project: ProjectEntity): List<Pair<UserEntity, List<RoleEntity>>>
+
+    suspend fun updateUserRoles(project: ProjectEntity, user: UserEntity, roles: List<RoleEntity>)
 }

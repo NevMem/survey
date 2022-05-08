@@ -93,6 +93,24 @@ internal class ProjectsServiceImpl(
         }) { it.second }.toList().map { it.first to it.second.filterNotNull() }
     }
 
+    override suspend fun updateUserRoles(
+        project: ProjectEntity,
+        user: UserEntity,
+        roles: List<RoleEntity>
+    ) = transaction {
+        UserProjectRoleDTO.find {
+            UserProjectRoleTable.userId eq user.id
+        }.forEach { it.delete() }
+
+        roles.forEach {
+            UserProjectRoleDTO.new {
+                this.projectId = project.id
+                this.userId = user.id
+                this.roleId = it.roleId
+            }
+        }
+    }
+
     private suspend fun ProjectEntityDTO.toEntity(): ProjectEntity {
         return ProjectEntity(
             id = this.id.value,
