@@ -141,9 +141,16 @@ const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project
 
     const modalState = useModalState();
 
-    const SelectRolesView = () => {
-        const [selectedRoles, setSelectedRoles] = useState<string[]>(info.roles.map(role => role.id));
+    const [newRoles, setNewRoles] = useState<string[]>(info.roles.map(role => role.id));
+
+    const SelectRolesView = (props: { updateNewRoles: (newRoles: string[]) => void }) => {
+        const [selectedRoles, setSelectedRoles] = useState<string[]>(newRoles);
         const [counter, setCounter] = useState(0);
+
+        const updateSelectedRoles = (roles: string[]) => {
+            setSelectedRoles(roles);
+            props.updateNewRoles(roles);
+        };
 
         const request = useAsyncRequest(controller => backendApi.roles(controller));
         if (isOk(request)) {
@@ -158,9 +165,9 @@ const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project
                                     onChange={
                                         event => {
                                             if (event.target.checked) {
-                                                setSelectedRoles([...selectedRoles, role.id]);
+                                                updateSelectedRoles([...selectedRoles, role.id]);
                                             } else {
-                                                setSelectedRoles([...selectedRoles.filter(selected => selected !== role.id)]);
+                                                updateSelectedRoles([...selectedRoles.filter(selected => selected !== role.id)]);
                                             }
                                             setCounter(counter + 1);
                                         }
@@ -197,7 +204,7 @@ const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project
                     <Text large>Изменить роли {info.administrator.name} {info.administrator.surname} в проекте {props.project.name}</Text>
                 </ModalHeader>
                 <ModalBody>
-                    <SelectRolesView />
+                    <SelectRolesView updateNewRoles={roles => setNewRoles(roles)} />
                 </ModalBody>
                 <ModalActions>
                     <GeneralButton>Обновить</GeneralButton>
