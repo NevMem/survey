@@ -226,13 +226,33 @@ const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project
 
     const [updating, setUpdating] = useState(false);
 
+    const RolesLineView = () => {
+        if (info.roles.length <= 3) {
+            return (
+                <Fragment>
+                    {info.roles.map((role, index) => {
+                        return (
+                            <Badge success key={index}>{role.id}</Badge>
+                        );
+                    })}
+                </Fragment>
+            );
+        }
+        return (
+            <Fragment>
+                {info.roles.slice(0, 3).map((role, index) => {
+                    return (
+                        <Badge success key={index}>{role.id}</Badge>
+                    );
+                })}
+                <Badge success>+{info.roles.length - 3} роли</Badge>
+            </Fragment>
+        );
+    };
+
     return (
         <SpacedRow columnGap={12}>
-            {info.roles.map((role, index) => {
-                return (
-                    <Badge success key={index}>{role.id}</Badge>
-                );
-            })}
+            <RolesLineView />
             <TextButton onClick={() => modalState.toggle()}>Изменить роли</TextButton>
             <ModalView state={modalState}>
                 <ModalHeader>
