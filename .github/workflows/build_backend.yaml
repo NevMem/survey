@@ -1,18 +1,12 @@
-name: Backend workflow
+name: "Backend - Core: Build and Publish"
 
 on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'revisions.json'
-      - '.github/workflows/roll_core_update.yaml'
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - 'revisions.json'
-      - '.github/workflows/roll_core_update.yaml'
 
 jobs:
   build_an_publish_docker:

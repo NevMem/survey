@@ -1,4 +1,4 @@
-name: Backend workflow
+name: "Backend - Test: Running integration testing"
 
 on:
   push:

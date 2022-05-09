@@ -1,4 +1,4 @@
-name: Metrics workflow
+name: "Backend - Metrics: Build and Publish"
 
 on:
   push:

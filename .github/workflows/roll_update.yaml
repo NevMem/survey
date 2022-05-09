@@ -1,4 +1,4 @@
-name: Rolling updates
+name: "Roll: Rolling updates"
 on:
   push:
     branches:
@@ -34,7 +34,7 @@ jobs:
         run: source /opt/yandex-cloud/path.bash.inc && yc compute instance list
       - name: Install requirements
         run: pip3 install -r tools/requirements.txt
-      - name: Launching metrics rolling
+      - name: Launching everything rolling
         run: source /opt/yandex-cloud/path.bash.inc && python3 tools/roll.py nevmem core,worker,metrics,push,grafana ./services.json ./ssh_key ${{ secrets.YC_TOKEN }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}

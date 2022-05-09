@@ -1,4 +1,4 @@
-name: Test export commited to main
+name: "Infra: Checking exported TypeScript types updated"
 
 on:
   push:
