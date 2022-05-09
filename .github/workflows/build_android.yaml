@@ -21,10 +21,14 @@ jobs:
         with:
           java-version: 11
 
-      - name: Store keystore file
-        run: echo $KEY_CONTENT > ./android/app/key.jks
+      - name: Decode Keystore file
         env:
-          KEY_CONTENT: ${{ secrets.SIGNING_KEY_FILE }}
+          ENCODED_STRING: ${{ secrets.SIGNING_KEY_FILE }}
+        run: |
+          TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
+          mkdir "${TMP_KEYSTORE_FILE_PATH}"
+          echo $ENCODED_STRING | base64 -di > ./android/app/key.jks
+
       - name: Build android RELEASE
         run: ./gradlew android:app:assembleRelease
         env:
