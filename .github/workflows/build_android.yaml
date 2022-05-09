@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  build_android:
-    name: Building android
+  build_android_release:
+    name: "Release: Build android"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,6 +37,18 @@ jobs:
         with:
           name: Release Apks
           path: android/app/build/outputs/apk/release/**/*.apk
+
+  build_android_debug:
+    name: "Debug: Build android"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
       - name: Build android DEBUG
         run: ./gradlew android:app:assembleDebug
