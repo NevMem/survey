@@ -68,6 +68,8 @@ jobs:
           SELF_URI: https://ethnosurvey.com
           WORKER_URI: http://survey-worker.ru-central1.internal
           PUSH_URI: http://survey-push.ru-central1.internal
+          ACME_BACKEND_CHALLENGE_VALUE: ${{ secrets.ACME_BACKEND_CHALLENGE_VALUE }}
+          ACME_BACKEND_CHALLENGE_KEY: ${{ secrets.ACME_BACKEND_CHALLENGE_KEY }}
       - name: Installing YC util
         run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
       - name: Authorizing YC util

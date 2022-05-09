@@ -1,24 +1,23 @@
 {
     "required": [
-        "DB_USERNAME",
-        "DB_PASSWORD",
+        "ACME_BACKEND_CHALLENGE_KEY",
+        "ACME_BACKEND_CHALLENGE_VALUE",
         "DB_DBNAME",
-        "DB_SERVER",
+        "DB_PASSWORD",
         "DB_PORT",
+        "DB_SERVER",
+        "DB_USERNAME",
         "JWT_AUDIENCE",
+        "JWT_DOMAIN",
         "JWT_REALM",
         "JWT_SECRET",
-        "JWT_DOMAIN",
-        "SECURITY_SALT",
-        "S3_REGION",
+        "PUSH_URI",
         "S3_ACCESS_KEY",
+        "S3_REGION",
         "S3_SECRET_ACCESS_KEY",
         "S3_URI",
+        "SECURITY_SALT",
         "SELF_URI",
-        "WORKER_URI",
-        "PUSH_URI"
-    ],
-    "other": [
-        "ADMIN_PASSWORD"
+        "WORKER_URI"
     ]
 }
