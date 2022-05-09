@@ -9,8 +9,12 @@ import io.ktor.routing.route
 
 fun Route.acme() {
     route("/.well-known/acme-challenge/") {
-        get(CoreEnvVars.ACME.key) {
-            call.respond(CoreEnvVars.ACME.value)
+        val key = CoreEnvVars.ACME.key
+        val value = CoreEnvVars.ACME.value
+        if (key != null && value != null) {
+            get(key) {
+                call.respond(value)
+            }
         }
     }
 }

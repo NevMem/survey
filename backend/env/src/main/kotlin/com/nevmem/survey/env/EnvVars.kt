@@ -40,7 +40,7 @@ object EnvVars {
     }
 }
 
-private fun maybeEnv(key: String): String? = System.getenv(key)
+fun maybeEnv(key: String): String? = System.getenv(key)
 
 fun env(key: String): String {
     return maybeEnv(key) ?: throw IllegalStateException("Environment variable with key $key not found")
