@@ -21,26 +21,26 @@ jobs:
         with:
           java-version: 11
 
+      - name: Store keystore file
+        run: echo $KEY_CONTENT > key.jks
+        env:
+          KEY_CONTENT: ${{ secrets.SIGNING_KEY_FILE }}
+      - name: Build android RELEASE
+        run: ./gradlew android:app:assembleRelease
+        env:
+          SIGN_APP: true
+          RELEASE_SIGNING_KEY_FILE: key.jks
+          RELEASE_SIGN_KEY_ALIAS: key0
+          RELEASE_SIGN_KEY_PASSWORD: ${{ secrets.RELEASE_SIGN_KEY_PASSWORD }}
+          RELEASE_SIGN_PASSWORD: ${{ secrets.RELEASE_SIGN_PASSWORD }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Release Apks
+          path: android/app/build/outputs/apk/release/**/*.apk
+
       - name: Build android DEBUG
         run: ./gradlew android:app:assembleDebug
       - uses: actions/upload-artifact@v2
         with:
           name: Debug Apks
           path: android/app/build/outputs/apk/debug/**/*.apk
-
-      - name: Store keystore file
-        run: echo $KEY_CONTENT > key.jks
-        env:
-          SIGN_APP: true
-          KEY_CONTENT: ${{ secrets.SIGNING_KEY_FILE }}
-          RELEASE_SIGN_KEY_ALIAS: key0
-          RELEASE_SIGN_KEY_PASSWORD: ${{ secrets.RELEASE_SIGN_KEY_PASSWORD }}
-          RELEASE_SIGN_PASSWORD: ${{ secrets.RELEASE_SIGN_PASSWORD }}
-      - name: Build android RELEASE
-        run: ./gradlew android:app:assembleRelease
-        env:
-          RELEASE_SIGNING_KEY_FILE: key.jks
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Release Apks
-          path: android/app/build/outputs/apk/release/**/*.apk
