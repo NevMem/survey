@@ -11,6 +11,8 @@ import io.ktor.routing.routing
 
 fun Application.configureRouting() {
     routing {
+        acme()
+
         v1Api()
         v2Api()
 
