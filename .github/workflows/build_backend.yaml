@@ -78,12 +78,12 @@ jobs:
           SERVICE_KEY: ${{ secrets.REGISTRY_KEY }}
           YC_CLOUD_ID: ${{ secrets.YC_CLOUD_ID }}
           YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
-      - name: Getting ssl keychain
-        run: |
-          source /opt/yandex-cloud/path.bash.inc &&
-          yc certificate-manager certificate content --id $CERT_ID --chain backend/core/docker/build_dir/certificate_full_chain.pem --key backend/core/docker/build_dir/private_key.pem
-        env:
-          CERT_ID: ${{ secrets.CERT_ID }}
+      # - name: Getting ssl keychain
+      #   run: |
+      #     source /opt/yandex-cloud/path.bash.inc &&
+      #     yc certificate-manager certificate content --id $CERT_ID --chain backend/core/docker/build_dir/certificate_full_chain.pem --key backend/core/docker/build_dir/private_key.pem
+      #   env:
+      #     CERT_ID: ${{ secrets.CERT_ID }}
       - name: Building docker
         run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
       - name: Pushing docker
