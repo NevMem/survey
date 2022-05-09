@@ -22,7 +22,7 @@ jobs:
           java-version: 11
 
       - name: Store keystore file
-        run: echo $KEY_CONTENT > key.jks
+        run: echo $KEY_CONTENT > ./android/app/key.jks
         env:
           KEY_CONTENT: ${{ secrets.SIGNING_KEY_FILE }}
       - name: Build android RELEASE
