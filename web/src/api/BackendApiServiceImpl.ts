@@ -40,6 +40,7 @@ import {
     GetGalleryResponse,
     GetGalleryRequest,
     TasksInSurvey,
+    UpdateUserRoles,
 } from "../data/exported";
 import { UnsavedSurvey } from "../data/Survey";
 import { BackendApiService } from "./BackendApiService";
@@ -181,8 +182,8 @@ class BackendApiServiceImpl implements BackendApiService {
         return this.get<AllRolesResponse>('/roles', abortController).then(data => data.data);
     }
 
-    updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void> {
-        return this.post<void, UpdateRolesRequest>('/v1/role/update_roles', request, abortController).then(data => data.data);
+    updateRoles(abortController: AbortController, request: UpdateUserRoles): Promise<void> {
+        return this.post<void, UpdateUserRoles>('/v2/projects/update_user_roles', request, abortController).then(data => data.data);
     }
 
     createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task> {

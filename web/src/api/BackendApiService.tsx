@@ -23,6 +23,7 @@ import {
     AcceptInviteRequest,
     MediaGallery,
     TasksInSurvey,
+    UpdateUserRoles,
 } from "../data/exported";
 
 interface BackendApiService {
@@ -57,7 +58,7 @@ interface BackendApiService {
     accept(abortController: AbortController, request: AcceptInviteRequest): Promise<AcceptInviteResponse>
 
     roles(abortController: AbortController): Promise<AllRolesResponse>
-    updateRoles(request: UpdateRolesRequest, abortController: AbortController): Promise<void>
+    updateRoles(abortController: AbortController, request: UpdateUserRoles): Promise<void>
 
     createExportDataTask(request: CreateExportDataTaskRequest, abortController: AbortController): Promise<Task>
     loadTask(request: LoadTaskRequest, abortController: AbortController): Promise<Task>

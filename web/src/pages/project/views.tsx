@@ -5,7 +5,7 @@ import SpacedCenteredColumn from "../../app/layout/SpacedCenteredColumn";
 import SpacedColumn from "../../app/layout/SpacedColumn";
 import GeneralButton from "../../components/button/GeneralButton";
 import Loader from "../../components/loader/Loader";
-import { Survey, Project, ProjectInfo, ProjectAdministratorInfo } from "../../data/exported";
+import { Survey, Project, ProjectInfo, ProjectAdministratorInfo, Administrator, Role } from "../../data/exported";
 import useAsyncRequest, { isOk, RequestError, RequestSuccess } from "../../utils/useAsyncUtils";
 import Text from '../../components/text/Text';
 import backendApi from '../../api/backendApiServiceSingleton';
@@ -19,6 +19,7 @@ import Badge from "../../components/badge/Badge";
 import { ModalActions, ModalBody, ModalHeader, ModalView, useModalState } from "../../components/modal/Modal";
 import { Fragment, useState } from "react";
 import Row from "../../app/layout/Row";
+import CardSuccess from "../../app/card/CardSuccess";
 
 const SurveyCard = styled.div`
     border-radius: 8px;
@@ -136,6 +137,38 @@ const ProjectSurveysWrapper = (props: { project: Project }) => {
     return <SpaceAroundRow><Loader large/></SpaceAroundRow>
 };
 
+const UpdatingUserRolesView = (props: { project: Project, administrator: Administrator, roles: Role[] }) => {
+    const request = useAsyncRequest(
+        controller => backendApi.updateRoles(
+            controller,
+            { projectId: props.project.id, user: props.administrator, roles: props.roles },
+        )
+    );
+
+    if (isOk(request)) {
+        return (
+            <CardSuccess>
+                <SpacedColumn rowGap={8}>
+                    <Text>Обновили роли</Text>
+                    <Text small>Обновите страницу чтобы увидеть результат</Text>
+                </SpacedColumn>
+            </CardSuccess>
+        );
+    } else if (request instanceof RequestError) {
+        return (
+            <CardError>
+                {request.message}
+            </CardError>
+        );
+    }
+
+    return (
+        <SpaceAroundRow>
+            <Loader />
+        </SpaceAroundRow>
+    );
+};
+
 const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project: Project }) => {
     const { info } = props;
 
@@ -191,6 +224,8 @@ const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project
         );
     };
 
+    const [updating, setUpdating] = useState(false);
+
     return (
         <SpacedRow columnGap={12}>
             {info.roles.map((role, index) => {
@@ -205,9 +240,10 @@ const AdministratorRolesView = (props: { info: ProjectAdministratorInfo, project
                 </ModalHeader>
                 <ModalBody>
                     <SelectRolesView updateNewRoles={roles => setNewRoles(roles)} />
+                    {updating && <UpdatingUserRolesView project={props.project} administrator={props.info.administrator} roles={newRoles.map(role => {return { id: role }})} />}
                 </ModalBody>
                 <ModalActions>
-                    <GeneralButton>Обновить</GeneralButton>
+                    <GeneralButton onClick={() => setUpdating(true)}>Обновить</GeneralButton>
                     <TextButton onClick={() => modalState.toggle()}>Отмена</TextButton>
                 </ModalActions>
             </ModalView>
