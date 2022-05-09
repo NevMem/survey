@@ -1,4 +1,4 @@
-name: "Android: Build Debug"
+name: "Android: Build Debug and Release"
 
 on:
   push:
