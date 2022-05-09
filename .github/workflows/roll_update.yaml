@@ -1,4 +1,5 @@
-name: "Roll: Rolling updates"
+name: "Infra: Rolling updates"
+
 on:
   push:
     branches:
