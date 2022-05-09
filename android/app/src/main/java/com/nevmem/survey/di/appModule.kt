@@ -3,9 +3,10 @@ package com.nevmem.survey.di
 import android.content.Context
 import com.nevmem.survey.network.api.BackendBaseUrlProvider
 import com.nevmem.survey.network.api.createNetworkService
-import com.nevmem.survey.preferences.PreferencesService
+import com.nevmem.survey.preferences.createPreferencesService
 import com.nevmem.survey.service.achievement.api.createAchievementService
 import com.nevmem.survey.service.camera.CameraDataListener
+import com.nevmem.survey.service.commonquestions.CommonQuestionsService
 import com.nevmem.survey.service.network.BackendBaseUrlProviderImpl
 import com.nevmem.survey.service.push.api.createPushService
 import com.nevmem.survey.service.survey.SurveyService
@@ -34,12 +35,13 @@ fun createAppModule(context: Context) = module {
     single { createNetworkService(get()) }
 
     single { context.getSharedPreferences("storage", Context.MODE_PRIVATE) }
-    single { PreferencesService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
+    single { createPreferencesService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
     single { SurveyService(get(), get(), get()) }
     single { UserIdProvider(get(), get()) }
     single { createAchievementService(get(BACKGROUND_SCOPE_QUALIFIER), get()) }
     single { createSettingsService(get()) }
     single { createPushService(get(BACKGROUND_SCOPE_QUALIFIER), get(), get(), get()) }
+    single { CommonQuestionsService(get()) }
 
     single { CameraDataListener(get(BACKGROUND_SCOPE_QUALIFIER)) }
     single<CameraScreenListener> { get<CameraDataListener>() }

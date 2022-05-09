@@ -17,3 +17,7 @@ fun report(event: String, params: Map<String, Any?>) {
     Log.d("report", "Event: $event params: $params")
     YandexMetrica.reportEvent(event, params)
 }
+
+fun report(event: String, exception: Exception) {
+    YandexMetrica.reportError(event, exception)
+}
