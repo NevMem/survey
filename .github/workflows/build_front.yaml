@@ -22,6 +22,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
           AWS_DEFAULT_REGION: ru-central1
+      - name: Fill in acme challenge
+        run: |
+          mkdir web/build/.well-known
+          mkdir web/build/.well-known/acme-challenge
+          echo $ACME_WEB_CHALLENGE_VALUE > web/build/.well-known/acme-challenge/$ACME_WEB_CHALLENGE_KEY
+        env:
+          ACME_WEB_CHALLENGE_VALUE: ${{ secrets.ACME_WEB_CHALLENGE_VALUE }}
+          ACME_WEB_CHALLENGE_KEY: ${{ secrets.ACME_WEB_CHALLENGE_KEY }}
       - name: Pushing to s3
         run: aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive web/build/ s3://web.ethnosurvey.com
         env:
