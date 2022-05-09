@@ -205,9 +205,12 @@ private fun SurveyView(
 private fun NoSurveyView(
     navController: NavController,
 ) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp), horizontalArrangement = Arrangement.Center) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
         Button(onClick = { navController.navigate("join") }) {
             Text(stringResource(id = R.string.join_survey))
         }

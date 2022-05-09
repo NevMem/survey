@@ -29,11 +29,11 @@ internal class TaskServiceImpl : TaskService, KoinComponent {
         ExportDataTaskDTO.find {
             ExportDataTaskTable.surveyId eq surveyId
         }.map {
-                val log = TaskLogDTO.find {
-                    TaskLogTable.taskId eq it.id.value
-                }
-                it.entity(log.toList())
+            val log = TaskLogDTO.find {
+                TaskLogTable.taskId eq it.id.value
             }
+            it.entity(log.toList())
+        }
     }
 
     override suspend fun exportWaitingTasks(): List<ExportDataTaskEntity> = transaction {
