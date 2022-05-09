@@ -94,7 +94,7 @@ private fun Route.projectsImpl() {
                 ?: throw NotFoundException("Project with id ${request.projectId} not found")
             val userRoles = projectsService.getRolesInProject(project, user)
 
-            if (!roleModel.hasAccess(listOf("survey.creator").toRoles(roleModel), userRoles)) {
+            if (!roleModel.hasAccess(listOf("admin").toRoles(roleModel), userRoles)) {
                 throw IllegalStateException("Access to method denied (not enough roles)")
             }
 
