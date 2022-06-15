@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.nevmem.survey.R
 import com.nevmem.survey.data.answer.QuestionAnswer
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.viewModel
 
@@ -52,8 +52,7 @@ fun SurveyScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
 ) {
-    val viewModel: SurveyScreenViewModel by viewModel()
-
+    val viewModel: SurveyScreenViewModelImpl by viewModel()
     val survey = viewModel.survey.value
 
     var currentAnswer: QuestionAnswer? by remember { mutableStateOf(null) }
@@ -61,10 +60,12 @@ fun SurveyScreen(
         currentAnswer = answer
     }
 
+    val scope = rememberCoroutineScope()
+
     val needAnswerMessage = stringResource(id = R.string.wait_for_answer)
     val moveNext: () -> Unit = {
         if (currentAnswer == null) {
-            GlobalScope.launch {
+            scope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(needAnswerMessage)
             }
         } else {
@@ -72,10 +73,9 @@ fun SurveyScreen(
             currentAnswer = null
         }
     }
-
     val send: () -> Unit = {
         if (currentAnswer == null) {
-            GlobalScope.launch {
+            scope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(needAnswerMessage)
             }
         } else {

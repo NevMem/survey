@@ -1,11 +1,13 @@
 package com.nevmem.survey.ui.survey
 
 import android.net.Uri
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.nevmem.survey.data.answer.QuestionAnswer
 import com.nevmem.survey.data.question.CommonQuestion
 import com.nevmem.survey.data.question.Question
+import com.nevmem.survey.data.survey.Survey
 import com.nevmem.survey.service.achievement.api.AchievementService
 import com.nevmem.survey.service.camera.CameraDataListener
 import com.nevmem.survey.service.commonquestions.CommonQuestionsService
@@ -46,14 +48,21 @@ data class SurveyScreenUiState(
     val actions: List<SurveyScreenActionType>,
 )
 
-class SurveyScreenViewModel(
+abstract class SurveyScreenViewModel : ViewModel() {
+    abstract val survey: MutableState<Survey>
+    abstract val uiState: MutableState<SurveyScreenUiState>
+
+    abstract fun dispatch(action: SurveyScreenAction)
+}
+
+class SurveyScreenViewModelImpl(
     private val surveyService: SurveyService,
     private val background: CoroutineScope,
     private val achievementService: AchievementService,
     private val cameraDataListener: CameraDataListener,
     private val commonQuestionsService: CommonQuestionsService,
-) : ViewModel() {
-    val survey = mutableStateOf(surveyService.survey)
+) : SurveyScreenViewModel() {
+    override val survey = mutableStateOf(surveyService.survey)
 
     private val questionsCount
         get() = survey.value.commonQuestions.size + survey.value.questions.size
@@ -69,7 +78,7 @@ class SurveyScreenViewModel(
 
     private var alreadyAnsweredCount = 0
 
-    val uiState = mutableStateOf<SurveyScreenUiState>(
+    override val uiState = mutableStateOf<SurveyScreenUiState>(
         SurveyScreenUiState(
             currentItem = buildCurrentQuestionItem(),
             progress = ProgressState.ActualProgress(1, questionsCount - alreadyAnsweredCount),
@@ -195,7 +204,7 @@ class SurveyScreenViewModel(
         }
     }
 
-    fun dispatch(action: SurveyScreenAction) {
+    override fun dispatch(action: SurveyScreenAction) {
         when (action) {
             is SurveyScreenAction.Next -> next(action.answer)
             is SurveyScreenAction.Send -> send(action.answer)
