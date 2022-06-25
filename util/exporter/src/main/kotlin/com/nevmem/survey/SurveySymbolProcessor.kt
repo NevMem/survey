@@ -37,6 +37,8 @@ data class TsEnum(
     val cases: List<TsEnumCase>
 ) : TsNode
 
+private const val UNDEFINED_MARK = " | undefined"
+
 class SurveySymbolProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
@@ -120,15 +122,15 @@ class SurveySymbolProcessor(
                     node.fields.forEach { field ->
                         when (field) {
                             is TsField.TsInteger -> {
-                                val nl = " | undefined".takeIf { field.nullable } ?: ""
+                                val nl = UNDEFINED_MARK.takeIf { field.nullable } ?: ""
                                 write("\t${field.name}: number$nl;\n")
                             }
                             is TsField.TsString -> {
-                                val nl = " | undefined".takeIf { field.nullable } ?: ""
+                                val nl = UNDEFINED_MARK.takeIf { field.nullable } ?: ""
                                 write("\t${field.name}: string$nl;\n")
                             }
                             is TsField.TsObject -> {
-                                val nl = " | undefined".takeIf { field.nullable } ?: ""
+                                val nl = UNDEFINED_MARK.takeIf { field.nullable } ?: ""
                                 write("\t${field.name}: ${field.objectType}$nl;\n")
                             }
                             is TsField.TsList -> {
