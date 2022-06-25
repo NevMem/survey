@@ -13,12 +13,14 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.util.error
 
+private const val UNKNOWN_ERROR = "Unknown error"
+
 fun Application.statusPages() {
     install(StatusPages) {
         exception<AccessDeniedException> {
             call.respond(
                 HttpStatusCode.Forbidden,
-                ServerError(it.message ?: "Unknown error"),
+                ServerError(it.message ?: UNKNOWN_ERROR),
             )
             application.environment.log.error(it)
         }
@@ -26,7 +28,7 @@ fun Application.statusPages() {
         exception<ForbiddenException> {
             call.respond(
                 HttpStatusCode.Forbidden,
-                ServerError(it.message ?: "Unknown error"),
+                ServerError(it.message ?: UNKNOWN_ERROR),
             )
             application.environment.log.error(it)
         }
@@ -42,7 +44,7 @@ fun Application.statusPages() {
         exception<Throwable> {
             call.respond(
                 HttpStatusCode.InternalServerError,
-                ServerError(it.message ?: "Unknown error"),
+                ServerError(it.message ?: UNKNOWN_ERROR),
             )
             application.environment.log.error(it)
         }

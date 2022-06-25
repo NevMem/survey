@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 
+private const val SURVEY_COMPLETED = "survey-completed"
+
 private enum class AchievementType {
     VeryFirst,
     Counter,
@@ -132,7 +134,7 @@ private class AchievementsState(
             preferencesService,
             AchievementRule.VeryFirstAchievementRule(
                 id = "very-first-survey",
-                report = "survey-completed",
+                report = SURVEY_COMPLETED,
                 title = "Первый пройденный опрос",
             ),
             shared,
@@ -142,7 +144,7 @@ private class AchievementsState(
             preferencesService,
             AchievementRule.CounterAchievementRule(
                 id = "surveys-counter",
-                report = "survey-completed",
+                report = SURVEY_COMPLETED,
                 title = "Пройдено опросов",
                 steps = listOf(1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 100),
             ),
@@ -172,7 +174,7 @@ internal class AchievementServiceImpl(
 
     override fun reportSurveyCompleted() {
         background.launch {
-            reports.emit("survey-completed")
+            reports.emit(SURVEY_COMPLETED)
         }
     }
 }

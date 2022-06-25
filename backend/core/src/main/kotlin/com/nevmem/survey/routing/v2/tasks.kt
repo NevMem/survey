@@ -5,6 +5,7 @@ import com.nevmem.survey.data.request.task.LoadTaskRequest
 import com.nevmem.survey.data.request.task.TasksInSurvey
 import com.nevmem.survey.exception.NotFoundException
 import com.nevmem.survey.role.RoleModel
+import com.nevmem.survey.role.SURVEY_MANAGER
 import com.nevmem.survey.routing.toRoles
 import com.nevmem.survey.routing.userId
 import com.nevmem.survey.survey.ProjectsService
@@ -38,7 +39,7 @@ private fun Route.tasksImpl() {
             val project = projectsService.get(survey.projectId) ?: throw IllegalStateException("wtf")
             val userRoles = projectsService.getRolesInProject(project, user)
 
-            if (!roleModel.hasAccess(listOf("survey.manager").toRoles(roleModel), userRoles)) {
+            if (!roleModel.hasAccess(listOf(SURVEY_MANAGER).toRoles(roleModel), userRoles)) {
                 throw IllegalStateException("Access to method denied (not enough roles)")
             }
 
@@ -53,7 +54,7 @@ private fun Route.tasksImpl() {
             val project = projectsService.get(survey.projectId) ?: throw IllegalStateException("wtf")
             val userRoles = projectsService.getRolesInProject(project, user)
 
-            if (!roleModel.hasAccess(listOf("survey.manager").toRoles(roleModel), userRoles)) {
+            if (!roleModel.hasAccess(listOf(SURVEY_MANAGER).toRoles(roleModel), userRoles)) {
                 throw IllegalStateException("Access to method denied (not enough roles)")
             }
 
@@ -69,7 +70,7 @@ private fun Route.tasksImpl() {
             val project = projectsService.get(task.projectId) ?: throw NotFoundException("Something went wrong")
             val userRoles = projectsService.getRolesInProject(project, user)
 
-            if (!roleModel.hasAccess(listOf("survey.manager").toRoles(roleModel), userRoles)) {
+            if (!roleModel.hasAccess(listOf(SURVEY_MANAGER).toRoles(roleModel), userRoles)) {
                 throw IllegalStateException("Access to method denied (not enough roles)")
             }
 

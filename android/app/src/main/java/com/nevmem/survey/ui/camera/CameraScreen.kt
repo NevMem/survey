@@ -136,7 +136,7 @@ fun ImageCapture.takePicture(
                     context,
                     arrayOf(savedUri.toFile().absolutePath),
                     arrayOf(mimeType)
-                ) { _, uri ->
+                ) { _, _ ->
                 }
                 onImageCaptured(savedUri)
             }

@@ -2,6 +2,8 @@ package com.nevmem.survey.role
 
 typealias RoleEntityVisitor = (RoleEntity) -> Unit
 
+const val SURVEY_MANAGER = "survey.manager"
+
 private class RoleEntityBuilder(
     private val currentRole: RoleEntity,
     private val visitor: RoleEntityVisitor,
@@ -34,7 +36,7 @@ fun mainRoleModel(): RoleModel {
             role("push.observe")
         }
 
-        role("survey.manager") {
+        role(SURVEY_MANAGER) {
             role("survey.creator")
             role("survey.observer")
         }

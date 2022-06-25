@@ -52,7 +52,7 @@ class SurveyService(
         preferencesService.put("currentSurvey", Json.encodeToString(Survey.serializer(), survey))
     }
 
-    suspend fun sendAnswer(answers: List<QuestionAnswer>, medias: List<Uri>): Flow<SendAnswerStatus> = flow {
+    fun sendAnswer(answers: List<QuestionAnswer>, medias: List<Uri>): Flow<SendAnswerStatus> = flow {
         val steps: Float = medias.size + 2f
 
         val savedMedias = medias.mapIndexed { index, media ->
