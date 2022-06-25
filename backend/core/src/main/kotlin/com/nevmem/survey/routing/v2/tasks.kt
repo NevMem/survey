@@ -22,6 +22,8 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 import org.koin.ktor.ext.inject
 
+private const val ACCESS_DENIED = "Access to method denied (not enough roles)"
+
 private fun Route.tasksImpl() {
     val surveysService by inject<SurveysService>()
     val workerApi by inject<WorkerApi>()
@@ -40,7 +42,7 @@ private fun Route.tasksImpl() {
             val userRoles = projectsService.getRolesInProject(project, user)
 
             if (!roleModel.hasAccess(listOf(SURVEY_MANAGER).toRoles(roleModel), userRoles)) {
-                throw IllegalStateException("Access to method denied (not enough roles)")
+                throw IllegalStateException(ACCESS_DENIED)
             }
 
             call.respond(workerApi.createExportDataTask(usersConverter(user), request.surveyId))
@@ -55,7 +57,7 @@ private fun Route.tasksImpl() {
             val userRoles = projectsService.getRolesInProject(project, user)
 
             if (!roleModel.hasAccess(listOf(SURVEY_MANAGER).toRoles(roleModel), userRoles)) {
-                throw IllegalStateException("Access to method denied (not enough roles)")
+                throw IllegalStateException(ACCESS_DENIED)
             }
 
             call.respond(workerApi.tasks(request.surveyId))
@@ -71,7 +73,7 @@ private fun Route.tasksImpl() {
             val userRoles = projectsService.getRolesInProject(project, user)
 
             if (!roleModel.hasAccess(listOf(SURVEY_MANAGER).toRoles(roleModel), userRoles)) {
-                throw IllegalStateException("Access to method denied (not enough roles)")
+                throw IllegalStateException(ACCESS_DENIED)
             }
 
             call.respond(task)
