@@ -39,3 +39,5 @@ include("backend:worker")
 include("common:data")
 include("util:exporter")
 include("util")
+include("util:client")
+findProject(":util:client")?.name = "client"

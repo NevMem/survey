@@ -136,7 +136,6 @@ class SurveySymbolProcessor(
                             is TsField.TsList -> {
                                 write("\t${field.name}: ${field.fieldType.objectType}[];\n")
                             }
-                            else -> {}
                         }
                     }
                     write("}\n\n")

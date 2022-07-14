@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id "com.google.devtools.ksp"
 }
 
 java {
@@ -20,4 +21,7 @@ dependencies {
 
     implementation project(path: ':backend:common')
     implementation project(path: ':common:data')
+
+    implementation project(":util:client")
+    ksp project(":util:client")
 }
