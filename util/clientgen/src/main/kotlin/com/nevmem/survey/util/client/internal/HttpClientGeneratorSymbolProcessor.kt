@@ -63,7 +63,7 @@ internal class HttpClientGeneratorSymbolProcessor(
 
         printer.declareImports(functions)
 
-        printer.println("class $generatedClassName(private val baseUrl: String) : $client {")
+        printer.println("internal class $generatedClassName(private val baseUrl: String) : $client {")
 
         printer.declareClient()
         functions.forEach { function ->

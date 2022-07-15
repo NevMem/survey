@@ -25,7 +25,7 @@ import com.nevmem.survey.survey.createSurveyMetadataAssembler
 import com.nevmem.survey.survey.createSurveysService
 import com.nevmem.survey.users.UsersService
 import com.nevmem.survey.users.createUsersService
-import com.nevmem.survey.worker.api.createWorkerApi
+import com.nevmem.survey.worker.api.WorkerClientFactory
 import io.ktor.application.Application
 import io.ktor.application.install
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +46,7 @@ private val coreModule = module {
     single<AnswersService> { createAnswersService(get(), CoroutineScope(Dispatchers.Default + SupervisorJob())) }
     single<SurveysMetadataAssembler> { createSurveyMetadataAssembler() }
     single<UsersService> { createUsersService() }
-    single { createWorkerApi(EnvVars.Worker.uri!!) }
+    single { WorkerClientFactory.create(EnvVars.Worker.uri!!) }
     single { createPushClient(EnvVars.Push.uri!!) }
     single { createProjectsService(get(), get()) }
 }
