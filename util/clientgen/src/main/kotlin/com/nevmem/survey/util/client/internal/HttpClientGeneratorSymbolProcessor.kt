@@ -28,8 +28,6 @@ internal class HttpClientGeneratorSymbolProcessor(
     }
 
     private fun processClient(client: KSAnnotated) {
-        log.warn(client.toString())
-
         val functions = mutableListOf<KSFunctionDeclaration>()
 
         val visitor = object : KSVisitorVoid() {
@@ -63,6 +61,23 @@ internal class HttpClientGeneratorSymbolProcessor(
         printer.println("package $packageName")
         printer.println()
 
+        printer.declareImports(functions)
+
+        printer.println("class $generatedClassName(private val baseUrl: String) : $client {")
+
+        printer.declareClient()
+        functions.forEach { function ->
+            printer.declareHandle(function)
+        }
+        printer.declarePostFunction()
+
+        printer.println("}")
+
+        printer.flush()
+        printer.close()
+    }
+
+    private fun createImports(functions: List<KSFunctionDeclaration>): List<String> {
         val imports = mutableListOf(
             "io.ktor.client.HttpClient",
             "io.ktor.client.features.json.JsonFeature",
@@ -88,49 +103,49 @@ internal class HttpClientGeneratorSymbolProcessor(
                 imports.add(type.declaration.packageName.asString() + "." + type.declaration.toString())
                 val args = type.arguments
                 args.forEach {
-                    log.warn(it.type.toString())
                     imports.add(it.type!!.resolve().declaration.packageName.asString() + "." + it.type.toString())
                 }
             }
         }
 
-        imports.toSet().toList().sorted().forEach {
-            printer.println("import $it")
-        }
-        printer.println()
-
-        printer.println("class $generatedClassName(private val baseUrl: String) : $client {")
-
-        declareClient(printer)
-
-        functions.forEach { function ->
-            assert(function.parameters.size <= 1)
-            val paramName = function.parameters.map { param -> "$param" }.firstOrNull() ?: ""
-            val paramString = function.parameters.map { param -> "$param: ${param.type}" }.firstOrNull() ?: ""
-
-            val returnType = function.returnType?.let {
-                val type = it.resolve()
-                type.toString()
-            } ?: "Unit"
-
-            val annotation = function.annotations.find { it.shortName.asString() == SurveyHttpClientHandle::class.java.simpleName }!!
-
-            val path = annotation.arguments.find { it.name?.asString() == "path" }!!.value.toString()
-
-            printer.println("\toverride suspend fun $function($paramString): $returnType = post(\"$path\", $paramName)")
-        }
-
-        declarePostFunction(printer)
-
-        printer.println("}")
-
-        printer.flush()
-        printer.close()
+        return imports.toSet().toList().sorted()
     }
 
-    private fun declareClient(printer: PrintWriter) {
-        printer.println()
-        printer.println(
+    private fun PrintWriter.declareImports(functions: List<KSFunctionDeclaration>) {
+        val imports = createImports(functions)
+        imports.forEach {
+            println("import $it")
+        }
+        println()
+    }
+
+    private fun PrintWriter.declareHandle(function: KSFunctionDeclaration) {
+        assert(function.parameters.size <= 1)
+
+        val paramsCount = function.parameters.size
+
+        val paramName = function.parameters.map { param -> "$param" }.firstOrNull()
+        val paramString = function.parameters.map { param -> "$param: ${param.type}" }.firstOrNull()
+
+        val returnType = function.returnType?.let {
+            val type = it.resolve()
+            type.toString()
+        } ?: "Unit"
+
+        val annotation = function.annotations.find { it.shortName.asString() == SurveyHttpClientHandle::class.java.simpleName }!!
+
+        val path = annotation.arguments.find { it.name?.asString() == "path" }!!.value.toString()
+
+        if (paramsCount == 1) {
+            println("\toverride suspend fun $function($paramString): $returnType = post(\"$path\", $paramName)")
+        } else {
+            println("\toverride suspend fun $function(): $returnType = post(\"$path\", Unit)")
+        }
+    }
+
+    private fun PrintWriter.declareClient() {
+        println()
+        println(
             """
             private val client = HttpClient {
                 install(JsonFeature) { serializer = KotlinxSerializer() }
@@ -141,12 +156,12 @@ internal class HttpClientGeneratorSymbolProcessor(
             }
             """.replaceIndent("    ")
         )
-        printer.println()
+        println()
     }
 
-    private fun declarePostFunction(printer: PrintWriter) {
-        printer.println()
-        printer.println(
+    private fun PrintWriter.declarePostFunction() {
+        println()
+        println(
             """
                 private suspend inline fun <Req : Any, reified Res : Any> post(path: String, body: Req): Res {
                     return client.post(baseUrl + path) {
@@ -156,6 +171,6 @@ internal class HttpClientGeneratorSymbolProcessor(
                 }
             """.replaceIndent("    ")
         )
-        printer.println()
+        println()
     }
 }
