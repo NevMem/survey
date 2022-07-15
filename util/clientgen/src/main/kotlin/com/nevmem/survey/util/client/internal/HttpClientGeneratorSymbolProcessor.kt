@@ -63,7 +63,18 @@ internal class HttpClientGeneratorSymbolProcessor(
         printer.println("package $packageName")
         printer.println()
 
-        val imports = mutableListOf<String>()
+        val imports = mutableListOf(
+            "io.ktor.client.HttpClient",
+            "io.ktor.client.features.json.JsonFeature",
+            "io.ktor.client.features.json.serializer.KotlinxSerializer",
+            "io.ktor.client.features.logging.DEFAULT",
+            "io.ktor.client.features.logging.LogLevel",
+            "io.ktor.client.features.logging.Logger",
+            "io.ktor.client.features.logging.Logging",
+            "io.ktor.client.request.post",
+            "io.ktor.http.ContentType",
+            "io.ktor.http.contentType",
+        )
 
         functions.forEach { function ->
             function.parameters.forEach { param ->
@@ -75,6 +86,11 @@ internal class HttpClientGeneratorSymbolProcessor(
             function.returnType?.let {
                 val type = it.resolve()
                 imports.add(type.declaration.packageName.asString() + "." + type.declaration.toString())
+                val args = type.arguments
+                args.forEach {
+                    log.warn(it.type.toString())
+                    imports.add(it.type!!.resolve().declaration.packageName.asString() + "." + it.type.toString())
+                }
             }
         }
 
@@ -83,24 +99,63 @@ internal class HttpClientGeneratorSymbolProcessor(
         }
         printer.println()
 
-        printer.println("class $generatedClassName : $client {")
+        printer.println("class $generatedClassName(private val baseUrl: String) : $client {")
+
+        declareClient(printer)
 
         functions.forEach { function ->
-            val params = function.parameters.map { param ->
-                "$param: ${param.type}"
-            }
+            assert(function.parameters.size <= 1)
+            val paramName = function.parameters.map { param -> "$param" }.firstOrNull() ?: ""
+            val paramString = function.parameters.map { param -> "$param: ${param.type}" }.firstOrNull() ?: ""
 
             val returnType = function.returnType?.let {
                 val type = it.resolve()
                 type.toString()
             } ?: "Unit"
 
-            printer.println("\toverride suspend fun $function(${params.joinToString(", ")}): $returnType = TODO(\"Not implemented\")")
+            val annotation = function.annotations.find { it.shortName.asString() == SurveyHttpClientHandle::class.java.simpleName }!!
+
+            val path = annotation.arguments.find { it.name?.asString() == "path" }!!.value.toString()
+
+            printer.println("\toverride suspend fun $function($paramString): $returnType = post(\"$path\", $paramName)")
         }
+
+        declarePostFunction(printer)
 
         printer.println("}")
 
         printer.flush()
         printer.close()
+    }
+
+    private fun declareClient(printer: PrintWriter) {
+        printer.println()
+        printer.println(
+            """
+            private val client = HttpClient {
+                install(JsonFeature) { serializer = KotlinxSerializer() }
+                install(Logging) {
+                    logger = Logger.DEFAULT
+                    level = LogLevel.BODY
+                }
+            }
+            """.replaceIndent("    ")
+        )
+        printer.println()
+    }
+
+    private fun declarePostFunction(printer: PrintWriter) {
+        printer.println()
+        printer.println(
+            """
+                private suspend inline fun <Req : Any, reified Res : Any> post(path: String, body: Req): Res {
+                    return client.post(baseUrl + path) {
+                        this.body = body
+                        contentType(ContentType.Application.Json)
+                    }
+                }
+            """.replaceIndent("    ")
+        )
+        printer.println()
     }
 }

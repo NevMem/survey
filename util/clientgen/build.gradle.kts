@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "com.nevmem.survey.util.client"
+group = "com.nevmem.survey.util.clientgen"
 
 repositories {
     mavenCentral()

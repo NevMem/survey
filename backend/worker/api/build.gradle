@@ -10,6 +10,14 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs += ["build/generated/ksp/main/kotlin"]
+        }
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutinesCore"
@@ -22,6 +30,6 @@ dependencies {
     implementation project(path: ':backend:common')
     implementation project(path: ':common:data')
 
-    implementation project(":util:client")
-    ksp project(":util:client")
+    implementation project(':util:clientgen')
+    ksp project(':util:clientgen')
 }

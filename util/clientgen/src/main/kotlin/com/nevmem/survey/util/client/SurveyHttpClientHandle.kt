@@ -1,4 +1,4 @@
 package com.nevmem.survey.util.client
 
 @Target(AnnotationTarget.FUNCTION)
-annotation class SurveyHttpClientHandle
+annotation class SurveyHttpClientHandle(val path: String)
