@@ -154,8 +154,8 @@ internal class HttpClientGeneratorSymbolProcessor(
                 RetryPolicy.None -> call
                 RetryPolicy.Exponential -> "exponentialRetry(-1) {\n$T$T$call\n$T}"
                 RetryPolicy.ExponentialFinite -> "exponentialRetry(3) {\n$T$T$call\n$T}"
-                RetryPolicy.Linear -> TODO()
-                RetryPolicy.LinearFinite -> TODO()
+                RetryPolicy.Linear -> "linearRetry(-1) {\n$T$T$call\n$T}"
+                RetryPolicy.LinearFinite ->"linearRetry(3) {\n$T$T$call\n$T}"
             }
         }
 
@@ -189,7 +189,7 @@ internal class HttpClientGeneratorSymbolProcessor(
                     level = $ktorLogLevel
                 }
             }
-            """.replaceIndent("    ")
+            """.replaceIndent(T)
         )
         println()
     }
@@ -204,32 +204,10 @@ internal class HttpClientGeneratorSymbolProcessor(
                         contentType(ContentType.Application.Json)
                     }
                 }
-            """.replaceIndent("    ")
+            """.replaceIndent(T)
         )
         println()
     }
-
-    /* suspend fun delay(time: Long) = Unit
-
-    class RequestFailedException(message: String) : Exception(message)
-    suspend fun <T> exponentialRetry(retriesCount: Int, doRequest: () -> T): T {
-        var delayTime = 1000L
-        var requestCount = 0
-        while (true) {
-            requestCount += 1
-            try {
-                return doRequest()
-            } catch (exception: Exception) {
-                if (requestCount == retriesCount) {
-                    throw RequestFailedException(exception.message ?: "Retry failed")
-                }
-
-                delay(delayTime)
-                delayTime *= 2
-                delayTime = delayTime.coerceAtMost(60 * 1000L)
-            }
-        }
-    } */
 
     private fun PrintWriter.declareRetryFunctions() {
         println(
@@ -254,7 +232,24 @@ internal class HttpClientGeneratorSymbolProcessor(
                     }
                 }
             }
-            """.replaceIndent("    ")
+            
+            private suspend fun <T> linearRetry(retriesCount: Int, doRequest: suspend () -> T): T {
+                val delayTime = 1000L
+                var requestCount = 0
+                while (true) {
+                    requestCount += 1
+                    try {
+                        return doRequest()
+                    } catch (exception: Exception) {
+                        if (requestCount == retriesCount) {
+                            throw RequestFailedException(exception.message ?: "Retry failed")
+                        }
+        
+                        delay(delayTime)
+                    }
+                }
+            }
+            """.replaceIndent(T)
         )
     }
 }
