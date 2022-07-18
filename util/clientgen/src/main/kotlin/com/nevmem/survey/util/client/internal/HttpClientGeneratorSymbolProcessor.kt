@@ -9,10 +9,13 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
+import com.nevmem.survey.util.client.ClientLogLevel
 import com.nevmem.survey.util.client.RetryPolicy
 import com.nevmem.survey.util.client.SurveyHttpClient
 import com.nevmem.survey.util.client.SurveyHttpClientHandle
 import java.io.PrintWriter
+
+private const val T = "    "
 
 internal class HttpClientGeneratorSymbolProcessor(
     private val environment: SymbolProcessorEnvironment,
@@ -66,7 +69,7 @@ internal class HttpClientGeneratorSymbolProcessor(
 
         printer.println("internal class $generatedClassName(private val baseUrl: String) : $client {")
 
-        printer.declareClient()
+        printer.declareClient(client)
         functions.forEach { function ->
             printer.declareHandle(function)
         }
@@ -149,8 +152,8 @@ internal class HttpClientGeneratorSymbolProcessor(
             log.warn(retryPolicy.toString())
             when (retryPolicy) {
                 RetryPolicy.None -> call
-                RetryPolicy.Exponential -> "exponentialRetry { $call }"
-                RetryPolicy.ExponentialFinite -> "exponentialRetryFinite { $call }"
+                RetryPolicy.Exponential -> "exponentialRetry(-1) {\n$T$T$call\n$T}"
+                RetryPolicy.ExponentialFinite -> "exponentialRetry(3) {\n$T$T$call\n$T}"
                 RetryPolicy.Linear -> TODO()
                 RetryPolicy.LinearFinite -> TODO()
             }
@@ -163,7 +166,19 @@ internal class HttpClientGeneratorSymbolProcessor(
         }
     }
 
-    private fun PrintWriter.declareClient() {
+    private fun PrintWriter.declareClient(client: KSAnnotated) {
+        val logLevel = client.annotations.find { it.shortName.asString() == SurveyHttpClient::class.java.simpleName }!!.arguments.find {
+            it.name?.asString() == "logLevel"
+        }!!.value.toString().split(".").last().let { ClientLogLevel.valueOf(it) }
+
+        val ktorLogLevel = when (logLevel) {
+            ClientLogLevel.All -> "LogLevel.ALL"
+            ClientLogLevel.Headers -> "LogLevel.HEADERS"
+            ClientLogLevel.Body -> "LogLevel.BODY"
+            ClientLogLevel.Info -> "LogLevel.INFO"
+            ClientLogLevel.None -> "LogLevel.NONE"
+        }
+
         println()
         println(
             """
@@ -171,7 +186,7 @@ internal class HttpClientGeneratorSymbolProcessor(
                 install(JsonFeature) { serializer = KotlinxSerializer() }
                 install(Logging) {
                     logger = Logger.DEFAULT
-                    level = LogLevel.BODY
+                    level = $ktorLogLevel
                 }
             }
             """.replaceIndent("    ")
@@ -197,7 +212,7 @@ internal class HttpClientGeneratorSymbolProcessor(
     /* suspend fun delay(time: Long) = Unit
 
     class RequestFailedException(message: String) : Exception(message)
-    suspend fun <T> exponentialRetryFinite(doRequest: () -> T): T {
+    suspend fun <T> exponentialRetry(retriesCount: Int, doRequest: () -> T): T {
         var delayTime = 1000L
         var requestCount = 0
         while (true) {
@@ -205,7 +220,7 @@ internal class HttpClientGeneratorSymbolProcessor(
             try {
                 return doRequest()
             } catch (exception: Exception) {
-                if (requestCount == 3) {
+                if (requestCount == retriesCount) {
                     throw RequestFailedException(exception.message ?: "Retry failed")
                 }
 
@@ -221,20 +236,7 @@ internal class HttpClientGeneratorSymbolProcessor(
             """
             class RequestFailedException(message: String) : Exception(message)
             
-            private suspend fun <T> exponentialRetry(doRequest: suspend () -> T): T {
-                var delayTime = 1000L
-                while (true) {
-                    try {
-                        return doRequest()
-                    } catch (_: Exception) {
-                        delay(delayTime)
-                        delayTime *= 2
-                        delayTime = delayTime.coerceAtMost(60 * 1000L)
-                    }
-                }
-            }
-            
-            private suspend fun <T> exponentialRetryFinite(doRequest: suspend () -> T): T {
+            private suspend fun <T> exponentialRetry(retriesCount: Int, doRequest: suspend () -> T): T {
                 var delayTime = 1000L
                 var requestCount = 0
                 while (true) {
@@ -242,10 +244,10 @@ internal class HttpClientGeneratorSymbolProcessor(
                     try {
                         return doRequest()
                     } catch (exception: Exception) {
-                        if (requestCount == 3) {
+                        if (requestCount == retriesCount) {
                             throw RequestFailedException(exception.message ?: "Retry failed")
                         }
-                        
+        
                         delay(delayTime)
                         delayTime *= 2
                         delayTime = delayTime.coerceAtMost(60 * 1000L)
