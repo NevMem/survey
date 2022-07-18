@@ -11,6 +11,7 @@ docker-compose up -d database
 docker-compose up -d s3local
 docker-compose up -d core
 docker-compose up -d worker
+docker-compose up -d push
 rm -rf ./report
 mkdir ./report
 docker-compose run test
