@@ -9,6 +9,7 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
+import com.nevmem.survey.util.client.RetryPolicy
 import com.nevmem.survey.util.client.SurveyHttpClient
 import com.nevmem.survey.util.client.SurveyHttpClientHandle
 import java.io.PrintWriter
@@ -71,6 +72,8 @@ internal class HttpClientGeneratorSymbolProcessor(
         }
         printer.declarePostFunction()
 
+        printer.declareRetryFunctions()
+
         printer.println("}")
 
         printer.flush()
@@ -89,6 +92,7 @@ internal class HttpClientGeneratorSymbolProcessor(
             "io.ktor.client.request.post",
             "io.ktor.http.ContentType",
             "io.ktor.http.contentType",
+            "kotlinx.coroutines.delay",
         )
 
         functions.forEach { function ->
@@ -136,10 +140,26 @@ internal class HttpClientGeneratorSymbolProcessor(
 
         val path = annotation.arguments.find { it.name?.asString() == "path" }!!.value.toString()
 
+        val withRetryPolicy: (String) -> String = { call: String ->
+            val retryPolicy = RetryPolicy.valueOf(
+                annotation.arguments.find { it.name?.asString() == "retryPolicy" }!!.value.toString()
+                    .split(".")
+                    .last()
+            )
+            log.warn(retryPolicy.toString())
+            when (retryPolicy) {
+                RetryPolicy.None -> call
+                RetryPolicy.Exponential -> "exponentialRetry { $call }"
+                RetryPolicy.ExponentialFinite -> "exponentialRetryFinite { $call }"
+                RetryPolicy.Linear -> TODO()
+                RetryPolicy.LinearFinite -> TODO()
+            }
+        }
+
         if (paramsCount == 1) {
-            println("\toverride suspend fun $function($paramString): $returnType = post(\"$path\", $paramName)")
+            println("\toverride suspend fun $function($paramString): $returnType = ${withRetryPolicy("post(\"$path\", $paramName)")}")
         } else {
-            println("\toverride suspend fun $function(): $returnType = post(\"$path\", Unit)")
+            println("\toverride suspend fun $function(): $returnType = ${withRetryPolicy("post(\"$path\", Unit)")}")
         }
     }
 
@@ -172,5 +192,67 @@ internal class HttpClientGeneratorSymbolProcessor(
             """.replaceIndent("    ")
         )
         println()
+    }
+
+    /* suspend fun delay(time: Long) = Unit
+
+    class RequestFailedException(message: String) : Exception(message)
+    suspend fun <T> exponentialRetryFinite(doRequest: () -> T): T {
+        var delayTime = 1000L
+        var requestCount = 0
+        while (true) {
+            requestCount += 1
+            try {
+                return doRequest()
+            } catch (exception: Exception) {
+                if (requestCount == 3) {
+                    throw RequestFailedException(exception.message ?: "Retry failed")
+                }
+
+                delay(delayTime)
+                delayTime *= 2
+                delayTime = delayTime.coerceAtMost(60 * 1000L)
+            }
+        }
+    } */
+
+    private fun PrintWriter.declareRetryFunctions() {
+        println(
+            """
+            class RequestFailedException(message: String) : Exception(message)
+            
+            private suspend fun <T> exponentialRetry(doRequest: suspend () -> T): T {
+                var delayTime = 1000L
+                while (true) {
+                    try {
+                        return doRequest()
+                    } catch (_: Exception) {
+                        delay(delayTime)
+                        delayTime *= 2
+                        delayTime = delayTime.coerceAtMost(60 * 1000L)
+                    }
+                }
+            }
+            
+            private suspend fun <T> exponentialRetryFinite(doRequest: suspend () -> T): T {
+                var delayTime = 1000L
+                var requestCount = 0
+                while (true) {
+                    requestCount += 1
+                    try {
+                        return doRequest()
+                    } catch (exception: Exception) {
+                        if (requestCount == 3) {
+                            throw RequestFailedException(exception.message ?: "Retry failed")
+                        }
+                        
+                        delay(delayTime)
+                        delayTime *= 2
+                        delayTime = delayTime.coerceAtMost(60 * 1000L)
+                    }
+                }
+            }
+            """.replaceIndent("    ")
+        )
     }
 }
