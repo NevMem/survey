@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":backend:invites"))
     implementation(project(":backend:media"))
     implementation(project(":backend:push:client"))
+    implementation(project(":backend:push:pushapi"))
     implementation(project(":backend:role"))
     implementation(project(":backend:survey"))
     implementation(project(":backend:task"))
