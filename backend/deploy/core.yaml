@@ -15,6 +15,13 @@ spec:
       containers:
       - name: survey-core
         image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core:e22286f
+        resources:
+          limits:
+            memory: 1.5G
+            cpu: "1"
+          requests:
+            memory: 512M
+            cpu: "0.5"
         env:
         - name: WORKER_URI
           value: "http://worker-service"

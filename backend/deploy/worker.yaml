@@ -17,6 +17,13 @@ spec:
         image: cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:e79c75a
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            memory: 1G
+            cpu: "1"
+          requests:
+            memory: 512M
+            cpu: "0.2"
       imagePullSecrets:
       - name: regcred
 ---
