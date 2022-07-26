@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: survey-core
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: survey-core
+  template:
+    metadata:
+      labels:
+        app: survey-core
+    spec:
+      containers:
+      - name: survey-core
+        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core:e79c75a
+        env:
+        - name: WORKER_URI
+          value: "http://worker-service"
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: core-service
+spec:
+  selector:
+    app: survey-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: core-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx-example
+  defaultBackend:
+    service:
+      name: core-service
+      port:
+        number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+  name: nginx-example
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: k8s.io/ingress-nginx

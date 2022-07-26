@@ -17,7 +17,6 @@
         "S3_SECRET_ACCESS_KEY",
         "S3_URI",
         "SECURITY_SALT",
-        "SELF_URI",
-        "WORKER_URI"
+        "SELF_URI"
     ]
 }

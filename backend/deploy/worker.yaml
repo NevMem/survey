@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: survey-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: survey-worker
+  template:
+    metadata:
+      labels:
+        app: survey-worker
+    spec:
+      containers:
+      - name: survey-worker
+        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:e79c75a
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-service
+spec:
+  selector:
+    app: survey-worker
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
