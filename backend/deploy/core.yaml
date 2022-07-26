@@ -14,10 +14,12 @@ spec:
     spec:
       containers:
       - name: survey-core
-        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core:e79c75a
+        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core:e22286f
         env:
         - name: WORKER_URI
           value: "http://worker-service"
+        - name: PUSH_URI
+          value: "http://push-service"
         ports:
         - containerPort: 80
       imagePullSecrets:
