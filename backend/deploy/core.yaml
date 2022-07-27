@@ -57,6 +57,10 @@ spec:
       name: core-service
       port:
         number: 80
+  tls:
+    - hosts:
+      - ethnosurvey.com
+      secretName: survey-tls
 ---
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
