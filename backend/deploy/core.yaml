@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: survey-core
-        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core:e22286f
+        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core:bb9564f
         resources:
           limits:
             memory: 1.5G
@@ -48,15 +48,21 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: core-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  # annotations:
+    # nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx-example
-  defaultBackend:
-    service:
-      name: core-service
-      port:
-        number: 80
+  ingressClassName: nginx-ingress
+  rules:
+  - host: "ethnosurvey.com"
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: core-service
+              port:
+                number: 80
   tls:
     - hosts:
       - ethnosurvey.com
@@ -67,7 +73,7 @@ kind: IngressClass
 metadata:
   labels:
     app.kubernetes.io/component: controller
-  name: nginx-example
+  name: nginx-ingress
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
