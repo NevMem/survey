@@ -85,6 +85,6 @@ jobs:
         env:
           CERT_ID: ${{ secrets.CERT_ID }}
       - name: Building docker
-        run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
+        run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core-nonginx:$(git rev-parse --short HEAD)
       - name: Pushing docker
-        run: docker push cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
+        run: docker push cr.yandex/crp9sskk3fu52ukovaco/ethno-core-nonginx:$(git rev-parse --short HEAD)

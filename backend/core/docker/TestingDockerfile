@@ -17,12 +17,10 @@ RUN apt update && \
     syslog-ng \
     curl \
     openjdk-8-jdk \
-    nginx \
     unzip
 
 COPY --from=BUILD_PHASE backend/core/build/distributions/core-0.0.1.zip /
 COPY ./backend/core/docker/testing_runner.sh .
-COPY ./backend/core/docker/nginx-config.conf .
 COPY ./backend/wait-for-it.sh .
 RUN unzip core-0.0.1.zip
 

@@ -3,7 +3,6 @@ FROM ubuntu:20.04
 COPY build_dir /
 COPY runner.sh /
 COPY env.sh /
-COPY nginx-production-config.conf /
 
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive \
@@ -13,9 +12,8 @@ RUN apt update && \
     lsof \
     syslog-ng \
     curl \
-    openjdk-8-jdk \
-    nginx
+    openjdk-8-jdk
 
 CMD [ "./runner.sh" ]
 
-EXPOSE 80 443
+EXPOSE 80
