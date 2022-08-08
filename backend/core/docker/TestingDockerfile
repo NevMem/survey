@@ -6,18 +6,10 @@
 FROM openjdk:8-jdk-alpine AS BUILD_PHASE
 COPY backend backend
 
-FROM ubuntu:20.04
+FROM openjdk:8-jdk-alpine
 
-RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-    vim \
-    telnet \
-    lsof \
-    syslog-ng \
-    curl \
-    openjdk-8-jdk \
-    unzip
+RUN apk update && apk add bash
+RUN apk -U add vim
 
 COPY --from=BUILD_PHASE backend/core/build/distributions/core-0.0.1.zip /
 COPY ./backend/core/docker/testing_runner.sh .
