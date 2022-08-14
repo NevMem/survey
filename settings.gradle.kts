@@ -41,3 +41,7 @@ include("util")
 include("util:clientgen")
 include("util:exporter")
 findProject(":util:client")?.name = "client"
+include("util:s3client")
+findProject(":util:s3client")?.name = "s3client"
+include("util:s3client:sample")
+findProject(":util:s3client:sample")?.name = "sample"
