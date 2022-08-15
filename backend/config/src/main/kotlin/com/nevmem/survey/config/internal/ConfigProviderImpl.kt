@@ -4,7 +4,6 @@ import com.nevmem.survey.config.Config
 import com.nevmem.survey.config.ConfigProvider
 import com.nevmem.survey.s3client.S3ClientWrapper
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
