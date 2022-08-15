@@ -1,5 +1,6 @@
 package com.nevmem.survey.config
 
+import com.nevmem.survey.cloud.MessagingService
 import com.nevmem.survey.config.internal.ConfigProviderImpl
 import com.nevmem.survey.s3client.S3ClientWrapper
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +19,7 @@ interface ConfigProvider {
         fun create(
             scope: CoroutineScope,
             s3ClientWrapper: S3ClientWrapper,
-        ): ConfigProvider = ConfigProviderImpl(scope, s3ClientWrapper)
+            messagingService: MessagingService,
+        ): ConfigProvider = ConfigProviderImpl(scope, s3ClientWrapper, messagingService)
     }
 }

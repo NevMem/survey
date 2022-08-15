@@ -14,5 +14,6 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions["coroutinesCore"]}")
     implementation(project(":backend:config"))
+    implementation(project(":backend:cloud"))
     implementation(project(":util:s3client"))
 }

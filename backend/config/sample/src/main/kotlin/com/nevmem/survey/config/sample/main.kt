@@ -1,5 +1,6 @@
 package com.nevmem.survey.config.sample
 
+import com.nevmem.survey.cloud.CloudServices
 import com.nevmem.survey.config.ConfigProvider
 import com.nevmem.survey.s3client.S3ClientWrapper
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +17,7 @@ fun main() {
         override val secretAccessKey: String = "YCNRGAd6tJl-j4ckSn9h4NOD-8Flh6HJlxLRXx15"
     }
     val s3ClientWrapper = S3ClientWrapper.Factory.create(deps)
-    val configProvider = ConfigProvider.Factory.create(scope, s3ClientWrapper)
+    val configProvider = ConfigProvider.Factory.create(scope, s3ClientWrapper, CloudServices.Factory.create().messaging)
 
     runBlocking {
         configProvider.config.collect {

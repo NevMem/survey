@@ -49,3 +49,5 @@ include("backend:config")
 findProject(":backend:config")?.name = "config"
 include("backend:config:sample")
 findProject(":backend:config:sample")?.name = "sample"
+include("backend:cloud")
+findProject(":backend:cloud")?.name = "cloud"

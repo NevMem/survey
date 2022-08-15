@@ -1,5 +1,6 @@
 package com.nevmem.survey.config.internal
 
+import com.nevmem.survey.cloud.MessagingService
 import com.nevmem.survey.config.Config
 import com.nevmem.survey.config.ConfigProvider
 import com.nevmem.survey.s3client.S3ClientWrapper
@@ -17,6 +18,7 @@ private const val UPDATE_DELAY = 1000L
 internal class ConfigProviderImpl(
     scope: CoroutineScope,
     private val s3ClientWrapper: S3ClientWrapper,
+    private val messagingService: MessagingService,
 ) : ConfigProvider {
 
     private val bucket by lazy {
@@ -43,10 +45,12 @@ internal class ConfigProviderImpl(
 
                 if (currentConfig == null || currentConfig.version < config.version) {
                     currentConfig = config
+                    messagingService.sendMessage("Config updated to version ${currentConfig.version}")
                     emit(config)
                 }
             } catch (exception: Exception) {
                 println(exception)
+                messagingService.sendMessage("Config downloading failed with exception: ${exception.message}")
             }
             delay(UPDATE_DELAY)
         }

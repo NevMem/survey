@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation(project(":util:s3client"))
+    implementation(project(":backend:cloud"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${versions["kotlinxSerializationJson"]}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions["coroutinesCore"]}")
 }
