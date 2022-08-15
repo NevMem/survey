@@ -37,6 +37,7 @@ internal class ConfigProviderImpl(
 
     private fun createConfigFlow(): Flow<Config> = flow {
         var currentConfig: Config? = null
+        var previousRequestFailed = false
 
         while (true) {
             try {
@@ -48,9 +49,13 @@ internal class ConfigProviderImpl(
                     messagingService.sendMessage("Config updated to version ${currentConfig.version}")
                     emit(config)
                 }
+                previousRequestFailed = false
             } catch (exception: Exception) {
                 println(exception)
-                messagingService.sendMessage("Config downloading failed with exception: ${exception.message}")
+                if (!previousRequestFailed) {
+                    messagingService.sendMessage("Config downloading failed with exception: ${exception.message}")
+                }
+                previousRequestFailed = true
             }
             delay(UPDATE_DELAY)
         }

@@ -37,6 +37,7 @@ dependencies {
     implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
     implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
     implementation(project(":backend:common"))
+    implementation(project(":backend:config"))
     implementation(project(":backend:converters"))
     implementation(project(":backend:env"))
     implementation(project(":backend:fs"))
