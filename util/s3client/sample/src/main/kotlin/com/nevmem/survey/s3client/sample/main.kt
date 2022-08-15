@@ -18,7 +18,7 @@ fun main() {
         val bucket = client.getOrCreateBucket("ethnosurvey-config")
         println(bucket)
 
-        val content = "{}"
+        val content = "{\"version\": 10}"
         bucket.putFileContents("config.json", content)
         println(bucket.getFileContents("config.json"))
     }
