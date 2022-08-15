@@ -41,6 +41,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     implementation(project(":backend:auth"))
     implementation(project(":backend:common"))
+    implementation(project(":backend:config"))
     implementation(project(":backend:converters"))
     implementation(project(":backend:env"))
     implementation(project(":backend:fs"))

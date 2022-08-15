@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Config(
     val version: Long,
+    val useBunchSaver: Boolean,
 )
 
 interface ConfigProvider {
