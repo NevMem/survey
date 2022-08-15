@@ -3,7 +3,7 @@ pluginManagement {
     val kotlinVersion: String by settings
     plugins {
         id("com.google.devtools.ksp") version kspVersion
-        id("org.jetbrains.kotlin.jvm") version "1.5.30"
+        id("org.jetbrains.kotlin.jvm") version kotlinVersion
     }
     repositories {
         gradlePluginPortal()
