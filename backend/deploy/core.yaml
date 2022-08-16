@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: survey-core
-        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core-nonginx:cfde722
+        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-core-nonginx:041da10
         resources:
           limits:
             memory: 1.5G

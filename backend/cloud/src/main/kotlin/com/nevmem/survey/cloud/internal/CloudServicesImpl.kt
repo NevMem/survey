@@ -12,7 +12,7 @@ import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
-import java.util.logging.Logger
+import org.slf4j.LoggerFactory
 
 @Serializable
 data class SendMessage(val message: String)
@@ -21,7 +21,7 @@ private class MessagingServiceImpl : MessagingService {
     private val baseUrl = "https://functions.yandexcloud.net/"
 
     private val logger by lazy {
-        Logger.getLogger("MessagingServiceImpl")
+        LoggerFactory.getLogger("MessagingServiceImpl")
     }
 
     private val client by lazy {
@@ -34,7 +34,7 @@ private class MessagingServiceImpl : MessagingService {
     }
 
     override suspend fun sendMessage(message: String) {
-        logger.warning("Sending message $message")
+        logger.warn("Sending message $message")
         return post("d4e8vjcobk58f3u8ut2p", SendMessage("${EnvVars.environment}: $message"))
     }
 
