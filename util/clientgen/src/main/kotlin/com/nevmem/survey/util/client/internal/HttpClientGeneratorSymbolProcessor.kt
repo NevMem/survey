@@ -155,7 +155,7 @@ internal class HttpClientGeneratorSymbolProcessor(
                 RetryPolicy.Exponential -> "exponentialRetry(-1) {\n$T$T$call\n$T}"
                 RetryPolicy.ExponentialFinite -> "exponentialRetry(3) {\n$T$T$call\n$T}"
                 RetryPolicy.Linear -> "linearRetry(-1) {\n$T$T$call\n$T}"
-                RetryPolicy.LinearFinite ->"linearRetry(3) {\n$T$T$call\n$T}"
+                RetryPolicy.LinearFinite -> "linearRetry(3) {\n$T$T$call\n$T}"
             }
         }
 

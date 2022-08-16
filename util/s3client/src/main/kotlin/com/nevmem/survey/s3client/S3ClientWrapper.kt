@@ -8,9 +8,9 @@ interface Bucket {
 }
 
 sealed class HasBucketResponse {
-    object Exists: HasBucketResponse()
-    object NotFound: HasBucketResponse()
-    data class SdkError(val exception: Exception): HasBucketResponse()
+    object Exists : HasBucketResponse()
+    object NotFound : HasBucketResponse()
+    data class SdkError(val exception: Exception) : HasBucketResponse()
 }
 
 interface S3ClientWrapper {

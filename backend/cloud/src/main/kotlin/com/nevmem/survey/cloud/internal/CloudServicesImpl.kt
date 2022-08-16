@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SendMessage(val message: String)
 
-private class MessagingServiceImpl: MessagingService {
+private class MessagingServiceImpl : MessagingService {
     private val baseUrl = "https://functions.yandexcloud.net/"
 
     private val client by lazy {
@@ -43,7 +43,7 @@ private class MessagingServiceImpl: MessagingService {
     }
 }
 
-internal class CloudServicesImpl: CloudServices {
+internal class CloudServicesImpl : CloudServices {
     override val messaging: MessagingService by lazy {
         MessagingServiceImpl()
     }

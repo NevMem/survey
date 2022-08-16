@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 internal class HybridAnswersSaver(
     private val backgroundScope: CoroutineScope,
     private val configProvider: ConfigProvider,
-): AnswerSaver {
+) : AnswerSaver {
     private val simpleSaver by lazy {
         SimpleAnswerSaver()
     }

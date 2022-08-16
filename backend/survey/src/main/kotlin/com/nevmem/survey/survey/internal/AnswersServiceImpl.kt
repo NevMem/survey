@@ -14,9 +14,7 @@ import com.nevmem.survey.survey.SurveyAnswerInconsistencyException
 import com.nevmem.survey.survey.SurveyNotFoundException
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.survey.internal.saver.AnswerSaver
-import com.nevmem.survey.survey.internal.saver.BunchAnswerSaver
 import com.nevmem.survey.survey.internal.saver.HybridAnswersSaver
-import com.nevmem.survey.survey.internal.saver.SimpleAnswerSaver
 import com.nevmem.survey.survey.internal.util.typeOfCommonQuestion
 import com.nevmem.survey.survey.internal.util.typeOfQuestion
 import com.nevmem.survey.survey.internal.util.typeOfQuestionForAnswer

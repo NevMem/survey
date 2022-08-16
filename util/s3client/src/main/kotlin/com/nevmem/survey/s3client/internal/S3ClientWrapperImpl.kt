@@ -22,7 +22,7 @@ import kotlin.coroutines.suspendCoroutine
 private class BucketImpl(
     private val client: S3Client,
     private val bucketName: String,
-): Bucket {
+) : Bucket {
     override suspend fun getFileContents(filename: String): String = suspendCoroutine { continuation ->
         val response = client.getObject(GetObjectRequest.builder().bucket(bucketName).key(filename).build())
 
