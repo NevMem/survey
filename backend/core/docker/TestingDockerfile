@@ -40,6 +40,8 @@ ENV PUSH_URI=http://push
 
 ENV SELF_URI=http://localhost
 
+ENV ENVIRONMENT=testing
+
 CMD ["./testing_runner.sh"]
 
 EXPOSE 8080

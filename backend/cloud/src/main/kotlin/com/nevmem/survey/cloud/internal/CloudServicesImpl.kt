@@ -2,6 +2,7 @@ package com.nevmem.survey.cloud.internal
 
 import com.nevmem.survey.cloud.CloudServices
 import com.nevmem.survey.cloud.MessagingService
+import com.nevmem.survey.env.EnvVars
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -31,7 +32,7 @@ private class MessagingServiceImpl: MessagingService {
     }
 
     override suspend fun sendMessage(message: String) {
-        return post("d4e8vjcobk58f3u8ut2p", SendMessage(message))
+        return post("d4e8vjcobk58f3u8ut2p", SendMessage("${EnvVars.environment}: $message"))
     }
 
     private suspend inline fun <Req : Any, reified Res : Any> post(path: String, body: Req): Res {

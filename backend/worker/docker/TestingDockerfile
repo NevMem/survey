@@ -37,6 +37,8 @@ ENV S3_URI=http://s3local:8000
 
 ENV SELF_URI=http://localhost
 
+ENV ENVIRONMENT=testing
+
 CMD ["./testing_runner.sh"]
 
 EXPOSE 80 443
