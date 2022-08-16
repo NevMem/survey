@@ -8,12 +8,12 @@ import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.features.logging.DEFAULT
 import io.ktor.client.features.logging.LogLevel
-import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
+import java.util.logging.Logger
 
 @Serializable
 data class SendMessage(val message: String)
@@ -21,17 +21,21 @@ data class SendMessage(val message: String)
 private class MessagingServiceImpl : MessagingService {
     private val baseUrl = "https://functions.yandexcloud.net/"
 
+    private val logger by lazy {
+        Logger.getLogger("MessagingServiceImpl")
+    }
+
     private val client by lazy {
         HttpClient {
             install(JsonFeature) { serializer = KotlinxSerializer() }
             install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.NONE
+                level = LogLevel.ALL
             }
         }
     }
 
     override suspend fun sendMessage(message: String) {
+        logger.warning("Sending message $message")
         return post("d4e8vjcobk58f3u8ut2p", SendMessage("${EnvVars.environment}: $message"))
     }
 

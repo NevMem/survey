@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import java.util.logging.Logger
 
 private const val UPDATE_DELAY = 1000L
 
@@ -21,9 +22,20 @@ internal class ConfigProviderImpl(
     private val messagingService: MessagingService,
 ) : ConfigProvider {
 
+    private val logger by lazy {
+        Logger.getLogger("ConfigProviderImpl")
+    }
+
+    init {
+        logger.warning("ConfigProviderImpl constructor")
+    }
+
     private val bucket by lazy {
         runBlocking {
-            s3ClientWrapper.getOrCreateBucket("ethnosurvey-config")
+            logger.warning("Getting config bucket")
+            val result = s3ClientWrapper.getOrCreateBucket("ethnosurvey-config")
+            logger.warning("Bucket ready")
+            result
         }
     }
 
@@ -51,7 +63,7 @@ internal class ConfigProviderImpl(
                 }
                 previousRequestFailed = false
             } catch (exception: Exception) {
-                println(exception)
+                logger.warning(exception.toString())
                 if (!previousRequestFailed) {
                     messagingService.sendMessage("Config downloading failed with exception: ${exception.message}")
                 }
