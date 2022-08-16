@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: survey-worker
-        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:e79c75a
+        image: cr.yandex/crp9sskk3fu52ukovaco/ethno-worker:cfde722
         ports:
         - containerPort: 80
         resources:
