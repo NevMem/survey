@@ -38,6 +38,8 @@ object EnvVars {
     object Push {
         val uri by lazy { maybeEnv("PUSH_URI") }
     }
+
+    val environment by lazy { env("ENVIRONMENT") }
 }
 
 fun maybeEnv(key: String): String? = System.getenv(key)

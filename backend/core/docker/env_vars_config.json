@@ -11,13 +11,12 @@
         "JWT_DOMAIN",
         "JWT_REALM",
         "JWT_SECRET",
-        "PUSH_URI",
         "S3_ACCESS_KEY",
         "S3_REGION",
         "S3_SECRET_ACCESS_KEY",
         "S3_URI",
         "SECURITY_SALT",
         "SELF_URI",
-        "WORKER_URI"
+        "ENVIRONMENT"
     ]
 }

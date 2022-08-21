@@ -70,6 +70,7 @@ jobs:
           PUSH_URI: http://survey-push.ru-central1.internal
           ACME_BACKEND_CHALLENGE_VALUE: ${{ secrets.ACME_BACKEND_CHALLENGE_VALUE }}
           ACME_BACKEND_CHALLENGE_KEY: ${{ secrets.ACME_BACKEND_CHALLENGE_KEY }}
+          ENVIRONMENT: production
       - name: Installing YC util
         run: curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i /opt/yandex-cloud -n
       - name: Authorizing YC util
@@ -85,6 +86,6 @@ jobs:
         env:
           CERT_ID: ${{ secrets.CERT_ID }}
       - name: Building docker
-        run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
+        run: cd backend/core/docker && chmod +x runner.sh && docker build . --network=host -t cr.yandex/crp9sskk3fu52ukovaco/ethno-core-nonginx:$(git rev-parse --short HEAD)
       - name: Pushing docker
-        run: docker push cr.yandex/crp9sskk3fu52ukovaco/ethno-core:$(git rev-parse --short HEAD)
+        run: docker push cr.yandex/crp9sskk3fu52ukovaco/ethno-core-nonginx:$(git rev-parse --short HEAD)

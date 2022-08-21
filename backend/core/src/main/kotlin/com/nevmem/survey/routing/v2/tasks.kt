@@ -11,7 +11,10 @@ import com.nevmem.survey.routing.userId
 import com.nevmem.survey.survey.ProjectsService
 import com.nevmem.survey.survey.SurveysService
 import com.nevmem.survey.users.UsersService
-import com.nevmem.survey.worker.api.WorkerApi
+import com.nevmem.survey.worker.api.WorkerClient
+import com.nevmem.survey.worker.api.request.GetExportDataTasksBySurveyId
+import com.nevmem.survey.worker.api.request.GetTaskRequest
+import com.nevmem.survey.worker.api.response.CreateExportDataTaskResponse
 import com.nevmem.surveys.converters.UsersConverter
 import io.ktor.application.call
 import io.ktor.auth.authenticate
@@ -26,7 +29,7 @@ private const val ACCESS_DENIED = "Access to method denied (not enough roles)"
 
 private fun Route.tasksImpl() {
     val surveysService by inject<SurveysService>()
-    val workerApi by inject<WorkerApi>()
+    val workerApi by inject<WorkerClient>()
     val usersService by inject<UsersService>()
     val projectsService by inject<ProjectsService>()
     val roleModel by inject<RoleModel>()
@@ -45,7 +48,14 @@ private fun Route.tasksImpl() {
                 throw IllegalStateException(ACCESS_DENIED)
             }
 
-            call.respond(workerApi.createExportDataTask(usersConverter(user), request.surveyId))
+            val response = workerApi.createExportDataTask(
+                com.nevmem.survey.worker.api.request.CreateExportDataTaskRequest(usersConverter(user), request.surveyId)
+            )
+
+            when (response) {
+                is CreateExportDataTaskResponse.Success -> call.respond(response.task)
+                is CreateExportDataTaskResponse.Error -> throw IllegalStateException(response.message)
+            }
         }
 
         post("/export_data_task_by_survey") {
@@ -60,14 +70,14 @@ private fun Route.tasksImpl() {
                 throw IllegalStateException(ACCESS_DENIED)
             }
 
-            call.respond(workerApi.tasks(request.surveyId))
+            call.respond(workerApi.tasks(GetExportDataTasksBySurveyId(request.surveyId)))
         }
 
         post("/get") {
             val request = call.receive<LoadTaskRequest>()
             val user = usersService.getUserById(userId())!!
 
-            val task = workerApi.getTask(usersConverter(user), request.id)
+            val task = workerApi.getTask(GetTaskRequest(usersConverter(user), request.id)).task ?: throw NotFoundException("Task not found")
 
             val project = projectsService.get(task.projectId) ?: throw NotFoundException("Something went wrong")
             val userRoles = projectsService.getRolesInProject(project, user)

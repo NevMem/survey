@@ -51,3 +51,4 @@ jobs:
           S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
           S3_URI: https://storage.yandexcloud.net
           SELF_URI: https://ethnosurvey.com
+          ENVIRONMENT: production

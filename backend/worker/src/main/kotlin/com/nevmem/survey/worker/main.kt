@@ -1,7 +1,11 @@
 package com.nevmem.survey.worker
 
+import com.nevmem.survey.cloud.CloudServices
+import com.nevmem.survey.config.ConfigProvider
+import com.nevmem.survey.env.EnvVars
 import com.nevmem.survey.fs.createFileSystemService
 import com.nevmem.survey.media.createMediaStorageService
+import com.nevmem.survey.s3client.S3ClientWrapper
 import com.nevmem.survey.survey.createAnswersService
 import com.nevmem.survey.survey.createSurveysService
 import com.nevmem.survey.task.createTaskService
@@ -35,7 +39,29 @@ private val coreModule = module {
     single { createTaskService() }
     single { createFileSystemService() }
     single { createSurveysService() }
-    single { createAnswersService(get(), CoroutineScope(Dispatchers.Default + SupervisorJob())) }
+    single {
+        val deps = object : S3ClientWrapper.Dependencies {
+            override val region: String
+                get() = EnvVars.S3.region
+            override val uri: String
+                get() = EnvVars.S3.s3Uri
+            override val keyId: String
+                get() = EnvVars.S3.accessKey
+            override val secretAccessKey: String
+                get() = EnvVars.S3.secretAccessKey
+        }
+        S3ClientWrapper.create(deps)
+    }
+    single { CloudServices.create() }
+    single {
+        val cloudServices: CloudServices = get()
+        ConfigProvider.create(
+            CoroutineScope(Dispatchers.Default + SupervisorJob()),
+            get(),
+            cloudServices.messaging,
+        )
+    }
+    single { createAnswersService(get(), CoroutineScope(Dispatchers.Default + SupervisorJob()), get()) }
     single { createMediaStorageService() }
 }
 

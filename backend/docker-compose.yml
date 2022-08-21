@@ -12,13 +12,13 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - "./config.json:/usr/src/app/config.json"
+      - "./s3-config.json:/usr/src/app/config.json"
   core:
     build:
       context: ../
       dockerfile: backend/core/docker/TestingDockerfile
     ports:
-      - "80:8080"
+      - "80:80"
   worker:
     build:
       context: ../

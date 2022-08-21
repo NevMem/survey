@@ -3,7 +3,7 @@ pluginManagement {
     val kotlinVersion: String by settings
     plugins {
         id("com.google.devtools.ksp") version kspVersion
-        id("org.jetbrains.kotlin.jvm") version "1.5.30"
+        id("org.jetbrains.kotlin.jvm") version kotlinVersion
     }
     repositories {
         gradlePluginPortal()
@@ -37,5 +37,11 @@ include("backend:users")
 include("backend:worker:api")
 include("backend:worker")
 include("common:data")
-include("util:exporter")
 include("util")
+include("util:clientgen")
+include("util:exporter")
+include("util:s3client")
+include("util:s3client:sample")
+include("backend:config")
+include("backend:config:sample")
+include("backend:cloud")

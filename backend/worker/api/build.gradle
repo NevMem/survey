@@ -2,11 +2,20 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id "com.google.devtools.ksp"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += ["build/generated/ksp/main/kotlin"]
+        }
+    }
 }
 
 dependencies {
@@ -20,4 +29,7 @@ dependencies {
 
     implementation project(path: ':backend:common')
     implementation project(path: ':common:data')
+
+    implementation project(':util:clientgen')
+    ksp project(':util:clientgen')
 }

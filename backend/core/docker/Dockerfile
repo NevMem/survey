@@ -1,21 +1,12 @@
-FROM ubuntu:20.04
+FROM openjdk:8-jdk-alpine
 
 COPY build_dir /
 COPY runner.sh /
 COPY env.sh /
-COPY nginx-production-config.conf /
 
-RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y --allow-downgrades --allow-remove-essential --allow-change-held-packages \
-    vim \
-    telnet \
-    lsof \
-    syslog-ng \
-    curl \
-    openjdk-8-jdk \
-    nginx
+RUN apk update && apk add bash
+RUN apk -U add vim
 
 CMD [ "./runner.sh" ]
 
-EXPOSE 80 443
+EXPOSE 80

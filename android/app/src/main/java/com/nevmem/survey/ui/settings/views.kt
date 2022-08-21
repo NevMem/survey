@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -22,9 +24,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.nevmem.survey.R
+import com.nevmem.survey.settings.api.Setting
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 internal fun SettingsItemBuilder(
@@ -38,6 +45,58 @@ internal fun SettingsItemBuilder(
         is SwitchSettingsScreenItem -> { SwitchView(item) }
         DeveloperSettingsHomeScreenItem -> { DeveloperSettingsView(navController) }
         is BlockSettingsScreenItem -> { BlockView(navController, item, onAboutViewClick) }
+    }
+}
+
+@Preview
+@Composable
+private fun SettingsPreview() {
+    val setting = object : Setting<Boolean> {
+        override var value: Boolean = false
+        override val changes: Flow<Boolean>
+            get() = flow {}
+    }
+
+    val items = listOf(
+        HeaderSettingsScreenItem,
+        BlockSettingsScreenItem(
+            SwitchSettingsScreenItem(
+                R.string.http_url_setting_title,
+                setting
+            ),
+            SwitchSettingsScreenItem(
+                R.string.enable_not_unique_user_ids,
+                setting
+            ),
+            SwitchSettingsScreenItem(
+                R.string.http_url_setting_title,
+                setting
+            ),
+        ),
+        SwitchSettingsScreenItem(
+            R.string.http_url_setting_title,
+            setting
+        ),
+        SwitchSettingsScreenItem(
+            R.string.enable_not_unique_user_ids,
+            setting
+        ),
+        SwitchSettingsScreenItem(
+            R.string.http_url_setting_title,
+            setting
+        ),
+        AboutSettingsScreenItem("1.0.0"),
+    )
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items.forEach { settingItem ->
+            item {
+                SettingsItemBuilder(
+                    navController = rememberNavController(),
+                    item = settingItem,
+                )
+            }
+        }
     }
 }
 
@@ -91,7 +150,7 @@ private fun SwitchView(item: SwitchSettingsScreenItem) {
 
     Row(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
