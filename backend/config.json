@@ -1,4 +1,9 @@
 {
     "version": 2,
-    "useBunchSaver": false
+    "backend": {
+        "useBunchSaver": false
+    },
+    "mobile": {
+        "pushNotificationsEnabled": false
+    }
 }

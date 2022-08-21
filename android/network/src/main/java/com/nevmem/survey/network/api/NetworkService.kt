@@ -2,6 +2,7 @@ package com.nevmem.survey.network.api
 
 import android.net.Uri
 import com.nevmem.survey.data.answer.QuestionAnswer
+import com.nevmem.survey.data.config.MobileClientConfig
 import com.nevmem.survey.data.media.Media
 import com.nevmem.survey.data.media.MediaGallery
 import com.nevmem.survey.data.survey.Survey
@@ -22,4 +23,6 @@ interface NetworkService {
     suspend fun sendMedia(media: Uri): Media
 
     suspend fun createGallery(medias: List<Media>): MediaGallery
+
+    suspend fun loadConfig(): MobileClientConfig
 }

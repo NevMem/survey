@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation(project(":util:s3client"))
     implementation(project(":backend:cloud"))
+    implementation(project(":common:data"))
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${versions["kotlinxSerializationJson"]}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions["coroutinesCore"]}")
